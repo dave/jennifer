@@ -93,7 +93,7 @@ func Render(ctx context.Context, l *StatementList, w io.Writer) error {
 func (f StatementList) Render(ctx context.Context, w io.Writer) error {
 	for i, code := range f {
 		if i > 0 {
-			if _, err := w.Write([]byte(";")); err != nil {
+			if _, err := w.Write([]byte("\n")); err != nil {
 				return err
 			}
 		}

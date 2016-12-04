@@ -53,7 +53,7 @@ var Blocks = []struct {
 		Desc:      "curly braces containing a statements list",
 		Open:      "{",
 		Close:     "}",
-		Seperator: ";",
+		Seperator: "\\n",
 	},
 	{
 		Name:      "Call",
