@@ -8,6 +8,7 @@ import (
 	"go/format"
 	"io"
 	"os"
+	"strconv"
 )
 
 type Code interface {
@@ -58,7 +59,7 @@ func Render(ctx context.Context, l *StatementList, w io.Writer) error {
 	}
 	if len(global.Imports) == 1 {
 		for path, alias := range global.Imports {
-			if _, err := fmt.Fprintf(source, "import %s %s\n\n", alias, path); err != nil {
+			if _, err := fmt.Fprintf(source, "import %s %s\n\n", alias, strconv.Quote(path)); err != nil {
 				return err
 			}
 		}
@@ -67,7 +68,7 @@ func Render(ctx context.Context, l *StatementList, w io.Writer) error {
 			return err
 		}
 		for path, alias := range global.Imports {
-			if _, err := fmt.Fprintf(source, "%s %s\n", alias, path); err != nil {
+			if _, err := fmt.Fprintf(source, "%s %s\n", alias, strconv.Quote(path)); err != nil {
 				return err
 			}
 		}
@@ -80,7 +81,6 @@ func Render(ctx context.Context, l *StatementList, w io.Writer) error {
 	}
 	formatted, err := format.Source(source.Bytes())
 	if err != nil {
-		fmt.Print(source.String())
 		return err
 	}
 	_, err = w.Write(formatted)
