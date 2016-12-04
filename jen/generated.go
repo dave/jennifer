@@ -78,6 +78,32 @@ func (s *Statement) Braces(code ...Code) *Statement {
 	return s
 }
 
+// Values inserts curly braces containing a comma separated list
+func Values(code ...Code) *Statement {
+	s := new(Statement)
+	return s.Values(code...)
+}
+
+// Values inserts curly braces containing a comma separated list
+func (l *StatementList) Values(code ...Code) *Statement {
+	s := Values(code...)
+	*l = append(*l, s)
+	return s
+}
+
+// Values inserts curly braces containing a comma separated list
+func (s *Statement) Values(code ...Code) *Statement {
+	b := block{
+		Statement: s,
+		code:      code,
+		open:      "{",
+		close:     "}",
+		seperator: ",",
+	}
+	*s = append(*s, b)
+	return s
+}
+
 // Index inserts square brackets containing a colon separated list
 func Index(code ...Code) *Statement {
 	s := new(Statement)

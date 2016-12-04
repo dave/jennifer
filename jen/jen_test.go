@@ -157,6 +157,11 @@ var cases = []tc{
 		),
 		expect: `if a == 1 { b = 1 } else if a == 2 { b = 2 } else { b = 3 }`,
 	},
+	{
+		desc:   `literal array`,
+		code:   Index().String().Values(Lit("a"), Lit("b")),
+		expect: `[]string{"a", "b"}`,
+	},
 }
 
 func TestJen(t *testing.T) {
