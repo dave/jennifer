@@ -12,6 +12,7 @@ func main() {
 
 	file := NewFile()
 	for _, b := range data.Blocks {
+		b := b // b used in closures
 		/*
 			// {{ .Name }} inserts {{ .Desc }}
 			func {{ .Name }}(c ...Code) *Statement {
@@ -69,37 +70,28 @@ func main() {
 		*/
 		file.Add(comment)
 		file.Func().Params(
-			Id("s").Ptr().Id("Statement"),
+			Id("l").Ptr().Id("Statement"),
 		).Id(b.Name).Params(
 			Id("c").Vari().Id("Code"),
-		).Ptr().Id("Statement").Block()
+		).Ptr().Id("Statement").Block(
+			Id("b").Sas().Id("block").MapLitFunc(func(m map[Code]Code) {
+				m[Id("Statement")] = Id("s")
+				m[Id("code")] = Id("c")
+				if b.Open != "" {
+					m[Id("open")] = Lit(b.Open)
+				}
+				if b.Close != "" {
+					m[Id("close")] = Lit(b.Close)
+				}
+				if b.Seperator != "" {
+					m[Id("seperator")] = Lit(b.Seperator)
+				}
+			}),
+			Ptr().Id("s").As().Append(Ptr().Id("s"), Id("b")),
+			Return().Id("s"),
+		)
+
 	}
-	/*
-	   {{ range .Blocks }}
-
-
-
-
-	   	// {{ .Name }} inserts {{ .Desc }}
-	   	func (s *Statement) {{ .Name }}(code ...Code) *Statement {
-	   		b := block{
-	   			Statement: s,
-	   			code:      code,
-	   			{{- if ne .Open "" }}
-	   			open:      "{{ .Open }}",
-	   			{{- end -}}
-	   			{{- if ne .Close "" }}
-	   			close:     "{{ .Close }}",
-	   			{{- end -}}
-	   			{{- if ne .Seperator "" }}
-	   			seperator: "{{ .Seperator }}",
-	   			{{- end }}
-	   		}
-	   		*s = append(*s, b)
-	   		return s
-	   	}
-	   	{{ end }}
-	*/
 	/*
 		{{ range .Identifiers }}
 		func {{ . | capital }}() *Statement {

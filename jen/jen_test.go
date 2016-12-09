@@ -172,6 +172,13 @@ var cases = []tc{
 		code:   Id("a").Params(Id("b"), Null(), Id("c")),
 		expect: `a(b, c)`,
 	},
+	{
+		desc: `map literal`,
+		code: Id("a").MapLit(map[Code]Code{
+			Id("b"): Id("c"),
+		}),
+		expect: `a{b: c}`,
+	},
 }
 
 func TestJen(t *testing.T) {
