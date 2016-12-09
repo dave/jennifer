@@ -13,6 +13,7 @@ import (
 
 type Code interface {
 	Render(ctx context.Context, w io.Writer) error
+	IsNull() bool
 }
 
 func NewFile() *StatementList {
@@ -23,14 +24,14 @@ type StatementList []Code
 
 type Statement []Code
 
-func (g *Statement) Insert(code ...Code) *Statement {
+func (g *Statement) Add(code ...Code) *Statement {
 	*g = append(*g, code...)
 	return g
 }
 
-func (f *StatementList) Insert(code ...Code) *Statement {
+func (f *StatementList) Add(code ...Code) *Statement {
 	g := new(Statement)
-	g.Insert(code...)
+	g.Add(code...)
 	*f = append(*f, g)
 	return g
 }
@@ -90,8 +91,17 @@ func Render(ctx context.Context, l *StatementList, w io.Writer) error {
 	return nil
 }
 
-func (f StatementList) Render(ctx context.Context, w io.Writer) error {
-	for i, code := range f {
+func (l StatementList) IsNull() bool {
+	for _, c := range l {
+		if !c.IsNull() {
+			return false
+		}
+	}
+	return true
+}
+
+func (l StatementList) Render(ctx context.Context, w io.Writer) error {
+	for i, code := range l {
 		if i > 0 {
 			if _, err := w.Write([]byte("\n")); err != nil {
 				return err
@@ -102,6 +112,15 @@ func (f StatementList) Render(ctx context.Context, w io.Writer) error {
 		}
 	}
 	return nil
+}
+
+func (s Statement) IsNull() bool {
+	for _, c := range s {
+		if !c.IsNull() {
+			return false
+		}
+	}
+	return true
 }
 
 func (g Statement) Render(ctx context.Context, w io.Writer) error {

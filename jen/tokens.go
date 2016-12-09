@@ -15,12 +15,17 @@ const (
 	operatorToken   tokenType = "operator"
 	delimiterToken  tokenType = "delimiter"
 	literalToken    tokenType = "literal"
+	nullToken       tokenType = "null"
 )
 
 type Token struct {
 	*Statement
 	typ     tokenType
 	content interface{}
+}
+
+func (t Token) IsNull() bool {
+	return t.typ == nullToken
 }
 
 func (t Token) Render(ctx context.Context, w io.Writer) error {
@@ -55,21 +60,55 @@ func (t Token) Render(ctx context.Context, w io.Writer) error {
 		if _, err := w.Write([]byte(full)); err != nil {
 			return err
 		}
+	case nullToken:
+		// do nothing
 	}
 	return nil
 }
 
+// Null token produces no output but also no separator
+// in a block.
+func Null() *Statement {
+	s := new(Statement)
+	return s.Null()
+}
+
+// Null token produces no output but also no separator
+// in a block.
+func (l *StatementList) Null() *Statement {
+	s := Null()
+	*l = append(*l, s)
+	return s
+}
+
+// Null token produces no output but also no separator
+// in a block.
+func (s *Statement) Null() *Statement {
+	t := Token{
+		Statement: s,
+		typ:       nullToken,
+	}
+	*s = append(*s, t)
+	return s
+}
+
+// Empty token produces no output but is followed by a
+// separator in a block.
 func Empty() *Statement {
 	s := new(Statement)
 	return s.Empty()
 }
 
+// Empty token produces no output but is followed by a
+// separator in a block.
 func (l *StatementList) Empty() *Statement {
 	s := Empty()
 	*l = append(*l, s)
 	return s
 }
 
+// Empty token produces no output but is followed by a
+// separator in a block.
 func (s *Statement) Empty() *Statement {
 	t := Token{
 		Statement: s,

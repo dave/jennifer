@@ -12,13 +12,13 @@ func (l *StatementList) Method(name string, code ...Code) *Statement {
 }
 
 func (s *Statement) Method(name string, code ...Code) *Statement {
-	b := block{
+	g := group{
 		Statement: s,
 		code:      code,
 		open:      "(",
 		close:     ")",
 		seperator: ",",
 	}
-	*s = append(*s, Sel(), Id(name), b)
+	*s = append(*s, Sel(), Id(name), g)
 	return s
 }

@@ -38,7 +38,7 @@ func main() {
 
 	// {{ .Name }} inserts {{ .Desc }}
 	func (s *Statement) {{ .Name }}(code ...Code) *Statement {
-		b := block{
+		g := group{
 			Statement: s,
 			code:      code,
 			{{- if ne .Open "" }}
@@ -51,7 +51,7 @@ func main() {
 			seperator: "{{ .Seperator }}",
 			{{- end }}
 		}
-		*s = append(*s, b)
+		*s = append(*s, g)
 		return s
 	}
 	{{ end }}

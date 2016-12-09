@@ -119,7 +119,7 @@ var cases = []tc{
 		).Block(
 			Return().Id("a"),
 		),
-		expect: `func a(a string){return a}`,
+		expect: `func a(a string){ return a }`,
 	},
 	{
 		desc:   `built in func`,
@@ -162,10 +162,24 @@ var cases = []tc{
 		code:   Index().String().Values(Lit("a"), Lit("b")),
 		expect: `[]string{"a", "b"}`,
 	},
+	{
+		desc:   `comment`,
+		code:   Comment("a"),
+		expect: `// a`,
+	},
+	{
+		desc:   `null`,
+		code:   Id("a").Params(Id("b"), Null(), Id("c")),
+		expect: `a(b, c)`,
+	},
 }
 
 func TestJen(t *testing.T) {
 	for i, c := range cases {
+		onlyTest := ""
+		if onlyTest != "" && c.desc != onlyTest {
+			continue
+		}
 		b := &bytes.Buffer{}
 
 		if c.path == "" {
@@ -180,7 +194,7 @@ func TestJen(t *testing.T) {
 
 		rendered, err := format.Source(b.Bytes())
 		if err != nil {
-			t.Errorf("Error formatting rendered source in test case %d. Description: %s\nError:\n%s", i, c.desc, err)
+			t.Errorf("Error formatting rendered source in test case %d. Description: %s\nError:\n%s\nSource:\n%s", i, c.desc, err, b.String())
 		}
 
 		expected, err := format.Source([]byte(c.expect))

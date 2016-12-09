@@ -19,7 +19,7 @@ func (l *StatementList) List(code ...Code) *Statement {
 
 // List inserts a comma seperated list
 func (s *Statement) List(code ...Code) *Statement {
-	b := block{
+	b := group{
 		Statement: s,
 		code:      code,
 		seperator: ",",
@@ -43,7 +43,7 @@ func (l *StatementList) Parens(code ...Code) *Statement {
 
 // Parens inserts parenthesis
 func (s *Statement) Parens(code ...Code) *Statement {
-	b := block{
+	b := group{
 		Statement: s,
 		code:      code,
 		open:      "(",
@@ -68,7 +68,7 @@ func (l *StatementList) Braces(code ...Code) *Statement {
 
 // Braces inserts curly braces
 func (s *Statement) Braces(code ...Code) *Statement {
-	b := block{
+	b := group{
 		Statement: s,
 		code:      code,
 		open:      "{",
@@ -93,7 +93,7 @@ func (l *StatementList) Values(code ...Code) *Statement {
 
 // Values inserts curly braces containing a comma separated list
 func (s *Statement) Values(code ...Code) *Statement {
-	b := block{
+	b := group{
 		Statement: s,
 		code:      code,
 		open:      "{",
@@ -119,7 +119,7 @@ func (l *StatementList) Index(code ...Code) *Statement {
 
 // Index inserts square brackets containing a colon separated list
 func (s *Statement) Index(code ...Code) *Statement {
-	b := block{
+	b := group{
 		Statement: s,
 		code:      code,
 		open:      "[",
@@ -145,7 +145,7 @@ func (l *StatementList) Block(code ...Code) *Statement {
 
 // Block inserts curly braces containing a statements list
 func (s *Statement) Block(code ...Code) *Statement {
-	b := block{
+	b := group{
 		Statement: s,
 		code:      code,
 		open:      "{",
@@ -171,7 +171,7 @@ func (l *StatementList) Call(code ...Code) *Statement {
 
 // Call inserts parenthesis containing a comma separated list
 func (s *Statement) Call(code ...Code) *Statement {
-	b := block{
+	b := group{
 		Statement: s,
 		code:      code,
 		open:      "(",
@@ -197,7 +197,7 @@ func (l *StatementList) Params(code ...Code) *Statement {
 
 // Params inserts parenthesis containing a comma separated list
 func (s *Statement) Params(code ...Code) *Statement {
-	b := block{
+	b := group{
 		Statement: s,
 		code:      code,
 		open:      "(",
@@ -223,7 +223,7 @@ func (l *StatementList) Decls(code ...Code) *Statement {
 
 // Decls inserts parenthesis containing a statement list
 func (s *Statement) Decls(code ...Code) *Statement {
-	b := block{
+	b := group{
 		Statement: s,
 		code:      code,
 		open:      "(",
