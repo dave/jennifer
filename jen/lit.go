@@ -36,7 +36,7 @@ func (g *Group) Lit(v interface{}) *Group {
 		return g
 	case func() interface{}:
 		i := v()
-		t := Token{
+		t := token{
 			Group:   g,
 			typ:     literalToken,
 			content: i,
@@ -44,7 +44,7 @@ func (g *Group) Lit(v interface{}) *Group {
 		g.items = append(g.items, t)
 		return g
 	default:
-		t := Token{
+		t := token{
 			Group:   g,
 			typ:     literalToken,
 			content: v,

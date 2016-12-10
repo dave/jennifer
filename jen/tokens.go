@@ -18,17 +18,17 @@ const (
 	nullToken       tokenType = "null"
 )
 
-type Token struct {
+type token struct {
 	*Group
 	typ     tokenType
 	content interface{}
 }
 
-func (t Token) isNull() bool {
+func (t token) isNull() bool {
 	return t.typ == nullToken
 }
 
-func (t Token) render(ctx context.Context, w io.Writer) error {
+func (t token) render(ctx context.Context, w io.Writer) error {
 	switch t.typ {
 	case literalToken:
 		// TODO: this does not work in all cases
@@ -78,7 +78,7 @@ func (g *Group) Null() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group: g,
 		typ:   nullToken,
 	}
@@ -100,7 +100,7 @@ func (g *Group) Empty() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		typ:     operatorToken,
 		content: "",
@@ -119,7 +119,7 @@ func (g *Group) Op(op string) *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		typ:     operatorToken,
 		content: op,
@@ -142,7 +142,7 @@ func (g *Group) Id(names ...string) *Group {
 		if i > 0 {
 			g.Op(".")
 		}
-		t := Token{
+		t := token{
 			Group:   g,
 			typ:     identifierToken,
 			content: n,

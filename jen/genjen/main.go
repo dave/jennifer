@@ -85,15 +85,15 @@ func main() {
 		)
 	}
 
-	type token struct {
+	type tkn struct {
 		name      string
 		cap       string
 		tokenType string
 		tokenDesc string
 	}
-	tokens := []token{}
+	tokens := []tkn{}
 	for _, v := range Identifiers {
-		tokens = append(tokens, token{
+		tokens = append(tokens, tkn{
 			name:      v,
 			cap:       strings.ToUpper(v[:1]) + v[1:],
 			tokenType: "identifierToken",
@@ -101,7 +101,7 @@ func main() {
 		})
 	}
 	for _, v := range Keywords {
-		tokens = append(tokens, token{
+		tokens = append(tokens, tkn{
 			name:      v,
 			cap:       strings.ToUpper(v[:1]) + v[1:],
 			tokenType: "keywordToken",
@@ -134,7 +134,7 @@ func main() {
 					g.items = append(g.items, s)
 					return s
 				}
-				t := Token{
+				t := token{
 					Group:    g,
 					typ:     {identifierToken|keywordToken},
 					content: "{Name}",
@@ -157,7 +157,7 @@ func main() {
 				),
 				Return(Id("s")),
 			),
-			Id("t").Op(":=").Id("Token").Lit(map[Code]Code{
+			Id("t").Op(":=").Id("token").Lit(map[Code]Code{
 				Id("Group"):   Id("g"),
 				Id("typ"):     Id(t.tokenType),
 				Id("content"): Lit(t.name),

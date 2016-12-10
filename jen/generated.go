@@ -174,7 +174,7 @@ func (g *Group) Bool() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "bool",
 		typ:     identifierToken,
@@ -193,7 +193,7 @@ func (g *Group) Byte() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "byte",
 		typ:     identifierToken,
@@ -212,7 +212,7 @@ func (g *Group) Complex64() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "complex64",
 		typ:     identifierToken,
@@ -231,7 +231,7 @@ func (g *Group) Complex128() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "complex128",
 		typ:     identifierToken,
@@ -250,7 +250,7 @@ func (g *Group) Error() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "error",
 		typ:     identifierToken,
@@ -269,7 +269,7 @@ func (g *Group) Float32() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "float32",
 		typ:     identifierToken,
@@ -288,7 +288,7 @@ func (g *Group) Float64() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "float64",
 		typ:     identifierToken,
@@ -307,7 +307,7 @@ func (g *Group) Int() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "int",
 		typ:     identifierToken,
@@ -326,7 +326,7 @@ func (g *Group) Int8() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "int8",
 		typ:     identifierToken,
@@ -345,7 +345,7 @@ func (g *Group) Int16() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "int16",
 		typ:     identifierToken,
@@ -364,7 +364,7 @@ func (g *Group) Int32() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "int32",
 		typ:     identifierToken,
@@ -383,7 +383,7 @@ func (g *Group) Int64() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "int64",
 		typ:     identifierToken,
@@ -402,7 +402,7 @@ func (g *Group) Rune() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "rune",
 		typ:     identifierToken,
@@ -421,7 +421,7 @@ func (g *Group) String() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "string",
 		typ:     identifierToken,
@@ -440,7 +440,7 @@ func (g *Group) Uint() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "uint",
 		typ:     identifierToken,
@@ -459,7 +459,7 @@ func (g *Group) Uint8() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "uint8",
 		typ:     identifierToken,
@@ -478,7 +478,7 @@ func (g *Group) Uint16() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "uint16",
 		typ:     identifierToken,
@@ -497,7 +497,7 @@ func (g *Group) Uint32() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "uint32",
 		typ:     identifierToken,
@@ -516,7 +516,7 @@ func (g *Group) Uint64() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "uint64",
 		typ:     identifierToken,
@@ -535,7 +535,7 @@ func (g *Group) Uintptr() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "uintptr",
 		typ:     identifierToken,
@@ -554,7 +554,7 @@ func (g *Group) True() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "true",
 		typ:     identifierToken,
@@ -573,7 +573,7 @@ func (g *Group) False() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "false",
 		typ:     identifierToken,
@@ -592,7 +592,7 @@ func (g *Group) Iota() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "iota",
 		typ:     identifierToken,
@@ -611,7 +611,7 @@ func (g *Group) Nil() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "nil",
 		typ:     identifierToken,
@@ -630,7 +630,7 @@ func (g *Group) Break() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "break",
 		typ:     keywordToken,
@@ -649,7 +649,7 @@ func (g *Group) Default() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "default",
 		typ:     keywordToken,
@@ -668,7 +668,7 @@ func (g *Group) Func() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "func",
 		typ:     keywordToken,
@@ -687,7 +687,7 @@ func (g *Group) Interface() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "interface",
 		typ:     keywordToken,
@@ -706,7 +706,7 @@ func (g *Group) Select() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "select",
 		typ:     keywordToken,
@@ -725,7 +725,7 @@ func (g *Group) Case() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "case",
 		typ:     keywordToken,
@@ -744,7 +744,7 @@ func (g *Group) Defer() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "defer",
 		typ:     keywordToken,
@@ -763,7 +763,7 @@ func (g *Group) Go() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "go",
 		typ:     keywordToken,
@@ -782,7 +782,7 @@ func (g *Group) Map() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "map",
 		typ:     keywordToken,
@@ -801,7 +801,7 @@ func (g *Group) Struct() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "struct",
 		typ:     keywordToken,
@@ -820,7 +820,7 @@ func (g *Group) Chan() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "chan",
 		typ:     keywordToken,
@@ -839,7 +839,7 @@ func (g *Group) Else() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "else",
 		typ:     keywordToken,
@@ -858,7 +858,7 @@ func (g *Group) Goto() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "goto",
 		typ:     keywordToken,
@@ -877,7 +877,7 @@ func (g *Group) Package() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "package",
 		typ:     keywordToken,
@@ -896,7 +896,7 @@ func (g *Group) Switch() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "switch",
 		typ:     keywordToken,
@@ -915,7 +915,7 @@ func (g *Group) Const() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "const",
 		typ:     keywordToken,
@@ -934,7 +934,7 @@ func (g *Group) Fallthrough() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "fallthrough",
 		typ:     keywordToken,
@@ -953,7 +953,7 @@ func (g *Group) If() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "if",
 		typ:     keywordToken,
@@ -972,7 +972,7 @@ func (g *Group) Range() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "range",
 		typ:     keywordToken,
@@ -991,7 +991,7 @@ func (g *Group) Type() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "type",
 		typ:     keywordToken,
@@ -1010,7 +1010,7 @@ func (g *Group) Continue() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "continue",
 		typ:     keywordToken,
@@ -1029,7 +1029,7 @@ func (g *Group) Import() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "import",
 		typ:     keywordToken,
@@ -1048,7 +1048,7 @@ func (g *Group) Var() *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	t := Token{
+	t := token{
 		Group:   g,
 		content: "var",
 		typ:     keywordToken,
