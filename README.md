@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	f := NewFile("a")
+	f := NewFile("main")
     f.Func().Id("main").Params().Block(
         Id("fmt.Println").Call(
             Lit("Hello, world"),
@@ -25,7 +25,7 @@ func main() {
 Output:
 
 ```go
-package a
+package main
 
 import fmt "fmt"
 
@@ -47,7 +47,7 @@ import (
 
 func main() {
 	f := NewFilePath("c", "a.b/c")
-    f.Func().Id("main").Params().Block(
+    f.Func().Id("init").Params().Block(
         Id("a.b/c.Local").Call(),
         Id("d.e/f.Remote").Call(),
         Id("g.h/f.Collision").Call(),
@@ -66,7 +66,7 @@ import (
     f1 "g.h/f"
 )
 
-func main() {
+func init() {
     Local()
     f.Remote()
     f1.Collision()

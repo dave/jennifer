@@ -15,9 +15,9 @@ func ExampleAppend() {
 }
 
 func ExampleGroup_Append() {
-	c := Id("a").Op("=").Append(Id("a"), Id("b"))
+	c := Id("a").Op("=").Append(Id("a"), Id("b").Op("..."))
 	fmt.Printf("%#v", c)
-	// Output: a = append(a, b)
+	// Output: a = append(a, b...)
 }
 
 func ExampleBlock() {
@@ -185,14 +185,14 @@ func ExampleNewFile() {
 }
 
 func ExampleId() {
-	f := NewFile("a")
+	f := NewFile("main")
 	f.Func().Id("main").Params().Block(
 		Id("fmt.Println").Call(
 			Lit("Hello, world"),
 		),
 	)
 	fmt.Printf("%#v", f)
-	// Output: package a
+	// Output: package main
 	//
 	// import fmt "fmt"
 	//
@@ -201,7 +201,7 @@ func ExampleId() {
 
 func ExampleNewFilePath() {
 	f := NewFilePath("c", "a.b/c")
-	f.Func().Id("main").Params().Block(
+	f.Func().Id("init").Params().Block(
 		Id("a.b/c.Local").Call(),
 		Id("d.e/f.Remote").Call(),
 		Id("g.h/f.Collision").Call(),
@@ -214,7 +214,7 @@ func ExampleNewFilePath() {
 	// 	f1 "g.h/f"
 	// )
 	//
-	// func main() {
+	// func init() {
 	// 	Local()
 	// 	f.Remote()
 	// 	f1.Collision()
