@@ -169,15 +169,6 @@ var cases = []tc{
 	},
 	{
 		desc: `map literal`,
-		code: Id("a").MapLit(map[Code]Code{
-			Id("b"): Id("c"),
-		}),
-		expect: `a{
-			b: c,
-		}`,
-	},
-	{
-		desc: `map literal`,
 		code: Id("a").Lit(map[Code]Code{
 			Id("b"): Id("c"),
 		}),
@@ -186,13 +177,20 @@ var cases = []tc{
 		}`,
 	},
 	{
-		desc: `map literal string keys`,
-		code: Id("a").Lit(map[string]Code{
-			"b": Id("c"),
+		desc: `map literal func`,
+		code: Id("a").Lit(func(m map[Code]Code) {
+			m[Id("b")] = Id("c")
 		}),
 		expect: `a{
 			b: c,
 		}`,
+	},
+	{
+		desc: `literal func`,
+		code: Id("a").Op(":=").Lit(func() interface{} {
+			return "b"
+		}),
+		expect: `a := "b"`,
 	},
 	{
 		desc:   `multi id`,
@@ -200,8 +198,8 @@ var cases = []tc{
 		expect: `a.b.c`,
 	},
 	{
-		desc:   `add func`,
-		code:   Id("a").Op(".").AddFunc(func() Code { return Id("b") }),
+		desc:   `do`,
+		code:   Id("a").Op(".").Do(func(g *Group) { g.Id("b") }),
 		expect: `a.b`,
 	},
 }

@@ -12,6 +12,10 @@ type Group struct {
 	items  []Code
 }
 
+func Add(code ...Code) *Group {
+	return newStatement().Add(code...)
+}
+
 func (g *Group) Add(code ...Code) *Group {
 	if startNewStatement(g.syntax) {
 		s := newStatement(code...)
@@ -22,14 +26,17 @@ func (g *Group) Add(code ...Code) *Group {
 	return g
 }
 
-func (g *Group) AddFunc(f func() Code) *Group {
+func Do(f func(*Group)) *Group {
+	return newStatement().Do(f)
+}
+
+func (g *Group) Do(f func(*Group)) *Group {
 	if startNewStatement(g.syntax) {
-		s := newStatement().AddFunc(f)
+		s := newStatement().Do(f)
 		g.items = append(g.items, s)
 		return s
 	}
-	code := f()
-	g.items = append(g.items, code)
+	f(g)
 	return g
 }
 

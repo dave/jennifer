@@ -83,7 +83,7 @@ func RenderFile(ctx context.Context, g *Group, w io.Writer) error {
 	}
 	formatted, err := format.Source(source.Bytes())
 	if err != nil {
-		return err
+		return fmt.Errorf("Error %s while formatting source:\n%s", err, source.String())
 	}
 	_, err = w.Write(formatted)
 	if err != nil {

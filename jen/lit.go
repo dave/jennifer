@@ -5,46 +5,57 @@ import (
 	"io"
 )
 
-func MapLit(lit map[Code]Code) *Group {
-	return newStatement().MapLit(lit)
+func Lit(v interface{}) *Group {
+	return newStatement().Lit(v)
 }
 
-func (g *Group) MapLit(code map[Code]Code) *Group {
+func (g *Group) Lit(v interface{}) *Group {
 	if startNewStatement(g.syntax) {
-		s := MapLit(code)
+		s := Lit(v)
 		g.items = append(g.items, s)
 		return s
 	}
-	m := mapLit{
-		Group: g,
-		m:     code,
+	switch v := v.(type) {
+	case map[Code]Code:
+		ml := mapLit{
+			Group: g,
+			m:     v,
+		}
+		g.items = append(g.items, ml)
+		return g
+	case func(map[Code]Code):
+		m := map[Code]Code{}
+		v(m)
+		ml := mapLit{
+			Group: g,
+			m:     m,
+		}
+		g.items = append(g.items, ml)
+		return g
+	case func() interface{}:
+		i := v()
+		t := Token{
+			Group:   g,
+			typ:     literalToken,
+			content: i,
+		}
+		g.items = append(g.items, t)
+		return g
+	default:
+		t := Token{
+			Group:   g,
+			typ:     literalToken,
+			content: v,
+		}
+		g.items = append(g.items, t)
+		return g
 	}
-	g.items = append(g.items, m)
-	return g
-}
 
-func MapLitFunc(f func(map[Code]Code)) *Group {
-	return newStatement().MapLitFunc(f)
-}
-
-func (g *Group) MapLitFunc(f func(map[Code]Code)) *Group {
-	if startNewStatement(g.syntax) {
-		s := MapLitFunc(f)
-		g.items = append(g.items, s)
-		return s
-	}
-	m := mapLit{
-		Group: g,
-		f:     f,
-	}
-	g.items = append(g.items, m)
-	return g
 }
 
 type mapLit struct {
 	*Group
 	m map[Code]Code
-	f func(map[Code]Code)
 }
 
 func (l mapLit) IsNull() bool {
@@ -55,15 +66,8 @@ func (l mapLit) Render(ctx context.Context, w io.Writer) error {
 	if _, err := w.Write([]byte("{")); err != nil {
 		return err
 	}
-	m := l.m
-	if m == nil {
-		m = map[Code]Code{}
-	}
-	if l.f != nil {
-		l.f(m)
-	}
 	first := true
-	for k, v := range m {
+	for k, v := range l.m {
 		if v.IsNull() {
 			// Null() token produces no output but also
 			// no separator. Empty() token products no
