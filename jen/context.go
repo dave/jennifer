@@ -6,6 +6,24 @@ import (
 	"strings"
 )
 
+type syntaxType string
+
+const syntaxKey syntaxType = ""
+
+const (
+	FileSyntax      syntaxType = "file"
+	ParamsSyntax    syntaxType = "params"
+	StatementSyntax syntaxType = "statement"
+	BlockSyntax     syntaxType = "block"
+	ParensSyntax    syntaxType = "parens"
+	ValuesSyntax    syntaxType = "values"
+	IndexSyntax     syntaxType = "index"
+	CallSyntax      syntaxType = "call"
+	DeclsSyntax     syntaxType = "decls"
+	BracesSyntax    syntaxType = "braces"
+	ListSyntax      syntaxType = "list"
+)
+
 type contextType int
 
 var contextKey contextType

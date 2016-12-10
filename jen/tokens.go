@@ -19,7 +19,7 @@ const (
 )
 
 type Token struct {
-	*Statement
+	*Group
 	typ     tokenType
 	content interface{}
 }
@@ -32,11 +32,11 @@ func (t Token) Render(ctx context.Context, w io.Writer) error {
 	switch t.typ {
 	case literalToken:
 		// TODO: this does not work in all cases
-		if _, err := w.Write([]byte(fmt.Sprintf("%#v ", t.content))); err != nil {
+		if _, err := w.Write([]byte(fmt.Sprintf("%#v", t.content))); err != nil {
 			return err
 		}
 	case keywordToken, operatorToken:
-		if _, err := w.Write([]byte(fmt.Sprintf("%s ", t.content))); err != nil {
+		if _, err := w.Write([]byte(fmt.Sprintf("%s", t.content))); err != nil {
 			return err
 		}
 	case identifierToken:
@@ -53,9 +53,9 @@ func (t Token) Render(ctx context.Context, w io.Writer) error {
 			name = id
 		}
 		if alias != "" {
-			full = fmt.Sprintf("%s.%s ", alias, name)
+			full = fmt.Sprintf("%s.%s", alias, name)
 		} else {
-			full = fmt.Sprintf("%s ", name)
+			full = fmt.Sprintf("%s", name)
 		}
 		if _, err := w.Write([]byte(full)); err != nil {
 			return err
@@ -67,117 +67,127 @@ func (t Token) Render(ctx context.Context, w io.Writer) error {
 }
 
 // Null token produces no output but also no separator
-// in a block.
-func Null() *Statement {
-	s := new(Statement)
-	return s.Null()
+// in a list.
+func Null() *Group {
+	return newStatement().Null()
 }
 
 // Null token produces no output but also no separator
-// in a block.
-func (l *StatementList) Null() *Statement {
-	s := Null()
-	*l = append(*l, s)
-	return s
-}
-
-// Null token produces no output but also no separator
-// in a block.
-func (s *Statement) Null() *Statement {
-	t := Token{
-		Statement: s,
-		typ:       nullToken,
+// in a list.
+func (g *Group) Null() *Group {
+	if startNewStatement(g.syntax) {
+		s := Null()
+		g.items = append(g.items, s)
+		return s
 	}
-	*s = append(*s, t)
-	return s
+	t := Token{
+		Group: g,
+		typ:   nullToken,
+	}
+	g.items = append(g.items, t)
+	return g
 }
 
 // Empty token produces no output but is followed by a
-// separator in a block.
-func Empty() *Statement {
-	s := new(Statement)
-	return s.Empty()
+// separator in a list.
+func Empty() *Group {
+	return newStatement().Empty()
 }
 
 // Empty token produces no output but is followed by a
-// separator in a block.
-func (l *StatementList) Empty() *Statement {
-	s := Empty()
-	*l = append(*l, s)
-	return s
-}
-
-// Empty token produces no output but is followed by a
-// separator in a block.
-func (s *Statement) Empty() *Statement {
-	t := Token{
-		Statement: s,
-		typ:       operatorToken,
-		content:   "",
+// separator in a list.
+func (g *Group) Empty() *Group {
+	if startNewStatement(g.syntax) {
+		s := Empty()
+		g.items = append(g.items, s)
+		return s
 	}
-	*s = append(*s, t)
-	return s
-}
-
-func Op(op string) *Statement {
-	s := new(Statement)
-	return s.Op(op)
-}
-
-func (l *StatementList) Op(op string) *Statement {
-	s := Op(op)
-	*l = append(*l, s)
-	return s
-}
-
-func (s *Statement) Op(op string) *Statement {
 	t := Token{
-		Statement: s,
-		typ:       operatorToken,
-		content:   op,
+		Group:   g,
+		typ:     operatorToken,
+		content: "",
 	}
-	*s = append(*s, t)
-	return s
+	g.items = append(g.items, t)
+	return g
 }
 
-func Id(name string) *Statement {
-	s := new(Statement)
-	return s.Id(name)
+func Op(op string) *Group {
+	return newStatement().Op(op)
 }
 
-func (l *StatementList) Id(name string) *Statement {
-	s := Id(name)
-	*l = append(*l, s)
-	return s
-}
-
-func (s *Statement) Id(name string) *Statement {
+func (g *Group) Op(op string) *Group {
+	if startNewStatement(g.syntax) {
+		s := Op(op)
+		g.items = append(g.items, s)
+		return s
+	}
 	t := Token{
-		Statement: s,
-		typ:       identifierToken,
-		content:   name,
+		Group:   g,
+		typ:     operatorToken,
+		content: op,
 	}
-	*s = append(*s, t)
-	return s
+	g.items = append(g.items, t)
+	return g
 }
 
-func Lit(v interface{}) *Statement {
-	s := new(Statement)
-	return s.Lit(v)
+func Id(names ...string) *Group {
+	return newStatement().Id(names...)
 }
 
-func (l *StatementList) Lit(v interface{}) *Statement {
-	s := Lit(v)
-	*l = append(*l, s)
-	return s
+func (g *Group) Id(names ...string) *Group {
+	if startNewStatement(g.syntax) {
+		s := Id(names...)
+		g.items = append(g.items, s)
+		return s
+	}
+	for i, n := range names {
+		if i > 0 {
+			g.Op(".")
+		}
+		t := Token{
+			Group:   g,
+			typ:     identifierToken,
+			content: n,
+		}
+		g.items = append(g.items, t)
+	}
+	return g
 }
 
-func (s *Statement) Lit(v interface{}) *Statement {
+func Lit(v interface{}) *Group {
+	return newStatement().Lit(v)
+}
+
+func (g *Group) Lit(v interface{}) *Group {
+	if startNewStatement(g.syntax) {
+		s := Lit(v)
+		g.items = append(g.items, s)
+		return s
+	}
+	if m, ok := v.(map[Code]Code); ok {
+		ml := mapLit{
+			Group: g,
+			m:     m,
+		}
+		g.items = append(g.items, ml)
+		return g
+	} else if ms, ok := v.(map[string]Code); ok {
+		m := map[Code]Code{}
+		for k, v := range ms {
+			m[Id(k)] = v
+		}
+		ml := mapLit{
+			Group: g,
+			m:     m,
+		}
+		g.items = append(g.items, ml)
+		return g
+	}
 	t := Token{
-		Statement: s,
-		typ:       literalToken,
-		content:   v,
+		Group:   g,
+		typ:     literalToken,
+		content: v,
 	}
-	*s = append(*s, t)
-	return s
+	g.items = append(g.items, t)
+	return g
 }

@@ -1,6 +1,6 @@
 package data
 
-var Keywords = []string{"break", "default", "func", "interface", "select", "case", "defer", "go", "map", "struct", "chan", "else", "goto", "package", "switch", "const", "fallthrough", "if", "range", "type", "continue", "for", "import", "return", "var"}
+var Keywords = []string{"break", "default", "func", "interface", "select", "case", "defer", "go", "map", "struct", "chan", "else", "goto", "package", "switch", "const", "fallthrough", "if", "range", "type", "continue", "for", "import", "var"}
 
 var Types = []string{"bool", "byte", "complex64", "complex128", "error", "float32", "float64", "int", "int8", "int16", "int32", "int64", "rune", "string", "uint", "uint8", "uint16", "uint32", "uint64", "uintptr"}
 
@@ -8,69 +8,107 @@ var Constants = []string{"true", "false", "iota"}
 
 var Zero = []string{"nil"}
 
-var Functions = []string{"append", "cap", "close", "complex", "copy", "delete", "imag", "len", "make", "new", "panic", "print", "println", "real", "recover"}
+var Functions = []struct {
+	Name     string
+	NoParens bool
+}{
+	{Name: "append"},
+	{Name: "cap"},
+	{Name: "close"},
+	{Name: "complex"},
+	{Name: "copy"},
+	{Name: "delete"},
+	{Name: "imag"},
+	{Name: "len"},
+	{Name: "make"},
+	{Name: "new"},
+	{Name: "panic"},
+	{Name: "print"},
+	{Name: "println"},
+	{Name: "real"},
+	{Name: "recover"},
+	{Name: "return", NoParens: true},
+}
 
-var Blocks = []struct {
+var Blocks = map[string]struct {
 	Name      string
+	Syntax    string
 	Desc      string
 	Open      string
 	Close     string
 	Seperator string
 }{
-	{
+	"file": {
+		Desc:      "statements separated with newlines",
+		Seperator: "\n",
+	},
+	"statement": {
+		Desc:      "tokens separated by spaces",
+		Seperator: " ",
+	},
+	"parens": {
+		Name:   "Parens",
+		Syntax: "ParensSyntax",
+		Desc:   "parenthesis",
+		Open:   "(",
+		Close:  ")",
+	},
+	"list": {
 		Name:      "List",
-		Desc:      "a comma seperated list",
+		Syntax:    "ListSyntax",
+		Desc:      "a comma separated list",
 		Seperator: ",",
 	},
-	{
-		Name:  "Parens",
-		Desc:  "parenthesis",
-		Open:  "(",
-		Close: ")",
+	"braces": {
+		Name:   "Braces",
+		Syntax: "BracesSyntax",
+		Desc:   "curly braces",
+		Open:   "{",
+		Close:  "}",
 	},
-	{
-		Name:  "Braces",
-		Desc:  "curly braces",
-		Open:  "{",
-		Close: "}",
-	},
-	{
+	"values": {
 		Name:      "Values",
+		Syntax:    "ValuesSyntax",
 		Desc:      "curly braces containing a comma separated list",
 		Open:      "{",
 		Close:     "}",
 		Seperator: ",",
 	},
-	{
+	"index": {
 		Name:      "Index",
+		Syntax:    "IndexSyntax",
 		Desc:      "square brackets containing a colon separated list",
 		Open:      "[",
 		Close:     "]",
 		Seperator: ":",
 	},
-	{
+	"block": {
 		Name:      "Block",
+		Syntax:    "BlockSyntax",
 		Desc:      "curly braces containing a statements list",
 		Open:      "{",
 		Close:     "}",
-		Seperator: "\\n",
+		Seperator: "\n",
 	},
-	{
+	"call": {
 		Name:      "Call",
+		Syntax:    "CallSyntax",
 		Desc:      "parenthesis containing a comma separated list",
 		Open:      "(",
 		Close:     ")",
 		Seperator: ",",
 	},
-	{
+	"params": {
 		Name:      "Params",
+		Syntax:    "ParamsSyntax",
 		Desc:      "parenthesis containing a comma separated list",
 		Open:      "(",
 		Close:     ")",
 		Seperator: ",",
 	},
-	{
+	"decls": {
 		Name:      "Decls",
+		Syntax:    "DeclsSyntax",
 		Desc:      "parenthesis containing a statement list",
 		Open:      "(",
 		Close:     ")",

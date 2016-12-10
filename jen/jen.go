@@ -1,4 +1,4 @@
-//go:generate genjen
+//go:generate genjen2
 package jen
 
 import (
@@ -16,41 +16,42 @@ type Code interface {
 	IsNull() bool
 }
 
-func NewFile() *StatementList {
-	return new(StatementList)
+func NewFile() *Group {
+	return &Group{
+		syntax: FileSyntax,
+	}
 }
 
-type StatementList []Code
-
-type Statement []Code
-
-func (g *Statement) Add(code ...Code) *Statement {
-	*g = append(*g, code...)
-	return g
+func newStatement(c ...Code) *Group {
+	return &Group{
+		syntax: StatementSyntax,
+		items:  c,
+	}
 }
 
-func (f *StatementList) Add(code ...Code) *Statement {
-	g := new(Statement)
-	g.Add(code...)
-	*f = append(*f, g)
-	return g
+func startNewStatement(s syntaxType) bool {
+	switch s {
+	case FileSyntax, BlockSyntax:
+		return true
+	}
+	return false
 }
 
-func WriteFile(ctx context.Context, l *StatementList, filename string) error {
+func WriteFile(ctx context.Context, g *Group, filename string) error {
 	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
 		return err
 	}
 	defer f.Close()
-	if err := Render(ctx, l, f); err != nil {
+	if err := RenderFile(ctx, g, f); err != nil {
 		return err
 	}
 	return nil
 }
 
-func Render(ctx context.Context, l *StatementList, w io.Writer) error {
+func RenderFile(ctx context.Context, g *Group, w io.Writer) error {
 	body := &bytes.Buffer{}
-	if err := l.Render(ctx, body); err != nil {
+	if err := g.Render(ctx, body); err != nil {
 		return err
 	}
 	global := FromContext(ctx)
@@ -87,47 +88,6 @@ func Render(ctx context.Context, l *StatementList, w io.Writer) error {
 	_, err = w.Write(formatted)
 	if err != nil {
 		return err
-	}
-	return nil
-}
-
-func (l StatementList) IsNull() bool {
-	for _, c := range l {
-		if !c.IsNull() {
-			return false
-		}
-	}
-	return true
-}
-
-func (l StatementList) Render(ctx context.Context, w io.Writer) error {
-	for i, code := range l {
-		if i > 0 {
-			if _, err := w.Write([]byte("\n")); err != nil {
-				return err
-			}
-		}
-		if err := code.Render(ctx, w); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-func (s Statement) IsNull() bool {
-	for _, c := range s {
-		if !c.IsNull() {
-			return false
-		}
-	}
-	return true
-}
-
-func (g Statement) Render(ctx context.Context, w io.Writer) error {
-	for _, code := range g {
-		if err := code.Render(ctx, w); err != nil {
-			return err
-		}
 	}
 	return nil
 }

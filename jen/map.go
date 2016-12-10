@@ -5,48 +5,44 @@ import (
 	"io"
 )
 
-func MapLit(lit map[Code]Code) *Statement {
-	s := new(Statement)
-	return s.MapLit(lit)
+func MapLit(lit map[Code]Code) *Group {
+	return newStatement().MapLit(lit)
 }
 
-func (l *StatementList) MapLit(lit map[Code]Code) *Statement {
-	s := MapLit(lit)
-	*l = append(*l, s)
-	return s
-}
-
-func (s *Statement) MapLit(lit map[Code]Code) *Statement {
-	l := mapLit{
-		Statement: s,
-		m:         lit,
+func (g *Group) MapLit(code map[Code]Code) *Group {
+	if startNewStatement(g.syntax) {
+		s := MapLit(code)
+		g.items = append(g.items, s)
+		return s
 	}
-	*s = append(*s, l)
-	return s
-}
-
-func MapLitFunc(f func(map[Code]Code)) *Statement {
-	s := new(Statement)
-	return s.MapLitFunc(f)
-}
-
-func (l *StatementList) MapLitFunc(f func(map[Code]Code)) *Statement {
-	s := MapLitFunc(f)
-	*l = append(*l, s)
-	return s
-}
-
-func (s *Statement) MapLitFunc(f func(map[Code]Code)) *Statement {
-	l := mapLit{
-		Statement: s,
-		f:         f,
+	m := mapLit{
+		Group: g,
+		m:     code,
 	}
-	*s = append(*s, l)
-	return s
+	g.items = append(g.items, m)
+	return g
+}
+
+func MapLitFunc(f func(map[Code]Code)) *Group {
+	return newStatement().MapLitFunc(f)
+}
+
+func (g *Group) MapLitFunc(f func(map[Code]Code)) *Group {
+	if startNewStatement(g.syntax) {
+		s := MapLitFunc(f)
+		g.items = append(g.items, s)
+		return s
+	}
+	m := mapLit{
+		Group: g,
+		f:     f,
+	}
+	g.items = append(g.items, m)
+	return g
 }
 
 type mapLit struct {
-	*Statement
+	*Group
 	m map[Code]Code
 	f func(map[Code]Code)
 }
@@ -93,7 +89,7 @@ func (l mapLit) Render(ctx context.Context, w io.Writer) error {
 			return err
 		}
 	}
-	if _, err := w.Write([]byte("} ")); err != nil {
+	if _, err := w.Write([]byte("}")); err != nil {
 		return err
 	}
 	return nil

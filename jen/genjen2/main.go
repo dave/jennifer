@@ -2,7 +2,8 @@ package main
 
 import (
 	"context"
-	"os"
+
+	"strings"
 
 	. "github.com/davelondon/jennifer/jen"
 	"github.com/davelondon/jennifer/jen/data"
@@ -13,201 +14,224 @@ func main() {
 	file := NewFile()
 	for _, b := range data.Blocks {
 		b := b // b used in closures
+		if b.Name == "" {
+			continue
+		}
+		comment := Commentf("%s inserts %s", b.Name, b.Desc)
+
 		/*
-			// {{ .Name }} inserts {{ .Desc }}
-			func {{ .Name }}(c ...Code) *Statement {
-				s := new(Statement)
-				return s.{{ .Name }}(c...)
+			func {Name}(c ...Code) *Group {
+				return newStatement().{Name}(c...)
 			}
 		*/
-		comment := Commentf("%s inserts %s", b.Name, b.Desc)
 		file.Add(comment)
 		file.Func().Id(b.Name).Params(
-			Id("c").Vari().Id("Code"),
-		).Ptr().Id("Statement").Block(
-			Id("s").Sas().New(Id("Statement")),
-			Return().Id("s").Method(b.Name, Id("c").Vari()),
+			Id("c").Op("...").Id("Code"),
+		).Op("*").Id("Group").Block(
+			Return().Id("newStatement").Call().Op(".").Id(b.Name).Call(
+				Id("c").Op("..."),
+			),
 		)
 
 		/*
-			// {{ .Name }} inserts {{ .Desc }}
-			func (l *StatementList) {{ .Name }}(c ...Code) *Statement {
-				s := {{ .Name }}(c...)
-				*l = append(*l, s)
-				return s
+			func (g *Group) {Name}(c ...Code) *Group {
+				if startNewStatement(g.syntax) {
+					s := {Name}(c...)
+					g.items = append(g.items, s)
+					return s
+				}
+				s := Group{
+					syntax: {Syntax},
+					items:  c,
+				}
+				g.items = append(g.items, s)
+				return g
 			}
 		*/
 		file.Add(comment)
 		file.Func().Params(
-			Id("l").Ptr().Id("StatementList"),
+			Id("g").Op("*").Id("Group"),
 		).Id(b.Name).Params(
-			Id("c").Vari().Id("Code"),
-		).Ptr().Id("Statement").Block(
-			Id("s").Sas().Id(b.Name).Call(Id("c").Vari()),
-			Ptr().Id("l").As().Append(Ptr().Id("l"), Id("s")),
-			Return().Id("s"),
-		)
-
-		/*
-			// {{ .Name }} inserts {{ .Desc }}
-			func (s *Statement) {{ .Name }}(c ...Code) *Statement {
-				b := block{
-					Statement: s,
-					code:      c,
-					{{- if ne .Open "" }}
-					open:      "{{ .Open }}",
-					{{- end -}}
-					{{- if ne .Close "" }}
-					close:     "{{ .Close }}",
-					{{- end -}}
-					{{- if ne .Seperator "" }}
-					seperator: "{{ .Seperator }}",
-					{{- end }}
-				}
-				*s = append(*s, b)
-				return s
-			}
-		*/
-		file.Add(comment)
-		file.Func().Params(
-			Id("l").Ptr().Id("Statement"),
-		).Id(b.Name).Params(
-			Id("c").Vari().Id("Code"),
-		).Ptr().Id("Statement").Block(
-			Id("b").Sas().Id("block").MapLitFunc(func(m map[Code]Code) {
-				m[Id("Statement")] = Id("s")
-				m[Id("code")] = Id("c")
-				if b.Open != "" {
-					m[Id("open")] = Lit(b.Open)
-				}
-				if b.Close != "" {
-					m[Id("close")] = Lit(b.Close)
-				}
-				if b.Seperator != "" {
-					m[Id("seperator")] = Lit(b.Seperator)
-				}
+			Id("c").Op("...").Id("Code"),
+		).Op("*").Id("Group").Block(
+			If().Id("startNewStatement").Call(
+				Id("g", "syntax"),
+			).Block(
+				Id("s").Op(":=").Id(b.Name).Call(
+					Id("c").Op("..."),
+				),
+				Id("g", "items").Op("=").Append(
+					Id("g", "items"),
+					Id("s"),
+				),
+				Return(Id("s")),
+			),
+			Id("s").Op(":=").Id("Group").Lit(map[string]Code{
+				"syntax": Id(b.Syntax),
+				"items":  Id("c"),
 			}),
-			Ptr().Id("s").As().Append(Ptr().Id("s"), Id("b")),
-			Return().Id("s"),
+			Id("g", "items").Op("=").Append(
+				Id("g", "items"),
+				Id("s"),
+			),
+			Return(Id("g")),
+		)
+	}
+
+	type token struct {
+		name      string
+		cap       string
+		tokenType string
+		tokenDesc string
+	}
+	tokens := []token{}
+	for _, v := range data.Identifiers {
+		tokens = append(tokens, token{
+			name:      v,
+			cap:       strings.ToUpper(v[:1]) + v[1:],
+			tokenType: "identifierToken",
+			tokenDesc: "identifier",
+		})
+	}
+	for _, v := range data.Keywords {
+		tokens = append(tokens, token{
+			name:      v,
+			cap:       strings.ToUpper(v[:1]) + v[1:],
+			tokenType: "keywordToken",
+			tokenDesc: "keyword",
+		})
+	}
+
+	for _, t := range tokens {
+		t := t // used in closures
+		comment := Commentf(
+			"%s inserts the %s %s",
+			t.cap,
+			t.name,
+			t.tokenDesc,
+		)
+		/*
+			func {Name}() *Group {
+				return newStatement().{Name}()
+			}
+		*/
+		file.Add(comment)
+		file.Func().Id(t.cap).Params().Op("*").Id("Group").Block(
+			Return().Id("newStatement").Call().Op(".").Id(t.cap).Call(),
+		)
+
+		/*
+			func (g *Group) {Name}() *Group {
+				if startNewStatement(g.syntax) {
+					s := {Name}()
+					g.items = append(g.items, s)
+					return s
+				}
+				t := Token{
+					Group:    g,
+					typ:     {identifierToken|keywordToken},
+					content: "{Name}",
+				}
+				g.items = append(g.items, t)
+				return g
+			}
+		*/
+		file.Add(comment)
+		file.Func().Params(
+			Id("g").Op("*").Id("Group"),
+		).Id(t.cap).Params().Op("*").Id("Group").Block(
+			If().Id("startNewStatement").Call(
+				Id("g", "syntax"),
+			).Block(
+				Id("s").Op(":=").Id(t.cap).Call(),
+				Id("g", "items").Op("=").Append(
+					Id("g", "items"),
+					Id("s"),
+				),
+				Return(Id("s")),
+			),
+			Id("t").Op(":=").Id("Token").Lit(map[string]Code{
+				"Group":   Id("g"),
+				"typ":     Id(t.tokenType),
+				"content": Lit(t.name),
+			}),
+			Id("g", "items").Op("=").Append(
+				Id("g", "items"),
+				Id("t"),
+			),
+			Return(Id("g")),
+		)
+	}
+
+	for _, f := range data.Functions {
+		f := f // used in closure
+		capName := strings.ToUpper(f.Name[:1]) + f.Name[1:]
+		desc := "built in function"
+		if f.NoParens {
+			desc = "keyword"
+		}
+		comment := Commentf(
+			"%s inserts the %s %s",
+			capName,
+			f.Name,
+			desc,
+		)
+		/*
+			func {Name}(c ...Code) *Group {
+				return newStatement().{Name}(c...)
+			}
+		*/
+		file.Add(comment)
+		file.Func().Id(capName).Params(
+			Id("c").Op("...").Id("Code"),
+		).Op("*").Id("Group").Block(
+			Return().Id("newStatement").Call().Op(".").Id(capName).Call(
+				Id("c").Op("..."),
+			),
+		)
+
+		/*
+			func (g *Group) {Name}(c ...Code) *Group {
+				if startNewStatement(g.syntax) {
+					s := {Name}(c...)
+					g.items = append(g.items, s)
+					return s
+				}
+				return g.Id("{Name}").{Call|List}(c...)
+			}
+		*/
+		file.Add(comment)
+		file.Func().Params(
+			Id("g").Op("*").Id("Group"),
+		).Id(capName).Params(
+			Id("c").Op("...").Id("Code"),
+		).Op("*").Id("Group").Block(
+			If().Id("startNewStatement").Call(Id("g", "syntax")).Block(
+				Id("s").Op(":=").Id(capName).Call(
+					Id("c").Op("..."),
+				),
+				Id("g", "items").Op("=").Append(
+					Id("g", "items"),
+					Id("s"),
+				),
+				Return(Id("s")),
+			),
+			Return().Id("g.Id").Call(
+				Lit(f.Name),
+			).Op(".").AddFunc(func() Code {
+				if f.NoParens {
+					return Id("List")
+				}
+				return Id("Call")
+			}).Call(
+				Id("c").Op("..."),
+			),
 		)
 
 	}
-	/*
-		{{ range .Identifiers }}
-		func {{ . | capital }}() *Statement {
-			s := new(Statement)
-			return s.{{ . | capital }}()
-		}
-
-		func (l *StatementList) {{ . | capital }}() *Statement {
-			s := {{ . | capital }}()
-			*l = append(*l, s)
-			return s
-		}
-
-		func (s *Statement) {{ . | capital }}() *Statement {
-			t := Token{
-				Statement: s,
-				typ:       identifierToken,
-				content:   "{{ . }}",
-			}
-			*s = append(*s, t)
-			return s
-		}
-		{{ end }}
-
-		{{ range .Functions }}
-		func {{ . | capital }}(c ...Code) *Statement {
-			s := new(Statement)
-			return s.{{ . | capital }}(c...)
-		}
-
-		func (l *StatementList) {{ . | capital }}(c ...Code) *Statement {
-			s := {{ . | capital }}(c...)
-			*l = append(*l, s)
-			return s
-		}
-
-		func (s *Statement) {{ . | capital }}(c ...Code) *Statement {
-			t := Token{
-				Statement: s,
-				typ:       identifierToken,
-				content:   "{{ . }}",
-			}
-			ca := Call(c...)
-			*s = append(*s, t, ca)
-			return s
-		}
-		{{ end }}
-
-		{{ range .Keywords }}
-		func {{ . | capital }}() *Statement {
-			s := new(Statement)
-			return s.{{ . | capital }}()
-		}
-
-		func (l *StatementList) {{ . | capital }}() *Statement {
-			s := {{ . | capital }}()
-			*l = append(*l, s)
-			return s
-		}
-
-		func (s *Statement) {{ . | capital }}() *Statement {
-			t := Token{
-				Statement: s,
-				typ:       keywordToken,
-				content:   "{{ . }}",
-			}
-			*s = append(*s, t)
-			return s
-		}
-
-		{{ end }}
-
-		{{ range .Operators }}
-		// {{ .Name }} inserts the {{ .Desc }} operator ({{ .Op }})
-		func {{ .Name }}() *Statement {
-			s := new(Statement)
-			return s.{{ .Name }}()
-		}
-
-		// {{ .Name }} inserts the {{ .Desc }} operator ({{ .Op }})
-		func (l *StatementList) {{ .Name }}() *Statement {
-			s := {{ .Name }}()
-			*l = append(*l, s)
-			return s
-		}
-
-		// {{ .Name }} inserts the {{ .Desc }} operator ({{ .Op }})
-		func (s *Statement) {{ .Name }}() *Statement {
-			t := Token{
-				Statement: s,
-				typ:       operatorToken,
-				content:   "{{ .Op }}",
-			}
-			*s = append(*s, t)
-			return s
-		}
-
-		{{ end }}
-	*/
-	/*
-		for _, keyword := range data.Keywords {
-			name := strings.ToUpper(keyword[:1]) + keyword[1:]
-			// func Foo(c ...Code) *Statement {
-			file.Comment("Foo")
-			file.Func().Id(name).Params(
-				Id("c").Vari().Id("Code"),
-			).Ptr().Id("Statement").Block(
-				// s := new(Statement)
-				Id("s").Sas().New(Id("Statement")),
-				// return s.Foo(c...)
-				Return().Id("s").Method(name, Id("c").Vari()),
-			)
-		}*/
 
 	ctx := Context(context.Background(), "jen")
-	err := Render(ctx, file, os.Stdout)
+	err := WriteFile(ctx, file, "./generated.go")
 	if err != nil {
 		panic(err)
 	}

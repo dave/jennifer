@@ -23,136 +23,111 @@ func main() {
 	*/
 
 	{{ range .Blocks }}
+	{{ if ne .Name "" }}
 	// {{ .Name }} inserts {{ .Desc }}
-	func {{ .Name }}(code ...Code) *Statement {
-		s := new(Statement)
-		return s.{{ .Name }}(code...)
+	func {{ .Name }}(code ...Code) *Group {
+		return newStatement().{{ .Name }}(code...)
 	}
 
 	// {{ .Name }} inserts {{ .Desc }}
-	func (l *StatementList) {{ .Name }}(code ...Code) *Statement {
-		s := {{ .Name }}(code...)
-		*l = append(*l, s)
-		return s
-	}
-
-	// {{ .Name }} inserts {{ .Desc }}
-	func (s *Statement) {{ .Name }}(code ...Code) *Statement {
-		g := group{
-			Statement: s,
-			code:      code,
-			{{- if ne .Open "" }}
-			open:      "{{ .Open }}",
-			{{- end -}}
-			{{- if ne .Close "" }}
-			close:     "{{ .Close }}",
-			{{- end -}}
-			{{- if ne .Seperator "" }}
-			seperator: "{{ .Seperator }}",
-			{{- end }}
+	func (g *Group) {{ .Name }}(c ...Code) *Group {
+		if startNewStatement(g.syntax) {
+			s := {{ .Name }}(c...)
+			g.items = append(g.items, s)
+			return s
 		}
-		*s = append(*s, g)
-		return s
+		s := Group{
+			syntax: {{ .Syntax }},
+			items:  c,
+		}
+		g.items = append(g.items, s)
+		return g
 	}
+	{{ end }}
 	{{ end }}
 
 	{{ range .Identifiers }}
-	func {{ . | capital }}() *Statement {
-		s := new(Statement)
-		return s.{{ . | capital }}()
+	func {{ . | capital }}() *Group {
+		return newStatement().{{ . | capital }}()
 	}
 
-	func (l *StatementList) {{ . | capital }}() *Statement {
-		s := {{ . | capital }}()
-		*l = append(*l, s)
-		return s
-	}
-
-	func (s *Statement) {{ . | capital }}() *Statement {
-		t := Token{
-			Statement: s,
-			typ:       identifierToken,
-			content:   "{{ . }}",
+	func (g *Group) {{ . | capital }}() *Group {
+		if startNewStatement(g.syntax) {
+			s := {{ . | capital }}()
+			g.items = append(g.items, s)
+			return s
 		}
-		*s = append(*s, t)
-		return s
+		t := Token{
+			Group:    g,
+			typ:     identifierToken,
+			content: "{{ . }}",
+		}
+		g.items = append(g.items, t)
+		return g
 	}
 	{{ end }}
 
 	{{ range .Functions }}
-	func {{ . | capital }}(c ...Code) *Statement {
-		s := new(Statement)
-		return s.{{ . | capital }}(c...)
+	func {{ .Name | capital }}(c ...Code) *Group {
+		return newStatement().{{ .Name | capital }}(c...)
 	}
 
-	func (l *StatementList) {{ . | capital }}(c ...Code) *Statement {
-		s := {{ . | capital }}(c...)
-		*l = append(*l, s)
-		return s
-	}
-
-	func (s *Statement) {{ . | capital }}(c ...Code) *Statement {
-		t := Token{
-			Statement: s,
-			typ:       identifierToken,
-			content:   "{{ . }}",
+	func (g *Group) {{ .Name | capital }}(c ...Code) *Group {
+		if startNewStatement(g.syntax) {
+			s := {{ .Name | capital }}(c...)
+			g.items = append(g.items, s)
+			return s
 		}
-		ca := Call(c...)
-		*s = append(*s, t, ca)
-		return s
+		return g.Id("{{ .Name }}").{{ if .NoParens }}List{{ else }}Call{{ end }}(c...)
 	}
 	{{ end }}
 
 	{{ range .Keywords }}
-	func {{ . | capital }}() *Statement {
-		s := new(Statement)
-		return s.{{ . | capital }}()
+	func {{ . | capital }}() *Group {
+		return newStatement().{{ . | capital }}()
 	}
 
-	func (l *StatementList) {{ . | capital }}() *Statement {
-		s := {{ . | capital }}()
-		*l = append(*l, s)
-		return s
-	}
-
-	func (s *Statement) {{ . | capital }}() *Statement {
-		t := Token{
-			Statement: s,
-			typ:       keywordToken,
-			content:   "{{ . }}",
+	func (g *Group) {{ . | capital }}() *Group {
+		if startNewStatement(g.syntax) {
+			s := {{ . | capital }}()
+			g.items = append(g.items, s)
+			return s
 		}
-		*s = append(*s, t)
-		return s
+		t := Token{
+			Group:    g,
+			typ:     keywordToken,
+			content: "{{ . }}",
+		}
+		g.items = append(g.items, t)
+		return g
 	}
 
 	{{ end }}
-	
+	/*
 	{{ range .Operators }}
 	// {{ .Name }} inserts the {{ .Desc }} operator ({{ .Op }})
-	func {{ .Name }}() *Statement {
-		s := new(Statement)
-		return s.{{ .Name }}()
+	func {{ .Name }}() *Group {
+		return newStatement().{{ .Name }}()
 	}
 
 	// {{ .Name }} inserts the {{ .Desc }} operator ({{ .Op }})
-	func (l *StatementList) {{ .Name }}() *Statement {
-		s := {{ .Name }}()
-		*l = append(*l, s)
-		return s
-	}
-
-	// {{ .Name }} inserts the {{ .Desc }} operator ({{ .Op }})
-	func (s *Statement) {{ .Name }}() *Statement {
-		t := Token{
-			Statement: s,
-			typ:       operatorToken,
-			content:   "{{ .Op }}",
+	func (g *Group) {{ .Name }}() *Group {
+		if startNewStatement(g.syntax) {
+			s := {{ .Name }}()
+			g.items = append(g.items, s)
+			return s
 		}
-		*s = append(*s, t)
-		return s
+		t := Token{
+			Group:   g,
+			typ:     operatorToken,
+			content: "{{ .Op }}",
+		}
+		g.items = append(g.items, t)
+		return g
 	}
 
-	{{ end }}`)
+	{{ end }}
+	*/`)
 	if err != nil {
 		panic(err)
 	}
@@ -160,9 +135,13 @@ func main() {
 	if err := tmpl.Execute(buf, struct {
 		Keywords    []string
 		Identifiers []string
-		Functions   []string
-		Blocks      []struct {
+		Functions   []struct {
+			Name     string
+			NoParens bool
+		}
+		Blocks map[string]struct {
 			Name      string
+			Syntax    string
 			Desc      string
 			Open      string
 			Close     string

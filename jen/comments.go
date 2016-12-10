@@ -6,49 +6,49 @@ import (
 	"io"
 )
 
-func Comment(comments ...string) *Statement {
-	s := new(Statement)
-	return s.Comment(comments...)
+func Comment(comments ...string) *Group {
+	return newStatement().Comment(comments...)
 }
 
-func (l *StatementList) Comment(comments ...string) *Statement {
-	s := Comment(comments...)
-	*l = append(*l, s)
-	return s
-}
-
-func (s *Statement) Comment(comments ...string) *Statement {
-	c := comment{
-		Statement: s,
-		comments:  comments,
+func (g *Group) Comment(comments ...string) *Group {
+	if startNewStatement(g.syntax) {
+		s := Comment(comments...)
+		g.items = append(g.items, s)
+		return s
 	}
-	*s = append(*s, c)
-	return s
-}
-
-func Commentf(format string, a ...interface{}) *Statement {
-	s := new(Statement)
-	return s.Comment(fmt.Sprintf(format, a...))
-}
-
-func (l *StatementList) Commentf(format string, a ...interface{}) *Statement {
-	s := Comment(fmt.Sprintf(format, a...))
-	*l = append(*l, s)
-	return s
-}
-
-func (s *Statement) Commentf(format string, a ...interface{}) *Statement {
 	c := comment{
-		Statement: s,
-		comments:  []string{fmt.Sprintf(format, a...)},
+		Group:    g,
+		comments: comments,
 	}
-	*s = append(*s, c)
-	return s
+	g.items = append(g.items, c)
+	return g
+}
+
+func Commentf(format string, a ...interface{}) *Group {
+	return newStatement().Commentf(format, a...)
+}
+
+func (g *Group) Commentf(format string, a ...interface{}) *Group {
+	if startNewStatement(g.syntax) {
+		s := Commentf(format, a...)
+		g.items = append(g.items, s)
+		return s
+	}
+	c := comment{
+		Group:    g,
+		comments: []string{fmt.Sprintf(format, a...)},
+	}
+	g.items = append(g.items, c)
+	return g
 }
 
 type comment struct {
-	*Statement
+	*Group
 	comments []string
+}
+
+func (c comment) IsNull() bool {
+	return false
 }
 
 func (c comment) Render(ctx context.Context, w io.Writer) error {

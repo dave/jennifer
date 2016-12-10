@@ -19,11 +19,6 @@ var cases = []tc{
 		expect: `{}`,
 	},
 	{
-		desc:   `empty list`,
-		code:   List(),
-		expect: ``,
-	},
-	{
 		desc:   `string literal`,
 		code:   Lit("a"),
 		expect: `"a"`,
@@ -48,34 +43,34 @@ var cases = []tc{
 	},
 	{
 		desc:   `var decl`,
-		code:   Var().Id("a").As().Lit("b"),
+		code:   Var().Id("a").Op("=").Lit("b"),
 		expect: `var a = "b"`,
 	},
 	{
 		desc:   `short var decl`,
-		code:   Id("a").Sas().Lit("b"),
+		code:   Id("a").Op(":=").Lit("b"),
 		expect: `a := "b"`,
 	},
 	{
 		desc:   `simple if`,
-		code:   If().Id("a").Eq().Lit("b").Block(),
+		code:   If().Id("a").Op("==").Lit("b").Block(),
 		expect: `if a == "b" {}`,
 	},
 	{
 		desc: `simple if`,
-		code: If().Id("a").Eq().Lit("b").Block(
-			Id("a").Inc(),
+		code: If().Id("a").Op("==").Lit("b").Block(
+			Id("a").Op("++"),
 		),
 		expect: `if a == "b" { a++ }`,
 	},
 	{
 		desc:   `pointer`,
-		code:   Ptr().Id("a"),
+		code:   Op("*").Id("a"),
 		expect: `*a`,
 	},
 	{
 		desc:   `address`,
-		code:   Adr().Id("a"),
+		code:   Op("&").Id("a"),
 		expect: `&a`,
 	},
 	{
@@ -104,12 +99,12 @@ var cases = []tc{
 	},
 	{
 		desc:   `return`,
-		code:   Return().Id("a"),
+		code:   Return(Id("a")),
 		expect: `return a`,
 	},
 	{
 		desc:   `double return`,
-		code:   Return().List(Id("a"), Id("b")),
+		code:   Return(Id("a"), Id("b")),
 		expect: `return a, b`,
 	},
 	{
@@ -117,7 +112,7 @@ var cases = []tc{
 		code: Func().Id("a").Params(
 			Id("a").String(),
 		).Block(
-			Return().Id("a"),
+			Return(Id("a")),
 		),
 		expect: `func a(a string){ return a }`,
 	},
@@ -128,32 +123,32 @@ var cases = []tc{
 	},
 	{
 		desc:   `multip`,
-		code:   Id("a").Product().Id("b"),
+		code:   Id("a").Op("*").Id("b"),
 		expect: `a * b`,
 	},
 	{
 		desc:   `multip ptr`,
-		code:   Id("a").Product().Ptr().Id("b"),
+		code:   Id("a").Op("*").Op("*").Id("b"),
 		expect: `a * *b`,
 	},
 	{
 		desc:   `field`,
-		code:   Id("a").Field("b"),
+		code:   Id("a", "b"),
 		expect: `a.b`,
 	},
 	{
 		desc:   `method`,
-		code:   Id("a").Method("b", Id("c"), Id("d")),
+		code:   Id("a", "b").Call(Id("c"), Id("d")),
 		expect: `a.b(c, d)`,
 	},
 	{
 		desc: `if else`,
-		code: If().Id("a").Eq().Lit(1).Block(
-			Id("b").As().Lit(1),
-		).Else().If().Id("a").Eq().Lit(2).Block(
-			Id("b").As().Lit(2),
+		code: If().Id("a").Op("==").Lit(1).Block(
+			Id("b").Op("=").Lit(1),
+		).Else().If().Id("a").Op("==").Lit(2).Block(
+			Id("b").Op("=").Lit(2),
 		).Else().Block(
-			Id("b").As().Lit(3),
+			Id("b").Op("=").Lit(3),
 		),
 		expect: `if a == 1 { b = 1 } else if a == 2 { b = 2 } else { b = 3 }`,
 	},
@@ -177,7 +172,37 @@ var cases = []tc{
 		code: Id("a").MapLit(map[Code]Code{
 			Id("b"): Id("c"),
 		}),
-		expect: `a{b: c}`,
+		expect: `a{
+			b: c,
+		}`,
+	},
+	{
+		desc: `map literal`,
+		code: Id("a").Lit(map[Code]Code{
+			Id("b"): Id("c"),
+		}),
+		expect: `a{
+			b: c,
+		}`,
+	},
+	{
+		desc: `map literal string keys`,
+		code: Id("a").Lit(map[string]Code{
+			"b": Id("c"),
+		}),
+		expect: `a{
+			b: c,
+		}`,
+	},
+	{
+		desc:   `multi id`,
+		code:   Id("a", "b", "c"),
+		expect: `a.b.c`,
+	},
+	{
+		desc:   `add func`,
+		code:   Id("a").Op(".").AddFunc(func() Code { return Id("b") }),
+		expect: `a.b`,
 	},
 }
 
