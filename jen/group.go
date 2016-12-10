@@ -1,10 +1,10 @@
 package jen
 
 import (
+	"bytes"
 	"context"
+	"go/format"
 	"io"
-
-	"github.com/davelondon/jennifer/jen/data"
 )
 
 type Group struct {
@@ -40,9 +40,63 @@ func (g *Group) Do(f func(*Group)) *Group {
 	return g
 }
 
+var info = map[syntaxType]struct {
+	Open      string
+	Close     string
+	Seperator string
+}{
+	FileSyntax: {
+		Seperator: "\n",
+	},
+	StatementSyntax: {
+		Seperator: " ",
+	},
+	ParensSyntax: {
+		Open:  "(",
+		Close: ")",
+	},
+	ListSyntax: {
+		Seperator: ",",
+	},
+	BracesSyntax: {
+		Open:  "{",
+		Close: "}",
+	},
+	ValuesSyntax: {
+		Open:      "{",
+		Close:     "}",
+		Seperator: ",",
+	},
+	IndexSyntax: {
+		Open:      "[",
+		Close:     "]",
+		Seperator: ":",
+	},
+	BlockSyntax: {
+		Open:      "{",
+		Close:     "}",
+		Seperator: "\n",
+	},
+	CallSyntax: {
+		Open:      "(",
+		Close:     ")",
+		Seperator: ",",
+	},
+	ParamsSyntax: {
+		Open:      "(",
+		Close:     ")",
+		Seperator: ",",
+	},
+	DeclsSyntax: {
+		Open:      "(",
+		Close:     ")",
+		Seperator: ";",
+	},
+}
+
 func (g Group) IsNull() bool {
-	d := data.Blocks[string(g.syntax)]
-	if d.Open != "" || d.Close != "" {
+	i := info[g.syntax]
+	if i.Open != "" || i.Close != "" {
 		return false
 	}
 	for _, c := range g.items {
@@ -54,9 +108,9 @@ func (g Group) IsNull() bool {
 }
 
 func (g Group) Render(ctx context.Context, w io.Writer) error {
-	d := data.Blocks[string(g.syntax)]
-	if d.Open != "" {
-		if _, err := w.Write([]byte(d.Open)); err != nil {
+	i := info[g.syntax]
+	if i.Open != "" {
+		if _, err := w.Write([]byte(i.Open)); err != nil {
 			return err
 		}
 	}
@@ -68,8 +122,8 @@ func (g Group) Render(ctx context.Context, w io.Writer) error {
 			// output but adds a separator.
 			continue
 		}
-		if !first && d.Seperator != "" {
-			if _, err := w.Write([]byte(d.Seperator)); err != nil {
+		if !first && i.Seperator != "" {
+			if _, err := w.Write([]byte(i.Seperator)); err != nil {
 				return err
 			}
 		}
@@ -78,10 +132,23 @@ func (g Group) Render(ctx context.Context, w io.Writer) error {
 		}
 		first = false
 	}
-	if d.Close != "" {
-		if _, err := w.Write([]byte(d.Close)); err != nil {
+	if i.Close != "" {
+		if _, err := w.Write([]byte(i.Close)); err != nil {
 			return err
 		}
 	}
 	return nil
+}
+
+func (g Group) GoString() string {
+	ctx := Context(context.Background(), "")
+	buf := &bytes.Buffer{}
+	if err := g.Render(ctx, buf); err != nil {
+		panic(err)
+	}
+	b, err := format.Source(buf.Bytes())
+	if err != nil {
+		panic(err)
+	}
+	return string(b)
 }

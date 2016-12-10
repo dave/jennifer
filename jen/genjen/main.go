@@ -139,13 +139,10 @@ func main() {
 			Name     string
 			NoParens bool
 		}
-		Blocks map[string]struct {
-			Name      string
-			Syntax    string
-			Desc      string
-			Open      string
-			Close     string
-			Seperator string
+		Blocks []struct {
+			Name   string
+			Syntax string
+			Desc   string
 		}
 		Operators []struct {
 			Name string

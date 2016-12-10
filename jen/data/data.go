@@ -30,89 +30,55 @@ var Functions = []struct {
 	{Name: "return", NoParens: true},
 }
 
-var Blocks = map[string]struct {
-	Name      string
-	Syntax    string
-	Desc      string
-	Open      string
-	Close     string
-	Seperator string
+var Blocks = []struct {
+	Name   string
+	Syntax string
+	Desc   string
 }{
-	"file": {
-		Desc:      "statements separated with newlines",
-		Seperator: "\n",
-	},
-	"statement": {
-		Desc:      "tokens separated by spaces",
-		Seperator: " ",
-	},
-	"parens": {
+	{
 		Name:   "Parens",
 		Syntax: "ParensSyntax",
 		Desc:   "parenthesis",
-		Open:   "(",
-		Close:  ")",
 	},
-	"list": {
-		Name:      "List",
-		Syntax:    "ListSyntax",
-		Desc:      "a comma separated list",
-		Seperator: ",",
+	{
+		Name:   "List",
+		Syntax: "ListSyntax",
+		Desc:   "a comma separated list",
 	},
-	"braces": {
+	{
 		Name:   "Braces",
 		Syntax: "BracesSyntax",
 		Desc:   "curly braces",
-		Open:   "{",
-		Close:  "}",
 	},
-	"values": {
-		Name:      "Values",
-		Syntax:    "ValuesSyntax",
-		Desc:      "curly braces containing a comma separated list",
-		Open:      "{",
-		Close:     "}",
-		Seperator: ",",
+	{
+		Name:   "Values",
+		Syntax: "ValuesSyntax",
+		Desc:   "curly braces containing a comma separated list",
 	},
-	"index": {
-		Name:      "Index",
-		Syntax:    "IndexSyntax",
-		Desc:      "square brackets containing a colon separated list",
-		Open:      "[",
-		Close:     "]",
-		Seperator: ":",
+	{
+		Name:   "Index",
+		Syntax: "IndexSyntax",
+		Desc:   "square brackets containing a colon separated list",
 	},
-	"block": {
-		Name:      "Block",
-		Syntax:    "BlockSyntax",
-		Desc:      "curly braces containing a statements list",
-		Open:      "{",
-		Close:     "}",
-		Seperator: "\n",
+	{
+		Name:   "Block",
+		Syntax: "BlockSyntax",
+		Desc:   "curly braces containing a statements list",
 	},
-	"call": {
-		Name:      "Call",
-		Syntax:    "CallSyntax",
-		Desc:      "parenthesis containing a comma separated list",
-		Open:      "(",
-		Close:     ")",
-		Seperator: ",",
+	{
+		Name:   "Call",
+		Syntax: "CallSyntax",
+		Desc:   "parenthesis containing a comma separated list",
 	},
-	"params": {
-		Name:      "Params",
-		Syntax:    "ParamsSyntax",
-		Desc:      "parenthesis containing a comma separated list",
-		Open:      "(",
-		Close:     ")",
-		Seperator: ",",
+	{
+		Name:   "Params",
+		Syntax: "ParamsSyntax",
+		Desc:   "parenthesis containing a comma separated list",
 	},
-	"decls": {
-		Name:      "Decls",
-		Syntax:    "DeclsSyntax",
-		Desc:      "parenthesis containing a statement list",
-		Open:      "(",
-		Close:     ")",
-		Seperator: ";",
+	{
+		Name:   "Decls",
+		Syntax: "DeclsSyntax",
+		Desc:   "parenthesis containing a statement list",
 	},
 }
 
