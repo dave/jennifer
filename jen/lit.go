@@ -58,17 +58,17 @@ type mapLit struct {
 	m map[Code]Code
 }
 
-func (l mapLit) IsNull() bool {
+func (l mapLit) isNull() bool {
 	return false
 }
 
-func (l mapLit) Render(ctx context.Context, w io.Writer) error {
+func (l mapLit) render(ctx context.Context, w io.Writer) error {
 	if _, err := w.Write([]byte("{")); err != nil {
 		return err
 	}
 	first := true
 	for k, v := range l.m {
-		if v.IsNull() {
+		if v.isNull() {
 			// Null() token produces no output but also
 			// no separator. Empty() token products no
 			// output but adds a separator.
@@ -80,13 +80,13 @@ func (l mapLit) Render(ctx context.Context, w io.Writer) error {
 			}
 			first = false
 		}
-		if err := k.Render(ctx, w); err != nil {
+		if err := k.render(ctx, w); err != nil {
 			return err
 		}
 		if _, err := w.Write([]byte(":")); err != nil {
 			return err
 		}
-		if err := v.Render(ctx, w); err != nil {
+		if err := v.render(ctx, w); err != nil {
 			return err
 		}
 		if _, err := w.Write([]byte(",\n")); err != nil {

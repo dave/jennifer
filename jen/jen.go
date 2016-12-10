@@ -14,8 +14,8 @@ import (
 )
 
 type Code interface {
-	Render(ctx context.Context, w io.Writer) error
-	IsNull() bool
+	render(ctx context.Context, w io.Writer) error
+	isNull() bool
 }
 
 func NewFile(name string) *Group {
@@ -74,7 +74,7 @@ func RenderFile(ctx context.Context, g *Group, w io.Writer) error {
 	global.Name = g.syntax.name
 	global.Path = g.syntax.path
 	body := &bytes.Buffer{}
-	if err := g.Render(ctx, body); err != nil {
+	if err := g.render(ctx, body); err != nil {
 		return err
 	}
 	source := &bytes.Buffer{}

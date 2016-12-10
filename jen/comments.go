@@ -47,11 +47,11 @@ type comment struct {
 	comments []string
 }
 
-func (c comment) IsNull() bool {
+func (c comment) isNull() bool {
 	return false
 }
 
-func (c comment) Render(ctx context.Context, w io.Writer) error {
+func (c comment) render(ctx context.Context, w io.Writer) error {
 	if len(c.comments) > 1 {
 		if _, err := w.Write([]byte("/*\n")); err != nil {
 			return err

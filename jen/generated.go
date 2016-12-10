@@ -35,28 +35,28 @@ func (g *Group) List(c ...Code) *Group {
 		return s
 	}
 	s := Group{
+		items: c,
 		syntax: syntax{
 			typ: listSyntax,
 		},
-		items: c,
 	}
 	g.items = append(g.items, s)
 	return g
 }
 
-// Braces inserts curly braces
-func Braces(c ...Code) *Group { return newStatement().Braces(c...) }
+// Clause inserts a semicolon separated list
+func Clause(c ...Code) *Group { return newStatement().Clause(c...) }
 
-// Braces inserts curly braces
-func (g *Group) Braces(c ...Code) *Group {
+// Clause inserts a semicolon separated list
+func (g *Group) Clause(c ...Code) *Group {
 	if startNewStatement(g.syntax) {
-		s := Braces(c...)
+		s := Clause(c...)
 		g.items = append(g.items, s)
 		return s
 	}
 	s := Group{
 		syntax: syntax{
-			typ: bracesSyntax,
+			typ: clauseSyntax,
 		},
 		items: c,
 	}
@@ -75,10 +75,10 @@ func (g *Group) Values(c ...Code) *Group {
 		return s
 	}
 	s := Group{
+		items: c,
 		syntax: syntax{
 			typ: valuesSyntax,
 		},
-		items: c,
 	}
 	g.items = append(g.items, s)
 	return g
@@ -135,10 +135,10 @@ func (g *Group) Call(c ...Code) *Group {
 		return s
 	}
 	s := Group{
-		items: c,
 		syntax: syntax{
 			typ: callSyntax,
 		},
+		items: c,
 	}
 	g.items = append(g.items, s)
 	return g
@@ -214,9 +214,9 @@ func (g *Group) Byte() *Group {
 		return s
 	}
 	t := Token{
+		Group:   g,
 		typ:     identifierToken,
 		content: "byte",
-		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -233,9 +233,9 @@ func (g *Group) Complex64() *Group {
 		return s
 	}
 	t := Token{
-		content: "complex64",
 		Group:   g,
 		typ:     identifierToken,
+		content: "complex64",
 	}
 	g.items = append(g.items, t)
 	return g
@@ -309,9 +309,9 @@ func (g *Group) Float64() *Group {
 		return s
 	}
 	t := Token{
+		Group:   g,
 		typ:     identifierToken,
 		content: "float64",
-		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -328,9 +328,9 @@ func (g *Group) Int() *Group {
 		return s
 	}
 	t := Token{
-		content: "int",
 		Group:   g,
 		typ:     identifierToken,
+		content: "int",
 	}
 	g.items = append(g.items, t)
 	return g
@@ -442,9 +442,9 @@ func (g *Group) String() *Group {
 		return s
 	}
 	t := Token{
-		Group:   g,
 		typ:     identifierToken,
 		content: "string",
+		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -461,9 +461,9 @@ func (g *Group) Uint() *Group {
 		return s
 	}
 	t := Token{
+		Group:   g,
 		typ:     identifierToken,
 		content: "uint",
-		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -480,9 +480,9 @@ func (g *Group) Uint8() *Group {
 		return s
 	}
 	t := Token{
+		content: "uint8",
 		Group:   g,
 		typ:     identifierToken,
-		content: "uint8",
 	}
 	g.items = append(g.items, t)
 	return g
@@ -499,9 +499,9 @@ func (g *Group) Uint16() *Group {
 		return s
 	}
 	t := Token{
-		content: "uint16",
 		Group:   g,
 		typ:     identifierToken,
+		content: "uint16",
 	}
 	g.items = append(g.items, t)
 	return g
@@ -594,9 +594,9 @@ func (g *Group) False() *Group {
 		return s
 	}
 	t := Token{
+		Group:   g,
 		typ:     identifierToken,
 		content: "false",
-		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -613,9 +613,9 @@ func (g *Group) Iota() *Group {
 		return s
 	}
 	t := Token{
-		Group:   g,
 		typ:     identifierToken,
 		content: "iota",
+		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -670,9 +670,9 @@ func (g *Group) Default() *Group {
 		return s
 	}
 	t := Token{
+		Group:   g,
 		typ:     keywordToken,
 		content: "default",
-		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -727,9 +727,9 @@ func (g *Group) Select() *Group {
 		return s
 	}
 	t := Token{
-		content: "select",
 		Group:   g,
 		typ:     keywordToken,
+		content: "select",
 	}
 	g.items = append(g.items, t)
 	return g
@@ -803,9 +803,9 @@ func (g *Group) Map() *Group {
 		return s
 	}
 	t := Token{
-		Group:   g,
 		typ:     keywordToken,
 		content: "map",
+		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -822,9 +822,9 @@ func (g *Group) Struct() *Group {
 		return s
 	}
 	t := Token{
+		content: "struct",
 		Group:   g,
 		typ:     keywordToken,
-		content: "struct",
 	}
 	g.items = append(g.items, t)
 	return g
@@ -917,9 +917,9 @@ func (g *Group) Switch() *Group {
 		return s
 	}
 	t := Token{
+		Group:   g,
 		typ:     keywordToken,
 		content: "switch",
-		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -1031,9 +1031,9 @@ func (g *Group) Continue() *Group {
 		return s
 	}
 	t := Token{
-		Group:   g,
 		typ:     keywordToken,
 		content: "continue",
+		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -1050,9 +1050,9 @@ func (g *Group) For() *Group {
 		return s
 	}
 	t := Token{
+		content: "for",
 		Group:   g,
 		typ:     keywordToken,
-		content: "for",
 	}
 	g.items = append(g.items, t)
 	return g

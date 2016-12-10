@@ -24,11 +24,11 @@ type Token struct {
 	content interface{}
 }
 
-func (t Token) IsNull() bool {
+func (t Token) isNull() bool {
 	return t.typ == nullToken
 }
 
-func (t Token) Render(ctx context.Context, w io.Writer) error {
+func (t Token) render(ctx context.Context, w io.Writer) error {
 	switch t.typ {
 	case literalToken:
 		// TODO: this does not work in all cases

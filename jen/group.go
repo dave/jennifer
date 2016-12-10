@@ -12,10 +12,12 @@ type Group struct {
 	items  []Code
 }
 
-func Add(code ...Code) *Group {
-	return newStatement().Add(code...)
-}
+// Add creates a new statement and appends the provided code.
+//func Add(code ...Code) *Group {
+//	return newStatement().Add(code...)
+//}
 
+// Add appends the provided code to the group.
 func (g *Group) Add(code ...Code) *Group {
 	if startNewStatement(g.syntax) {
 		s := newStatement(code...)
@@ -26,10 +28,13 @@ func (g *Group) Add(code ...Code) *Group {
 	return g
 }
 
+// Do creates a new statement and calls the provided function with it as a
+// parameter
 func Do(f func(*Group)) *Group {
 	return newStatement().Do(f)
 }
 
+// Do calls the provided function with the group as a parameter
 func (g *Group) Do(f func(*Group)) *Group {
 	if startNewStatement(g.syntax) {
 		s := newStatement().Do(f)
@@ -52,16 +57,20 @@ var info = map[syntaxType]struct {
 		Seperator: " ",
 	},
 	parensSyntax: {
-		Open:  "(",
-		Close: ")",
+		Open:      "(",
+		Close:     ")",
+		Seperator: " ",
 	},
 	listSyntax: {
 		Seperator: ",",
 	},
-	bracesSyntax: {
-		Open:  "{",
-		Close: "}",
+	clauseSyntax: {
+		Seperator: ";",
 	},
+	//bracesSyntax: {
+	//	Open:  "{",
+	//	Close: "}",
+	//},
 	valuesSyntax: {
 		Open:      "{",
 		Close:     "}",
@@ -94,20 +103,20 @@ var info = map[syntaxType]struct {
 	},
 }
 
-func (g Group) IsNull() bool {
+func (g Group) isNull() bool {
 	i := info[g.syntax.typ]
 	if i.Open != "" || i.Close != "" {
 		return false
 	}
 	for _, c := range g.items {
-		if !c.IsNull() {
+		if !c.isNull() {
 			return false
 		}
 	}
 	return true
 }
 
-func (g Group) Render(ctx context.Context, w io.Writer) error {
+func (g Group) render(ctx context.Context, w io.Writer) error {
 	i := info[g.syntax.typ]
 	if i.Open != "" {
 		if _, err := w.Write([]byte(i.Open)); err != nil {
@@ -116,7 +125,7 @@ func (g Group) Render(ctx context.Context, w io.Writer) error {
 	}
 	first := true
 	for _, code := range g.items {
-		if code.IsNull() {
+		if code.isNull() {
 			// Null() token produces no output but also
 			// no separator. Empty() token products no
 			// output but adds a separator.
@@ -127,7 +136,7 @@ func (g Group) Render(ctx context.Context, w io.Writer) error {
 				return err
 			}
 		}
-		if err := code.Render(ctx, w); err != nil {
+		if err := code.render(ctx, w); err != nil {
 			return err
 		}
 		first = false
@@ -150,7 +159,7 @@ func (g *Group) GoString() string {
 		return buf.String()
 	}
 	buf := &bytes.Buffer{}
-	if err := g.Render(ctx, buf); err != nil {
+	if err := g.render(ctx, buf); err != nil {
 		panic(err)
 	}
 	b, err := format.Source(buf.Bytes())

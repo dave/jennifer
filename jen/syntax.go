@@ -18,6 +18,6 @@ const (
 	indexSyntax     syntaxType = "index"
 	callSyntax      syntaxType = "call"
 	declsSyntax     syntaxType = "decls"
-	bracesSyntax    syntaxType = "braces"
 	listSyntax      syntaxType = "list"
+	clauseSyntax    syntaxType = "clause"
 )

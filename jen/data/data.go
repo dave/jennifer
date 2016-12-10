@@ -46,9 +46,9 @@ var Blocks = []struct {
 		Desc:   "a comma separated list",
 	},
 	{
-		Name:   "Braces",
-		Syntax: "bracesSyntax",
-		Desc:   "curly braces",
+		Name:   "Clause",
+		Syntax: "clauseSyntax",
+		Desc:   "a semicolon separated list",
 	},
 	{
 		Name:   "Values",
