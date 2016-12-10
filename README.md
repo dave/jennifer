@@ -6,32 +6,26 @@ Jennifer is a code generator for go:
 package main
 
 import (
-	"context"
-	"os"
+	"fmt"
 
-	"github.com/davelondon/jennifer/jen"
+	. "github.com/davelondon/jennifer/jen"
 )
 
 func main() {
-	ctx := jen.Context(context.Background(), "main")
-
-	f := jen.NewFile()
-	f.Func().Id("main").Params().Block(
-		jen.Id("fmt.Println").Call(
-			jen.Lit("Hello, world"),
-		),
-	)
-
-	if err := jen.RenderFile(ctx, f, os.Stdout); err != nil {
-		panic(err)
-	}
+	f := NewFile("a")
+    f.Func().Id("main").Params().Block(
+        Id("fmt.Println").Call(
+            Lit("Hello, world"),
+        ),
+    )
+    fmt.Printf("%#v", f)
 }
 ```
 
 Output:
 
 ```go
-package main
+package a
 
 import fmt "fmt"
 
@@ -46,45 +40,35 @@ Jennifer manages your imports and aliases:
 package main
 
 import (
-	"context"
-	"os"
+	"fmt"
 
-	"github.com/davelondon/jennifer/jen"
+	. "github.com/davelondon/jennifer/jen"
 )
 
 func main() {
-	ctx := jen.ContextPath(
-		context.Background(),
-		"baz",
-		"foo.bar/baz",
-	)
-
-	f := jen.NewFile()
-	f.Func().Id("init").Params().Block(
-		jen.Id("foo.bar/baz.LocalFunction").Call(),
-		jen.Id("foo.bar/qux.RemoteFunction").Call(),
-		jen.Id("bar.foo/qux.PackageCollision").Call(),
-	)
-
-	if err := jen.RenderFile(ctx, f, os.Stdout); err != nil {
-		panic(err)
-	}
+	f := NewFilePath("c", "a.b/c")
+    f.Func().Id("main").Params().Block(
+        Id("a.b/c.Local").Call(),
+        Id("d.e/f.Remote").Call(),
+        Id("g.h/f.Collision").Call(),
+    )
+    fmt.Printf("%#v", f)
 }
 ```
 
 Output:
 
 ```go
-package baz
+package c
 
 import (
-	qux1 "bar.foo/qux"
-	qux "foo.bar/qux"
+    f "d.e/f"
+    f1 "g.h/f"
 )
 
-func init() {
-	LocalFunction()
-	qux.RemoteFunction()
-	qux1.PackageCollision()
+func main() {
+    Local()
+    f.Remote()
+    f1.Collision()
 }
 ```
