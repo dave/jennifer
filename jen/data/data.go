@@ -1,6 +1,8 @@
 package data
 
-var Keywords = []string{"break", "default", "func", "interface", "select", "case", "defer", "go", "map", "struct", "chan", "else", "goto", "package", "switch", "const", "fallthrough", "if", "range", "type", "continue", "for", "import", "var"}
+var Keywords = []string{"break", "default", "func", "interface", "select", "case", "defer", "go", "map", "struct", "chan", "else", "goto", "package", "switch", "const", "fallthrough", "if", "range", "type", "continue", "import", "var"}
+
+// "return" and "for" are special cases
 
 var Types = []string{"bool", "byte", "complex64", "complex128", "error", "float32", "float64", "int", "int8", "int16", "int32", "int64", "rune", "string", "uint", "uint8", "uint16", "uint32", "uint64", "uintptr"}
 
@@ -8,27 +10,7 @@ var Constants = []string{"true", "false", "iota"}
 
 var Zero = []string{"nil"}
 
-var Functions = []struct {
-	Name     string
-	NoParens bool
-}{
-	{Name: "append"},
-	{Name: "cap"},
-	{Name: "close"},
-	{Name: "complex"},
-	{Name: "copy"},
-	{Name: "delete"},
-	{Name: "imag"},
-	{Name: "len"},
-	{Name: "make"},
-	{Name: "new"},
-	{Name: "panic"},
-	{Name: "print"},
-	{Name: "println"},
-	{Name: "real"},
-	{Name: "recover"},
-	{Name: "return", NoParens: true},
-}
+var Functions = []string{"append", "cap", "close", "complex", "copy", "delete", "imag", "len", "make", "new", "panic", "print", "println", "real", "recover"}
 
 var Blocks = []struct {
 	Name   string
@@ -44,11 +26,6 @@ var Blocks = []struct {
 		Name:   "List",
 		Syntax: "listSyntax",
 		Desc:   "a comma separated list",
-	},
-	{
-		Name:   "Clause",
-		Syntax: "clauseSyntax",
-		Desc:   "a semicolon separated list",
 	},
 	{
 		Name:   "Values",

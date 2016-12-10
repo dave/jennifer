@@ -51,7 +51,7 @@ func ExampleGroup_Bool() {
 }
 
 func ExampleBreak() {
-	c := For().Clause(
+	c := For(
 		Id("i").Op(":=").Lit(0),
 		Id("i").Op("<").Lit(10),
 		Id("i").Op("++"),
@@ -80,8 +80,12 @@ func ExampleGroup_Byte() {
 	// Output: b := []byte(s)
 }
 
-//func Byte() *Group
-//func Call(c ...Code) *Group
+func ExampleGroup_Call() {
+	c := Id("a").Call(Id("b"), Id("c"))
+	fmt.Printf("%#v", c)
+	// Output: a(b, c)
+}
+
 //func Cap(c ...Code) *Group
 //func Case() *Group
 //func Chan() *Group

@@ -35,28 +35,8 @@ func (g *Group) List(c ...Code) *Group {
 		return s
 	}
 	s := Group{
-		items: c,
 		syntax: syntax{
 			typ: listSyntax,
-		},
-	}
-	g.items = append(g.items, s)
-	return g
-}
-
-// Clause inserts a semicolon separated list
-func Clause(c ...Code) *Group { return newStatement().Clause(c...) }
-
-// Clause inserts a semicolon separated list
-func (g *Group) Clause(c ...Code) *Group {
-	if startNewStatement(g.syntax) {
-		s := Clause(c...)
-		g.items = append(g.items, s)
-		return s
-	}
-	s := Group{
-		syntax: syntax{
-			typ: clauseSyntax,
 		},
 		items: c,
 	}
@@ -328,9 +308,9 @@ func (g *Group) Int() *Group {
 		return s
 	}
 	t := Token{
-		Group:   g,
 		typ:     identifierToken,
 		content: "int",
+		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -404,9 +384,9 @@ func (g *Group) Int64() *Group {
 		return s
 	}
 	t := Token{
+		content: "int64",
 		Group:   g,
 		typ:     identifierToken,
-		content: "int64",
 	}
 	g.items = append(g.items, t)
 	return g
@@ -442,9 +422,9 @@ func (g *Group) String() *Group {
 		return s
 	}
 	t := Token{
+		Group:   g,
 		typ:     identifierToken,
 		content: "string",
-		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -480,9 +460,9 @@ func (g *Group) Uint8() *Group {
 		return s
 	}
 	t := Token{
-		content: "uint8",
 		Group:   g,
 		typ:     identifierToken,
+		content: "uint8",
 	}
 	g.items = append(g.items, t)
 	return g
@@ -556,9 +536,9 @@ func (g *Group) Uintptr() *Group {
 		return s
 	}
 	t := Token{
-		Group:   g,
 		typ:     identifierToken,
 		content: "uintptr",
+		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -575,9 +555,9 @@ func (g *Group) True() *Group {
 		return s
 	}
 	t := Token{
+		content: "true",
 		Group:   g,
 		typ:     identifierToken,
-		content: "true",
 	}
 	g.items = append(g.items, t)
 	return g
@@ -613,9 +593,9 @@ func (g *Group) Iota() *Group {
 		return s
 	}
 	t := Token{
+		Group:   g,
 		typ:     identifierToken,
 		content: "iota",
-		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -632,9 +612,9 @@ func (g *Group) Nil() *Group {
 		return s
 	}
 	t := Token{
-		content: "nil",
 		Group:   g,
 		typ:     identifierToken,
+		content: "nil",
 	}
 	g.items = append(g.items, t)
 	return g
@@ -727,9 +707,9 @@ func (g *Group) Select() *Group {
 		return s
 	}
 	t := Token{
-		Group:   g,
 		typ:     keywordToken,
 		content: "select",
+		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -803,9 +783,9 @@ func (g *Group) Map() *Group {
 		return s
 	}
 	t := Token{
+		Group:   g,
 		typ:     keywordToken,
 		content: "map",
-		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -822,9 +802,9 @@ func (g *Group) Struct() *Group {
 		return s
 	}
 	t := Token{
-		content: "struct",
 		Group:   g,
 		typ:     keywordToken,
+		content: "struct",
 	}
 	g.items = append(g.items, t)
 	return g
@@ -841,9 +821,9 @@ func (g *Group) Chan() *Group {
 		return s
 	}
 	t := Token{
-		Group:   g,
 		typ:     keywordToken,
 		content: "chan",
+		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -1012,9 +992,9 @@ func (g *Group) Type() *Group {
 		return s
 	}
 	t := Token{
+		content: "type",
 		Group:   g,
 		typ:     keywordToken,
-		content: "type",
 	}
 	g.items = append(g.items, t)
 	return g
@@ -1031,28 +1011,9 @@ func (g *Group) Continue() *Group {
 		return s
 	}
 	t := Token{
+		Group:   g,
 		typ:     keywordToken,
 		content: "continue",
-		Group:   g,
-	}
-	g.items = append(g.items, t)
-	return g
-}
-
-// For inserts the for keyword
-func For() *Group { return newStatement().For() }
-
-// For inserts the for keyword
-func (g *Group) For() *Group {
-	if startNewStatement(g.syntax) {
-		s := For()
-		g.items = append(g.items, s)
-		return s
-	}
-	t := Token{
-		content: "for",
-		Group:   g,
-		typ:     keywordToken,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -1069,9 +1030,9 @@ func (g *Group) Import() *Group {
 		return s
 	}
 	t := Token{
-		Group:   g,
 		typ:     keywordToken,
 		content: "import",
+		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -1088,18 +1049,18 @@ func (g *Group) Var() *Group {
 		return s
 	}
 	t := Token{
+		content: "var",
 		Group:   g,
 		typ:     keywordToken,
-		content: "var",
 	}
 	g.items = append(g.items, t)
 	return g
 }
 
-// Append inserts the append built in function
+// Append inserts the built in function append
 func Append(c ...Code) *Group { return newStatement().Append(c...) }
 
-// Append inserts the append built in function
+// Append inserts the built in function append
 func (g *Group) Append(c ...Code) *Group {
 	if startNewStatement(g.syntax) {
 		s := Append(c...)
@@ -1109,10 +1070,10 @@ func (g *Group) Append(c ...Code) *Group {
 	return g.Id("append").Call(c...)
 }
 
-// Cap inserts the cap built in function
+// Cap inserts the built in function cap
 func Cap(c ...Code) *Group { return newStatement().Cap(c...) }
 
-// Cap inserts the cap built in function
+// Cap inserts the built in function cap
 func (g *Group) Cap(c ...Code) *Group {
 	if startNewStatement(g.syntax) {
 		s := Cap(c...)
@@ -1122,10 +1083,10 @@ func (g *Group) Cap(c ...Code) *Group {
 	return g.Id("cap").Call(c...)
 }
 
-// Close inserts the close built in function
+// Close inserts the built in function close
 func Close(c ...Code) *Group { return newStatement().Close(c...) }
 
-// Close inserts the close built in function
+// Close inserts the built in function close
 func (g *Group) Close(c ...Code) *Group {
 	if startNewStatement(g.syntax) {
 		s := Close(c...)
@@ -1135,10 +1096,10 @@ func (g *Group) Close(c ...Code) *Group {
 	return g.Id("close").Call(c...)
 }
 
-// Complex inserts the complex built in function
+// Complex inserts the built in function complex
 func Complex(c ...Code) *Group { return newStatement().Complex(c...) }
 
-// Complex inserts the complex built in function
+// Complex inserts the built in function complex
 func (g *Group) Complex(c ...Code) *Group {
 	if startNewStatement(g.syntax) {
 		s := Complex(c...)
@@ -1148,10 +1109,10 @@ func (g *Group) Complex(c ...Code) *Group {
 	return g.Id("complex").Call(c...)
 }
 
-// Copy inserts the copy built in function
+// Copy inserts the built in function copy
 func Copy(c ...Code) *Group { return newStatement().Copy(c...) }
 
-// Copy inserts the copy built in function
+// Copy inserts the built in function copy
 func (g *Group) Copy(c ...Code) *Group {
 	if startNewStatement(g.syntax) {
 		s := Copy(c...)
@@ -1161,10 +1122,10 @@ func (g *Group) Copy(c ...Code) *Group {
 	return g.Id("copy").Call(c...)
 }
 
-// Delete inserts the delete built in function
+// Delete inserts the built in function delete
 func Delete(c ...Code) *Group { return newStatement().Delete(c...) }
 
-// Delete inserts the delete built in function
+// Delete inserts the built in function delete
 func (g *Group) Delete(c ...Code) *Group {
 	if startNewStatement(g.syntax) {
 		s := Delete(c...)
@@ -1174,10 +1135,10 @@ func (g *Group) Delete(c ...Code) *Group {
 	return g.Id("delete").Call(c...)
 }
 
-// Imag inserts the imag built in function
+// Imag inserts the built in function imag
 func Imag(c ...Code) *Group { return newStatement().Imag(c...) }
 
-// Imag inserts the imag built in function
+// Imag inserts the built in function imag
 func (g *Group) Imag(c ...Code) *Group {
 	if startNewStatement(g.syntax) {
 		s := Imag(c...)
@@ -1187,10 +1148,10 @@ func (g *Group) Imag(c ...Code) *Group {
 	return g.Id("imag").Call(c...)
 }
 
-// Len inserts the len built in function
+// Len inserts the built in function len
 func Len(c ...Code) *Group { return newStatement().Len(c...) }
 
-// Len inserts the len built in function
+// Len inserts the built in function len
 func (g *Group) Len(c ...Code) *Group {
 	if startNewStatement(g.syntax) {
 		s := Len(c...)
@@ -1200,10 +1161,10 @@ func (g *Group) Len(c ...Code) *Group {
 	return g.Id("len").Call(c...)
 }
 
-// Make inserts the make built in function
+// Make inserts the built in function make
 func Make(c ...Code) *Group { return newStatement().Make(c...) }
 
-// Make inserts the make built in function
+// Make inserts the built in function make
 func (g *Group) Make(c ...Code) *Group {
 	if startNewStatement(g.syntax) {
 		s := Make(c...)
@@ -1213,10 +1174,10 @@ func (g *Group) Make(c ...Code) *Group {
 	return g.Id("make").Call(c...)
 }
 
-// New inserts the new built in function
+// New inserts the built in function new
 func New(c ...Code) *Group { return newStatement().New(c...) }
 
-// New inserts the new built in function
+// New inserts the built in function new
 func (g *Group) New(c ...Code) *Group {
 	if startNewStatement(g.syntax) {
 		s := New(c...)
@@ -1226,10 +1187,10 @@ func (g *Group) New(c ...Code) *Group {
 	return g.Id("new").Call(c...)
 }
 
-// Panic inserts the panic built in function
+// Panic inserts the built in function panic
 func Panic(c ...Code) *Group { return newStatement().Panic(c...) }
 
-// Panic inserts the panic built in function
+// Panic inserts the built in function panic
 func (g *Group) Panic(c ...Code) *Group {
 	if startNewStatement(g.syntax) {
 		s := Panic(c...)
@@ -1239,10 +1200,10 @@ func (g *Group) Panic(c ...Code) *Group {
 	return g.Id("panic").Call(c...)
 }
 
-// Print inserts the print built in function
+// Print inserts the built in function print
 func Print(c ...Code) *Group { return newStatement().Print(c...) }
 
-// Print inserts the print built in function
+// Print inserts the built in function print
 func (g *Group) Print(c ...Code) *Group {
 	if startNewStatement(g.syntax) {
 		s := Print(c...)
@@ -1252,10 +1213,10 @@ func (g *Group) Print(c ...Code) *Group {
 	return g.Id("print").Call(c...)
 }
 
-// Println inserts the println built in function
+// Println inserts the built in function println
 func Println(c ...Code) *Group { return newStatement().Println(c...) }
 
-// Println inserts the println built in function
+// Println inserts the built in function println
 func (g *Group) Println(c ...Code) *Group {
 	if startNewStatement(g.syntax) {
 		s := Println(c...)
@@ -1265,10 +1226,10 @@ func (g *Group) Println(c ...Code) *Group {
 	return g.Id("println").Call(c...)
 }
 
-// Real inserts the real built in function
+// Real inserts the built in function real
 func Real(c ...Code) *Group { return newStatement().Real(c...) }
 
-// Real inserts the real built in function
+// Real inserts the built in function real
 func (g *Group) Real(c ...Code) *Group {
 	if startNewStatement(g.syntax) {
 		s := Real(c...)
@@ -1278,10 +1239,10 @@ func (g *Group) Real(c ...Code) *Group {
 	return g.Id("real").Call(c...)
 }
 
-// Recover inserts the recover built in function
+// Recover inserts the built in function recover
 func Recover(c ...Code) *Group { return newStatement().Recover(c...) }
 
-// Recover inserts the recover built in function
+// Recover inserts the built in function recover
 func (g *Group) Recover(c ...Code) *Group {
 	if startNewStatement(g.syntax) {
 		s := Recover(c...)
@@ -1289,17 +1250,4 @@ func (g *Group) Recover(c ...Code) *Group {
 		return s
 	}
 	return g.Id("recover").Call(c...)
-}
-
-// Return inserts the return keyword
-func Return(c ...Code) *Group { return newStatement().Return(c...) }
-
-// Return inserts the return keyword
-func (g *Group) Return(c ...Code) *Group {
-	if startNewStatement(g.syntax) {
-		s := Return(c...)
-		g.items = append(g.items, s)
-		return s
-	}
-	return g.Id("return").List(c...)
 }

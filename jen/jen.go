@@ -1,4 +1,4 @@
-//go:generate genjen2
+//go:generate genjen
 package jen
 
 import (
