@@ -21,7 +21,7 @@ func main() {
 		jen.Id("bar.foo/qux.PackageCollision").Call(),
 	)
 
-	if err := jen.Render(ctx, f, os.Stdout); err != nil {
+	if err := jen.RenderFile(ctx, f, os.Stdout); err != nil {
 		panic(err)
 	}
 }

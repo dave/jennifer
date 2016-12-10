@@ -17,7 +17,7 @@ func main() {
 		),
 	)
 
-	if err := jen.Render(ctx, f, os.Stdout); err != nil {
+	if err := jen.RenderFile(ctx, f, os.Stdout); err != nil {
 		panic(err)
 	}
 }
