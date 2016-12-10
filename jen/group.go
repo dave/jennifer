@@ -8,7 +8,7 @@ import (
 )
 
 type Group struct {
-	syntax syntaxType
+	syntax syntax
 	items  []Code
 }
 
@@ -45,49 +45,49 @@ var info = map[syntaxType]struct {
 	Close     string
 	Seperator string
 }{
-	FileSyntax: {
+	fileSyntax: {
 		Seperator: "\n",
 	},
-	StatementSyntax: {
+	statementSyntax: {
 		Seperator: " ",
 	},
-	ParensSyntax: {
+	parensSyntax: {
 		Open:  "(",
 		Close: ")",
 	},
-	ListSyntax: {
+	listSyntax: {
 		Seperator: ",",
 	},
-	BracesSyntax: {
+	bracesSyntax: {
 		Open:  "{",
 		Close: "}",
 	},
-	ValuesSyntax: {
+	valuesSyntax: {
 		Open:      "{",
 		Close:     "}",
 		Seperator: ",",
 	},
-	IndexSyntax: {
+	indexSyntax: {
 		Open:      "[",
 		Close:     "]",
 		Seperator: ":",
 	},
-	BlockSyntax: {
+	blockSyntax: {
 		Open:      "{",
 		Close:     "}",
 		Seperator: "\n",
 	},
-	CallSyntax: {
+	callSyntax: {
 		Open:      "(",
 		Close:     ")",
 		Seperator: ",",
 	},
-	ParamsSyntax: {
+	paramsSyntax: {
 		Open:      "(",
 		Close:     ")",
 		Seperator: ",",
 	},
-	DeclsSyntax: {
+	declsSyntax: {
 		Open:      "(",
 		Close:     ")",
 		Seperator: ";",
@@ -95,7 +95,7 @@ var info = map[syntaxType]struct {
 }
 
 func (g Group) IsNull() bool {
-	i := info[g.syntax]
+	i := info[g.syntax.typ]
 	if i.Open != "" || i.Close != "" {
 		return false
 	}
@@ -108,7 +108,7 @@ func (g Group) IsNull() bool {
 }
 
 func (g Group) Render(ctx context.Context, w io.Writer) error {
-	i := info[g.syntax]
+	i := info[g.syntax.typ]
 	if i.Open != "" {
 		if _, err := w.Write([]byte(i.Open)); err != nil {
 			return err
@@ -140,8 +140,15 @@ func (g Group) Render(ctx context.Context, w io.Writer) error {
 	return nil
 }
 
-func (g Group) GoString() string {
-	ctx := Context(context.Background(), "")
+func (g *Group) GoString() string {
+	ctx := Context(context.Background())
+	if g.syntax.typ == fileSyntax {
+		buf := &bytes.Buffer{}
+		if err := RenderFile(ctx, g, buf); err != nil {
+			panic(err)
+		}
+		return buf.String()
+	}
 	buf := &bytes.Buffer{}
 	if err := g.Render(ctx, buf); err != nil {
 		panic(err)

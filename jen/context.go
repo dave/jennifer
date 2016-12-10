@@ -6,40 +6,12 @@ import (
 	"strings"
 )
 
-type syntaxType string
-
-const syntaxKey syntaxType = ""
-
-const (
-	FileSyntax      syntaxType = "file"
-	ParamsSyntax    syntaxType = "params"
-	StatementSyntax syntaxType = "statement"
-	BlockSyntax     syntaxType = "block"
-	ParensSyntax    syntaxType = "parens"
-	ValuesSyntax    syntaxType = "values"
-	IndexSyntax     syntaxType = "index"
-	CallSyntax      syntaxType = "call"
-	DeclsSyntax     syntaxType = "decls"
-	BracesSyntax    syntaxType = "braces"
-	ListSyntax      syntaxType = "list"
-)
-
 type contextType int
 
 var contextKey contextType
 
-func Context(ctx context.Context, name string) context.Context {
+func Context(ctx context.Context) context.Context {
 	f := &global{
-		Name:    name,
-		Imports: make(map[string]string),
-	}
-	return context.WithValue(ctx, contextKey, f)
-}
-
-func ContextPath(ctx context.Context, name, path string) context.Context {
-	f := &global{
-		Name:    name,
-		Path:    path,
 		Imports: make(map[string]string),
 	}
 	return context.WithValue(ctx, contextKey, f)
@@ -60,6 +32,9 @@ type global struct {
 }
 
 func (f *global) register(path string) string {
+	if f.Path == path {
+		return ""
+	}
 	if f.Imports[path] != "" && f.Imports[path] != "_" {
 		return f.Imports[path]
 	}

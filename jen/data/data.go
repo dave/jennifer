@@ -37,47 +37,47 @@ var Blocks = []struct {
 }{
 	{
 		Name:   "Parens",
-		Syntax: "ParensSyntax",
+		Syntax: "parensSyntax",
 		Desc:   "parenthesis",
 	},
 	{
 		Name:   "List",
-		Syntax: "ListSyntax",
+		Syntax: "listSyntax",
 		Desc:   "a comma separated list",
 	},
 	{
 		Name:   "Braces",
-		Syntax: "BracesSyntax",
+		Syntax: "bracesSyntax",
 		Desc:   "curly braces",
 	},
 	{
 		Name:   "Values",
-		Syntax: "ValuesSyntax",
+		Syntax: "valuesSyntax",
 		Desc:   "curly braces containing a comma separated list",
 	},
 	{
 		Name:   "Index",
-		Syntax: "IndexSyntax",
+		Syntax: "indexSyntax",
 		Desc:   "square brackets containing a colon separated list",
 	},
 	{
 		Name:   "Block",
-		Syntax: "BlockSyntax",
+		Syntax: "blockSyntax",
 		Desc:   "curly braces containing a statements list",
 	},
 	{
 		Name:   "Call",
-		Syntax: "CallSyntax",
+		Syntax: "callSyntax",
 		Desc:   "parenthesis containing a comma separated list",
 	},
 	{
 		Name:   "Params",
-		Syntax: "ParamsSyntax",
+		Syntax: "paramsSyntax",
 		Desc:   "parenthesis containing a comma separated list",
 	},
 	{
 		Name:   "Decls",
-		Syntax: "DeclsSyntax",
+		Syntax: "declsSyntax",
 		Desc:   "parenthesis containing a statement list",
 	},
 }

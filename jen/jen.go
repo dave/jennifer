@@ -4,10 +4,12 @@ package jen
 import (
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"go/format"
 	"io"
 	"os"
+	"sort"
 	"strconv"
 )
 
@@ -16,22 +18,37 @@ type Code interface {
 	IsNull() bool
 }
 
-func NewFile() *Group {
+func NewFile(name string) *Group {
 	return &Group{
-		syntax: FileSyntax,
+		syntax: syntax{
+			typ:  fileSyntax,
+			name: name,
+		},
+	}
+}
+
+func NewFilePath(name, path string) *Group {
+	return &Group{
+		syntax: syntax{
+			typ:  fileSyntax,
+			name: name,
+			path: path,
+		},
 	}
 }
 
 func newStatement(c ...Code) *Group {
 	return &Group{
-		syntax: StatementSyntax,
-		items:  c,
+		syntax: syntax{
+			typ: statementSyntax,
+		},
+		items: c,
 	}
 }
 
-func startNewStatement(s syntaxType) bool {
-	switch s {
-	case FileSyntax, BlockSyntax:
+func startNewStatement(s syntax) bool {
+	switch s.typ {
+	case fileSyntax, blockSyntax:
 		return true
 	}
 	return false
@@ -50,11 +67,16 @@ func WriteFile(ctx context.Context, g *Group, filename string) error {
 }
 
 func RenderFile(ctx context.Context, g *Group, w io.Writer) error {
+	if g.syntax.typ != fileSyntax {
+		return errors.New("Group passed to RenderFile must be a File.")
+	}
+	global := FromContext(ctx)
+	global.Name = g.syntax.name
+	global.Path = g.syntax.path
 	body := &bytes.Buffer{}
 	if err := g.Render(ctx, body); err != nil {
 		return err
 	}
-	global := FromContext(ctx)
 	source := &bytes.Buffer{}
 	if _, err := fmt.Fprintf(source, "package %s\n\n", global.Name); err != nil {
 		return err
@@ -69,8 +91,15 @@ func RenderFile(ctx context.Context, g *Group, w io.Writer) error {
 		if _, err := fmt.Fprint(source, "import (\n"); err != nil {
 			return err
 		}
-		for path, alias := range global.Imports {
-			if _, err := fmt.Fprintf(source, "%s %s\n", alias, strconv.Quote(path)); err != nil {
+		// We must sort the imports to ensure repeatable
+		// source.
+		paths := []string{}
+		for path := range global.Imports {
+			paths = append(paths, path)
+		}
+		sort.Strings(paths)
+		for _, path := range paths {
+			if _, err := fmt.Fprintf(source, "%s %s\n", global.Imports[path], strconv.Quote(path)); err != nil {
 				return err
 			}
 		}

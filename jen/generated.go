@@ -15,8 +15,10 @@ func (g *Group) Parens(c ...Code) *Group {
 		return s
 	}
 	s := Group{
-		syntax: ParensSyntax,
-		items:  c,
+		syntax: syntax{
+			typ: parensSyntax,
+		},
+		items: c,
 	}
 	g.items = append(g.items, s)
 	return g
@@ -33,8 +35,10 @@ func (g *Group) List(c ...Code) *Group {
 		return s
 	}
 	s := Group{
-		syntax: ListSyntax,
-		items:  c,
+		syntax: syntax{
+			typ: listSyntax,
+		},
+		items: c,
 	}
 	g.items = append(g.items, s)
 	return g
@@ -51,8 +55,10 @@ func (g *Group) Braces(c ...Code) *Group {
 		return s
 	}
 	s := Group{
-		syntax: BracesSyntax,
-		items:  c,
+		syntax: syntax{
+			typ: bracesSyntax,
+		},
+		items: c,
 	}
 	g.items = append(g.items, s)
 	return g
@@ -69,8 +75,10 @@ func (g *Group) Values(c ...Code) *Group {
 		return s
 	}
 	s := Group{
-		items:  c,
-		syntax: ValuesSyntax,
+		syntax: syntax{
+			typ: valuesSyntax,
+		},
+		items: c,
 	}
 	g.items = append(g.items, s)
 	return g
@@ -87,8 +95,10 @@ func (g *Group) Index(c ...Code) *Group {
 		return s
 	}
 	s := Group{
-		syntax: IndexSyntax,
-		items:  c,
+		syntax: syntax{
+			typ: indexSyntax,
+		},
+		items: c,
 	}
 	g.items = append(g.items, s)
 	return g
@@ -105,8 +115,10 @@ func (g *Group) Block(c ...Code) *Group {
 		return s
 	}
 	s := Group{
-		syntax: BlockSyntax,
-		items:  c,
+		syntax: syntax{
+			typ: blockSyntax,
+		},
+		items: c,
 	}
 	g.items = append(g.items, s)
 	return g
@@ -123,8 +135,10 @@ func (g *Group) Call(c ...Code) *Group {
 		return s
 	}
 	s := Group{
-		items:  c,
-		syntax: CallSyntax,
+		items: c,
+		syntax: syntax{
+			typ: callSyntax,
+		},
 	}
 	g.items = append(g.items, s)
 	return g
@@ -141,8 +155,10 @@ func (g *Group) Params(c ...Code) *Group {
 		return s
 	}
 	s := Group{
-		syntax: ParamsSyntax,
-		items:  c,
+		syntax: syntax{
+			typ: paramsSyntax,
+		},
+		items: c,
 	}
 	g.items = append(g.items, s)
 	return g
@@ -159,8 +175,10 @@ func (g *Group) Decls(c ...Code) *Group {
 		return s
 	}
 	s := Group{
-		syntax: DeclsSyntax,
-		items:  c,
+		syntax: syntax{
+			typ: declsSyntax,
+		},
+		items: c,
 	}
 	g.items = append(g.items, s)
 	return g
@@ -196,9 +214,9 @@ func (g *Group) Byte() *Group {
 		return s
 	}
 	t := Token{
-		Group:   g,
 		typ:     identifierToken,
 		content: "byte",
+		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -215,9 +233,9 @@ func (g *Group) Complex64() *Group {
 		return s
 	}
 	t := Token{
+		content: "complex64",
 		Group:   g,
 		typ:     identifierToken,
-		content: "complex64",
 	}
 	g.items = append(g.items, t)
 	return g
@@ -291,9 +309,9 @@ func (g *Group) Float64() *Group {
 		return s
 	}
 	t := Token{
-		Group:   g,
 		typ:     identifierToken,
 		content: "float64",
+		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -310,9 +328,9 @@ func (g *Group) Int() *Group {
 		return s
 	}
 	t := Token{
+		content: "int",
 		Group:   g,
 		typ:     identifierToken,
-		content: "int",
 	}
 	g.items = append(g.items, t)
 	return g
@@ -443,9 +461,9 @@ func (g *Group) Uint() *Group {
 		return s
 	}
 	t := Token{
-		Group:   g,
 		typ:     identifierToken,
 		content: "uint",
+		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -462,9 +480,9 @@ func (g *Group) Uint8() *Group {
 		return s
 	}
 	t := Token{
+		Group:   g,
 		typ:     identifierToken,
 		content: "uint8",
-		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -538,9 +556,9 @@ func (g *Group) Uintptr() *Group {
 		return s
 	}
 	t := Token{
+		Group:   g,
 		typ:     identifierToken,
 		content: "uintptr",
-		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -557,9 +575,9 @@ func (g *Group) True() *Group {
 		return s
 	}
 	t := Token{
-		content: "true",
 		Group:   g,
 		typ:     identifierToken,
+		content: "true",
 	}
 	g.items = append(g.items, t)
 	return g
@@ -576,9 +594,9 @@ func (g *Group) False() *Group {
 		return s
 	}
 	t := Token{
-		Group:   g,
 		typ:     identifierToken,
 		content: "false",
+		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -614,9 +632,9 @@ func (g *Group) Nil() *Group {
 		return s
 	}
 	t := Token{
+		content: "nil",
 		Group:   g,
 		typ:     identifierToken,
-		content: "nil",
 	}
 	g.items = append(g.items, t)
 	return g
@@ -652,9 +670,9 @@ func (g *Group) Default() *Group {
 		return s
 	}
 	t := Token{
-		Group:   g,
 		typ:     keywordToken,
 		content: "default",
+		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -671,9 +689,9 @@ func (g *Group) Func() *Group {
 		return s
 	}
 	t := Token{
+		Group:   g,
 		typ:     keywordToken,
 		content: "func",
-		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -690,9 +708,9 @@ func (g *Group) Interface() *Group {
 		return s
 	}
 	t := Token{
-		content: "interface",
 		Group:   g,
 		typ:     keywordToken,
+		content: "interface",
 	}
 	g.items = append(g.items, t)
 	return g
@@ -709,9 +727,9 @@ func (g *Group) Select() *Group {
 		return s
 	}
 	t := Token{
+		content: "select",
 		Group:   g,
 		typ:     keywordToken,
-		content: "select",
 	}
 	g.items = append(g.items, t)
 	return g
@@ -728,9 +746,9 @@ func (g *Group) Case() *Group {
 		return s
 	}
 	t := Token{
+		Group:   g,
 		typ:     keywordToken,
 		content: "case",
-		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -785,9 +803,9 @@ func (g *Group) Map() *Group {
 		return s
 	}
 	t := Token{
-		content: "map",
 		Group:   g,
 		typ:     keywordToken,
+		content: "map",
 	}
 	g.items = append(g.items, t)
 	return g
@@ -823,9 +841,9 @@ func (g *Group) Chan() *Group {
 		return s
 	}
 	t := Token{
+		Group:   g,
 		typ:     keywordToken,
 		content: "chan",
-		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g
@@ -842,9 +860,9 @@ func (g *Group) Else() *Group {
 		return s
 	}
 	t := Token{
-		content: "else",
 		Group:   g,
 		typ:     keywordToken,
+		content: "else",
 	}
 	g.items = append(g.items, t)
 	return g
@@ -899,9 +917,9 @@ func (g *Group) Switch() *Group {
 		return s
 	}
 	t := Token{
-		Group:   g,
 		typ:     keywordToken,
 		content: "switch",
+		Group:   g,
 	}
 	g.items = append(g.items, t)
 	return g

@@ -46,9 +46,7 @@ func (t Token) Render(ctx context.Context, w io.Writer) error {
 			name = id[sep+1:]
 			path = id[:sep]
 			file := FromContext(ctx)
-			if file.Path != path {
-				alias = file.register(path)
-			}
+			alias = file.register(path)
 		} else {
 			name = id
 		}

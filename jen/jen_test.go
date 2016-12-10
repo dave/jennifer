@@ -212,10 +212,7 @@ func TestJen(t *testing.T) {
 		}
 		b := &bytes.Buffer{}
 
-		if c.path == "" {
-			c.path = "a.b/c"
-		}
-		ctx := Context(context.Background(), c.path)
+		ctx := Context(context.Background())
 
 		err := c.code.Render(ctx, b)
 		if err != nil {
