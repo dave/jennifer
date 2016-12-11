@@ -168,7 +168,7 @@ var cases = []tc{
 	},
 	{
 		desc: `map literal`,
-		code: Id("a").Lit(map[Code]Code{
+		code: Id("a").Dict(map[Code]Code{
 			Id("b"): Id("c"),
 		}),
 		expect: `a{
@@ -177,7 +177,7 @@ var cases = []tc{
 	},
 	{
 		desc: `map literal func`,
-		code: Id("a").Lit(func(m map[Code]Code) {
+		code: Id("a").DictFunc(func(m map[Code]Code) {
 			m[Id("b")] = Id("c")
 		}),
 		expect: `a{
@@ -186,7 +186,7 @@ var cases = []tc{
 	},
 	{
 		desc: `literal func`,
-		code: Id("a").Op(":=").Lit(func() interface{} {
+		code: Id("a").Op(":=").LitFunc(func() interface{} {
 			return "b"
 		}),
 		expect: `a := "b"`,

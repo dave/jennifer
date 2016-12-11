@@ -3,21 +3,22 @@ package jen
 import (
 	"fmt"
 	"io"
+	"strings"
 )
 
-func Comment(comments ...string) *Group {
-	return newStatement().Comment(comments...)
+func Comment(str string) *Group {
+	return newStatement().Comment(str)
 }
 
-func (g *Group) Comment(comments ...string) *Group {
+func (g *Group) Comment(str string) *Group {
 	if startNewStatement(g.syntax) {
-		s := Comment(comments...)
+		s := Comment(str)
 		g.items = append(g.items, s)
 		return s
 	}
 	c := comment{
-		Group:    g,
-		comments: comments,
+		Group:   g,
+		comment: str,
 	}
 	g.items = append(g.items, c)
 	return g
@@ -34,8 +35,8 @@ func (g *Group) Commentf(format string, a ...interface{}) *Group {
 		return s
 	}
 	c := comment{
-		Group:    g,
-		comments: []string{fmt.Sprintf(format, a...)},
+		Group:   g,
+		comment: fmt.Sprintf(format, a...),
 	}
 	g.items = append(g.items, c)
 	return g
@@ -43,7 +44,7 @@ func (g *Group) Commentf(format string, a ...interface{}) *Group {
 
 type comment struct {
 	*Group
-	comments []string
+	comment string
 }
 
 func (c comment) isNull() bool {
@@ -51,7 +52,7 @@ func (c comment) isNull() bool {
 }
 
 func (c comment) render(f *File, w io.Writer) error {
-	if len(c.comments) > 1 {
+	if strings.Contains(c.comment, "\n") {
 		if _, err := w.Write([]byte("/*\n")); err != nil {
 			return err
 		}
@@ -60,17 +61,16 @@ func (c comment) render(f *File, w io.Writer) error {
 			return err
 		}
 	}
-	for _, str := range c.comments {
-		if _, err := w.Write([]byte(str)); err != nil {
-			return err
-		}
-		if len(c.comments) > 1 {
+
+	if _, err := w.Write([]byte(c.comment)); err != nil {
+		return err
+	}
+	if strings.Contains(c.comment, "\n") {
+		if !strings.HasSuffix(c.comment, "\n") {
 			if _, err := w.Write([]byte("\n")); err != nil {
 				return err
 			}
 		}
-	}
-	if len(c.comments) > 1 {
 		if _, err := w.Write([]byte("*/")); err != nil {
 			return err
 		}

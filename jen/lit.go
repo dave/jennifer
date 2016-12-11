@@ -16,54 +16,84 @@ func (g *Group) Lit(v interface{}) *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	switch v := v.(type) {
-	case map[Code]Code:
-		ml := mapLit{
-			Group: g,
-			m:     v,
-		}
-		g.items = append(g.items, ml)
-		return g
-	case func(map[Code]Code):
-		m := map[Code]Code{}
-		v(m)
-		ml := mapLit{
-			Group: g,
-			m:     m,
-		}
-		g.items = append(g.items, ml)
-		return g
-	case func() interface{}:
-		i := v()
-		t := token{
-			Group:   g,
-			typ:     literalToken,
-			content: i,
-		}
-		g.items = append(g.items, t)
-		return g
-	default:
-		t := token{
-			Group:   g,
-			typ:     literalToken,
-			content: v,
-		}
-		g.items = append(g.items, t)
-		return g
+	t := token{
+		Group:   g,
+		typ:     literalToken,
+		content: v,
 	}
-
+	g.items = append(g.items, t)
+	return g
 }
 
-type mapLit struct {
+func LitFunc(f func() interface{}) *Group {
+	return newStatement().LitFunc(f)
+}
+
+func (g *Group) LitFunc(f func() interface{}) *Group {
+	if startNewStatement(g.syntax) {
+		s := LitFunc(f)
+		g.items = append(g.items, s)
+		return s
+	}
+	t := token{
+		Group:   g,
+		typ:     literalToken,
+		content: f(),
+	}
+	g.items = append(g.items, t)
+	return g
+}
+
+// Dict inserts a map literal
+func Dict(m map[Code]Code) *Group {
+	return newStatement().Dict(m)
+}
+
+// Dict inserts a map literal
+func (g *Group) Dict(m map[Code]Code) *Group {
+	if startNewStatement(g.syntax) {
+		s := Dict(m)
+		g.items = append(g.items, s)
+		return s
+	}
+	ml := dict{
+		Group: g,
+		m:     m,
+	}
+	g.items = append(g.items, ml)
+	return g
+}
+
+func DictFunc(f func(map[Code]Code)) *Group {
+	return newStatement().DictFunc(f)
+}
+
+func (g *Group) DictFunc(f func(map[Code]Code)) *Group {
+	if startNewStatement(g.syntax) {
+		s := DictFunc(f)
+		g.items = append(g.items, s)
+		return s
+	}
+	m := map[Code]Code{}
+	f(m)
+	ml := dict{
+		Group: g,
+		m:     m,
+	}
+	g.items = append(g.items, ml)
+	return g
+}
+
+type dict struct {
 	*Group
 	m map[Code]Code
 }
 
-func (l mapLit) isNull() bool {
+func (l dict) isNull() bool {
 	return false
 }
 
-func (l mapLit) render(f *File, w io.Writer) error {
+func (l dict) render(f *File, w io.Writer) error {
 	if _, err := w.Write([]byte("{")); err != nil {
 		return err
 	}

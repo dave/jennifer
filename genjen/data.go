@@ -36,6 +36,11 @@ var Blocks = []struct {
 		Desc:   "curly braces containing a comma separated list",
 	},
 	{
+		Name:   "Slice",
+		Syntax: "valuesSyntax",
+		Desc:   "curly braces containing a comma separated list",
+	},
+	{
 		Name:   "Index",
 		Syntax: "indexSyntax",
 		Desc:   "square brackets containing a colon separated list",

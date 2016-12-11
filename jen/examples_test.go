@@ -145,7 +145,7 @@ func ExampleComment() {
 }
 
 func ExampleComment_multiline() {
-	c := Comment("a", "b")
+	c := Comment("a\nb")
 	fmt.Printf("%#v", c)
 	// Output: /*
 	// a
@@ -175,8 +175,29 @@ func ExampleGroup_Commentf() {
 //func Empty() *Group
 //func For() *Group
 
-//func Id(names ...string) *Group
 //func Lit(v interface{}) *Group
+
+func ExampleGroup_Dict() {
+	c := Id("a").Op(":=").Map().Index(String()).String().Dict(map[Code]Code{
+		Lit("a"): Lit("b"),
+	})
+	fmt.Printf("%#v", c)
+	// Output: a := map[string]string{
+	// 	"a": "b",
+	// }
+}
+
+func ExampleGroup_DictFunc() {
+	c := Id("a").Op(":=").Map().Index(String()).String().DictFunc(func(m map[Code]Code) {
+		m[Lit("a")] = Lit("b")
+	})
+	fmt.Printf("%#v", c)
+	// Output: a := map[string]string{
+	// 	"a": "b",
+	// }
+}
+
+//func Id(names ...string) *Group
 
 func ExampleId_local() {
 	c := Id("a").Op(":=").Lit(1)

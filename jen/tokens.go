@@ -15,6 +15,7 @@ const (
 	delimiterToken  tokenType = "delimiter"
 	literalToken    tokenType = "literal"
 	nullToken       tokenType = "null"
+	layoutToken     tokenType = "layout"
 )
 
 type token struct {
@@ -34,7 +35,7 @@ func (t token) render(f *File, w io.Writer) error {
 		if _, err := w.Write([]byte(fmt.Sprintf("%#v", t.content))); err != nil {
 			return err
 		}
-	case keywordToken, operatorToken:
+	case keywordToken, operatorToken, layoutToken:
 		if _, err := w.Write([]byte(fmt.Sprintf("%s", t.content))); err != nil {
 			return err
 		}
@@ -147,5 +148,24 @@ func (g *Group) Id(names ...string) *Group {
 		}
 		g.items = append(g.items, t)
 	}
+	return g
+}
+
+func Line() *Group {
+	return newStatement().Line()
+}
+
+func (g *Group) Line() *Group {
+	if startNewStatement(g.syntax) {
+		s := Line()
+		g.items = append(g.items, s)
+		return s
+	}
+	t := token{
+		Group:   g,
+		typ:     layoutToken,
+		content: "\n",
+	}
+	g.items = append(g.items, t)
 	return g
 }
