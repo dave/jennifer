@@ -72,3 +72,7 @@ func init() {
     f1.Collision()
 }
 ```
+
+# NewFile
+
+Creates a new file

@@ -12,11 +12,6 @@ type Group struct {
 	items  []Code
 }
 
-// Add creates a new statement and appends the provided code.
-//func Add(code ...Code) *Group {
-//	return newStatement().Add(code...)
-//}
-
 // Add appends the provided code to the group.
 func (g *Group) Add(code ...Code) *Group {
 	if startNewStatement(g.syntax) {
@@ -67,10 +62,6 @@ var info = map[syntaxType]struct {
 	clauseSyntax: {
 		Seperator: ";",
 	},
-	//bracesSyntax: {
-	//	Open:  "{",
-	//	Close: "}",
-	//},
 	valuesSyntax: {
 		Open:      "{",
 		Close:     "}",

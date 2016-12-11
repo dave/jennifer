@@ -38,6 +38,15 @@ func NewFilePath(name, path string) *Group {
 	}
 }
 
+/*
+type File struct {
+	*Group
+	name    string
+	path    string
+	imports map[string]string
+}
+*/
+
 func newStatement(c ...Code) *Group {
 	return &Group{
 		syntax: syntax{
