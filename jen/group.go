@@ -2,13 +2,12 @@ package jen
 
 import (
 	"bytes"
-	"context"
 	"go/format"
 	"io"
 )
 
 type Group struct {
-	syntax syntax
+	syntax syntaxType
 	items  []Code
 }
 
@@ -95,7 +94,7 @@ var info = map[syntaxType]struct {
 }
 
 func (g Group) isNull() bool {
-	i := info[g.syntax.typ]
+	i := info[g.syntax]
 	if i.Open != "" || i.Close != "" {
 		return false
 	}
@@ -107,8 +106,8 @@ func (g Group) isNull() bool {
 	return true
 }
 
-func (g Group) render(ctx context.Context, w io.Writer) error {
-	i := info[g.syntax.typ]
+func (g Group) render(f *File, w io.Writer) error {
+	i := info[g.syntax]
 	if i.Open != "" {
 		if _, err := w.Write([]byte(i.Open)); err != nil {
 			return err
@@ -127,7 +126,7 @@ func (g Group) render(ctx context.Context, w io.Writer) error {
 				return err
 			}
 		}
-		if err := code.render(ctx, w); err != nil {
+		if err := code.render(f, w); err != nil {
 			return err
 		}
 		first = false
@@ -141,16 +140,9 @@ func (g Group) render(ctx context.Context, w io.Writer) error {
 }
 
 func (g *Group) GoString() string {
-	ctx := Context(context.Background())
-	if g.syntax.typ == fileSyntax {
-		buf := &bytes.Buffer{}
-		if err := RenderFile(ctx, g, buf); err != nil {
-			panic(err)
-		}
-		return buf.String()
-	}
+	f := NewFile("")
 	buf := &bytes.Buffer{}
-	if err := g.render(ctx, buf); err != nil {
+	if err := g.render(f, buf); err != nil {
 		panic(err)
 	}
 	b, err := format.Source(buf.Bytes())

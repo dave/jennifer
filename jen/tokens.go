@@ -1,7 +1,6 @@
 package jen
 
 import (
-	"context"
 	"fmt"
 	"io"
 	"strings"
@@ -28,7 +27,7 @@ func (t token) isNull() bool {
 	return t.typ == nullToken
 }
 
-func (t token) render(ctx context.Context, w io.Writer) error {
+func (t token) render(f *File, w io.Writer) error {
 	switch t.typ {
 	case literalToken:
 		// TODO: this does not work in all cases
@@ -45,8 +44,7 @@ func (t token) render(ctx context.Context, w io.Writer) error {
 		if sep := strings.LastIndex(id, "."); sep > -1 {
 			name = id[sep+1:]
 			path = id[:sep]
-			file := FromContext(ctx)
-			alias = file.register(path)
+			alias = f.register(path)
 		} else {
 			name = id
 		}

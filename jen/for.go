@@ -12,10 +12,8 @@ func (g *Group) For(c ...Code) *Group {
 	}
 	g.Id("for")
 	s := Group{
-		syntax: syntax{
-			typ: clauseSyntax,
-		},
-		items: c,
+		syntax: clauseSyntax,
+		items:  c,
 	}
 	g.items = append(g.items, s)
 	return g

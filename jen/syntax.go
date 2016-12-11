@@ -1,11 +1,5 @@
 package jen
 
-type syntax struct {
-	typ  syntaxType
-	name string
-	path string
-}
-
 type syntaxType string
 
 const (

@@ -1,8 +1,6 @@
 package main
 
 import (
-	"context"
-
 	"strings"
 
 	. "github.com/davelondon/jennifer/jen"
@@ -44,9 +42,7 @@ func main() {
 					return s
 				}
 				s := Group{
-					syntax: syntax{
-						typ: {Syntax},
-					},
+					syntax: {Syntax},
 					items:  c,
 				}
 				g.items = append(g.items, s)
@@ -72,10 +68,8 @@ func main() {
 				Return(Id("s")),
 			),
 			Id("s").Op(":=").Id("Group").Lit(map[Code]Code{
-				Id("syntax"): Id("syntax").Lit(map[Code]Code{
-					Id("typ"): Id(b.Syntax),
-				}),
-				Id("items"): Id("c"),
+				Id("syntax"): Id(b.Syntax),
+				Id("items"):  Id("c"),
 			}),
 			Id("g", "items").Op("=").Append(
 				Id("g", "items"),
@@ -226,9 +220,8 @@ func main() {
 		)
 	}
 
-	ctx := Context(context.Background())
-	err := WriteFile(ctx, file, "./generated.go")
-	//err := RenderFile(ctx, file, os.Stdout)
+	err := file.Save("./generated.go")
+	//err := file.Render(os.Stdout)
 	if err != nil {
 		panic(err)
 	}

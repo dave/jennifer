@@ -4,112 +4,73 @@ package jen
 
 import (
 	"bytes"
-	"context"
-	"errors"
 	"fmt"
 	"go/format"
 	"io"
-	"os"
+	"io/ioutil"
 	"sort"
 	"strconv"
 )
 
 type Code interface {
-	render(ctx context.Context, w io.Writer) error
+	render(f *File, w io.Writer) error
 	isNull() bool
 }
 
-func NewFile(name string) *Group {
-	return &Group{
-		syntax: syntax{
-			typ:  fileSyntax,
-			name: name,
-		},
-	}
-}
-
-func NewFilePath(name, path string) *Group {
-	return &Group{
-		syntax: syntax{
-			typ:  fileSyntax,
-			name: name,
-			path: path,
-		},
-	}
-}
-
-/*
-type File struct {
-	*Group
-	name    string
-	path    string
-	imports map[string]string
-}
-*/
-
 func newStatement(c ...Code) *Group {
 	return &Group{
-		syntax: syntax{
-			typ: statementSyntax,
-		},
-		items: c,
+		syntax: statementSyntax,
+		items:  c,
 	}
 }
 
-func startNewStatement(s syntax) bool {
-	switch s.typ {
+func startNewStatement(s syntaxType) bool {
+	switch s {
 	case fileSyntax, blockSyntax:
 		return true
 	}
 	return false
 }
 
-func WriteFile(ctx context.Context, g *Group, filename string) error {
-	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
-	if err != nil {
+func (f *File) Save(filename string) error {
+	buf := &bytes.Buffer{}
+	if err := f.Render(buf); err != nil {
 		return err
 	}
-	defer f.Close()
-	if err := RenderFile(ctx, g, f); err != nil {
+	if err := ioutil.WriteFile(filename, buf.Bytes(), 0644); err != nil {
 		return err
 	}
 	return nil
 }
 
-func RenderFile(ctx context.Context, g *Group, w io.Writer) error {
-	if g.syntax.typ != fileSyntax {
-		return errors.New("Group passed to RenderFile must be a File.")
-	}
-	global := FromContext(ctx)
-	global.Name = g.syntax.name
-	global.Path = g.syntax.path
+func (f *File) Render(w io.Writer) error {
 	body := &bytes.Buffer{}
-	if err := g.render(ctx, body); err != nil {
+	if err := f.render(f, body); err != nil {
 		return err
 	}
 	source := &bytes.Buffer{}
-	if _, err := fmt.Fprintf(source, "package %s\n\n", global.Name); err != nil {
+	if _, err := fmt.Fprintf(source, "package %s\n\n", f.name); err != nil {
 		return err
 	}
-	if len(global.Imports) == 1 {
-		for path, alias := range global.Imports {
+	if len(f.imports) == 1 {
+		for path, alias := range f.imports {
 			if _, err := fmt.Fprintf(source, "import %s %s\n\n", alias, strconv.Quote(path)); err != nil {
 				return err
 			}
 		}
-	} else if len(global.Imports) > 1 {
+	} else if len(f.imports) > 1 {
 		if _, err := fmt.Fprint(source, "import (\n"); err != nil {
 			return err
 		}
 		// We must sort the imports to ensure repeatable
 		// source.
 		paths := []string{}
-		for path := range global.Imports {
+		for path := range f.imports {
 			paths = append(paths, path)
 		}
 		sort.Strings(paths)
 		for _, path := range paths {
-			if _, err := fmt.Fprintf(source, "%s %s\n", global.Imports[path], strconv.Quote(path)); err != nil {
+			if _, err := fmt.Fprintf(source, "%s %s\n", f.imports[path], strconv.Quote(path)); err != nil {
 				return err
 			}
 		}

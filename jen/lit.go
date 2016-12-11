@@ -2,7 +2,6 @@ package jen
 
 import (
 	"bytes"
-	"context"
 	"io"
 	"sort"
 )
@@ -64,7 +63,7 @@ func (l mapLit) isNull() bool {
 	return false
 }
 
-func (l mapLit) render(ctx context.Context, w io.Writer) error {
+func (l mapLit) render(f *File, w io.Writer) error {
 	if _, err := w.Write([]byte("{")); err != nil {
 		return err
 	}
@@ -78,7 +77,7 @@ func (l mapLit) render(ctx context.Context, w io.Writer) error {
 	keys := []string{}
 	for k, v := range l.m {
 		buf := &bytes.Buffer{}
-		if err := k.render(ctx, buf); err != nil {
+		if err := k.render(f, buf); err != nil {
 			return err
 		}
 		keys = append(keys, buf.String())
@@ -100,13 +99,13 @@ func (l mapLit) render(ctx context.Context, w io.Writer) error {
 			}
 			first = false
 		}
-		if err := k.render(ctx, w); err != nil {
+		if err := k.render(f, w); err != nil {
 			return err
 		}
 		if _, err := w.Write([]byte(":")); err != nil {
 			return err
 		}
-		if err := v.render(ctx, w); err != nil {
+		if err := v.render(f, w); err != nil {
 			return err
 		}
 		if _, err := w.Write([]byte(",\n")); err != nil {
