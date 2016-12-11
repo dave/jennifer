@@ -11,6 +11,8 @@ var Constants = []string{"true", "false", "iota"}
 
 var Zero = []string{"nil"}
 
+var Identifiers = append(append(append([]string{}, Types...), Constants...), Zero...)
+
 var Functions = []string{"append", "cap", "close", "complex", "copy", "delete", "imag", "len", "make", "new", "panic", "print", "println", "real", "recover"}
 
 var Blocks = []struct {
@@ -60,14 +62,6 @@ var Blocks = []struct {
 	},
 }
 
-/*
-+    &     +=    &=     &&    ==    !=    (    )
--    |     -=    |=     ||    <     <=    [    ]
-*    ^     *=    ^=     <-    >     >=    {    }
-/    <<    /=    <<=    ++    =     :=    ,    ;
-%    >>    %=    >>=    --    !     ...   .    :
-     &^          &^=
-*/
 var Operators = []struct {
 	Name string
 	Desc string
@@ -160,5 +154,3 @@ var Operators = []struct {
 	{Name: "Ptr", Desc: "pointer", Op: "*"},
 	{Name: "Adr", Desc: "address", Op: "&"},
 }
-
-var Identifiers = append(append(append([]string{}, Types...), Constants...), Zero...)

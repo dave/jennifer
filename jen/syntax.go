@@ -15,3 +15,57 @@ const (
 	listSyntax      syntaxType = "list"
 	clauseSyntax    syntaxType = "clause"
 )
+
+var syntaxInfo = map[syntaxType]struct {
+	open      string
+	close     string
+	seperator string
+}{
+	fileSyntax: {
+		seperator: "\n",
+	},
+	statementSyntax: {
+		seperator: " ",
+	},
+	parensSyntax: {
+		open:      "(",
+		close:     ")",
+		seperator: " ",
+	},
+	listSyntax: {
+		seperator: ",",
+	},
+	clauseSyntax: {
+		seperator: ";",
+	},
+	valuesSyntax: {
+		open:      "{",
+		close:     "}",
+		seperator: ",",
+	},
+	indexSyntax: {
+		open:      "[",
+		close:     "]",
+		seperator: ":",
+	},
+	blockSyntax: {
+		open:      "{",
+		close:     "}",
+		seperator: "\n",
+	},
+	callSyntax: {
+		open:      "(",
+		close:     ")",
+		seperator: ",",
+	},
+	paramsSyntax: {
+		open:      "(",
+		close:     ")",
+		seperator: ",",
+	},
+	declsSyntax: {
+		open:      "(",
+		close:     ")",
+		seperator: ";",
+	},
+}

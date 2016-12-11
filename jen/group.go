@@ -39,63 +39,9 @@ func (g *Group) Do(f func(*Group)) *Group {
 	return g
 }
 
-var info = map[syntaxType]struct {
-	Open      string
-	Close     string
-	Seperator string
-}{
-	fileSyntax: {
-		Seperator: "\n",
-	},
-	statementSyntax: {
-		Seperator: " ",
-	},
-	parensSyntax: {
-		Open:      "(",
-		Close:     ")",
-		Seperator: " ",
-	},
-	listSyntax: {
-		Seperator: ",",
-	},
-	clauseSyntax: {
-		Seperator: ";",
-	},
-	valuesSyntax: {
-		Open:      "{",
-		Close:     "}",
-		Seperator: ",",
-	},
-	indexSyntax: {
-		Open:      "[",
-		Close:     "]",
-		Seperator: ":",
-	},
-	blockSyntax: {
-		Open:      "{",
-		Close:     "}",
-		Seperator: "\n",
-	},
-	callSyntax: {
-		Open:      "(",
-		Close:     ")",
-		Seperator: ",",
-	},
-	paramsSyntax: {
-		Open:      "(",
-		Close:     ")",
-		Seperator: ",",
-	},
-	declsSyntax: {
-		Open:      "(",
-		Close:     ")",
-		Seperator: ";",
-	},
-}
-
 func (g Group) isNull() bool {
-	i := info[g.syntax]
-	if i.Open != "" || i.Close != "" {
+	i := syntaxInfo[g.syntax]
+	if i.open != "" || i.close != "" {
 		return false
 	}
 	for _, c := range g.items {
@@ -107,9 +53,9 @@ func (g Group) isNull() bool {
 }
 
 func (g Group) render(f *File, w io.Writer) error {
-	i := info[g.syntax]
-	if i.Open != "" {
-		if _, err := w.Write([]byte(i.Open)); err != nil {
+	i := syntaxInfo[g.syntax]
+	if i.open != "" {
+		if _, err := w.Write([]byte(i.open)); err != nil {
 			return err
 		}
 	}
@@ -121,8 +67,8 @@ func (g Group) render(f *File, w io.Writer) error {
 			// output but adds a separator.
 			continue
 		}
-		if !first && i.Seperator != "" {
-			if _, err := w.Write([]byte(i.Seperator)); err != nil {
+		if !first && i.seperator != "" {
+			if _, err := w.Write([]byte(i.seperator)); err != nil {
 				return err
 			}
 		}
@@ -131,8 +77,8 @@ func (g Group) render(f *File, w io.Writer) error {
 		}
 		first = false
 	}
-	if i.Close != "" {
-		if _, err := w.Write([]byte(i.Close)); err != nil {
+	if i.close != "" {
+		if _, err := w.Write([]byte(i.close)); err != nil {
 			return err
 		}
 	}

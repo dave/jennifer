@@ -30,7 +30,7 @@ func (t token) isNull() bool {
 func (t token) render(f *File, w io.Writer) error {
 	switch t.typ {
 	case literalToken:
-		// TODO: this does not work in all cases
+		// TODO: Does this work in all cases?
 		if _, err := w.Write([]byte(fmt.Sprintf("%#v", t.content))); err != nil {
 			return err
 		}
