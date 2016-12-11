@@ -49,7 +49,7 @@ var syntaxInfo = map[syntaxType]struct {
 		seperator: ":",
 	},
 	blockSyntax: {
-		open:      "{",
+		open:      "{\n",
 		close:     "}",
 		seperator: "\n",
 	},

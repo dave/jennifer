@@ -16,10 +16,28 @@ func (g *Group) Parens(c ...Code) *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	s := Group{
+	s := &Group{
 		items:  c,
 		syntax: parensSyntax,
 	}
+	g.items = append(g.items, s)
+	return g
+}
+
+// Parens inserts parenthesis
+func ParensFunc(f func(*Group)) *Group { return newStatement().ParensFunc(f) }
+
+// Parens inserts parenthesis
+func (g *Group) ParensFunc(f func(*Group)) *Group {
+	if startNewStatement(g.syntax) {
+		s := ParensFunc(f)
+		g.items = append(g.items, s)
+		return s
+	}
+	s := &Group{
+		syntax: parensSyntax,
+	}
+	f(s)
 	g.items = append(g.items, s)
 	return g
 }
@@ -34,10 +52,28 @@ func (g *Group) List(c ...Code) *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	s := Group{
+	s := &Group{
 		items:  c,
 		syntax: listSyntax,
 	}
+	g.items = append(g.items, s)
+	return g
+}
+
+// List inserts a comma separated list
+func ListFunc(f func(*Group)) *Group { return newStatement().ListFunc(f) }
+
+// List inserts a comma separated list
+func (g *Group) ListFunc(f func(*Group)) *Group {
+	if startNewStatement(g.syntax) {
+		s := ListFunc(f)
+		g.items = append(g.items, s)
+		return s
+	}
+	s := &Group{
+		syntax: listSyntax,
+	}
+	f(s)
 	g.items = append(g.items, s)
 	return g
 }
@@ -52,10 +88,28 @@ func (g *Group) Values(c ...Code) *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	s := Group{
+	s := &Group{
 		items:  c,
 		syntax: valuesSyntax,
 	}
+	g.items = append(g.items, s)
+	return g
+}
+
+// Values inserts curly braces containing a comma separated list
+func ValuesFunc(f func(*Group)) *Group { return newStatement().ValuesFunc(f) }
+
+// Values inserts curly braces containing a comma separated list
+func (g *Group) ValuesFunc(f func(*Group)) *Group {
+	if startNewStatement(g.syntax) {
+		s := ValuesFunc(f)
+		g.items = append(g.items, s)
+		return s
+	}
+	s := &Group{
+		syntax: valuesSyntax,
+	}
+	f(s)
 	g.items = append(g.items, s)
 	return g
 }
@@ -70,10 +124,28 @@ func (g *Group) Index(c ...Code) *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	s := Group{
+	s := &Group{
 		items:  c,
 		syntax: indexSyntax,
 	}
+	g.items = append(g.items, s)
+	return g
+}
+
+// Index inserts square brackets containing a colon separated list
+func IndexFunc(f func(*Group)) *Group { return newStatement().IndexFunc(f) }
+
+// Index inserts square brackets containing a colon separated list
+func (g *Group) IndexFunc(f func(*Group)) *Group {
+	if startNewStatement(g.syntax) {
+		s := IndexFunc(f)
+		g.items = append(g.items, s)
+		return s
+	}
+	s := &Group{
+		syntax: indexSyntax,
+	}
+	f(s)
 	g.items = append(g.items, s)
 	return g
 }
@@ -88,10 +160,28 @@ func (g *Group) Block(c ...Code) *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	s := Group{
+	s := &Group{
 		items:  c,
 		syntax: blockSyntax,
 	}
+	g.items = append(g.items, s)
+	return g
+}
+
+// Block inserts curly braces containing a statements list
+func BlockFunc(f func(*Group)) *Group { return newStatement().BlockFunc(f) }
+
+// Block inserts curly braces containing a statements list
+func (g *Group) BlockFunc(f func(*Group)) *Group {
+	if startNewStatement(g.syntax) {
+		s := BlockFunc(f)
+		g.items = append(g.items, s)
+		return s
+	}
+	s := &Group{
+		syntax: blockSyntax,
+	}
+	f(s)
 	g.items = append(g.items, s)
 	return g
 }
@@ -106,10 +196,28 @@ func (g *Group) Call(c ...Code) *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	s := Group{
+	s := &Group{
 		items:  c,
 		syntax: callSyntax,
 	}
+	g.items = append(g.items, s)
+	return g
+}
+
+// Call inserts parenthesis containing a comma separated list
+func CallFunc(f func(*Group)) *Group { return newStatement().CallFunc(f) }
+
+// Call inserts parenthesis containing a comma separated list
+func (g *Group) CallFunc(f func(*Group)) *Group {
+	if startNewStatement(g.syntax) {
+		s := CallFunc(f)
+		g.items = append(g.items, s)
+		return s
+	}
+	s := &Group{
+		syntax: callSyntax,
+	}
+	f(s)
 	g.items = append(g.items, s)
 	return g
 }
@@ -124,10 +232,28 @@ func (g *Group) Params(c ...Code) *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	s := Group{
+	s := &Group{
 		items:  c,
 		syntax: paramsSyntax,
 	}
+	g.items = append(g.items, s)
+	return g
+}
+
+// Params inserts parenthesis containing a comma separated list
+func ParamsFunc(f func(*Group)) *Group { return newStatement().ParamsFunc(f) }
+
+// Params inserts parenthesis containing a comma separated list
+func (g *Group) ParamsFunc(f func(*Group)) *Group {
+	if startNewStatement(g.syntax) {
+		s := ParamsFunc(f)
+		g.items = append(g.items, s)
+		return s
+	}
+	s := &Group{
+		syntax: paramsSyntax,
+	}
+	f(s)
 	g.items = append(g.items, s)
 	return g
 }
@@ -142,10 +268,28 @@ func (g *Group) Decls(c ...Code) *Group {
 		g.items = append(g.items, s)
 		return s
 	}
-	s := Group{
+	s := &Group{
 		items:  c,
 		syntax: declsSyntax,
 	}
+	g.items = append(g.items, s)
+	return g
+}
+
+// Decls inserts parenthesis containing a statement list
+func DeclsFunc(f func(*Group)) *Group { return newStatement().DeclsFunc(f) }
+
+// Decls inserts parenthesis containing a statement list
+func (g *Group) DeclsFunc(f func(*Group)) *Group {
+	if startNewStatement(g.syntax) {
+		s := DeclsFunc(f)
+		g.items = append(g.items, s)
+		return s
+	}
+	s := &Group{
+		syntax: declsSyntax,
+	}
+	f(s)
 	g.items = append(g.items, s)
 	return g
 }

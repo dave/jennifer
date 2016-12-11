@@ -111,7 +111,9 @@ var cases = []tc{
 		).Block(
 			Return(Id("a")),
 		),
-		expect: `func a(a string){ return a }`,
+		expect: `func a(a string){
+			return a
+		}`,
 	},
 	{
 		desc:   `built in func`,

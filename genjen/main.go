@@ -67,10 +67,69 @@ func main() {
 				),
 				Return(Id("s")),
 			),
-			Id("s").Op(":=").Id("Group").Lit(map[Code]Code{
+			Id("s").Op(":=").Op("&").Id("Group").Lit(map[Code]Code{
 				Id("syntax"): Id(b.Syntax),
 				Id("items"):  Id("c"),
 			}),
+			Id("g", "items").Op("=").Append(
+				Id("g", "items"),
+				Id("s"),
+			),
+			Return(Id("g")),
+		)
+
+		nameFunc := b.Name + "Func"
+		/*
+			func {NameFunc}(f func(*Group)) *Group {
+				return newStatement().{NameFunc}(c...)
+			}
+		*/
+		file.Add(comment)
+		file.Func().Id(nameFunc).Params(
+			Id("f").Func().Params(Op("*").Id("Group")),
+		).Op("*").Id("Group").Block(
+			Return().Id("newStatement").Call().Op(".").Id(nameFunc).Call(
+				Id("f"),
+			),
+		)
+
+		/*
+			func (g *Group) {NameFunc}(f func(*Group)) *Group {
+				if startNewStatement(g.syntax) {
+					s := {NameFunc}(f)
+					g.items = append(g.items, s)
+					return s
+				}
+				s := &Group{
+					syntax:    {Syntax},
+				}
+				f(s)
+				g.items = append(g.items, s)
+				return g
+			}
+		*/
+		file.Add(comment)
+		file.Func().Params(
+			Id("g").Op("*").Id("Group"),
+		).Id(nameFunc).Params(
+			Id("f").Func().Params(Op("*").Id("Group")),
+		).Op("*").Id("Group").Block(
+			If().Id("startNewStatement").Call(
+				Id("g", "syntax"),
+			).Block(
+				Id("s").Op(":=").Id(nameFunc).Call(
+					Id("f"),
+				),
+				Id("g", "items").Op("=").Append(
+					Id("g", "items"),
+					Id("s"),
+				),
+				Return(Id("s")),
+			),
+			Id("s").Op(":=").Op("&").Id("Group").Lit(map[Code]Code{
+				Id("syntax"): Id(b.Syntax),
+			}),
+			Id("f").Call(Id("s")),
 			Id("g", "items").Op("=").Append(
 				Id("g", "items"),
 				Id("s"),

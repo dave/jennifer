@@ -33,13 +33,15 @@ func ExampleBreak() {
 func ExampleFunc() {
 	c := Func().Id("a").Params().Block()
 	fmt.Printf("%#v", c)
-	// Output: func a() {}
+	// Output: func a() {
+	// }
 }
 
 func ExampleGroup_Func() {
 	c := Id("a").Op(":=").Func().Params().Block()
 	fmt.Printf("%#v", c)
-	// Output: a := func() {}
+	// Output: a := func() {
+	// }
 }
 
 /*
@@ -117,6 +119,16 @@ func ExampleGroup_Block() {
 	// }
 }
 
+func ExampleGroup_BlockFunc() {
+	c := Func().Id("a").Params().BlockFunc(func(g *Group) {
+		g.Id("a").Op("++")
+	})
+	fmt.Printf("%#v", c)
+	// Output: func a() {
+	// 	a++
+	// }
+}
+
 func ExampleGroup_Call() {
 	c := Id("a").Call(Id("b"), Id("c"))
 	fmt.Printf("%#v", c)
@@ -190,7 +202,9 @@ func ExampleId_remote() {
 	//
 	// import fmt "fmt"
 	//
-	// func main() { fmt.Println("Hello, world") }
+	// func main() {
+	// 	fmt.Println("Hello, world")
+	// }
 }
 
 //func NewFile(name string) *Group
@@ -211,7 +225,9 @@ func ExampleNewFile() {
 	//
 	// import fmt "fmt"
 	//
-	// func main() { fmt.Println("Hello, world") }
+	// func main() {
+	// 	fmt.Println("Hello, world")
+	// }
 }
 func ExampleNewFilePath() {
 	f := NewFilePath("c", "a.b/c")
