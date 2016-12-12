@@ -25,11 +25,7 @@ func newStatement(c ...Code) *Group {
 }
 
 func startNewStatement(s syntaxType) bool {
-	switch s {
-	case fileSyntax, blockSyntax:
-		return true
-	}
-	return false
+	return s != statementSyntax
 }
 
 func (f *File) Save(filename string) error {
