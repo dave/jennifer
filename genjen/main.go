@@ -184,8 +184,8 @@ func main() {
 		redirect(
 			t.cap,
 			comment,
-			[]Code{},
-			[]Code{},
+			nil,
+			nil,
 		)
 
 		/*
