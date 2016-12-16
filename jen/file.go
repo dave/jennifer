@@ -41,12 +41,7 @@ func (f *File) register(path string) string {
 	if f.imports[path] != "" && f.imports[path] != "_" {
 		return f.imports[path]
 	}
-	alias := ""
-	if sep := strings.LastIndex(path, "/"); sep > -1 {
-		alias = path[sep+1:]
-	} else {
-		alias = path
-	}
+	alias := guessAlias(path)
 	unique := alias
 	find := func(a string) bool {
 		for _, v := range f.imports {
@@ -71,4 +66,30 @@ func (f *File) GoString() string {
 		panic(err)
 	}
 	return buf.String()
+}
+
+func guessAlias(path string) string {
+	alias := path
+	if strings.HasSuffix(alias, "/") {
+		// training slashes are usually tolerated, so we can get rid of one if
+		// it exists
+		alias = alias[:len(alias)-1]
+	}
+	if strings.Contains(alias, "/") {
+		// if the path contains a "/", use the last part
+		alias = alias[strings.LastIndex(alias, "/")+1:]
+	}
+	if strings.Contains(alias, "-") {
+		// the name usually follows a hyphen - e.g. github.com/foo/go-bar if
+		// the package name contains a "-", use the last part
+		alias = alias[strings.LastIndex(alias, "-")+1:]
+	}
+	if strings.Contains(alias, ".") {
+		// dot is commonly usually used as a version - e.g. github.com/foo/bar.v1
+		// if the package name contains a ".", use the first part
+		alias = alias[:strings.Index(alias, ".")]
+	}
+	// alias should be lower case
+	alias = strings.ToLower(alias)
+	return alias
 }
