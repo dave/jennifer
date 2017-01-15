@@ -1016,6 +1016,28 @@ func (s *Statement) Nil() *Statement {
 	return s
 }
 
+// Err inserts the err identifier
+func Err() *Statement {
+	return newStatement().Err()
+}
+
+// Err inserts the err identifier
+func (g *Group) Err() *Statement {
+	s := Err()
+	g.items = append(g.items, s)
+	return s
+}
+
+// Err inserts the err identifier
+func (s *Statement) Err() *Statement {
+	t := token{
+		content: "err",
+		typ:     identifierToken,
+	}
+	s.items = append(s.items, t)
+	return s
+}
+
 // Break inserts the break keyword
 func Break() *Statement {
 	return newStatement().Break()

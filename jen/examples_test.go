@@ -12,6 +12,19 @@ var Keywords = []string{"break", "default", "func", "interface", "select", "case
  "return" and "for" are special cases
 */
 
+func ExampleErr() {
+	c := If(
+		Err().Op(":=").Id("foo").Call(),
+		Err().Op("!=").Nil(),
+	).Block(
+		Return(Err()),
+	)
+	fmt.Printf("%#v", c)
+	// Output: if err := foo(); err != nil {
+	// 	return err
+	// }
+}
+
 func ExampleCaseBlock() {
 	c := Switch().Id("foo").Block(
 		Case().Lit("a").CaseBlock(

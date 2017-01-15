@@ -11,7 +11,9 @@ var Constants = []string{"true", "false", "iota"}
 
 var Zero = []string{"nil"}
 
-var Identifiers = append(append(append([]string{}, Types...), Constants...), Zero...)
+var Err = []string{"err"}
+
+var Identifiers = append(append(append(append([]string{}, Types...), Constants...), Zero...), Err...)
 
 var Functions = []string{"append", "cap", "close", "complex", "copy", "delete", "imag", "len", "make", "new", "panic", "print", "println", "real", "recover"}
 
