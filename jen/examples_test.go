@@ -13,7 +13,7 @@ var Keywords = []string{"break", "default", "func", "interface", "select", "case
 */
 
 func ExampleComplex() {
-	collection := func(name string, key Code, value Code) *Group {
+	collection := func(name string, key Code, value Code) *Statement {
 		if key == nil {
 			// slice
 			return Var().Id(name).Index().Add(value)

@@ -24,17 +24,35 @@ func main() {
 	) {
 		/*
 			// {comment}
-			func {name}({params}) *Group {
+			func {name}({params}) *Statement {
 				return newStatement().{name}({call})
 			}
 		*/
 		file.Add(comment)
 		file.Func().Id(name).Params(
 			params...,
-		).Op("*").Id("Group").Block(
+		).Op("*").Id("Statement").Block(
 			Return().Id("newStatement").Call().Op(".").Id(name).Call(
 				call...,
 			),
+		)
+		/*
+			// {comment}
+			func (g *Group) {name}({params}) *Statement {
+				s := {name}({call})
+				g.items = append(g.items, s)
+				return s
+			}
+		*/
+		file.Add(comment)
+		file.Func().Params(
+			Id("g").Op("*").Id("Group"),
+		).Id(name).Params(
+			params...,
+		).Op("*").Id("Statement").Block(
+			Id("s").Op(":=").Id(name).Params(call...),
+			Id("g", "items").Op("=").Append(Id("g", "items"), Id("s")),
+			Return(Id("s")),
 		)
 	}
 
@@ -53,47 +71,27 @@ func main() {
 		)
 
 		/*
-			func (g *Group) {Name}(c ...Code) *Group {
-				if startNewStatement(g.syntax) {
-					s := {Name}(c...)
-					g.items = append(g.items, s)
-					return s
-				}
-				s := Group{
+			func (s *Statement) {Name}(c ...Code) *Statement {
+				g := Group{
 					syntax: {Syntax},
 					items:  c,
 				}
-				g.items = append(g.items, s)
-				return g
+				s.items = append(s.items, g)
+				return s
 			}
 		*/
 		file.Add(comment)
 		file.Func().Params(
-			Id("g").Op("*").Id("Group"),
+			Id("s").Op("*").Id("Statement"),
 		).Id(b.Name).Params(
 			Id("c").Op("...").Id("Code"),
-		).Op("*").Id("Group").Block(
-			If().Id("startNewStatement").Call(
-				Id("g", "syntax"),
-			).Block(
-				Id("s").Op(":=").Id(b.Name).Call(
-					Id("c").Op("..."),
-				),
-				Id("g", "items").Op("=").Append(
-					Id("g", "items"),
-					Id("s"),
-				),
-				Return(Id("s")),
-			),
-			Id("s").Op(":=").Op("&").Id("Group").Dict(map[Code]Code{
+		).Op("*").Id("Statement").Block(
+			Id("g").Op(":=").Op("&").Id("Group").Dict(map[Code]Code{
 				Id("syntax"): Id(b.Syntax),
 				Id("items"):  Id("c"),
 			}),
-			Id("g", "items").Op("=").Append(
-				Id("g", "items"),
-				Id("s"),
-			),
-			Return(Id("g")),
+			Id("s", "items").Op("=").Append(Id("s", "items"), Id("g")),
+			Return(Id("s")),
 		)
 
 		nameFunc := b.Name + "Func"
@@ -105,47 +103,27 @@ func main() {
 		)
 
 		/*
-			func (g *Group) {NameFunc}(f func(*Group)) *Group {
-				if startNewStatement(g.syntax) {
-					s := {NameFunc}(f)
-					g.items = append(g.items, s)
-					return s
+			func (s *Statement) {NameFunc}(f func(*Group)) *Statement {
+				g := &Group{
+					syntax: {Syntax},
 				}
-				s := &Group{
-					syntax:    {Syntax},
-				}
-				f(s)
-				g.items = append(g.items, s)
-				return g
+				f(g)
+				s.items = append(s.items, g)
+				return s
 			}
 		*/
 		file.Add(comment)
 		file.Func().Params(
-			Id("g").Op("*").Id("Group"),
+			Id("s").Op("*").Id("Statement"),
 		).Id(nameFunc).Params(
 			Id("f").Func().Params(Op("*").Id("Group")),
-		).Op("*").Id("Group").Block(
-			If().Id("startNewStatement").Call(
-				Id("g", "syntax"),
-			).Block(
-				Id("s").Op(":=").Id(nameFunc).Call(
-					Id("f"),
-				),
-				Id("g", "items").Op("=").Append(
-					Id("g", "items"),
-					Id("s"),
-				),
-				Return(Id("s")),
-			),
-			Id("s").Op(":=").Op("&").Id("Group").Dict(map[Code]Code{
+		).Op("*").Id("Statement").Block(
+			Id("g").Op(":=").Op("&").Id("Group").Dict(map[Code]Code{
 				Id("syntax"): Id(b.Syntax),
 			}),
-			Id("f").Call(Id("s")),
-			Id("g", "items").Op("=").Append(
-				Id("g", "items"),
-				Id("s"),
-			),
-			Return(Id("g")),
+			Id("f").Call(Id("g")),
+			Id("s", "items").Op("=").Append(Id("s", "items"), Id("g")),
+			Return(Id("s")),
 		)
 	}
 
@@ -189,45 +167,25 @@ func main() {
 		)
 
 		/*
-			func (g *Group) {Name}() *Group {
-				if startNewStatement(g.syntax) {
-					s := {Name}()
-					g.items = append(g.items, s)
-					return s
-				}
+			func (s *Statement) {Name}() *Statement {
 				t := token{
-					Group:    g,
 					typ:     {identifierToken|keywordToken},
 					content: "{Name}",
 				}
-				g.items = append(g.items, t)
-				return g
+				s.items = append(s.items, t)
+				return s
 			}
 		*/
 		file.Add(comment)
 		file.Func().Params(
-			Id("g").Op("*").Id("Group"),
-		).Id(t.cap).Params().Op("*").Id("Group").Block(
-			If().Id("startNewStatement").Call(
-				Id("g", "syntax"),
-			).Block(
-				Id("s").Op(":=").Id(t.cap).Call(),
-				Id("g", "items").Op("=").Append(
-					Id("g", "items"),
-					Id("s"),
-				),
-				Return(Id("s")),
-			),
+			Id("s").Op("*").Id("Statement"),
+		).Id(t.cap).Params().Op("*").Id("Statement").Block(
 			Id("t").Op(":=").Id("token").Dict(map[Code]Code{
-				Id("Group"):   Id("g"),
 				Id("typ"):     Id(t.tokenType),
 				Id("content"): Lit(t.name),
 			}),
-			Id("g", "items").Op("=").Append(
-				Id("g", "items"),
-				Id("t"),
-			),
-			Return(Id("g")),
+			Id("s", "items").Op("=").Append(Id("s", "items"), Id("t")),
+			Return(Id("s")),
 		)
 	}
 
@@ -248,32 +206,17 @@ func main() {
 		)
 
 		/*
-			func (g *Group) {Name}(c ...Code) *Group {
-				if startNewStatement(g.syntax) {
-					s := {Name}(c...)
-					g.items = append(g.items, s)
-					return s
-				}
-				return g.Id("{Name}").{Call|List}(c...)
+			func (s *Statement) {Name}(c ...Code) *Statement {
+				return s.Id("{Name}").Call(c...)
 			}
 		*/
 		file.Add(comment)
 		file.Func().Params(
-			Id("g").Op("*").Id("Group"),
+			Id("s").Op("*").Id("Statement"),
 		).Id(capName).Params(
 			Id("c").Op("...").Id("Code"),
-		).Op("*").Id("Group").Block(
-			If().Id("startNewStatement").Call(Id("g", "syntax")).Block(
-				Id("s").Op(":=").Id(capName).Call(
-					Id("c").Op("..."),
-				),
-				Id("g", "items").Op("=").Append(
-					Id("g", "items"),
-					Id("s"),
-				),
-				Return(Id("s")),
-			),
-			Return().Id("g", "Id").Call(
+		).Op("*").Id("Statement").Block(
+			Return().Id("s", "Id").Call(
 				Lit(f),
 			).Op(".").Id("Call").Call(
 				Id("c").Op("..."),

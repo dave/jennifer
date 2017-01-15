@@ -17,17 +17,6 @@ type Code interface {
 	isNull() bool
 }
 
-func newStatement(c ...Code) *Group {
-	return &Group{
-		syntax: statementSyntax,
-		items:  c,
-	}
-}
-
-func startNewStatement(s syntaxType) bool {
-	return s != statementSyntax
-}
-
 func (f *File) Save(filename string) error {
 	buf := &bytes.Buffer{}
 	if err := f.Render(buf); err != nil {

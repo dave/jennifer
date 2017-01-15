@@ -1,20 +1,24 @@
 package jen
 
 // For inserts the for keyword
-func For(c ...Code) *Group { return newStatement().For(c...) }
+func For(c ...Code) *Statement {
+	return newStatement().For(c...)
+}
 
 // For inserts the for keyword
-func (g *Group) For(c ...Code) *Group {
-	if startNewStatement(g.syntax) {
-		s := For(c...)
-		g.items = append(g.items, s)
-		return s
-	}
-	g.Id("for")
-	s := Group{
+func (g *Group) For(c ...Code) *Statement {
+	s := For(c...)
+	s.items = append(s.items, s)
+	return s
+}
+
+// For inserts the for keyword
+func (s *Statement) For(c ...Code) *Statement {
+	s.Id("for")
+	g := Group{
 		syntax: clauseSyntax,
 		items:  c,
 	}
-	g.items = append(g.items, s)
-	return g
+	s.items = append(s.items, g)
+	return s
 }

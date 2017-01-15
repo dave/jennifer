@@ -198,7 +198,7 @@ var cases = []tc{
 	},
 	{
 		desc:   `do`,
-		code:   Id("a").Op(".").Do(func(g *Group) { g.Id("b") }),
+		code:   Id("a").Op(".").Do(func(s *Statement) { s.Id("b") }),
 		expect: `a.b`,
 	},
 	{

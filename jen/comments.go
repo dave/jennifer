@@ -6,44 +6,43 @@ import (
 	"strings"
 )
 
-func Comment(str string) *Group {
+func Comment(str string) *Statement {
 	return newStatement().Comment(str)
 }
 
-func (g *Group) Comment(str string) *Group {
-	if startNewStatement(g.syntax) {
-		s := Comment(str)
-		g.items = append(g.items, s)
-		return s
-	}
+func (g *Group) Comment(str string) *Statement {
+	s := Comment(str)
+	g.items = append(g.items, s)
+	return s
+}
+
+func (g *Statement) Comment(str string) *Statement {
 	c := comment{
-		Group:   g,
 		comment: str,
 	}
 	g.items = append(g.items, c)
 	return g
 }
 
-func Commentf(format string, a ...interface{}) *Group {
+func Commentf(format string, a ...interface{}) *Statement {
 	return newStatement().Commentf(format, a...)
 }
 
-func (g *Group) Commentf(format string, a ...interface{}) *Group {
-	if startNewStatement(g.syntax) {
-		s := Commentf(format, a...)
-		g.items = append(g.items, s)
-		return s
-	}
+func (g *Group) Commentf(format string, a ...interface{}) *Statement {
+	s := Commentf(format, a...)
+	g.items = append(g.items, s)
+	return s
+}
+
+func (s *Statement) Commentf(format string, a ...interface{}) *Statement {
 	c := comment{
-		Group:   g,
 		comment: fmt.Sprintf(format, a...),
 	}
-	g.items = append(g.items, c)
-	return g
+	s.items = append(s.items, c)
+	return s
 }
 
 type comment struct {
-	*Group
 	comment string
 }
 

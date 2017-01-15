@@ -12,39 +12,6 @@ type Group struct {
 	items  []Code
 }
 
-// Add creates a new statement and appends the provided code to it.
-func Add(code ...Code) *Group {
-	return newStatement().Add(code...)
-}
-
-// Add appends the provided code to the group.
-func (g *Group) Add(code ...Code) *Group {
-	if startNewStatement(g.syntax) {
-		s := newStatement(code...)
-		g.items = append(g.items, s)
-		return s
-	}
-	g.items = append(g.items, code...)
-	return g
-}
-
-// Do creates a new statement and calls the provided function with it as a
-// parameter
-func Do(f func(*Group)) *Group {
-	return newStatement().Do(f)
-}
-
-// Do calls the provided function with the group as a parameter
-func (g *Group) Do(f func(*Group)) *Group {
-	if startNewStatement(g.syntax) {
-		s := newStatement().Do(f)
-		g.items = append(g.items, s)
-		return s
-	}
-	f(g)
-	return g
-}
-
 func (g Group) isNull() bool {
 	i := syntaxInfo[g.syntax]
 	if i.open != "" || i.close != "" {

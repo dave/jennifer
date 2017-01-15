@@ -3,17 +3,16 @@ package jen
 type syntaxType string
 
 const (
-	fileSyntax      syntaxType = "file"
-	paramsSyntax    syntaxType = "params"
-	statementSyntax syntaxType = "statement"
-	blockSyntax     syntaxType = "block"
-	parensSyntax    syntaxType = "parens"
-	valuesSyntax    syntaxType = "values"
-	indexSyntax     syntaxType = "index"
-	callSyntax      syntaxType = "call"
-	declsSyntax     syntaxType = "decls"
-	listSyntax      syntaxType = "list"
-	clauseSyntax    syntaxType = "clause"
+	fileSyntax   syntaxType = "file"
+	paramsSyntax syntaxType = "params"
+	blockSyntax  syntaxType = "block"
+	parensSyntax syntaxType = "parens"
+	valuesSyntax syntaxType = "values"
+	indexSyntax  syntaxType = "index"
+	callSyntax   syntaxType = "call"
+	declsSyntax  syntaxType = "decls"
+	listSyntax   syntaxType = "list"
+	clauseSyntax syntaxType = "clause"
 )
 
 var syntaxInfo = map[syntaxType]struct {
@@ -23,9 +22,6 @@ var syntaxInfo = map[syntaxType]struct {
 }{
 	fileSyntax: {
 		seperator: "\n",
-	},
-	statementSyntax: {
-		seperator: " ",
 	},
 	parensSyntax: {
 		open:      "(",

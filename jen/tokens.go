@@ -19,7 +19,6 @@ const (
 )
 
 type token struct {
-	*Group
 	typ     tokenType
 	content interface{}
 }
@@ -65,42 +64,46 @@ func (t token) render(f *File, w io.Writer) error {
 
 // Null token produces no output but also no separator
 // in a list.
-func Null() *Group {
+func Null() *Statement {
 	return newStatement().Null()
 }
 
 // Null token produces no output but also no separator
 // in a list.
-func (g *Group) Null() *Group {
-	if startNewStatement(g.syntax) {
-		s := Null()
-		g.items = append(g.items, s)
-		return s
-	}
+func (g *Group) Null() *Statement {
+	s := Null()
+	g.items = append(g.items, s)
+	return s
+}
+
+// Null token produces no output but also no separator
+// in a list.
+func (s *Statement) Null() *Statement {
 	t := token{
-		Group: g,
-		typ:   nullToken,
+		typ: nullToken,
 	}
-	g.items = append(g.items, t)
-	return g
+	s.items = append(s.items, t)
+	return s
 }
 
 // Empty token produces no output but is followed by a
 // separator in a list.
-func Empty() *Group {
+func Empty() *Statement {
 	return newStatement().Empty()
 }
 
 // Empty token produces no output but is followed by a
 // separator in a list.
-func (g *Group) Empty() *Group {
-	if startNewStatement(g.syntax) {
-		s := Empty()
-		g.items = append(g.items, s)
-		return s
-	}
+func (g *Group) Empty() *Statement {
+	s := Empty()
+	g.items = append(g.items, s)
+	return s
+}
+
+// Empty token produces no output but is followed by a
+// separator in a list.
+func (g *Statement) Empty() *Statement {
 	t := token{
-		Group:   g,
 		typ:     operatorToken,
 		content: "",
 	}
@@ -108,64 +111,64 @@ func (g *Group) Empty() *Group {
 	return g
 }
 
-func Op(op string) *Group {
+func Op(op string) *Statement {
 	return newStatement().Op(op)
 }
 
-func (g *Group) Op(op string) *Group {
-	if startNewStatement(g.syntax) {
-		s := Op(op)
-		g.items = append(g.items, s)
-		return s
-	}
+func (g *Group) Op(op string) *Statement {
+	s := Op(op)
+	g.items = append(g.items, s)
+	return s
+}
+
+func (s *Statement) Op(op string) *Statement {
 	t := token{
-		Group:   g,
 		typ:     operatorToken,
 		content: op,
 	}
-	g.items = append(g.items, t)
-	return g
+	s.items = append(s.items, t)
+	return s
 }
 
-func Id(names ...string) *Group {
+func Id(names ...string) *Statement {
 	return newStatement().Id(names...)
 }
 
-func (g *Group) Id(names ...string) *Group {
-	if startNewStatement(g.syntax) {
-		s := Id(names...)
-		g.items = append(g.items, s)
-		return s
-	}
+func (g *Group) Id(names ...string) *Statement {
+	s := Id(names...)
+	g.items = append(g.items, s)
+	return s
+}
+
+func (s *Statement) Id(names ...string) *Statement {
 	for i, n := range names {
 		if i > 0 {
-			g.Op(".")
+			s.Op(".")
 		}
 		t := token{
-			Group:   g,
 			typ:     identifierToken,
 			content: n,
 		}
-		g.items = append(g.items, t)
+		s.items = append(s.items, t)
 	}
-	return g
+	return s
 }
 
-func Line() *Group {
+func Line() *Statement {
 	return newStatement().Line()
 }
 
-func (g *Group) Line() *Group {
-	if startNewStatement(g.syntax) {
-		s := Line()
-		g.items = append(g.items, s)
-		return s
-	}
+func (g *Group) Line() *Statement {
+	s := Line()
+	g.items = append(g.items, s)
+	return s
+}
+
+func (s *Statement) Line() *Statement {
 	t := token{
-		Group:   g,
 		typ:     layoutToken,
 		content: "\n",
 	}
-	g.items = append(g.items, t)
-	return g
+	s.items = append(s.items, t)
+	return s
 }

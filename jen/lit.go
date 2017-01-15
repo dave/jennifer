@@ -6,86 +6,86 @@ import (
 	"sort"
 )
 
-func Lit(v interface{}) *Group {
+func Lit(v interface{}) *Statement {
 	return newStatement().Lit(v)
 }
 
-func (g *Group) Lit(v interface{}) *Group {
-	if startNewStatement(g.syntax) {
-		s := Lit(v)
-		g.items = append(g.items, s)
-		return s
-	}
+func (g *Group) Lit(v interface{}) *Statement {
+	s := Lit(v)
+	g.items = append(g.items, s)
+	return s
+}
+
+func (s *Statement) Lit(v interface{}) *Statement {
 	t := token{
-		Group:   g,
 		typ:     literalToken,
 		content: v,
 	}
-	g.items = append(g.items, t)
-	return g
+	s.items = append(s.items, t)
+	return s
 }
 
-func LitFunc(f func() interface{}) *Group {
+func LitFunc(f func() interface{}) *Statement {
 	return newStatement().LitFunc(f)
 }
 
-func (g *Group) LitFunc(f func() interface{}) *Group {
-	if startNewStatement(g.syntax) {
-		s := LitFunc(f)
-		g.items = append(g.items, s)
-		return s
-	}
+func (g *Group) LitFunc(f func() interface{}) *Statement {
+	s := LitFunc(f)
+	g.items = append(g.items, s)
+	return s
+}
+
+func (s *Statement) LitFunc(f func() interface{}) *Statement {
 	t := token{
-		Group:   g,
 		typ:     literalToken,
 		content: f(),
 	}
-	g.items = append(g.items, t)
-	return g
+	s.items = append(s.items, t)
+	return s
 }
 
 // Dict inserts a map literal
-func Dict(m map[Code]Code) *Group {
+func Dict(m map[Code]Code) *Statement {
 	return newStatement().Dict(m)
 }
 
 // Dict inserts a map literal
-func (g *Group) Dict(m map[Code]Code) *Group {
-	if startNewStatement(g.syntax) {
-		s := Dict(m)
-		g.items = append(g.items, s)
-		return s
-	}
-	ml := dict{
-		Group: g,
-		m:     m,
-	}
-	g.items = append(g.items, ml)
-	return g
+func (g *Group) Dict(m map[Code]Code) *Statement {
+	s := Dict(m)
+	g.items = append(g.items, s)
+	return s
 }
 
-func DictFunc(f func(map[Code]Code)) *Group {
+// Dict inserts a map literal
+func (s *Statement) Dict(m map[Code]Code) *Statement {
+	d := dict{
+		m: m,
+	}
+	s.items = append(s.items, d)
+	return s
+}
+
+func DictFunc(f func(map[Code]Code)) *Statement {
 	return newStatement().DictFunc(f)
 }
 
-func (g *Group) DictFunc(f func(map[Code]Code)) *Group {
-	if startNewStatement(g.syntax) {
-		s := DictFunc(f)
-		g.items = append(g.items, s)
-		return s
-	}
+func (g *Group) DictFunc(f func(map[Code]Code)) *Statement {
+	s := DictFunc(f)
+	g.items = append(g.items, s)
+	return s
+}
+
+func (s *Statement) DictFunc(f func(map[Code]Code)) *Statement {
 	m := map[Code]Code{}
 	f(m)
 	ml := dict{
-		Group: g,
-		m:     m,
+		m: m,
 	}
-	g.items = append(g.items, ml)
-	return g
+	s.items = append(s.items, ml)
+	return s
 }
 
 type dict struct {
-	*Group
 	m map[Code]Code
 }
 
