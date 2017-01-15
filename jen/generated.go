@@ -400,6 +400,94 @@ func (s *Statement) DeclsFunc(f func(*Group)) *Statement {
 	return s
 }
 
+// CaseBlock inserts a statement list preceeded by a colon
+func CaseBlock(c ...Code) *Statement {
+	return newStatement().CaseBlock(c...)
+}
+
+// CaseBlock inserts a statement list preceeded by a colon
+func (g *Group) CaseBlock(c ...Code) *Statement {
+	s := CaseBlock(c...)
+	g.items = append(g.items, s)
+	return s
+}
+
+// CaseBlock inserts a statement list preceeded by a colon
+func (s *Statement) CaseBlock(c ...Code) *Statement {
+	g := &Group{
+		items:  c,
+		syntax: caseSyntax,
+	}
+	s.items = append(s.items, g)
+	return s
+}
+
+// CaseBlock inserts a statement list preceeded by a colon
+func CaseBlockFunc(f func(*Group)) *Statement {
+	return newStatement().CaseBlockFunc(f)
+}
+
+// CaseBlock inserts a statement list preceeded by a colon
+func (g *Group) CaseBlockFunc(f func(*Group)) *Statement {
+	s := CaseBlockFunc(f)
+	g.items = append(g.items, s)
+	return s
+}
+
+// CaseBlock inserts a statement list preceeded by a colon
+func (s *Statement) CaseBlockFunc(f func(*Group)) *Statement {
+	g := &Group{
+		syntax: caseSyntax,
+	}
+	f(g)
+	s.items = append(s.items, g)
+	return s
+}
+
+// Assert inserts a type assertion
+func Assert(c ...Code) *Statement {
+	return newStatement().Assert(c...)
+}
+
+// Assert inserts a type assertion
+func (g *Group) Assert(c ...Code) *Statement {
+	s := Assert(c...)
+	g.items = append(g.items, s)
+	return s
+}
+
+// Assert inserts a type assertion
+func (s *Statement) Assert(c ...Code) *Statement {
+	g := &Group{
+		items:  c,
+		syntax: assertSyntax,
+	}
+	s.items = append(s.items, g)
+	return s
+}
+
+// Assert inserts a type assertion
+func AssertFunc(f func(*Group)) *Statement {
+	return newStatement().AssertFunc(f)
+}
+
+// Assert inserts a type assertion
+func (g *Group) AssertFunc(f func(*Group)) *Statement {
+	s := AssertFunc(f)
+	g.items = append(g.items, s)
+	return s
+}
+
+// Assert inserts a type assertion
+func (s *Statement) AssertFunc(f func(*Group)) *Statement {
+	g := &Group{
+		syntax: assertSyntax,
+	}
+	f(g)
+	s.items = append(s.items, g)
+	return s
+}
+
 // Bool inserts the bool identifier
 func Bool() *Statement {
 	return newStatement().Bool()

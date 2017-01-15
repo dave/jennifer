@@ -12,6 +12,29 @@ var Keywords = []string{"break", "default", "func", "interface", "select", "case
  "return" and "for" are special cases
 */
 
+func ExampleCaseBlock() {
+	c := Switch().Id("foo").Block(
+		Case().Lit("a").CaseBlock(
+			Return(Lit(1)),
+		),
+		Case().Lit("b").CaseBlock(
+			Return(Lit(2)),
+		),
+		Default().CaseBlock(
+			Return(Lit(3)),
+		),
+	)
+	fmt.Printf("%#v", c)
+	// Output: switch foo {
+	// case "a":
+	// 	return 1
+	// case "b":
+	// 	return 2
+	// default:
+	// 	return 3
+	// }
+}
+
 func ExampleTag() {
 	c := Type().Id("foo").Struct().Block(
 		Id("A").String().Tag(map[string]string{"json": "a"}),
@@ -94,7 +117,7 @@ var Types = []string{"bool", "byte", "complex64", "complex128", "error", "float3
 */
 
 func ExampleBool() {
-	c := List(Id("b"), Id("ok")).Op(":=").Id("a").Op(".").Parens(Bool())
+	c := List(Id("b"), Id("ok")).Op(":=").Id("a").Assert(Bool())
 	fmt.Printf("%#v", c)
 	// Output: b, ok := a.(bool)
 }
@@ -106,7 +129,7 @@ func ExampleGroup_Bool() {
 }
 
 func ExampleByte() {
-	c := Id("b").Op(":=").Id("a").Op(".").Parens(Byte())
+	c := Id("b").Op(":=").Id("a").Assert(Byte())
 	fmt.Printf("%#v", c)
 	// Output: b := a.(byte)
 }

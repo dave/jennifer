@@ -65,6 +65,16 @@ var Blocks = []struct {
 		Syntax: "declsSyntax",
 		Desc:   "parenthesis containing a statement list",
 	},
+	{
+		Name:   "CaseBlock",
+		Syntax: "caseSyntax",
+		Desc:   "a statement list preceeded by a colon",
+	},
+	{
+		Name:   "Assert",
+		Syntax: "assertSyntax",
+		Desc:   "a type assertion",
+	},
 }
 
 var Operators = []struct {

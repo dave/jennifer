@@ -13,6 +13,8 @@ const (
 	declsSyntax  syntaxType = "decls"
 	listSyntax   syntaxType = "list"
 	clauseSyntax syntaxType = "clause"
+	caseSyntax   syntaxType = "case"
+	assertSyntax syntaxType = "assert"
 )
 
 var syntaxInfo = map[syntaxType]struct {
@@ -63,5 +65,14 @@ var syntaxInfo = map[syntaxType]struct {
 		open:      "(",
 		close:     ")",
 		seperator: ";",
+	},
+	caseSyntax: {
+		open:      ":\n",
+		seperator: "\n",
+	},
+	assertSyntax: {
+		open:      ".(",
+		close:     ")",
+		seperator: " ",
 	},
 }
