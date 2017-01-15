@@ -12,6 +12,27 @@ var Keywords = []string{"break", "default", "func", "interface", "select", "case
  "return" and "for" are special cases
 */
 
+func ExampleComplex() {
+	collection := func(name string, key Code, value Code) *Group {
+		if key == nil {
+			// slice
+			return Var().Id(name).Index().Add(value)
+		} else {
+			// map
+			return Var().Id(name).Map().Index(key).Add(value)
+		}
+	}
+	c := Func().Id("main").Params().Block(
+		collection("foo", nil, String()),
+		collection("bar", String(), Int()),
+	)
+	fmt.Printf("%#v", c)
+	// Output: func main() {
+	// 	var foo []string
+	// 	var bar map[string]int
+	// }
+}
+
 func ExampleBreak() {
 	c := For(
 		Id("i").Op(":=").Lit(0),
@@ -122,10 +143,12 @@ func ExampleGroup_Block() {
 func ExampleGroup_BlockFunc() {
 	c := Func().Id("a").Params().BlockFunc(func(g *Group) {
 		g.Id("a").Op("++")
+		g.Id("b").Op("--")
 	})
 	fmt.Printf("%#v", c)
 	// Output: func a() {
 	// 	a++
+	//	b--
 	// }
 }
 
@@ -250,8 +273,9 @@ func ExampleNewFile() {
 	// 	fmt.Println("Hello, world")
 	// }
 }
+
 func ExampleNewFilePath() {
-	f := NewFilePath("c", "a.b/c")
+	f := NewFilePath("a.b/c")
 	f.Func().Id("init").Params().Block(
 		Id("a.b/c.Local").Call(),
 		Id("d.e/f.Remote").Call(),
@@ -269,5 +293,19 @@ func ExampleNewFilePath() {
 	// 	Local()
 	// 	f.Remote()
 	// 	f1.Collision()
+	// }
+}
+
+func ExampleFile_PackageComment() {
+	f := NewFile("c")
+	f.PackageComment("a")
+	f.PackageComment("b")
+	f.Func().Id("init").Params().Block()
+	fmt.Printf("%#v", f)
+	// Output: // a
+	// // b
+	// package c
+	//
+	// func init() {
 	// }
 }

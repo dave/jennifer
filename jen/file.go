@@ -16,12 +16,12 @@ func NewFile(name string) *File {
 	}
 }
 
-func NewFilePath(name, path string) *File {
+func NewFilePath(path string) *File {
 	return &File{
 		Group: &Group{
 			syntax: fileSyntax,
 		},
-		name:    name,
+		name:    guessAlias(path),
 		path:    path,
 		imports: map[string]string{},
 	}
@@ -29,9 +29,27 @@ func NewFilePath(name, path string) *File {
 
 type File struct {
 	*Group
-	name    string
-	path    string
-	imports map[string]string
+	prefix   string
+	name     string
+	path     string
+	imports  map[string]string
+	comments []string
+}
+
+func (f *File) PackageComment(comment string) {
+	f.comments = append(f.comments, comment)
+}
+
+func (f *File) Anon(paths ...string) {
+	for _, p := range paths {
+		f.imports[p] = "_"
+	}
+}
+
+// If you're worried about package aliases conflicting with local variable
+// names, you can set a prefix here. Package foo becomes {prefix}_foo.
+func (f *File) PackagePrefix(prefix string) {
+	f.prefix = prefix
 }
 
 func (f *File) register(path string) string {
@@ -55,6 +73,9 @@ func (f *File) register(path string) string {
 	for find(unique) {
 		i++
 		unique = fmt.Sprintf("%s%d", alias, i)
+	}
+	if f.prefix != "" {
+		unique = f.prefix + "_" + unique
 	}
 	f.imports[path] = unique
 	return unique

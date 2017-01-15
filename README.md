@@ -48,7 +48,7 @@ import (
 )
 
 func main() {
-	f := NewFilePath("c", "a.b/c")
+	f := NewFilePath("a.b/c")
     f.Func().Id("init").Params().Block(
         Id("a.b/c.Local").Call(),
         Id("d.e/f.Remote").Call(),

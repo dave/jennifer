@@ -1204,27 +1204,6 @@ func (g *Group) Fallthrough() *Group {
 	return g
 }
 
-// If inserts the if keyword
-func If() *Group {
-	return newStatement().If()
-}
-
-// If inserts the if keyword
-func (g *Group) If() *Group {
-	if startNewStatement(g.syntax) {
-		s := If()
-		g.items = append(g.items, s)
-		return s
-	}
-	t := token{
-		Group:   g,
-		content: "if",
-		typ:     keywordToken,
-	}
-	g.items = append(g.items, t)
-	return g
-}
-
 // Range inserts the range keyword
 func Range() *Group {
 	return newStatement().Range()

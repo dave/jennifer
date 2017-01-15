@@ -2,6 +2,7 @@ package jen
 
 import (
 	"bytes"
+	"fmt"
 	"go/format"
 	"io"
 )
@@ -9,6 +10,11 @@ import (
 type Group struct {
 	syntax syntaxType
 	items  []Code
+}
+
+// Add creates a new statement and appends the provided code to it.
+func Add(code ...Code) *Group {
+	return newStatement().Add(code...)
 }
 
 // Add appends the provided code to the group.
@@ -93,7 +99,7 @@ func (g *Group) GoString() string {
 	}
 	b, err := format.Source(buf.Bytes())
 	if err != nil {
-		panic(err)
+		panic(fmt.Errorf("Error while formatting source: %s\nSource: %s", err, buf.String()))
 	}
 	return string(b)
 }

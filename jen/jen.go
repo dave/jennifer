@@ -45,6 +45,16 @@ func (f *File) Render(w io.Writer) error {
 		return err
 	}
 	source := &bytes.Buffer{}
+	if f.comments != nil {
+		for _, c := range f.comments {
+			if err := Comment(c).render(f, source); err != nil {
+				return err
+			}
+			if _, err := fmt.Fprint(source, "\n"); err != nil {
+				return err
+			}
+		}
+	}
 	if _, err := fmt.Fprintf(source, "package %s\n\n", f.name); err != nil {
 		return err
 	}
