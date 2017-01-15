@@ -27,7 +27,7 @@ func (s Statement) isNull() bool {
 func (s Statement) render(f *File, w io.Writer) error {
 	first := true
 	for _, code := range s.items {
-		if code.isNull() {
+		if code == nil || code.isNull() {
 			// Null() token produces no output but also
 			// no separator. Empty() token products no
 			// output but adds a separator.

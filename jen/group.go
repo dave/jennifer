@@ -34,7 +34,7 @@ func (g Group) render(f *File, w io.Writer) error {
 	}
 	first := true
 	for _, code := range g.items {
-		if code.isNull() {
+		if code == nil || code.isNull() {
 			// Null() token produces no output but also
 			// no separator. Empty() token products no
 			// output but adds a separator.

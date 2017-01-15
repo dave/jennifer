@@ -12,6 +12,18 @@ var Keywords = []string{"break", "default", "func", "interface", "select", "case
  "return" and "for" are special cases
 */
 
+func ExampleNull() {
+	c := Func().Id("foo").Params(
+		nil,
+		Id("s").String(),
+		Null(),
+		Id("i").Int(),
+	).Block()
+	fmt.Printf("%#v", c)
+	// Output: func foo(s string, i int) {
+	// }
+}
+
 func ExampleComplex() {
 	collection := func(name string, key Code, value Code) *Statement {
 		if key == nil {
