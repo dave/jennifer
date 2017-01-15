@@ -16,12 +16,12 @@ func (g *Group) Comment(str string) *Statement {
 	return s
 }
 
-func (g *Statement) Comment(str string) *Statement {
+func (s *Statement) Comment(str string) *Statement {
 	c := comment{
 		comment: str,
 	}
-	g.items = append(g.items, c)
-	return g
+	s.items = append(s.items, c)
+	return s
 }
 
 func Commentf(format string, a ...interface{}) *Statement {

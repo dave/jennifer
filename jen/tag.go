@@ -1,0 +1,64 @@
+package jen
+
+import (
+	"fmt"
+	"io"
+	"strconv"
+)
+
+// Tag adds a struct tag
+func Tag(items map[string]string) *Statement {
+	return newStatement().Tag(items)
+}
+
+// Tag adds a struct tag
+func (g *Group) Tag(items map[string]string) *Statement {
+	s := Tag(items)
+	g.items = append(g.items, s)
+	return s
+}
+
+// Tag adds a struct tag
+func (s *Statement) Tag(items map[string]string) *Statement {
+	c := tag{
+		items: items,
+	}
+	s.items = append(s.items, c)
+	return s
+}
+
+type tag struct {
+	items map[string]string
+}
+
+func (t tag) isNull() bool {
+	return len(t.items) == 0
+}
+
+func (t tag) render(f *File, w io.Writer) error {
+
+	if t.isNull() {
+		return nil
+	}
+
+	var s string
+
+	for k, v := range t.items {
+		if len(s) > 0 {
+			s += " "
+		}
+		s += fmt.Sprintf(`%s:"%s"`, k, v)
+	}
+
+	if strconv.CanBackquote(s) {
+		s = "`" + s + "`"
+	} else {
+		s = strconv.Quote(s)
+	}
+
+	if _, err := w.Write([]byte(s)); err != nil {
+		return err
+	}
+
+	return nil
+}

@@ -12,6 +12,18 @@ var Keywords = []string{"break", "default", "func", "interface", "select", "case
  "return" and "for" are special cases
 */
 
+func ExampleTag() {
+	c := Type().Id("foo").Struct().Block(
+		Id("A").String().Tag(map[string]string{"json": "a"}),
+		Id("B").Int().Tag(map[string]string{"json": "b", "bar": "baz"}),
+	)
+	fmt.Printf("%#v", c)
+	// Output: type foo struct {
+	// 	A string `json:"a"`
+	// 	B int    `json:"b" bar:"baz"`
+	// }
+}
+
 func ExampleNull() {
 	c := Func().Id("foo").Params(
 		nil,
