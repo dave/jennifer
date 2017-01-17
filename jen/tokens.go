@@ -130,26 +130,37 @@ func (s *Statement) Op(op string) *Statement {
 	return s
 }
 
-func Id(names ...string) *Statement {
-	return newStatement().Id(names...)
+func Id(items ...interface{}) *Statement {
+	return newStatement().Id(items...)
 }
 
-func (g *Group) Id(names ...string) *Statement {
-	s := Id(names...)
+func (g *Group) Id(items ...interface{}) *Statement {
+	s := Id(items...)
 	g.items = append(g.items, s)
 	return s
 }
 
-func (s *Statement) Id(names ...string) *Statement {
-	for i, n := range names {
-		if i > 0 {
+func (s *Statement) Id(items ...interface{}) *Statement {
+	first := true
+	for _, item := range items {
+		if !first {
 			s.Op(".")
 		}
-		t := token{
-			typ:     identifierToken,
-			content: n,
+		switch item := item.(type) {
+		case string:
+			first = false
+			t := token{
+				typ:     identifierToken,
+				content: item,
+			}
+			s.items = append(s.items, t)
+		case Code:
+			if item.isNull() {
+				break
+			}
+			first = false
+			s.items = append(s.items, item)
 		}
-		s.items = append(s.items, t)
 	}
 	return s
 }
@@ -168,6 +179,44 @@ func (s *Statement) Line() *Statement {
 	t := token{
 		typ:     layoutToken,
 		content: "\n",
+	}
+	s.items = append(s.items, t)
+	return s
+}
+
+func Dot() *Statement {
+	return newStatement().Dot()
+}
+
+func (g *Group) Dot() *Statement {
+	s := Dot()
+	g.items = append(g.items, s)
+	return s
+}
+
+func (s *Statement) Dot() *Statement {
+	t := token{
+		typ:     delimiterToken,
+		content: ".",
+	}
+	s.items = append(s.items, t)
+	return s
+}
+
+func Comma() *Statement {
+	return newStatement().Comma()
+}
+
+func (g *Group) Comma() *Statement {
+	s := Comma()
+	g.items = append(g.items, s)
+	return s
+}
+
+func (s *Statement) Comma() *Statement {
+	t := token{
+		typ:     delimiterToken,
+		content: ",",
 	}
 	s.items = append(s.items, t)
 	return s

@@ -12,6 +12,13 @@ var Keywords = []string{"break", "default", "func", "interface", "select", "case
  "return" and "for" are special cases
 */
 
+func ExampleId2() {
+	id := Id("foo.Bar", "Baz")
+	c := Id(id, "Qux").Call()
+	fmt.Printf("%#v", c)
+	// Output: foo.Bar.Baz.Qux()
+}
+
 func ExampleErr() {
 	c := If(
 		Err().Op(":=").Id("foo").Call(),
@@ -79,7 +86,7 @@ func ExampleComplex() {
 			return Var().Id(name).Index().Add(value)
 		} else {
 			// map
-			return Var().Id(name).Map().Index(key).Add(value)
+			return Var().Id(name).Map(key).Add(value)
 		}
 	}
 	c := Func().Id("main").Params().Block(
@@ -261,7 +268,7 @@ func ExampleGroup_Commentf() {
 //func Lit(v interface{}) *Group
 
 func ExampleGroup_Dict() {
-	c := Id("a").Op(":=").Map().Index(String()).String().Dict(map[Code]Code{
+	c := Id("a").Op(":=").Map(String()).String().Dict(map[Code]Code{
 		Lit("a"): Lit("b"),
 	})
 	fmt.Printf("%#v", c)
@@ -271,7 +278,7 @@ func ExampleGroup_Dict() {
 }
 
 func ExampleGroup_DictFunc() {
-	c := Id("a").Op(":=").Map().Index(String()).String().DictFunc(func(m map[Code]Code) {
+	c := Id("a").Op(":=").Map(String()).String().DictFunc(func(m map[Code]Code) {
 		m[Lit("a")] = Lit("b")
 	})
 	fmt.Printf("%#v", c)

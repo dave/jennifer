@@ -15,6 +15,7 @@ const (
 	clauseSyntax syntaxType = "clause"
 	caseSyntax   syntaxType = "case"
 	assertSyntax syntaxType = "assert"
+	mapSyntax 	 syntaxType = "map"
 )
 
 var syntaxInfo = map[syntaxType]struct {
@@ -28,7 +29,6 @@ var syntaxInfo = map[syntaxType]struct {
 	parensSyntax: {
 		open:      "(",
 		close:     ")",
-		seperator: " ",
 	},
 	listSyntax: {
 		seperator: ",",
@@ -73,6 +73,9 @@ var syntaxInfo = map[syntaxType]struct {
 	assertSyntax: {
 		open:      ".(",
 		close:     ")",
-		seperator: " ",
+	},
+	mapSyntax: {
+		open:      "map[",
+		close:     "]",
 	},
 }

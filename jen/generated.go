@@ -5,21 +5,21 @@ package jen
 */
 
 // Parens inserts parenthesis
-func Parens(c ...Code) *Statement {
-	return newStatement().Parens(c...)
+func Parens(c Code) *Statement {
+	return newStatement().Parens(c)
 }
 
 // Parens inserts parenthesis
-func (g *Group) Parens(c ...Code) *Statement {
-	s := Parens(c...)
+func (g *Group) Parens(c Code) *Statement {
+	s := Parens(c)
 	g.items = append(g.items, s)
 	return s
 }
 
 // Parens inserts parenthesis
-func (s *Statement) Parens(c ...Code) *Statement {
+func (s *Statement) Parens(c Code) *Statement {
 	g := &Group{
-		items:  c,
+		items:  []Code{c},
 		syntax: parensSyntax,
 	}
 	s.items = append(s.items, g)
@@ -445,21 +445,21 @@ func (s *Statement) CaseBlockFunc(f func(*Group)) *Statement {
 }
 
 // Assert inserts a type assertion
-func Assert(c ...Code) *Statement {
-	return newStatement().Assert(c...)
+func Assert(c Code) *Statement {
+	return newStatement().Assert(c)
 }
 
 // Assert inserts a type assertion
-func (g *Group) Assert(c ...Code) *Statement {
-	s := Assert(c...)
+func (g *Group) Assert(c Code) *Statement {
+	s := Assert(c)
 	g.items = append(g.items, s)
 	return s
 }
 
 // Assert inserts a type assertion
-func (s *Statement) Assert(c ...Code) *Statement {
+func (s *Statement) Assert(c Code) *Statement {
 	g := &Group{
-		items:  c,
+		items:  []Code{c},
 		syntax: assertSyntax,
 	}
 	s.items = append(s.items, g)
@@ -482,6 +482,50 @@ func (g *Group) AssertFunc(f func(*Group)) *Statement {
 func (s *Statement) AssertFunc(f func(*Group)) *Statement {
 	g := &Group{
 		syntax: assertSyntax,
+	}
+	f(g)
+	s.items = append(s.items, g)
+	return s
+}
+
+// Map inserts the map keyword, followed by square brackets
+func Map(c Code) *Statement {
+	return newStatement().Map(c)
+}
+
+// Map inserts the map keyword, followed by square brackets
+func (g *Group) Map(c Code) *Statement {
+	s := Map(c)
+	g.items = append(g.items, s)
+	return s
+}
+
+// Map inserts the map keyword, followed by square brackets
+func (s *Statement) Map(c Code) *Statement {
+	g := &Group{
+		items:  []Code{c},
+		syntax: mapSyntax,
+	}
+	s.items = append(s.items, g)
+	return s
+}
+
+// Map inserts the map keyword, followed by square brackets
+func MapFunc(f func(*Group)) *Statement {
+	return newStatement().MapFunc(f)
+}
+
+// Map inserts the map keyword, followed by square brackets
+func (g *Group) MapFunc(f func(*Group)) *Statement {
+	s := MapFunc(f)
+	g.items = append(g.items, s)
+	return s
+}
+
+// Map inserts the map keyword, followed by square brackets
+func (s *Statement) MapFunc(f func(*Group)) *Statement {
+	g := &Group{
+		syntax: mapSyntax,
 	}
 	f(g)
 	s.items = append(s.items, g)
@@ -1208,28 +1252,6 @@ func (g *Group) Go() *Statement {
 func (s *Statement) Go() *Statement {
 	t := token{
 		content: "go",
-		typ:     keywordToken,
-	}
-	s.items = append(s.items, t)
-	return s
-}
-
-// Map inserts the map keyword
-func Map() *Statement {
-	return newStatement().Map()
-}
-
-// Map inserts the map keyword
-func (g *Group) Map() *Statement {
-	s := Map()
-	g.items = append(g.items, s)
-	return s
-}
-
-// Map inserts the map keyword
-func (s *Statement) Map() *Statement {
-	t := token{
-		content: "map",
 		typ:     keywordToken,
 	}
 	s.items = append(s.items, t)

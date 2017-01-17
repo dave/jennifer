@@ -63,18 +63,23 @@ func main() {
 		}
 		comment := Commentf("%s inserts %s", b.Name, b.Desc)
 
+		var variadic Code
+		if b.List {
+			variadic = Op("...")
+		}
+
 		redirect(
 			b.Name,
 			comment,
-			[]Code{Id("c").Op("...").Id("Code")},
-			[]Code{Id("c").Op("...")},
+			[]Code{Id("c").Add(variadic).Id("Code")},
+			[]Code{Id("c").Add(variadic)},
 		)
 
 		/*
-			func (s *Statement) {Name}(c ...Code) *Statement {
+			func (s *Statement) {Name}(c [...]Code) *Statement {
 				g := Group{
 					syntax: {Syntax},
-					items:  c,
+					items:  []Code{c}|c,
 				}
 				s.items = append(s.items, g)
 				return s
@@ -84,11 +89,17 @@ func main() {
 		file.Func().Params(
 			Id("s").Op("*").Id("Statement"),
 		).Id(b.Name).Params(
-			Id("c").Op("...").Id("Code"),
+			Id("c").Add(variadic).Id("Code"),
 		).Op("*").Id("Statement").Block(
 			Id("g").Op(":=").Op("&").Id("Group").Dict(map[Code]Code{
 				Id("syntax"): Id(b.Syntax),
-				Id("items"):  Id("c"),
+				Id("items"):  Do(func(s *Statement) {
+					if b.List {
+						s.Id("c")
+					} else {
+						s.Index().Id("Code").Values(Id("c"))
+					}
+				}),
 			}),
 			Id("s", "items").Op("=").Append(Id("s", "items"), Id("g")),
 			Return(Id("s")),
@@ -216,10 +227,12 @@ func main() {
 		).Id(capName).Params(
 			Id("c").Op("...").Id("Code"),
 		).Op("*").Id("Statement").Block(
-			Return().Id("s", "Id").Call(
-				Lit(f),
-			).Op(".").Id("Call").Call(
-				Id("c").Op("..."),
+			Return(
+				Id("s", "Id").Call(
+					Lit(f),
+				).Op(".").Id("Call").Call(
+					Id("c").Op("..."),
+				),
 			),
 		)
 	}

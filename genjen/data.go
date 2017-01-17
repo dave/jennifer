@@ -1,9 +1,10 @@
 package main
 
-var Keywords = []string{"break", "default", "func", "interface", "select", "case", "defer", "go", "map", "struct", "chan", "else", "goto", "switch", "const", "fallthrough", "range", "type", "continue", "var"}
+var Keywords = []string{"break", "default", "func", "interface", "select", "case", "defer", "go", "struct", "chan", "else", "goto", "switch", "const", "fallthrough", "range", "type", "continue", "var"}
 
 // "return", "for" and "if" are special cases
 // "import" and "package" are handled automatically, so not needed.
+// "map" is treated as a block
 
 var Types = []string{"bool", "byte", "complex64", "complex128", "error", "float32", "float64", "int", "int8", "int16", "int32", "int64", "rune", "string", "uint", "uint8", "uint16", "uint32", "uint64", "uintptr"}
 
@@ -11,9 +12,9 @@ var Constants = []string{"true", "false", "iota"}
 
 var Zero = []string{"nil"}
 
-var Err = []string{"err"}
+var Errs = []string{"err"}
 
-var Identifiers = append(append(append(append([]string{}, Types...), Constants...), Zero...), Err...)
+var Identifiers = append(append(append(append([]string{}, Types...), Constants...), Zero...), Errs...)
 
 var Functions = []string{"append", "cap", "close", "complex", "copy", "delete", "imag", "len", "make", "new", "panic", "print", "println", "real", "recover"}
 
@@ -21,61 +22,79 @@ var Blocks = []struct {
 	Name   string
 	Syntax string
 	Desc   string
+	List   bool
 }{
 	{
 		Name:   "Parens",
 		Syntax: "parensSyntax",
 		Desc:   "parenthesis",
+		List:   false,
 	},
 	{
 		Name:   "List",
 		Syntax: "listSyntax",
 		Desc:   "a comma separated list",
+		List:   true,
 	},
 	{
 		Name:   "Values",
 		Syntax: "valuesSyntax",
 		Desc:   "curly braces containing a comma separated list",
+		List:   true,
 	},
 	{
 		Name:   "Slice",
 		Syntax: "valuesSyntax",
 		Desc:   "curly braces containing a comma separated list",
+		List:   true,
 	},
 	{
 		Name:   "Index",
 		Syntax: "indexSyntax",
 		Desc:   "square brackets containing a colon separated list",
+		List:   true,
 	},
 	{
 		Name:   "Block",
 		Syntax: "blockSyntax",
 		Desc:   "curly braces containing a statements list",
+		List:   true,
 	},
 	{
 		Name:   "Call",
 		Syntax: "callSyntax",
 		Desc:   "parenthesis containing a comma separated list",
+		List:   true,
 	},
 	{
 		Name:   "Params",
 		Syntax: "paramsSyntax",
 		Desc:   "parenthesis containing a comma separated list",
+		List:   true,
 	},
 	{
 		Name:   "Decls",
 		Syntax: "declsSyntax",
 		Desc:   "parenthesis containing a statement list",
+		List:   true,
 	},
 	{
 		Name:   "CaseBlock",
 		Syntax: "caseSyntax",
 		Desc:   "a statement list preceeded by a colon",
+		List:   true,
 	},
 	{
 		Name:   "Assert",
 		Syntax: "assertSyntax",
 		Desc:   "a type assertion",
+		List:   false,
+	},
+	{
+		Name:   "Map",
+		Syntax: "mapSyntax",
+		Desc:   "the map keyword, followed by square brackets",
+		List:   false,
 	},
 }
 
