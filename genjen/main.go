@@ -80,8 +80,10 @@ func main() {
 		/*
 			func (s *Statement) {Name}(c [...]Code) *Statement {
 				g := &Group{
-					syntax: {Syntax},
-					items:  []Code{c}|c,
+					items:     []Code{c}|c,
+					open:      "{Open}",
+					close:     "{Close}",
+					separator: "{Separator}",
 				}
 				*s = append(*s, g)
 				return s
@@ -94,7 +96,6 @@ func main() {
 			params...,
 		).Op("*").Id("Statement").Block(
 			Id("g").Op(":=").Op("&").Id("Group").Dict(map[Code]Code{
-				Id("syntax"): Id(b.Syntax),
 				Id("items"): Do(func(s *Statement) {
 					if b.List {
 						s.Id("c")
@@ -102,6 +103,9 @@ func main() {
 						s.Index().Id("Code").Values(Id("c"))
 					}
 				}),
+				Id("open"):      Lit(b.Open),
+				Id("close"):     Lit(b.Close),
+				Id("separator"): Lit(b.Separator),
 			}),
 			Op("*").Id("s").Op("=").Append(Op("*").Id("s"), Id("g")),
 			Return(Id("s")),
@@ -121,7 +125,9 @@ func main() {
 		/*
 			func (s *Statement) {NameFunc}(f func(*Group)) *Statement {
 				g := &Group{
-					syntax: {Syntax},
+					open:      "{Open}",
+					close:     "{Close}",
+					separator: "{Separator}",
 				}
 				f(g)
 				*s = append(*s, g)
@@ -135,7 +141,9 @@ func main() {
 			funcParams...,
 		).Op("*").Id("Statement").Block(
 			Id("g").Op(":=").Op("&").Id("Group").Dict(map[Code]Code{
-				Id("syntax"): Id(b.Syntax),
+				Id("open"):      Lit(b.Open),
+				Id("close"):     Lit(b.Close),
+				Id("separator"): Lit(b.Separator),
 			}),
 			Id("f").Call(Id("g")),
 			Op("*").Id("s").Op("=").Append(Op("*").Id("s"), Id("g")),

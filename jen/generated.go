@@ -19,8 +19,10 @@ func (g *Group) Parens(c Code) *Statement {
 // Parens inserts parenthesis
 func (s *Statement) Parens(c Code) *Statement {
 	g := &Group{
-		items:  []Code{c},
-		syntax: parensSyntax,
+		close:     ")",
+		items:     []Code{c},
+		open:      "(",
+		separator: "",
 	}
 	*s = append(*s, g)
 	return s
@@ -41,7 +43,9 @@ func (g *Group) ParensFunc(f func(*Group)) *Statement {
 // Parens inserts parenthesis
 func (s *Statement) ParensFunc(f func(*Group)) *Statement {
 	g := &Group{
-		syntax: parensSyntax,
+		close:     ")",
+		open:      "(",
+		separator: "",
 	}
 	f(g)
 	*s = append(*s, g)
@@ -63,8 +67,10 @@ func (g *Group) List(c ...Code) *Statement {
 // List inserts a comma separated list
 func (s *Statement) List(c ...Code) *Statement {
 	g := &Group{
-		items:  c,
-		syntax: listSyntax,
+		close:     "",
+		items:     c,
+		open:      "",
+		separator: ",",
 	}
 	*s = append(*s, g)
 	return s
@@ -85,7 +91,9 @@ func (g *Group) ListFunc(f func(*Group)) *Statement {
 // List inserts a comma separated list
 func (s *Statement) ListFunc(f func(*Group)) *Statement {
 	g := &Group{
-		syntax: listSyntax,
+		close:     "",
+		open:      "",
+		separator: ",",
 	}
 	f(g)
 	*s = append(*s, g)
@@ -107,8 +115,10 @@ func (g *Group) Values(c ...Code) *Statement {
 // Values inserts curly braces containing a comma separated list
 func (s *Statement) Values(c ...Code) *Statement {
 	g := &Group{
-		items:  c,
-		syntax: valuesSyntax,
+		close:     "}",
+		items:     c,
+		open:      "{",
+		separator: ",",
 	}
 	*s = append(*s, g)
 	return s
@@ -129,7 +139,9 @@ func (g *Group) ValuesFunc(f func(*Group)) *Statement {
 // Values inserts curly braces containing a comma separated list
 func (s *Statement) ValuesFunc(f func(*Group)) *Statement {
 	g := &Group{
-		syntax: valuesSyntax,
+		close:     "}",
+		open:      "{",
+		separator: ",",
 	}
 	f(g)
 	*s = append(*s, g)
@@ -151,8 +163,10 @@ func (g *Group) Slice(c ...Code) *Statement {
 // Slice inserts curly braces containing a comma separated list
 func (s *Statement) Slice(c ...Code) *Statement {
 	g := &Group{
-		items:  c,
-		syntax: valuesSyntax,
+		close:     "}",
+		items:     c,
+		open:      "{",
+		separator: ",",
 	}
 	*s = append(*s, g)
 	return s
@@ -173,7 +187,9 @@ func (g *Group) SliceFunc(f func(*Group)) *Statement {
 // Slice inserts curly braces containing a comma separated list
 func (s *Statement) SliceFunc(f func(*Group)) *Statement {
 	g := &Group{
-		syntax: valuesSyntax,
+		close:     "}",
+		open:      "{",
+		separator: ",",
 	}
 	f(g)
 	*s = append(*s, g)
@@ -195,8 +211,10 @@ func (g *Group) Index(c ...Code) *Statement {
 // Index inserts square brackets containing a colon separated list
 func (s *Statement) Index(c ...Code) *Statement {
 	g := &Group{
-		items:  c,
-		syntax: indexSyntax,
+		close:     "]",
+		items:     c,
+		open:      "[",
+		separator: ":",
 	}
 	*s = append(*s, g)
 	return s
@@ -217,7 +235,9 @@ func (g *Group) IndexFunc(f func(*Group)) *Statement {
 // Index inserts square brackets containing a colon separated list
 func (s *Statement) IndexFunc(f func(*Group)) *Statement {
 	g := &Group{
-		syntax: indexSyntax,
+		close:     "]",
+		open:      "[",
+		separator: ":",
 	}
 	f(g)
 	*s = append(*s, g)
@@ -239,8 +259,10 @@ func (g *Group) Block(c ...Code) *Statement {
 // Block inserts curly braces containing a statements list
 func (s *Statement) Block(c ...Code) *Statement {
 	g := &Group{
-		items:  c,
-		syntax: blockSyntax,
+		close:     "}",
+		items:     c,
+		open:      "{\n",
+		separator: "\n",
 	}
 	*s = append(*s, g)
 	return s
@@ -261,7 +283,9 @@ func (g *Group) BlockFunc(f func(*Group)) *Statement {
 // Block inserts curly braces containing a statements list
 func (s *Statement) BlockFunc(f func(*Group)) *Statement {
 	g := &Group{
-		syntax: blockSyntax,
+		close:     "}",
+		open:      "{\n",
+		separator: "\n",
 	}
 	f(g)
 	*s = append(*s, g)
@@ -283,8 +307,10 @@ func (g *Group) Call(c ...Code) *Statement {
 // Call inserts parenthesis containing a comma separated list
 func (s *Statement) Call(c ...Code) *Statement {
 	g := &Group{
-		items:  c,
-		syntax: callSyntax,
+		close:     ")",
+		items:     c,
+		open:      "(",
+		separator: ",",
 	}
 	*s = append(*s, g)
 	return s
@@ -305,7 +331,9 @@ func (g *Group) CallFunc(f func(*Group)) *Statement {
 // Call inserts parenthesis containing a comma separated list
 func (s *Statement) CallFunc(f func(*Group)) *Statement {
 	g := &Group{
-		syntax: callSyntax,
+		close:     ")",
+		open:      "(",
+		separator: ",",
 	}
 	f(g)
 	*s = append(*s, g)
@@ -327,8 +355,10 @@ func (g *Group) Params(c ...Code) *Statement {
 // Params inserts parenthesis containing a comma separated list
 func (s *Statement) Params(c ...Code) *Statement {
 	g := &Group{
-		items:  c,
-		syntax: paramsSyntax,
+		close:     ")",
+		items:     c,
+		open:      "(",
+		separator: ",",
 	}
 	*s = append(*s, g)
 	return s
@@ -349,7 +379,9 @@ func (g *Group) ParamsFunc(f func(*Group)) *Statement {
 // Params inserts parenthesis containing a comma separated list
 func (s *Statement) ParamsFunc(f func(*Group)) *Statement {
 	g := &Group{
-		syntax: paramsSyntax,
+		close:     ")",
+		open:      "(",
+		separator: ",",
 	}
 	f(g)
 	*s = append(*s, g)
@@ -371,8 +403,10 @@ func (g *Group) Decls(c ...Code) *Statement {
 // Decls inserts parenthesis containing a statement list
 func (s *Statement) Decls(c ...Code) *Statement {
 	g := &Group{
-		items:  c,
-		syntax: declsSyntax,
+		close:     ")",
+		items:     c,
+		open:      "(",
+		separator: ";",
 	}
 	*s = append(*s, g)
 	return s
@@ -393,7 +427,9 @@ func (g *Group) DeclsFunc(f func(*Group)) *Statement {
 // Decls inserts parenthesis containing a statement list
 func (s *Statement) DeclsFunc(f func(*Group)) *Statement {
 	g := &Group{
-		syntax: declsSyntax,
+		close:     ")",
+		open:      "(",
+		separator: ";",
 	}
 	f(g)
 	*s = append(*s, g)
@@ -415,8 +451,10 @@ func (g *Group) CaseBlock(c ...Code) *Statement {
 // CaseBlock inserts a statement list preceeded by a colon
 func (s *Statement) CaseBlock(c ...Code) *Statement {
 	g := &Group{
-		items:  c,
-		syntax: caseSyntax,
+		close:     "",
+		items:     c,
+		open:      ":\n",
+		separator: "\n",
 	}
 	*s = append(*s, g)
 	return s
@@ -437,7 +475,9 @@ func (g *Group) CaseBlockFunc(f func(*Group)) *Statement {
 // CaseBlock inserts a statement list preceeded by a colon
 func (s *Statement) CaseBlockFunc(f func(*Group)) *Statement {
 	g := &Group{
-		syntax: caseSyntax,
+		close:     "",
+		open:      ":\n",
+		separator: "\n",
 	}
 	f(g)
 	*s = append(*s, g)
@@ -459,8 +499,10 @@ func (g *Group) Assert(c Code) *Statement {
 // Assert inserts a type assertion
 func (s *Statement) Assert(c Code) *Statement {
 	g := &Group{
-		items:  []Code{c},
-		syntax: assertSyntax,
+		close:     ")",
+		items:     []Code{c},
+		open:      ".(",
+		separator: "",
 	}
 	*s = append(*s, g)
 	return s
@@ -481,7 +523,9 @@ func (g *Group) AssertFunc(f func(*Group)) *Statement {
 // Assert inserts a type assertion
 func (s *Statement) AssertFunc(f func(*Group)) *Statement {
 	g := &Group{
-		syntax: assertSyntax,
+		close:     ")",
+		open:      ".(",
+		separator: "",
 	}
 	f(g)
 	*s = append(*s, g)
@@ -503,8 +547,10 @@ func (g *Group) Map(c Code) *Statement {
 // Map inserts the map keyword, followed by square brackets
 func (s *Statement) Map(c Code) *Statement {
 	g := &Group{
-		items:  []Code{c},
-		syntax: mapSyntax,
+		close:     "]",
+		items:     []Code{c},
+		open:      "map[",
+		separator: "",
 	}
 	*s = append(*s, g)
 	return s
@@ -525,7 +571,9 @@ func (g *Group) MapFunc(f func(*Group)) *Statement {
 // Map inserts the map keyword, followed by square brackets
 func (s *Statement) MapFunc(f func(*Group)) *Statement {
 	g := &Group{
-		syntax: mapSyntax,
+		close:     "]",
+		open:      "map[",
+		separator: "",
 	}
 	f(g)
 	*s = append(*s, g)
@@ -547,8 +595,10 @@ func (g *Group) If(c ...Code) *Statement {
 // If inserts the if keyword, followed by a semicolon separated list
 func (s *Statement) If(c ...Code) *Statement {
 	g := &Group{
-		items:  c,
-		syntax: ifSyntax,
+		close:     "",
+		items:     c,
+		open:      "if ",
+		separator: ";",
 	}
 	*s = append(*s, g)
 	return s
@@ -569,7 +619,9 @@ func (g *Group) IfFunc(f func(*Group)) *Statement {
 // If inserts the if keyword, followed by a semicolon separated list
 func (s *Statement) IfFunc(f func(*Group)) *Statement {
 	g := &Group{
-		syntax: ifSyntax,
+		close:     "",
+		open:      "if ",
+		separator: ";",
 	}
 	f(g)
 	*s = append(*s, g)
@@ -591,8 +643,10 @@ func (g *Group) Return(c ...Code) *Statement {
 // Return inserts the return keyword, followed by a comma separated list
 func (s *Statement) Return(c ...Code) *Statement {
 	g := &Group{
-		items:  c,
-		syntax: returnSyntax,
+		close:     "",
+		items:     c,
+		open:      "return ",
+		separator: ",",
 	}
 	*s = append(*s, g)
 	return s
@@ -613,7 +667,9 @@ func (g *Group) ReturnFunc(f func(*Group)) *Statement {
 // Return inserts the return keyword, followed by a comma separated list
 func (s *Statement) ReturnFunc(f func(*Group)) *Statement {
 	g := &Group{
-		syntax: returnSyntax,
+		close:     "",
+		open:      "return ",
+		separator: ",",
 	}
 	f(g)
 	*s = append(*s, g)
@@ -635,8 +691,10 @@ func (g *Group) For(c ...Code) *Statement {
 // For inserts the for keyword, followed by a semicolon separated list
 func (s *Statement) For(c ...Code) *Statement {
 	g := &Group{
-		items:  c,
-		syntax: forSyntax,
+		close:     "",
+		items:     c,
+		open:      "for ",
+		separator: ";",
 	}
 	*s = append(*s, g)
 	return s
@@ -657,7 +715,9 @@ func (g *Group) ForFunc(f func(*Group)) *Statement {
 // For inserts the for keyword, followed by a semicolon separated list
 func (s *Statement) ForFunc(f func(*Group)) *Statement {
 	g := &Group{
-		syntax: forSyntax,
+		close:     "",
+		open:      "for ",
+		separator: ";",
 	}
 	f(g)
 	*s = append(*s, g)

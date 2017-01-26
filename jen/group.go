@@ -8,16 +8,17 @@ import (
 )
 
 type Group struct {
-	syntax syntaxType
-	items  []Code
+	items     []Code
+	open      string
+	close     string
+	separator string
 }
 
 func (g *Group) isNull() bool {
 	if g == nil {
 		return true
 	}
-	i := syntaxInfo[g.syntax]
-	if i.open != "" || i.close != "" {
+	if g.open != "" || g.close != "" {
 		return false
 	}
 	for _, c := range g.items {
@@ -29,9 +30,8 @@ func (g *Group) isNull() bool {
 }
 
 func (g *Group) render(f *File, w io.Writer) error {
-	i := syntaxInfo[g.syntax]
-	if i.open != "" {
-		if _, err := w.Write([]byte(i.open)); err != nil {
+	if g.open != "" {
+		if _, err := w.Write([]byte(g.open)); err != nil {
 			return err
 		}
 	}
@@ -43,8 +43,8 @@ func (g *Group) render(f *File, w io.Writer) error {
 			// output but adds a separator.
 			continue
 		}
-		if !first && i.seperator != "" {
-			if _, err := w.Write([]byte(i.seperator)); err != nil {
+		if !first && g.separator != "" {
+			if _, err := w.Write([]byte(g.separator)); err != nil {
 				return err
 			}
 		}
@@ -53,8 +53,8 @@ func (g *Group) render(f *File, w io.Writer) error {
 		}
 		first = false
 	}
-	if i.close != "" {
-		if _, err := w.Write([]byte(i.close)); err != nil {
+	if g.close != "" {
+		if _, err := w.Write([]byte(g.close)); err != nil {
 			return err
 		}
 	}

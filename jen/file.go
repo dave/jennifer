@@ -9,7 +9,7 @@ import (
 func NewFile(name string) *File {
 	return &File{
 		Group: &Group{
-			syntax: fileSyntax,
+			separator: "\n",
 		},
 		name:    name,
 		imports: map[string]string{},
@@ -19,7 +19,7 @@ func NewFile(name string) *File {
 func NewFilePath(path string) *File {
 	return &File{
 		Group: &Group{
-			syntax: fileSyntax,
+			separator: "\n",
 		},
 		name:    guessAlias(path),
 		path:    path,
@@ -30,7 +30,7 @@ func NewFilePath(path string) *File {
 func NewFilePathName(path, name string) *File {
 	return &File{
 		Group: &Group{
-			syntax: fileSyntax,
+			separator: "\n",
 		},
 		name:    name,
 		path:    path,
