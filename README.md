@@ -127,27 +127,27 @@ seperated by a separator token.
 
 ### Blocks accepting a list of items:
 
-| Block  | Opening  | Separator | Closing |
-| ------ | -------- | --------- | ------- |
-| List   |          | `,`       |         |
-| Call   | `(`      | `,`       | `)`     |
-| Params | `(`      | `,`       | `)`     |
-| Values | `{`      | `,`       | `}`     |
-| Index  | `[`      | `:`       | `]`     |
-| Block  | `{\n`    | `\n`      | `}`     |
-| Case   | `:\n`    | `\n`      |         |
-| Return | `return` | `,`       |         |
-| If     | `if`     | `;`       |         |
-| For    | `for`    | `;`       |         |
-| Switch | `switch` | `;`       |         |
+| Block  | Opening  | Separator | Closing | Usage                             |
+| ------ | -------- | --------- | ------- | --------------------------------- |
+| List   |          | `,`       |         | `a, b := c()`                     |
+| Call   | `(`      | `,`       | `)`     | `a(b, c)`                         |
+| Params | `(`      | `,`       | `)`     | `func (a int)`                    |
+| Values | `{`      | `,`       | `}`     | `[]int{1, 2}`                     |
+| Index  | `[`      | `:`       | `]`     | `a[1:2]`                          |
+| Block  | `{\n`    | `\n`      | `}`     | `func a() { ... }`                |
+| Case   | `:\n`    | `\n`      |         | `switch a {case 1: ... }`         |
+| Return | `return` | `,`       |         | `return a, b`                     |
+| If     | `if`     | `;`       |         | `if a, ok := b(); ok { ... }`     |
+| For    | `for`    | `;`       |         | `for i := 0; i < 10; i++ { ... }` |
+| Switch | `switch` | `;`       |         | `switch a { ... }`                |
 
 ### Blocks accepting a single item:
 
-| Block  | Opening  | Closing |
-| ------ | -------- | ------- |
-| Parens | `(`      | `)`     |
-| Assert | `.(`     | `)`     |
-| Map    | `map[`   | `]`     |
+| Block  | Opening  | Closing | Usage                 |
+| ------ | -------- | ------- | --------------------- |
+| Parens | `(`      | `)`     | `[]byte(s)`           |
+| Assert | `.(`     | `)`     | `s, ok := i.(string)` |
+| Map    | `map[`   | `]`     | `map[int]string`      |
 
 ### List
 `List` renders a comma seperated list with no open or closing tokens. Use for 
