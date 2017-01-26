@@ -316,7 +316,6 @@ fmt.Printf("%#v", c)
 //  a++
 //  b--
 // }
-}
 ```
 
 ```go
@@ -327,7 +326,6 @@ fmt.Printf("%#v", c)
 // Output: if a > 10 {
 //  a = a / 2
 // }
-}
 ```
 
 ### Switch, Case, CaseBlock
