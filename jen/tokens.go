@@ -9,6 +9,7 @@ import (
 type tokenType string
 
 const (
+	packageToken    tokenType = "package"
 	identifierToken tokenType = "identifier"
 	keywordToken    tokenType = "keyword"
 	operatorToken   tokenType = "operator"
@@ -23,7 +24,11 @@ type token struct {
 	content interface{}
 }
 
-func (t token) isNull() bool {
+func (t token) isNull(f *File) bool {
+	if t.typ == packageToken {
+		// package token is null if the path is the local package path
+		return f.isLocal(t.content.(string))
+	}
 	return t.typ == nullToken
 }
 
@@ -36,6 +41,12 @@ func (t token) render(f *File, w io.Writer) error {
 		}
 	case keywordToken, operatorToken, layoutToken:
 		if _, err := w.Write([]byte(fmt.Sprintf("%s", t.content))); err != nil {
+			return err
+		}
+	case packageToken:
+		path := t.content.(string)
+		alias := f.register(path)
+		if _, err := w.Write([]byte(alias)); err != nil {
 			return err
 		}
 	case identifierToken:
@@ -130,6 +141,25 @@ func (s *Statement) Op(op string) *Statement {
 	return s
 }
 
+func Alias(path string) *Statement {
+	return newStatement().Alias(path)
+}
+
+func (g *Group) Alias(path string) *Statement {
+	s := Alias(path)
+	g.items = append(g.items, s)
+	return s
+}
+
+func (s *Statement) Alias(path string) *Statement {
+	t := token{
+		typ:     packageToken,
+		content: path,
+	}
+	*s = append(*s, t)
+	return s
+}
+
 func Id(items ...interface{}) *Statement {
 	return newStatement().Id(items...)
 }
@@ -141,27 +171,24 @@ func (g *Group) Id(items ...interface{}) *Statement {
 }
 
 func (s *Statement) Id(items ...interface{}) *Statement {
-	first := true
+	g := &Group{
+		open:      "",
+		close:     "",
+		separator: ".",
+	}
 	for _, item := range items {
-		if !first {
-			s.Op(".")
-		}
 		switch item := item.(type) {
 		case string:
-			first = false
 			t := token{
 				typ:     identifierToken,
 				content: item,
 			}
-			*s = append(*s, t)
+			g.items = append(g.items, t)
 		case Code:
-			if item.isNull() {
-				break
-			}
-			first = false
-			*s = append(*s, item)
+			g.items = append(g.items, item)
 		}
 	}
+	*s = append(*s, g)
 	return s
 }
 

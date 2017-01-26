@@ -80,6 +80,62 @@ The tests are written mostly as examples - [see godoc.org](https://godoc.org/git
 
 Most of the code is generated using jennifer itself, see the [genjen package](https://github.com/davelondon/jennifer/tree/master/genjen) for a real-world example of usage - it generates [generated.go](https://github.com/davelondon/jennifer/blob/master/jen/generated.go).
 
+# Rendering
+For testing, a `File` or `Statement` can be rendered `fmt` package:
+
+```go
+c := Id("a").Call(Lit("b"))
+fmt.Printf("%#v", c)
+// Output: a("b")
+```
+
+This is not recommended for use in production because any error will cause a 
+panic. For production use, `File.Render` or `File.Save` are preferred.
+
+# Id
+`Id` renders an identifier. For a local identifier, simply use a string:
+ 
+```go
+c := Id("a")
+fmt.Printf("%#v", c)
+// Output: a
+```
+
+For a remote identifier, prefix with the full package path:
+
+```go
+c := Id("encoding/gob.NewEncoder").Call()
+fmt.Printf("%#v", c)
+// Output: gob.NewEncoder()
+```
+
+The imports are automatically handled.
+
+To access fields, more items may be added to the `Id` method:
+
+```go
+c := Id("a", "b", "c")
+fmt.Printf("%#v", c)
+// Output: a.b.c
+```
+
+This can be combined with the remote syntax:
+
+```go
+c := Id("a.b/c.Foo", "Bar", "Baz")
+fmt.Printf("%#v", c)
+// Output: c.Foo.Bar.Baz
+```
+
+
+
+
+If more than one item is provided, they are joined using periods:
+
+# Op
+
+
+
 # Identifiers 
 
 Identifiers are simple methods with no parameters. They render as the 
@@ -209,9 +265,7 @@ fmt.Printf("%#v", c)
 
 ### Alternate FooFunc methods
 
-# Op
 
-# Id
 
 # Add
 

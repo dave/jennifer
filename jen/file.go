@@ -63,8 +63,12 @@ func (f *File) PackagePrefix(prefix string) {
 	f.prefix = prefix
 }
 
+func (f *File) isLocal(path string) bool {
+	return f.path == path
+}
+
 func (f *File) register(path string) string {
-	if f.path == path {
+	if f.isLocal(path) {
 		return ""
 	}
 	if f.imports[path] != "" && f.imports[path] != "_" {

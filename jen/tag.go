@@ -31,13 +31,13 @@ type tag struct {
 	items map[string]string
 }
 
-func (t tag) isNull() bool {
+func (t tag) isNull(f *File) bool {
 	return len(t.items) == 0
 }
 
 func (t tag) render(f *File, w io.Writer) error {
 
-	if t.isNull() {
+	if t.isNull(f) {
 		return nil
 	}
 

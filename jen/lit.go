@@ -89,7 +89,7 @@ type dict struct {
 	m map[Code]Code
 }
 
-func (l dict) isNull() bool {
+func (l dict) isNull(f *File) bool {
 	return false
 }
 
@@ -117,7 +117,7 @@ func (l dict) render(f *File, w io.Writer) error {
 	for _, key := range keys {
 		k := lookup[key].k
 		v := lookup[key].v
-		if v.isNull() {
+		if v.isNull(f) {
 			// Null() token produces no output but also
 			// no separator. Empty() token products no
 			// output but adds a separator.

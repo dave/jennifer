@@ -13,12 +13,12 @@ func newStatement() *Statement {
 	return &Statement{}
 }
 
-func (s Statement) isNull() bool {
+func (s Statement) isNull(f *File) bool {
 	if s == nil {
 		return true
 	}
 	for _, c := range s {
-		if !c.isNull() {
+		if !c.isNull(f) {
 			return false
 		}
 	}
@@ -28,7 +28,7 @@ func (s Statement) isNull() bool {
 func (s Statement) render(f *File, w io.Writer) error {
 	first := true
 	for _, code := range s {
-		if code == nil || code.isNull() {
+		if code == nil || code.isNull(f) {
 			// Null() token produces no output but also
 			// no separator. Empty() token products no
 			// output but adds a separator.

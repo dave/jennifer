@@ -70,6 +70,27 @@ var Keywords = []string{"break", "default", "func", "interface", "select", "case
  "return" and "for" are special cases
 */
 
+func ExampleAlias() {
+	f := NewFile("a")
+	f.Func().Id("main").Params().Block(
+		Id(Alias("encoding/gob"), "NewEncoder").Call(),
+	)
+	fmt.Printf("%#v", f)
+	// Output: package a
+	//
+	// import gob "encoding/gob"
+	//
+	// func main() {
+	// 	gob.NewEncoder()
+	// }
+}
+
+func ExampleAlias2() {
+	c := Id(Alias("a.b/c"), Id("Foo").Call(), "Bar")
+	fmt.Printf("%#v", c)
+	// Output: c.Foo().Bar
+}
+
 func ExampleId2() {
 	id := Id("foo.Bar", "Baz")
 	c := Id(id, "Qux").Call()

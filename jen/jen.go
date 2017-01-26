@@ -14,7 +14,7 @@ import (
 
 type Code interface {
 	render(f *File, w io.Writer) error
-	isNull() bool
+	isNull(f *File) bool
 }
 
 func (f *File) Save(filename string) error {

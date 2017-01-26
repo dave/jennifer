@@ -46,7 +46,7 @@ type comment struct {
 	comment string
 }
 
-func (c comment) isNull() bool {
+func (c comment) isNull(f *File) bool {
 	return false
 }
 

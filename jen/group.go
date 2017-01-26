@@ -14,7 +14,7 @@ type Group struct {
 	separator string
 }
 
-func (g *Group) isNull() bool {
+func (g *Group) isNull(f *File) bool {
 	if g == nil {
 		return true
 	}
@@ -22,7 +22,7 @@ func (g *Group) isNull() bool {
 		return false
 	}
 	for _, c := range g.items {
-		if !c.isNull() {
+		if !c.isNull(f) {
 			return false
 		}
 	}
@@ -37,7 +37,7 @@ func (g *Group) render(f *File, w io.Writer) error {
 	}
 	first := true
 	for _, code := range g.items {
-		if code == nil || code.isNull() {
+		if code == nil || code.isNull(f) {
 			// Null() token produces no output but also
 			// no separator. Empty() token products no
 			// output but adds a separator.
