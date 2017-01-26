@@ -14,9 +14,7 @@ import (
 func main() {
 	f := NewFile("main")
     f.Func().Id("main").Params().Block(
-        Id("fmt.Println").Call(
-            Lit("Hello, world"),
-        ),
+        Id("fmt.Println").Call(Lit("Hello, world")),
     )
     fmt.Printf("%#v", f)
 }
