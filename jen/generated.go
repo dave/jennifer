@@ -148,54 +148,6 @@ func (s *Statement) ValuesFunc(f func(*Group)) *Statement {
 	return s
 }
 
-// Slice inserts curly braces containing a comma separated list
-func Slice(c ...Code) *Statement {
-	return newStatement().Slice(c...)
-}
-
-// Slice inserts curly braces containing a comma separated list
-func (g *Group) Slice(c ...Code) *Statement {
-	s := Slice(c...)
-	g.items = append(g.items, s)
-	return s
-}
-
-// Slice inserts curly braces containing a comma separated list
-func (s *Statement) Slice(c ...Code) *Statement {
-	g := &Group{
-		close:     "}",
-		items:     c,
-		open:      "{",
-		separator: ",",
-	}
-	*s = append(*s, g)
-	return s
-}
-
-// Slice inserts curly braces containing a comma separated list
-func SliceFunc(f func(*Group)) *Statement {
-	return newStatement().SliceFunc(f)
-}
-
-// Slice inserts curly braces containing a comma separated list
-func (g *Group) SliceFunc(f func(*Group)) *Statement {
-	s := SliceFunc(f)
-	g.items = append(g.items, s)
-	return s
-}
-
-// Slice inserts curly braces containing a comma separated list
-func (s *Statement) SliceFunc(f func(*Group)) *Statement {
-	g := &Group{
-		close:     "}",
-		open:      "{",
-		separator: ",",
-	}
-	f(g)
-	*s = append(*s, g)
-	return s
-}
-
 // Index inserts square brackets containing a colon separated list
 func Index(c ...Code) *Statement {
 	return newStatement().Index(c...)

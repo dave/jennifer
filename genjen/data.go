@@ -51,14 +51,6 @@ var Blocks = []struct {
 		Separator: ",",
 	},
 	{
-		Name:      "Slice",
-		Desc:      "curly braces containing a comma separated list",
-		List:      true,
-		Open:      "{",
-		Close:     "}",
-		Separator: ",",
-	},
-	{
 		Name:      "Index",
 		Desc:      "square brackets containing a colon separated list",
 		List:      true,

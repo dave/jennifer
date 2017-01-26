@@ -201,19 +201,6 @@ var cases = []tc{
 		code:   Id("a").Op(".").Do(func(s *Statement) { s.Id("b") }),
 		expect: `a.b`,
 	},
-	{
-		desc:   `slice`,
-		code:   Id("a").Slice(Id("b"), Id("c")),
-		expect: `a{b, c}`,
-	},
-	{
-		desc: `slice func`,
-		code: Id("a").SliceFunc(func(g *Group) {
-			g.Id("b").Call()
-			g.Id("c").Call()
-		}),
-		expect: `a{b(), c()}`,
-	},
 }
 
 func TestJen(t *testing.T) {
