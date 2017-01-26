@@ -71,6 +71,7 @@ func main() {
 		)
 
 		/*
+			// {comment}
 			func (s *Statement) {Name}(c [...]Code) *Statement {
 				g := &Group{
 					items:     []Code{c}|c,
@@ -116,6 +117,7 @@ func main() {
 		)
 
 		/*
+			// {comment}
 			func (s *Statement) {NameFunc}(f func(*Group)) *Statement {
 				g := &Group{
 					open:      "{Open}",
@@ -184,6 +186,7 @@ func main() {
 		)
 
 		/*
+			// {comment}
 			func (s *Statement) {Name}() *Statement {
 				t := token{
 					typ:     {identifierToken|keywordToken},
@@ -225,6 +228,7 @@ func main() {
 		)
 
 		/*
+			// {comment}
 			func (s *Statement) {Name}(c ...Code) *Statement {
 				return s.Id("{Name}").Call(c...)
 			}
