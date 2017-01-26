@@ -75,25 +75,6 @@ func init() {
 }
 ```
 
-# NewFile
-
-`NewFile` Creates a new file. `NewFilePath` creates a new file while specifying 
-the package path - the package name is inferred from the path. `NewFilePathName` 
-additionally specifies the package name.
-
-```go
-f := NewFilePathName("a.b/c", "main")
-f.Func().Id("main").Params().Block(
-    Id("a.b/c.Foo").Call(),
-)
-fmt.Printf("%#v", f)
-// Output: package main
-//
-// func main() {
-// 	Foo()
-// }
-```
-
 # Identifiers 
 
 Identifiers are simple methods with no parameters. They render as the 
@@ -193,8 +174,86 @@ fmt.Printf("%#v", c)
 // Output: []string{"a", "b"}
 ```
 
+### Call
+
+### Params
+
+### Decls
+
+### Slice
+
+### Index
+
+### Block
+
+### Case
+
+### Assert
+
+### Map
+
+### If
+
+### Return
+
+### For
+
+### Alternate FooFunc methods
+
+# Op
+
+# Id
+
+# Add
+
+# Do
+
+# Lit, LitFunc
+
+# Dict, DictFunc
+
+# Tag
+
+# Null, Empty
+
+# Line
+
+# Comment Commentf, File.PackageComment
+
+# File
+
+### NewFile
+`NewFile` Creates a new file, with the specified package name. 
+
+### NewFilePath
+`NewFilePath` creates a new file while specifying 
+the package path - the package name is inferred from the path.
+
+### NewFilePathName
+`NewFilePathName` 
+additionally specifies the package name.
+
+```go
+f := NewFilePathName("a.b/c", "main")
+f.Func().Id("main").Params().Block(
+    Id("a.b/c.Foo").Call(),
+)
+fmt.Printf("%#v", f)
+// Output: package main
+//
+// func main() {
+// 	Foo()
+// }
+```
+
+### Anon
+
+### PackagePrefix
+
+### Save, Render
+
 # Pointers
-Be careful when passing *Statement around. Consider the following example:
+Be careful when passing `*Statement` around. Consider the following example:
 
 ```go
 caller := func(s *Statement) *Statement {
