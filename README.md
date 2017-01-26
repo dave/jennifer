@@ -109,7 +109,8 @@ fmt.Printf("%#v", c)
 // Output: gob.NewEncoder()
 ```
 
-The imports are automatically handled when used with a `File`.
+The imports are automatically handled when used with a `File`, and if the path
+matches the local path, the package alias is omitted from the rendered code.
 
 To access fields, more items may be added to the `Id` method:
 
@@ -185,7 +186,7 @@ Constants: `True`, `False`, `Iota`, `Nil`
 Also included is `Err` for the commonly used `err` variable.
 
 Note: `Interface`, `Map`, `Return`, `Switch`, `For`, `Case` and `If` are special cases, 
-and treated as blocks - see below.
+and treated as groups - see below.
 
 Note: The `import` and `package` keywords are always rendered automatically, so 
 not included.
@@ -204,15 +205,15 @@ fmt.Printf("%#v", c)
 
 Functions: `Append`, `Cap`, `Close`, `Complex`, `Copy`, `Delete`, `Imag`, `Len`, `Make`, `New`, `Panic`, `Print`, `Println`, `Real`, `Recover`
 
-# Blocks
+# Groups
 
-Blocks take either a single code item or a varidic list of code items. The 
+Groups take either a single code item or a varidic list of code items. The 
 items are rendered between open and closing tokens. Multiple items are 
 seperated by a separator token.
 
-### Blocks accepting a list of items:
+### Groups accepting a list of items:
 
-| Block     | Opening       | Separator | Closing | Usage                             |
+| Group     | Opening       | Separator | Closing | Usage                             |
 | --------- | ------------- | --------- | ------- | --------------------------------- |
 | List      |               | `,`       |         | `a, b := c()`                     |
 | Call      | `(`           | `,`       | `)`     | `fmt.Println(b, c)`               |
@@ -228,9 +229,9 @@ seperated by a separator token.
 | Switch    | `switch`      | `;`       |         | `switch a { ... }`                |
 | Interface | `interface {` | `\n`      | `}`     | `interface { ... }`               |
 
-### Blocks accepting a single item:
+### Groups accepting a single item:
 
-| Block  | Opening  | Closing | Usage                        |
+| Group  | Opening  | Closing | Usage                        |
 | ------ | -------- | ------- | ---------------------------- |
 | Parens | `(`      | `)`     | `[]byte(s)` or `a / (b + c)` |
 | Assert | `.(`     | `)`     | `s, ok := i.(string)`        |
@@ -246,22 +247,6 @@ fmt.Printf("%#v", c)
 // Output: a, b := c()
 ```
 
-### Parens
-`Parens` renders a single code item in parenthesis. Use for type conversion or 
-to specify evaluation order:
-
-```go
-c := Id("b").Op(":=").Index().Byte().Parens(Id("s"))
-fmt.Printf("%#v", c)
-// Output: b := []byte(s)
-```
-
-```go
-c := Id("a").Op("/").Parens(Id("b").Op("+").Id("c"))
-fmt.Printf("%#v", c)
-// Output: a / (b + c)
-```
-
 ### Values
 `Values` renders a comma seperated list enclosed by curly braces. Use for slice 
 literals:
@@ -273,12 +258,74 @@ fmt.Printf("%#v", c)
 ```
 
 ### Call
+`Call` renders a comma seperated list enclosed by parenthesis. Use for function
+calls:
+
+```go
+c := Id("a").Call(Id("b"), Id("c"))
+fmt.Printf("%#v", c)
+// Output: a(b, c)
+```
 
 ### Params
+`Params` renders a comma seperated list enclosed by parenthesis. Use for 
+function parameters and method receivers:
+
+```go
+c := Func().Params(Id("a").Id("A")).Id("foo").Params(Id("b").String()).String().Block()
+fmt.Printf("%#v", c)
+// Output: func (a A) foo(b string) string {}
+```
 
 ### Index
+`Params` renders a colon seperated list enclosed by square brackets. Use for 
+array / slice indexes and definitions:
+
+```go
+c := Var().Id("a").Index().String()
+fmt.Printf("%#v", c)
+// Output: var a []string
+```
+
+```go
+c := Id("a").Op(":=").Id("b").Index(Lit(0), Lit(1))
+fmt.Printf("%#v", c)
+// Output: a := b[0:1]
+```
+
+```go
+c := Id("a").Op(":=").Id("b").Index(Lit(1), Empty())
+fmt.Printf("%#v", c)
+// Output: a := b[1:]
+```
 
 ### Block
+`Block` renders a list of statements enclosed by curly braces. Use for all 
+blocks:
+
+```go
+c := Func().Id("main").Params().Block(
+    Id("a").Op("++"),
+    Id("b").Op("--"),
+)
+fmt.Printf("%#v", c)
+// Output: func main() {
+//  a++
+//  b--
+// }
+}
+```
+
+```go
+c := If(Id("a").Op(">").Lit(10)).Block(
+    Id("a").Op("=").Id("a").Op("/").Lit(2),
+)
+fmt.Printf("%#v", c)
+// Output: if a > 10 {
+//  a = a / 2
+// }
+}
+```
 
 ### Switch, Case, CaseBlock
 `Switch`, `Case` and `CaseBlock` can be used to build `switch` statements:
@@ -311,9 +358,6 @@ fmt.Printf("%#v", c)
 // }
 ```
 
-### Assert
-
-### Map
 
 ### Return
 
@@ -340,7 +384,60 @@ fmt.Printf("%#v", c)
 // }
 ```
 
-### Alternate BlockFunc methods
+### Parens
+`Parens` renders a single code item in parenthesis. Use for type conversion or 
+to specify evaluation order:
+
+```go
+c := Id("b").Op(":=").Index().Byte().Parens(Id("s"))
+fmt.Printf("%#v", c)
+// Output: b := []byte(s)
+```
+
+```go
+c := Id("a").Op("/").Parens(Id("b").Op("+").Id("c"))
+fmt.Printf("%#v", c)
+// Output: a / (b + c)
+```
+
+### Assert
+`Assert` renders a period followed by a single Code item enclosed by 
+parenthesis. Use for type assertions:
+
+```go
+c := Id("a").Op("=").Id("b").Assert(String())
+fmt.Printf("%#v", c)
+// Output: a = b.(string)
+```
+
+### Map
+`Map` renders the `map` keyword followed by a single Code item enclosed by 
+square brackets. Use for map definitions:
+
+```go
+c := Id("a").Op(":=").Map(String()).String().Values()
+fmt.Printf("%#v", c)
+// Output: a := map[string]string{}
+```
+
+### Alternate GroupFunc methods
+All the Group functions have GroupFunc functions that accept a `func(*Group)`. 
+Use this for embedding logic:
+
+```go
+increment = true
+c := Func().Id("a").Params().BlockFunc(func(g *Group) {
+    if increment {
+        g.Id("a").Op("++")
+    } else {
+        g.Id("a").Op("--")
+    }
+})
+fmt.Printf("%#v", c)
+// Output: func a() {
+// 	a++
+// }
+```
 
 # Add
 `Add` adds the provided Code to the Statement.
