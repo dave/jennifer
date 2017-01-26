@@ -122,27 +122,37 @@ Blocks take either a single code item or a varidic list of code items. The
 items are rendered between open and closing toekns. Multiple items are 
 seperated by a seperator token:
 
-| Block  | Seperator | Opening | Closing |
-| ------ | --------- | ------- | ------- |
-| Parens | n/a       | (       | )       |
-| List   | ,         |         |         |
-| Values | ,         | {       | }       |
-| Slice  | ,         | {       | }       |
-| Index  | :         | [       | ]       |
-| Block  | \n        | {\n     | }       |
-| Call   | ,         | (       | )       |
-| Params | ,         | (       | )       |
-| Decls  | ;         | (       | )       |
-| Case   | \n        | :\n     |         |
-| Assert | n/a       | .(      | )       |
-| Map    | n/a       | map[    | ]       |
-| If     | ;         | if      |         |
-| Return | ,         | return  |         |
-| For    | ;         | for     |         |
+| Block  | Seperator | Opening  | Closing |
+| ------ | --------- | -------- | ------- |
+| List   | `,`       |          |         |
+| Parens | n/a       | `(`      | `)`     |
+| Call   | `,`       | `(`      | `)`     |
+| Params | `,`       | `(`      | `)`     |
+| Decls  | `;`       | `(`      | `)`     |
+| Values | `,`       | `{`      | `}`     |
+| Slice  | `,`       | `{`      | `}`     |
+| Index  | `:`       | `[`      | `]`     |
+| Block  | `\n`      | `{\n`    | `}`     |
+| Case   | `\n`      | `:\n`    |         |
+| Assert | n/a       | `.(`     | `)`     |
+| Map    | n/a       | `map[`   | `]`     |
+| If     | `;`       | `if`     |         |
+| Return | `,`       | `return` |         |
+| For    | `;`       | `for`    |         |
+
+### List
+List renders a comma seperated list with no open or closing tokens. Use for 
+multiple return functions:
+
+```go
+c := List(Id("a"), Id("b")).Op(":=").Id("c").Call()
+fmt.Printf("%#v", c)
+// Output: a, b := c()
+```
 
 ### Parens
-Parens should be used for enclosing a single code item in parenthesis, usually 
-for type conversion or logical grouping:
+Parens renders a single code item in parenthesis. Use for type conversion or 
+logical grouping:
 
 ```go
 c := Id("b").Op(":=").Index().Byte().Parens(Id("s"))
@@ -154,16 +164,6 @@ fmt.Printf("%#v", c)
 c := Parens(Id("a").Op("/").Id("b")).Op("*").Id("c")
 fmt.Printf("%#v", c)
 // Output: (a / b) * c
-```
-
-### List
-List should be used for a comma seperated list with no open or closing tokens. 
-Usually for multiple return methods:
-
-```go
-c := List(Id("a"), Id("b")).Op(":=").Id("c").Call()
-fmt.Printf("%#v", c)
-// Output: a, b := c()
 ```
 
 ### Values
