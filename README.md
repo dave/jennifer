@@ -130,12 +130,12 @@ seperated by a separator token.
 | Block  | Opening  | Separator | Closing | Usage                             |
 | ------ | -------- | --------- | ------- | --------------------------------- |
 | List   |          | `,`       |         | `a, b := c()`                     |
-| Call   | `(`      | `,`       | `)`     | `a(b, c)`                         |
+| Call   | `(`      | `,`       | `)`     | `fmt.Println(b, c)`               |
 | Params | `(`      | `,`       | `)`     | `func (a int)`                    |
-| Values | `{`      | `,`       | `}`     | `[]int{1, 2}`                     |
-| Index  | `[`      | `:`       | `]`     | `a[1:2]`                          |
+| Values | `{`      | `,`       | `}`     | `[]int{1, 2}` or `interface{}`    |
+| Index  | `[`      | `:`       | `]`     | `a[1:2]` or `[]int{}`             |
 | Block  | `{\n`    | `\n`      | `}`     | `func a() { ... }`                |
-| Case   | `:\n`    | `\n`      |         | `switch a {case 1: ... }`         |
+| Case   | `:\n`    | `\n`      |         | `switch i {case 1: ... }`         |
 | Return | `return` | `,`       |         | `return a, b`                     |
 | If     | `if`     | `;`       |         | `if a, ok := b(); ok { ... }`     |
 | For    | `for`    | `;`       |         | `for i := 0; i < 10; i++ { ... }` |
@@ -143,11 +143,11 @@ seperated by a separator token.
 
 ### Blocks accepting a single item:
 
-| Block  | Opening  | Closing | Usage                 |
-| ------ | -------- | ------- | --------------------- |
-| Parens | `(`      | `)`     | `[]byte(s)`           |
-| Assert | `.(`     | `)`     | `s, ok := i.(string)` |
-| Map    | `map[`   | `]`     | `map[int]string`      |
+| Block  | Opening  | Closing | Usage                        |
+| ------ | -------- | ------- | ---------------------------- |
+| Parens | `(`      | `)`     | `[]byte(s)` or `a / (b + c)` |
+| Assert | `.(`     | `)`     | `s, ok := i.(string)`        |
+| Map    | `map[`   | `]`     | `map[int]string`             |
 
 ### List
 `List` renders a comma seperated list with no open or closing tokens. Use for 
