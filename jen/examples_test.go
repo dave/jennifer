@@ -218,7 +218,7 @@ func ExampleGroup_Append() {
 }
 
 /*
-Blocks: "Parens", "List", "Values", "Index", "Block","Call", "Params", "Decls"
+Blocks: "Parens", "List", "Values", "Index", "Block","Call", "Params"
 */
 
 func ExampleParens2() {

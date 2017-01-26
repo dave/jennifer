@@ -91,14 +91,6 @@ var Blocks = []struct {
 		Separator: ",",
 	},
 	{
-		Name:      "Decls",
-		Desc:      "parenthesis containing a statement list",
-		List:      true,
-		Open:      "(",
-		Close:     ")",
-		Separator: ";",
-	},
-	{
 		Name:      "CaseBlock",
 		Desc:      "a statement list preceeded by a colon",
 		List:      true,

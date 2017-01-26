@@ -118,16 +118,15 @@ Functions: `Append`, `Cap`, `Close`, `Complex`, `Copy`, `Delete`, `Imag`, `Len`,
 
 Blocks take either a single code item or a varidic list of code items. The 
 items are rendered between open and closing tokens. Multiple items are 
-seperated by a seperator token.
+seperated by a separator token.
 
 ### Blocks accepting a list of items:
 
-| Block  | Opening   | Seperator | Closing |
+| Block  | Opening   | Separator | Closing |
 | ------ | --------- | --------- | ------- |
 | List   |           | `,`       |         |
 | Call   | `(`       | `,`       | `)`     |
 | Params | `(`       | `,`       | `)`     |
-| Decls  | `(`       | `;`       | `)`     |
 | Values | `{`       | `,`       | `}`     |
 | Slice  | `{`       | `,`       | `}`     |
 | Index  | `[`       | `:`       | `]`     |
@@ -184,8 +183,6 @@ fmt.Printf("%#v", c)
 ### Call
 
 ### Params
-
-### Decls
 
 ### Slice
 

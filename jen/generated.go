@@ -388,54 +388,6 @@ func (s *Statement) ParamsFunc(f func(*Group)) *Statement {
 	return s
 }
 
-// Decls inserts parenthesis containing a statement list
-func Decls(c ...Code) *Statement {
-	return newStatement().Decls(c...)
-}
-
-// Decls inserts parenthesis containing a statement list
-func (g *Group) Decls(c ...Code) *Statement {
-	s := Decls(c...)
-	g.items = append(g.items, s)
-	return s
-}
-
-// Decls inserts parenthesis containing a statement list
-func (s *Statement) Decls(c ...Code) *Statement {
-	g := &Group{
-		close:     ")",
-		items:     c,
-		open:      "(",
-		separator: ";",
-	}
-	*s = append(*s, g)
-	return s
-}
-
-// Decls inserts parenthesis containing a statement list
-func DeclsFunc(f func(*Group)) *Statement {
-	return newStatement().DeclsFunc(f)
-}
-
-// Decls inserts parenthesis containing a statement list
-func (g *Group) DeclsFunc(f func(*Group)) *Statement {
-	s := DeclsFunc(f)
-	g.items = append(g.items, s)
-	return s
-}
-
-// Decls inserts parenthesis containing a statement list
-func (s *Statement) DeclsFunc(f func(*Group)) *Statement {
-	g := &Group{
-		close:     ")",
-		open:      "(",
-		separator: ";",
-	}
-	f(g)
-	*s = append(*s, g)
-	return s
-}
-
 // CaseBlock inserts a statement list preceeded by a colon
 func CaseBlock(c ...Code) *Statement {
 	return newStatement().CaseBlock(c...)
