@@ -167,8 +167,7 @@ func ExampleNull() {
 		Id("i").Int(),
 	).Block()
 	fmt.Printf("%#v", c)
-	// Output: func foo(s string, i int) {
-	// }
+	// Output: func foo(s string, i int) {}
 }
 
 func ExampleComplex() {
@@ -213,15 +212,13 @@ func ExampleBreak() {
 func ExampleFunc() {
 	c := Func().Id("a").Params().Block()
 	fmt.Printf("%#v", c)
-	// Output: func a() {
-	// }
+	// Output: func a() {}
 }
 
 func ExampleGroup_Func() {
 	c := Id("a").Op(":=").Func().Params().Block()
 	fmt.Printf("%#v", c)
-	// Output: a := func() {
-	// }
+	// Output: a := func() {}
 }
 
 /*
@@ -280,6 +277,22 @@ func ExampleGroup_Append() {
 /*
 Blocks: "Parens", "List", "Values", "Index", "Block","Call", "Params"
 */
+
+func ExampleInterface() {
+	c := Var().Id("a").Interface()
+	fmt.Printf("%#v", c)
+	// Output: var a interface{}
+}
+
+func ExampleInterface2() {
+	c := Type().Id("a").Interface(
+		Id("b").Params().String(),
+	)
+	fmt.Printf("%#v", c)
+	// Output: type a interface {
+	// 	b() string
+	// }
+}
 
 func ExampleParens2() {
 	c := Id("a").Op("/").Parens(Id("b").Op("+").Id("c"))
@@ -505,6 +518,5 @@ func ExampleFile_PackageComment() {
 	// // b
 	// package c
 	//
-	// func init() {
-	// }
+	// func init() {}
 }

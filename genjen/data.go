@@ -1,8 +1,8 @@
 package main
 
-var Keywords = []string{"break", "default", "func", "interface", "select", "case", "defer", "go", "struct", "chan", "else", "goto", "const", "fallthrough", "range", "type", "continue", "var"}
+var Keywords = []string{"break", "default", "func", "select", "case", "defer", "go", "struct", "chan", "else", "goto", "const", "fallthrough", "range", "type", "continue", "var"}
 
-// "return", "for" and "if" are special cases
+// "return", "for", "interface" and "if" are special cases
 // "import" and "package" are handled automatically, so not needed.
 // "map" is treated as a block
 
@@ -60,9 +60,9 @@ var Blocks = []struct {
 	},
 	{
 		Name:      "Block",
-		Desc:      "curly braces containing a statements list",
+		Desc:      "curly braces containing a statement list",
 		List:      true,
-		Open:      "{\n",
+		Open:      "{",
 		Close:     "}",
 		Separator: "\n",
 	},
@@ -86,7 +86,7 @@ var Blocks = []struct {
 		Name:      "CaseBlock",
 		Desc:      "a statement list preceeded by a colon",
 		List:      true,
-		Open:      ":\n",
+		Open:      ":",
 		Close:     "",
 		Separator: "\n",
 	},
@@ -137,5 +137,13 @@ var Blocks = []struct {
 		Open:      "switch ",
 		Close:     "",
 		Separator: ";",
+	},
+	{
+		Name:      "Interface",
+		Desc:      "the interface keyword, followed by curly braces containing a statement list",
+		List:      true,
+		Open:      "interface{",
+		Close:     "}",
+		Separator: "\n",
 	},
 }

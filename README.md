@@ -176,7 +176,7 @@ fmt.Printf("%#v", c)
 // Output: break
 ```
 
-Keywords: `Break`, `Default`, `Func`, `Interface`, `Select`, `Case`, `Defer`, `Go`, `Struct`, `Chan`, `Else`, `Goto`, `Const`, `Fallthrough`, `Range`, `Type`, `Continue`, `Var`
+Keywords: `Break`, `Default`, `Func`, `Select`, `Case`, `Defer`, `Go`, `Struct`, `Chan`, `Else`, `Goto`, `Const`, `Fallthrough`, `Range`, `Type`, `Continue`, `Var`
 
 Built-in types: `Bool`, `Byte`, `Complex64`, `Complex128`, `Error`, `Float32`, `Float64`, `Int`, `Int8`, `Int16`, `Int32`, `Int64`, `Rune`, `String`, `Uint`, `Uint8`, `Uint16`, `Uint32`, `Uint64`, `Uintptr`
 
@@ -184,8 +184,8 @@ Constants: `True`, `False`, `Iota`, `Nil`
 
 Also included is `Err` for the commonly used `err` variable.
 
-Note: `Map`, `Return`, `Switch`, `For` and `If` are special cases, and treated as 
-blocks - see below.
+Note: `Interface`, `Map`, `Return`, `Switch`, `For` and `If` are special cases, 
+and treated as blocks - see below.
 
 Note: The `import` and `package` keywords are always rendered automatically, so 
 not included.
@@ -212,19 +212,20 @@ seperated by a separator token.
 
 ### Blocks accepting a list of items:
 
-| Block     | Opening  | Separator | Closing | Usage                             |
-| --------- | -------- | --------- | ------- | --------------------------------- |
-| List      |          | `,`       |         | `a, b := c()`                     |
-| Call      | `(`      | `,`       | `)`     | `fmt.Println(b, c)`               |
-| Params    | `(`      | `,`       | `)`     | `func (a *A) Foo(i int) { ... }`  |
-| Values    | `{`      | `,`       | `}`     | `[]int{1, 2}` or `interface{}`    |
-| Index     | `[`      | `:`       | `]`     | `a[1:2]` or `[]int{}`             |
-| Block     | `{\n`    | `\n`      | `}`     | `func a() { ... }`                |
-| CaseBlock | `:\n`    | `\n`      |         | `switch i {case 1: ... }`         |
-| Return    | `return` | `,`       |         | `return a, b`                     |
-| If        | `if`     | `;`       |         | `if a, ok := b(); ok { ... }`     |
-| For       | `for`    | `;`       |         | `for i := 0; i < 10; i++ { ... }` |
-| Switch    | `switch` | `;`       |         | `switch a { ... }`                |
+| Block     | Opening       | Separator | Closing | Usage                             |
+| --------- | ------------- | --------- | ------- | --------------------------------- |
+| List      |               | `,`       |         | `a, b := c()`                     |
+| Call      | `(`           | `,`       | `)`     | `fmt.Println(b, c)`               |
+| Params    | `(`           | `,`       | `)`     | `func (a *A) Foo(i int) { ... }`  |
+| Values    | `{`           | `,`       | `}`     | `[]int{1, 2}` or `interface{}`    |
+| Index     | `[`           | `:`       | `]`     | `a[1:2]` or `[]int{}`             |
+| Block     | `{\n`         | `\n`      | `}`     | `func a() { ... }`                |
+| CaseBlock | `:\n`         | `\n`      |         | `switch i {case 1: ... }`         |
+| Return    | `return`      | `,`       |         | `return a, b`                     |
+| If        | `if`          | `;`       |         | `if a, ok := b(); ok { ... }`     |
+| For       | `for`         | `;`       |         | `for i := 0; i < 10; i++ { ... }` |
+| Switch    | `switch`      | `;`       |         | `switch a { ... }`                |
+| Interface | `interface {` | `\n`      | `}`     | `interface { ... }`               |
 
 ### Blocks accepting a single item:
 
@@ -291,6 +292,25 @@ fmt.Printf("%#v", c)
 ### For
 
 ### Switch
+
+### Interface
+`Interface` renders the interface keyword followed by a statement block:
+
+```go
+c := Var().Id("a").Interface()
+fmt.Printf("%#v", c)
+// Output: var a interface{}
+```
+
+```go
+c := Type().Id("a").Interface(
+    Id("b").Params().String(),
+)
+fmt.Printf("%#v", c)
+// Output: type a interface {
+// 	b() string
+// }
+```
 
 ### Alternate FooFunc methods
 

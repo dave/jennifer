@@ -43,6 +43,13 @@ func (g *Group) render(f *File, w io.Writer) error {
 			// output but adds a separator.
 			continue
 		}
+		if first && g.separator == "\n" {
+			// For blocks seperated with new lines, we always insert a new line
+			// before the first item (but only if there is an item).
+			if _, err := w.Write([]byte("\n")); err != nil {
+				return err
+			}
+		}
 		if !first && g.separator != "" {
 			if _, err := w.Write([]byte(g.separator)); err != nil {
 				return err

@@ -196,47 +196,47 @@ func (s *Statement) IndexFunc(f func(*Group)) *Statement {
 	return s
 }
 
-// Block inserts curly braces containing a statements list
+// Block inserts curly braces containing a statement list
 func Block(c ...Code) *Statement {
 	return newStatement().Block(c...)
 }
 
-// Block inserts curly braces containing a statements list
+// Block inserts curly braces containing a statement list
 func (g *Group) Block(c ...Code) *Statement {
 	s := Block(c...)
 	g.items = append(g.items, s)
 	return s
 }
 
-// Block inserts curly braces containing a statements list
+// Block inserts curly braces containing a statement list
 func (s *Statement) Block(c ...Code) *Statement {
 	g := &Group{
 		close:     "}",
 		items:     c,
-		open:      "{\n",
+		open:      "{",
 		separator: "\n",
 	}
 	*s = append(*s, g)
 	return s
 }
 
-// Block inserts curly braces containing a statements list
+// Block inserts curly braces containing a statement list
 func BlockFunc(f func(*Group)) *Statement {
 	return newStatement().BlockFunc(f)
 }
 
-// Block inserts curly braces containing a statements list
+// Block inserts curly braces containing a statement list
 func (g *Group) BlockFunc(f func(*Group)) *Statement {
 	s := BlockFunc(f)
 	g.items = append(g.items, s)
 	return s
 }
 
-// Block inserts curly braces containing a statements list
+// Block inserts curly braces containing a statement list
 func (s *Statement) BlockFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     "}",
-		open:      "{\n",
+		open:      "{",
 		separator: "\n",
 	}
 	f(g)
@@ -357,7 +357,7 @@ func (s *Statement) CaseBlock(c ...Code) *Statement {
 	g := &Group{
 		close:     "",
 		items:     c,
-		open:      ":\n",
+		open:      ":",
 		separator: "\n",
 	}
 	*s = append(*s, g)
@@ -380,7 +380,7 @@ func (g *Group) CaseBlockFunc(f func(*Group)) *Statement {
 func (s *Statement) CaseBlockFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     "",
-		open:      ":\n",
+		open:      ":",
 		separator: "\n",
 	}
 	f(g)
@@ -670,6 +670,54 @@ func (s *Statement) SwitchFunc(f func(*Group)) *Statement {
 		close:     "",
 		open:      "switch ",
 		separator: ";",
+	}
+	f(g)
+	*s = append(*s, g)
+	return s
+}
+
+// Interface inserts the interface keyword, followed by curly braces containing a statement list
+func Interface(c ...Code) *Statement {
+	return newStatement().Interface(c...)
+}
+
+// Interface inserts the interface keyword, followed by curly braces containing a statement list
+func (g *Group) Interface(c ...Code) *Statement {
+	s := Interface(c...)
+	g.items = append(g.items, s)
+	return s
+}
+
+// Interface inserts the interface keyword, followed by curly braces containing a statement list
+func (s *Statement) Interface(c ...Code) *Statement {
+	g := &Group{
+		close:     "}",
+		items:     c,
+		open:      "interface{",
+		separator: "\n",
+	}
+	*s = append(*s, g)
+	return s
+}
+
+// Interface inserts the interface keyword, followed by curly braces containing a statement list
+func InterfaceFunc(f func(*Group)) *Statement {
+	return newStatement().InterfaceFunc(f)
+}
+
+// Interface inserts the interface keyword, followed by curly braces containing a statement list
+func (g *Group) InterfaceFunc(f func(*Group)) *Statement {
+	s := InterfaceFunc(f)
+	g.items = append(g.items, s)
+	return s
+}
+
+// Interface inserts the interface keyword, followed by curly braces containing a statement list
+func (s *Statement) InterfaceFunc(f func(*Group)) *Statement {
+	g := &Group{
+		close:     "}",
+		open:      "interface{",
+		separator: "\n",
 	}
 	f(g)
 	*s = append(*s, g)
@@ -1286,28 +1334,6 @@ func (g *Group) Func() *Statement {
 func (s *Statement) Func() *Statement {
 	t := token{
 		content: "func",
-		typ:     keywordToken,
-	}
-	*s = append(*s, t)
-	return s
-}
-
-// Interface inserts the interface keyword
-func Interface() *Statement {
-	return newStatement().Interface()
-}
-
-// Interface inserts the interface keyword
-func (g *Group) Interface() *Statement {
-	s := Interface()
-	g.items = append(g.items, s)
-	return s
-}
-
-// Interface inserts the interface keyword
-func (s *Statement) Interface() *Statement {
-	t := token{
-		content: "interface",
 		typ:     keywordToken,
 	}
 	*s = append(*s, t)
