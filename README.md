@@ -78,7 +78,7 @@ func init() {
 # Examples
 The tests are written mostly as examples - [see godoc.org](https://godoc.org/github.com/davelondon/jennifer/jen#pkg-examples) for an index.
 
-Most of the code is generated using jennifer itself, see the [gengen package](https://github.com/davelondon/jennifer/tree/master/genjen) for a real-world example of usage - it generates [generated.go](https://github.com/davelondon/jennifer/blob/master/jen/generated.go).
+Most of the code is generated using jennifer itself, see the [genjen package](https://github.com/davelondon/jennifer/tree/master/genjen) for a real-world example of usage - it generates [generated.go](https://github.com/davelondon/jennifer/blob/master/jen/generated.go).
 
 # Identifiers 
 
@@ -127,19 +127,19 @@ seperated by a separator token.
 
 ### Blocks accepting a list of items:
 
-| Block  | Opening  | Separator | Closing | Usage                             |
-| ------ | -------- | --------- | ------- | --------------------------------- |
-| List   |          | `,`       |         | `a, b := c()`                     |
-| Call   | `(`      | `,`       | `)`     | `fmt.Println(b, c)`               |
-| Params | `(`      | `,`       | `)`     | `func (a int)`                    |
-| Values | `{`      | `,`       | `}`     | `[]int{1, 2}` or `interface{}`    |
-| Index  | `[`      | `:`       | `]`     | `a[1:2]` or `[]int{}`             |
-| Block  | `{\n`    | `\n`      | `}`     | `func a() { ... }`                |
-| Case   | `:\n`    | `\n`      |         | `switch i {case 1: ... }`         |
-| Return | `return` | `,`       |         | `return a, b`                     |
-| If     | `if`     | `;`       |         | `if a, ok := b(); ok { ... }`     |
-| For    | `for`    | `;`       |         | `for i := 0; i < 10; i++ { ... }` |
-| Switch | `switch` | `;`       |         | `switch a { ... }`                |
+| Block     | Opening  | Separator | Closing | Usage                             |
+| --------- | -------- | --------- | ------- | --------------------------------- |
+| List      |          | `,`       |         | `a, b := c()`                     |
+| Call      | `(`      | `,`       | `)`     | `fmt.Println(b, c)`               |
+| Params    | `(`      | `,`       | `)`     | `func (a *A) Foo(i int) { ... }`  |
+| Values    | `{`      | `,`       | `}`     | `[]int{1, 2}` or `interface{}`    |
+| Index     | `[`      | `:`       | `]`     | `a[1:2]` or `[]int{}`             |
+| Block     | `{\n`    | `\n`      | `}`     | `func a() { ... }`                |
+| CaseBlock | `:\n`    | `\n`      |         | `switch i {case 1: ... }`         |
+| Return    | `return` | `,`       |         | `return a, b`                     |
+| If        | `if`     | `;`       |         | `if a, ok := b(); ok { ... }`     |
+| For       | `for`    | `;`       |         | `for i := 0; i < 10; i++ { ... }` |
+| Switch    | `switch` | `;`       |         | `switch a { ... }`                |
 
 ### Blocks accepting a single item:
 
@@ -193,7 +193,7 @@ fmt.Printf("%#v", c)
 
 ### Block
 
-### Case
+### CaseBlock
 
 ### Assert
 
