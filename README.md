@@ -1,6 +1,6 @@
 # Jennifer
 
-Jennifer is a code generator for go:
+Jennifer is a code generator for Go:
 
 ```go
 package main
@@ -120,24 +120,24 @@ Blocks take either a single code item or a varidic list of code items. The
 items are rendered between open and closing tokens. Multiple items are 
 seperated by a seperator token.
 
-# Blocks accepting a list of items:
+### Blocks accepting a list of items:
 
-| Block  | Seperator | Opening  | Closing |
-| ------ | --------- | -------- | ------- |
-| List   | `,`       |          |         |
-| Call   | `,`       | `(`      | `)`     |
-| Params | `,`       | `(`      | `)`     |
-| Decls  | `;`       | `(`      | `)`     |
-| Values | `,`       | `{`      | `}`     |
-| Slice  | `,`       | `{`      | `}`     |
-| Index  | `:`       | `[`      | `]`     |
-| Block  | `\n`      | `{\n`    | `}`     |
-| Case   | `\n`      | `:\n`    |         |
-| If     | `;`       | `if`     |         |
-| Return | `,`       | `return` |         |
-| For    | `;`       | `for`    |         |
+| Block  | Opening   | Seperator | Closing |
+| ------ | --------- | --------- | ------- |
+| List   |           | `,`       |         |
+| Call   | `(`       | `,`       | `)`     |
+| Params | `(`       | `,`       | `)`     |
+| Decls  | `(`       | `;`       | `)`     |
+| Values | `{`       | `,`       | `}`     |
+| Slice  | `{`       | `,`       | `}`     |
+| Index  | `[`       | `:`       | `]`     |
+| Block  | `{\n`     | `\n`      | `}`     |
+| Case   | `:\n`     | `\n`      |         |
+| If     | `if `     | `;`       |         |
+| Return | `return ` | `,`       |         |
+| For    | `for `    | `;`       |         |
 
-# Blocks accepting a single item:
+### Blocks accepting a single item:
 
 | Block  | Opening  | Closing |
 | ------ | -------- | ------- |
@@ -225,7 +225,7 @@ fmt.Printf("%#v", c)
 
 # Line
 
-# Comment Commentf, File.PackageComment
+# Comment, Commentf
 
 # File
 
@@ -252,6 +252,8 @@ fmt.Printf("%#v", f)
 // 	Foo()
 // }
 ```
+
+### PackageComment
 
 ### Anon
 
