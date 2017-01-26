@@ -6,7 +6,7 @@ import (
 	. "github.com/davelondon/jennifer/jen"
 )
 
-func ExampleGotcha() {
+func ExampleGotchaPointer() {
 	caller := func(s *Statement) *Statement {
 		return s.Call()
 	}
@@ -22,7 +22,7 @@ func ExampleGotcha() {
 	// }
 }
 
-func ExampleGotchaFixed() {
+func ExampleGotchaPointerFixed() {
 	caller := func(s Statement) *Statement {
 		return s.Call()
 	}
@@ -30,6 +30,32 @@ func ExampleGotchaFixed() {
 	c := Block(
 		caller(a),
 		caller(a),
+	)
+	fmt.Printf("%#v", c)
+	// Output: {
+	// 	a()
+	// 	a()
+	// }
+}
+
+func ExampleGotchaAdd() {
+	a := Id("a")
+	c := Block(
+		a.Call(),
+		a.Call(),
+	)
+	fmt.Printf("%#v", c)
+	// Output: {
+	// 	a()()
+	// 	a()()
+	// }
+}
+
+func ExampleGotchaAddFixed() {
+	a := Id("a")
+	c := Block(
+		Add(a).Call(),
+		Add(a).Call(),
 	)
 	fmt.Printf("%#v", c)
 	// Output: {

@@ -292,3 +292,33 @@ fmt.Printf("%#v", c)
 // 	a()
 // }
 ```
+
+Here is another variation, which can't be solved by pointer indirection:
+
+```go
+a := Id("a")
+c := Block(
+    a.Call(),
+    a.Call(),
+)
+fmt.Printf("%#v", c)
+// Output: {
+// 	a()()
+// 	a()()
+// }
+```
+
+Here we can prevent the double call by using `Add` to create a new `*Statement`:  
+
+```go
+a := Id("a")
+c := Block(
+    Add(a).Call(),
+    Add(a).Call(),
+)
+fmt.Printf("%#v", c)
+// Output: {
+// 	a()
+// 	a()
+// }
+```
