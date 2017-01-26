@@ -77,8 +77,8 @@ func init() {
 
 # NewFile
 
-NewFile Creates a new file. NewFilePath creates a new file while specifying the 
-package path - the package name is inferred from the path. NewFilePathName 
+`NewFile` Creates a new file. `NewFilePath` creates a new file while specifying 
+the package path - the package name is inferred from the path. `NewFilePathName` 
 additionally specifies the package name.
 
 ```go
@@ -158,7 +158,7 @@ seperated by a seperator token:
 | For    | `;`       | `for`    |         |
 
 ### List
-List renders a comma seperated list with no open or closing tokens. Use for 
+`List` renders a comma seperated list with no open or closing tokens. Use for 
 multiple return functions:
 
 ```go
@@ -168,7 +168,7 @@ fmt.Printf("%#v", c)
 ```
 
 ### Parens
-Parens renders a single code item in parenthesis. Use for type conversion or 
+`Parens` renders a single code item in parenthesis. Use for type conversion or 
 logical grouping:
 
 ```go
@@ -184,7 +184,7 @@ fmt.Printf("%#v", c)
 ```
 
 ### Values
-Values renders a comma seperated list enclosed by curly braces. Use for slice 
+`Values` renders a comma seperated list enclosed by curly braces. Use for slice 
 literals:
 
 ```go
