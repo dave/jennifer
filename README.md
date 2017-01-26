@@ -102,7 +102,7 @@ not included.
 
 # Built-in functions
 
-Built in functions take a variadic slice of code items, and render the function
+Built in functions take a variadic list of code items, and render the function
 name followed by the items as a comma seperated list of parameters in 
 parenthesis:
 
@@ -128,7 +128,6 @@ seperated by a separator token.
 | Call   | `(`       | `,`       | `)`     |
 | Params | `(`       | `,`       | `)`     |
 | Values | `{`       | `,`       | `}`     |
-| Slice  | `{`       | `,`       | `}`     |
 | Index  | `[`       | `:`       | `]`     |
 | Block  | `{\n`     | `\n`      | `}`     |
 | Case   | `:\n`     | `\n`      |         |
@@ -183,8 +182,6 @@ fmt.Printf("%#v", c)
 ### Call
 
 ### Params
-
-### Slice
 
 ### Index
 
