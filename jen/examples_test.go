@@ -456,6 +456,12 @@ func ExampleDo() {
 	// b := []string{}
 }
 
+func ExampleGroup_Dict2() {
+	c := Id("a").Op(":=").Map(String()).String().Dict(nil)
+	fmt.Printf("%#v", c)
+	// Output: a := map[string]string{}
+}
+
 func ExampleGroup_Dict() {
 	c := Id("a").Op(":=").Map(String()).String().Dict(map[Code]Code{
 		Lit("a"): Lit("b"),
