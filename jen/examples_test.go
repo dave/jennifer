@@ -192,6 +192,14 @@ func ExampleCaseBlock() {
 	// }
 }
 
+func ExampleAdd() {
+	a := Id("a")
+	i := Int()
+	c := Var().Add(a, i)
+	fmt.Printf("%#v", c)
+	// Output: var a int
+}
+
 func ExampleTag() {
 	c := Type().Id("foo").Struct().Block(
 		Id("A").String().Tag(map[string]string{"json": "a"}),
