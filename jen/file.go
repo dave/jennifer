@@ -27,6 +27,17 @@ func NewFilePath(path string) *File {
 	}
 }
 
+func NewFilePathName(path, name string) *File {
+	return &File{
+		Group: &Group{
+			syntax: fileSyntax,
+		},
+		name:    name,
+		path:    path,
+		imports: map[string]string{},
+	}
+}
+
 type File struct {
 	*Group
 	prefix   string

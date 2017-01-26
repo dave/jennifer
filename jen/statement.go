@@ -15,7 +15,10 @@ func newStatement() *Statement {
 	return &Statement{}
 }
 
-func (s Statement) isNull() bool {
+func (s *Statement) isNull() bool {
+	if s == nil {
+		return true
+	}
 	for _, c := range s.items {
 		if !c.isNull() {
 			return false
@@ -24,7 +27,7 @@ func (s Statement) isNull() bool {
 	return true
 }
 
-func (s Statement) render(f *File, w io.Writer) error {
+func (s *Statement) render(f *File, w io.Writer) error {
 	first := true
 	for _, code := range s.items {
 		if code == nil || code.isNull() {

@@ -8,14 +8,14 @@ func For(c ...Code) *Statement {
 // For inserts the for keyword
 func (g *Group) For(c ...Code) *Statement {
 	s := For(c...)
-	s.items = append(s.items, s)
+	g.items = append(g.items, s)
 	return s
 }
 
 // For inserts the for keyword
 func (s *Statement) For(c ...Code) *Statement {
 	s.Id("for")
-	g := Group{
+	g := &Group{
 		syntax: clauseSyntax,
 		items:  c,
 	}

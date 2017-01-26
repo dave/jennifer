@@ -12,7 +12,10 @@ type Group struct {
 	items  []Code
 }
 
-func (g Group) isNull() bool {
+func (g *Group) isNull() bool {
+	if g == nil {
+		return true
+	}
 	i := syntaxInfo[g.syntax]
 	if i.open != "" || i.close != "" {
 		return false
@@ -25,7 +28,7 @@ func (g Group) isNull() bool {
 	return true
 }
 
-func (g Group) render(f *File, w io.Writer) error {
+func (g *Group) render(f *File, w io.Writer) error {
 	i := syntaxInfo[g.syntax]
 	if i.open != "" {
 		if _, err := w.Write([]byte(i.open)); err != nil {

@@ -77,7 +77,7 @@ func main() {
 
 		/*
 			func (s *Statement) {Name}(c [...]Code) *Statement {
-				g := Group{
+				g := &Group{
 					syntax: {Syntax},
 					items:  []Code{c}|c,
 				}
@@ -93,7 +93,7 @@ func main() {
 		).Op("*").Id("Statement").Block(
 			Id("g").Op(":=").Op("&").Id("Group").Dict(map[Code]Code{
 				Id("syntax"): Id(b.Syntax),
-				Id("items"):  Do(func(s *Statement) {
+				Id("items"): Do(func(s *Statement) {
 					if b.List {
 						s.Id("c")
 					} else {

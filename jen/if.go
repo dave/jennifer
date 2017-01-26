@@ -14,7 +14,7 @@ func (g *Group) If(c ...Code) *Statement {
 // If inserts the if keyword
 func (s *Statement) If(c ...Code) *Statement {
 	s.Id("if")
-	g := Group{
+	g := &Group{
 		syntax: clauseSyntax,
 		items:  c,
 	}
