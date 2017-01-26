@@ -2,9 +2,8 @@ package main
 
 var Keywords = []string{"break", "default", "func", "select", "defer", "go", "struct", "chan", "else", "goto", "const", "fallthrough", "range", "type", "continue", "var"}
 
-// "return", "for", "interface", "case" and "if" are special cases
+// "return", "map", "switch", "for", "interface", "case" and "if" are special cases
 // "import" and "package" are handled automatically, so not needed.
-// "map" is treated as a block
 
 var Types = []string{"bool", "byte", "complex64", "complex128", "error", "float32", "float64", "int", "int8", "int16", "int32", "int64", "rune", "string", "uint", "uint8", "uint16", "uint32", "uint64", "uintptr"}
 
@@ -18,7 +17,7 @@ var Identifiers = append(append(append(append([]string{}, Types...), Constants..
 
 var Functions = []string{"append", "cap", "close", "complex", "copy", "delete", "imag", "len", "make", "new", "panic", "print", "println", "real", "recover"}
 
-var Blocks = []struct {
+var Groups = []struct {
 	Name      string
 	Desc      string
 	List      bool

@@ -49,7 +49,7 @@ func main() {
 		)
 	}
 
-	for _, b := range Blocks {
+	for _, b := range Groups {
 		b := b // b used in closures
 		if b.Name == "" {
 			continue
