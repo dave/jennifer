@@ -60,6 +60,16 @@ func (g *Group) render(f *File, w io.Writer) error {
 		}
 		first = false
 	}
+	if !first && g.separator == "\n" && g.close != "" {
+		// For blocks seperated with new lines and with a closing token, we
+		// always insert a new line after the last item (but only if there is
+		// an item). This is to ensure that if the statement finishes with a
+		// comment, the closing token is not commented out.
+		// TODO: This seems really brittle.
+		if _, err := w.Write([]byte("\n")); err != nil {
+			return err
+		}
+	}
 	if g.close != "" {
 		if _, err := w.Write([]byte(g.close)); err != nil {
 			return err

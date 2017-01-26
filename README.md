@@ -48,9 +48,9 @@ import (
 func main() {
 	f := NewFilePath("a.b/c")
     f.Func().Id("init").Params().Block(
-        Id("a.b/c.Local").Call(),
-        Id("d.e/f.Remote").Call(),
-        Id("g.h/f.Collision").Call(),
+        Id("a.b/c.Foo").Call().Comment("Local package - alias is omitted."),
+        Id("d.e/f.Bar").Call().Comment("Import is automatically added."),
+        Id("g.h/f.Baz").Call().Comment("Colliding package name is automatically renamed."),
     )
     fmt.Printf("%#v", f)
 }
@@ -67,9 +67,9 @@ import (
 )
 
 func init() {
-    Local()
-    f.Remote()
-    f1.Collision()
+    Foo()    // Local package - alias is omitted.
+    f.Bar()  // Import is automatically added.
+    f1.Baz() // Colliding package name is automatically renamed.
 }
 ```
 

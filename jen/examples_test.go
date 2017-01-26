@@ -81,6 +81,28 @@ func ExampleFile_Render() {
 	// func main() {}
 }
 
+func ExampleStatement_Comment() {
+	f := NewFilePath("a.b/c")
+	f.Func().Id("init").Params().Block(
+		Id("a.b/c.Foo").Call().Comment("Local package - alias is omitted."),
+		Id("d.e/f.Bar").Call().Comment("Import is automatically added."),
+		Id("g.h/f.Baz").Call().Comment("Colliding package name is automatically renamed."),
+	)
+	fmt.Printf("%#v", f)
+	// Output: package c
+	//
+	// import (
+	// 	f "d.e/f"
+	// 	f1 "g.h/f"
+	// )
+	//
+	// func init() {
+	// 	Foo()    // Local package - alias is omitted.
+	// 	f.Bar()  // Import is automatically added.
+	// 	f1.Baz() // Colliding package name is automatically renamed.
+	// }
+}
+
 /*
 var Keywords = []string{"break", "default", "func", "interface", "select", "case", "defer", "go", "map", "struct", "chan", "else", "goto", "package", "switch", "const", "fallthrough", "if", "range", "type", "continue", "import", "var"}
 
