@@ -189,6 +189,18 @@ func ExampleGroup_Append() {
 Blocks: "Parens", "List", "Values", "Index", "Block","Call", "Params", "Decls"
 */
 
+func ExampleParens2() {
+	c := Parens(Id("a").Op("/").Id("b")).Op("*").Id("c")
+	fmt.Printf("%#v", c)
+	// Output: (a / b) * c
+}
+
+func ExampleValues2() {
+	c := Index().String().Values(Lit("a"), Lit("b"))
+	fmt.Printf("%#v", c)
+	// Output: []string{"a", "b"}
+}
+
 func ExampleBlock() {
 	c := Block(Id("a").Op("=").Id("b"))
 	fmt.Printf("%#v", c)

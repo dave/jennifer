@@ -15,7 +15,10 @@ const (
 	clauseSyntax syntaxType = "clause"
 	caseSyntax   syntaxType = "case"
 	assertSyntax syntaxType = "assert"
-	mapSyntax 	 syntaxType = "map"
+	mapSyntax    syntaxType = "map"
+	ifSyntax     syntaxType = "if"
+	returnSyntax syntaxType = "return"
+	forSyntax    syntaxType = "for"
 )
 
 var syntaxInfo = map[syntaxType]struct {
@@ -27,8 +30,8 @@ var syntaxInfo = map[syntaxType]struct {
 		seperator: "\n",
 	},
 	parensSyntax: {
-		open:      "(",
-		close:     ")",
+		open:  "(",
+		close: ")",
 	},
 	listSyntax: {
 		seperator: ",",
@@ -71,11 +74,26 @@ var syntaxInfo = map[syntaxType]struct {
 		seperator: "\n",
 	},
 	assertSyntax: {
-		open:      ".(",
-		close:     ")",
+		open:  ".(",
+		close: ")",
 	},
 	mapSyntax: {
-		open:      "map[",
-		close:     "]",
+		open:  "map[",
+		close: "]",
+	},
+	ifSyntax: {
+		open:      "if ",
+		close:     "",
+		seperator: ";",
+	},
+	returnSyntax: {
+		open:      "return ",
+		close:     "",
+		seperator: ",",
+	},
+	forSyntax: {
+		open:      "for ",
+		close:     "",
+		seperator: ";",
 	},
 }

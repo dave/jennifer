@@ -532,6 +532,138 @@ func (s *Statement) MapFunc(f func(*Group)) *Statement {
 	return s
 }
 
+// If inserts the if keyword, followed by a semicolon separated list
+func If(c ...Code) *Statement {
+	return newStatement().If(c...)
+}
+
+// If inserts the if keyword, followed by a semicolon separated list
+func (g *Group) If(c ...Code) *Statement {
+	s := If(c...)
+	g.items = append(g.items, s)
+	return s
+}
+
+// If inserts the if keyword, followed by a semicolon separated list
+func (s *Statement) If(c ...Code) *Statement {
+	g := &Group{
+		items:  c,
+		syntax: ifSyntax,
+	}
+	s.items = append(s.items, g)
+	return s
+}
+
+// If inserts the if keyword, followed by a semicolon separated list
+func IfFunc(f func(*Group)) *Statement {
+	return newStatement().IfFunc(f)
+}
+
+// If inserts the if keyword, followed by a semicolon separated list
+func (g *Group) IfFunc(f func(*Group)) *Statement {
+	s := IfFunc(f)
+	g.items = append(g.items, s)
+	return s
+}
+
+// If inserts the if keyword, followed by a semicolon separated list
+func (s *Statement) IfFunc(f func(*Group)) *Statement {
+	g := &Group{
+		syntax: ifSyntax,
+	}
+	f(g)
+	s.items = append(s.items, g)
+	return s
+}
+
+// Return inserts the return keyword, followed by a comma separated list
+func Return(c ...Code) *Statement {
+	return newStatement().Return(c...)
+}
+
+// Return inserts the return keyword, followed by a comma separated list
+func (g *Group) Return(c ...Code) *Statement {
+	s := Return(c...)
+	g.items = append(g.items, s)
+	return s
+}
+
+// Return inserts the return keyword, followed by a comma separated list
+func (s *Statement) Return(c ...Code) *Statement {
+	g := &Group{
+		items:  c,
+		syntax: returnSyntax,
+	}
+	s.items = append(s.items, g)
+	return s
+}
+
+// Return inserts the return keyword, followed by a comma separated list
+func ReturnFunc(f func(*Group)) *Statement {
+	return newStatement().ReturnFunc(f)
+}
+
+// Return inserts the return keyword, followed by a comma separated list
+func (g *Group) ReturnFunc(f func(*Group)) *Statement {
+	s := ReturnFunc(f)
+	g.items = append(g.items, s)
+	return s
+}
+
+// Return inserts the return keyword, followed by a comma separated list
+func (s *Statement) ReturnFunc(f func(*Group)) *Statement {
+	g := &Group{
+		syntax: returnSyntax,
+	}
+	f(g)
+	s.items = append(s.items, g)
+	return s
+}
+
+// For inserts the for keyword, followed by a semicolon separated list
+func For(c ...Code) *Statement {
+	return newStatement().For(c...)
+}
+
+// For inserts the for keyword, followed by a semicolon separated list
+func (g *Group) For(c ...Code) *Statement {
+	s := For(c...)
+	g.items = append(g.items, s)
+	return s
+}
+
+// For inserts the for keyword, followed by a semicolon separated list
+func (s *Statement) For(c ...Code) *Statement {
+	g := &Group{
+		items:  c,
+		syntax: forSyntax,
+	}
+	s.items = append(s.items, g)
+	return s
+}
+
+// For inserts the for keyword, followed by a semicolon separated list
+func ForFunc(f func(*Group)) *Statement {
+	return newStatement().ForFunc(f)
+}
+
+// For inserts the for keyword, followed by a semicolon separated list
+func (g *Group) ForFunc(f func(*Group)) *Statement {
+	s := ForFunc(f)
+	g.items = append(g.items, s)
+	return s
+}
+
+// For inserts the for keyword, followed by a semicolon separated list
+func (s *Statement) ForFunc(f func(*Group)) *Statement {
+	g := &Group{
+		syntax: forSyntax,
+	}
+	f(g)
+	s.items = append(s.items, g)
+	return s
+}
+
 // Bool inserts the bool identifier
 func Bool() *Statement {
 	return newStatement().Bool()

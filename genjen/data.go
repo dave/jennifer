@@ -96,6 +96,24 @@ var Blocks = []struct {
 		Desc:   "the map keyword, followed by square brackets",
 		List:   false,
 	},
+	{
+		Name:   "If",
+		Syntax: "ifSyntax",
+		Desc:   "the if keyword, followed by a semicolon separated list",
+		List:   true,
+	},
+	{
+		Name:   "Return",
+		Syntax: "returnSyntax",
+		Desc:   "the return keyword, followed by a comma separated list",
+		List:   true,
+	},
+	{
+		Name:   "For",
+		Syntax: "forSyntax",
+		Desc:   "the for keyword, followed by a semicolon separated list",
+		List:   true,
+	},
 }
 
 var Operators = []struct {
