@@ -248,9 +248,9 @@ Blocks: "Parens", "List", "Values", "Index", "Block","Call", "Params"
 */
 
 func ExampleParens2() {
-	c := Parens(Id("a").Op("/").Id("b")).Op("*").Id("c")
+	c := Id("a").Op("/").Parens(Id("b").Op("+").Id("c"))
 	fmt.Printf("%#v", c)
-	// Output: (a / b) * c
+	// Output: a / (b + c)
 }
 
 func ExampleValues2() {

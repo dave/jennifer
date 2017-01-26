@@ -78,7 +78,7 @@ func init() {
 # Examples
 The tests are written mostly as examples - [see godoc.org](https://godoc.org/github.com/davelondon/jennifer/jen#pkg-examples) for an index.
 
-Most of the code is generated using jennifer itself, see the [gengen package](https://github.com/davelondon/jennifer/tree/master/genjen) for a real-world example us usage.
+Most of the code is generated using jennifer itself, see the [gengen package](https://github.com/davelondon/jennifer/tree/master/genjen) for a real-world example of usage - it generates [generated.go](https://github.com/davelondon/jennifer/blob/master/jen/generated.go).
 
 # Identifiers 
 
@@ -91,7 +91,7 @@ fmt.Printf("%#v", c)
 // Output: break
 ```
 
-Keywords: `Break`, `Default`, `Func`, `Interface`, `Select`, `Case`, `Defer`, `Go`, `Struct`, `Chan`, `Else`, `Goto`, `Switch`, `Const`, `Fallthrough`, `Range`, `Type`, `Continue`, `Var`
+Keywords: `Break`, `Default`, `Func`, `Interface`, `Select`, `Case`, `Defer`, `Go`, `Struct`, `Chan`, `Else`, `Goto`, `Const`, `Fallthrough`, `Range`, `Type`, `Continue`, `Var`
 
 Built-in types: `Bool`, `Byte`, `Complex64`, `Complex128`, `Error`, `Float32`, `Float64`, `Int`, `Int8`, `Int16`, `Int32`, `Int64`, `Rune`, `String`, `Uint`, `Uint8`, `Uint16`, `Uint32`, `Uint64`, `Uintptr`
 
@@ -99,7 +99,7 @@ Constants: `True`, `False`, `Iota`, `Nil`
 
 Also included is `Err` for the commonly used `err` variable.
 
-Note: `Map`, `Return`, `For` and `If` are special cases, and treated as 
+Note: `Map`, `Return`, `Switch`, `For` and `If` are special cases, and treated as 
 blocks - see below.
 
 Note: The `import` and `package` keywords are always rendered automatically, so 
@@ -112,9 +112,9 @@ name followed by the items as a comma seperated list of parameters in
 parenthesis:
 
 ```go
-c := Append(Id("foo"), Id("bar"))
+c := Append(Id("a"), Id("b"))
 fmt.Printf("%#v", c)
-// Output: append(foo, bar)
+// Output: append(a, b)
 ```
 
 Functions: `Append`, `Cap`, `Close`, `Complex`, `Copy`, `Delete`, `Imag`, `Len`, `Make`, `New`, `Panic`, `Print`, `Println`, `Real`, `Recover`
@@ -127,18 +127,19 @@ seperated by a separator token.
 
 ### Blocks accepting a list of items:
 
-| Block  | Opening   | Separator | Closing |
-| ------ | --------- | --------- | ------- |
-| List   |           | `,`       |         |
-| Call   | `(`       | `,`       | `)`     |
-| Params | `(`       | `,`       | `)`     |
-| Values | `{`       | `,`       | `}`     |
-| Index  | `[`       | `:`       | `]`     |
-| Block  | `{\n`     | `\n`      | `}`     |
-| Case   | `:\n`     | `\n`      |         |
-| If     | `if `     | `;`       |         |
-| Return | `return ` | `,`       |         |
-| For    | `for `    | `;`       |         |
+| Block  | Opening  | Separator | Closing |
+| ------ | -------- | --------- | ------- |
+| List   |          | `,`       |         |
+| Call   | `(`      | `,`       | `)`     |
+| Params | `(`      | `,`       | `)`     |
+| Values | `{`      | `,`       | `}`     |
+| Index  | `[`      | `:`       | `]`     |
+| Block  | `{\n`    | `\n`      | `}`     |
+| Case   | `:\n`    | `\n`      |         |
+| Return | `return` | `,`       |         |
+| If     | `if`     | `;`       |         |
+| For    | `for`    | `;`       |         |
+| Switch | `switch` | `;`       |         |
 
 ### Blocks accepting a single item:
 
@@ -160,7 +161,7 @@ fmt.Printf("%#v", c)
 
 ### Parens
 `Parens` renders a single code item in parenthesis. Use for type conversion or 
-logical grouping:
+to specify evaluation order:
 
 ```go
 c := Id("b").Op(":=").Index().Byte().Parens(Id("s"))
@@ -169,9 +170,9 @@ fmt.Printf("%#v", c)
 ```
 
 ```go
-c := Parens(Id("a").Op("/").Id("b")).Op("*").Id("c")
+c := Id("a").Op("/").Parens(Id("b").Op("+").Id("c"))
 fmt.Printf("%#v", c)
-// Output: (a / b) * c
+// Output: a / (b + c)
 ```
 
 ### Values
@@ -198,11 +199,13 @@ fmt.Printf("%#v", c)
 
 ### Map
 
-### If
-
 ### Return
 
+### If
+
 ### For
+
+### Switch
 
 ### Alternate FooFunc methods
 

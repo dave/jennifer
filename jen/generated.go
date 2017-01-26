@@ -628,6 +628,54 @@ func (s *Statement) ForFunc(f func(*Group)) *Statement {
 	return s
 }
 
+// Switch inserts the switch keyword, followed by a semicolon separated list
+func Switch(c ...Code) *Statement {
+	return newStatement().Switch(c...)
+}
+
+// Switch inserts the switch keyword, followed by a semicolon separated list
+func (g *Group) Switch(c ...Code) *Statement {
+	s := Switch(c...)
+	g.items = append(g.items, s)
+	return s
+}
+
+// Switch inserts the switch keyword, followed by a semicolon separated list
+func (s *Statement) Switch(c ...Code) *Statement {
+	g := &Group{
+		close:     "",
+		items:     c,
+		open:      "switch ",
+		separator: ";",
+	}
+	*s = append(*s, g)
+	return s
+}
+
+// Switch inserts the switch keyword, followed by a semicolon separated list
+func SwitchFunc(f func(*Group)) *Statement {
+	return newStatement().SwitchFunc(f)
+}
+
+// Switch inserts the switch keyword, followed by a semicolon separated list
+func (g *Group) SwitchFunc(f func(*Group)) *Statement {
+	s := SwitchFunc(f)
+	g.items = append(g.items, s)
+	return s
+}
+
+// Switch inserts the switch keyword, followed by a semicolon separated list
+func (s *Statement) SwitchFunc(f func(*Group)) *Statement {
+	g := &Group{
+		close:     "",
+		open:      "switch ",
+		separator: ";",
+	}
+	f(g)
+	*s = append(*s, g)
+	return s
+}
+
 // Bool inserts the bool identifier
 func Bool() *Statement {
 	return newStatement().Bool()
@@ -1436,28 +1484,6 @@ func (g *Group) Goto() *Statement {
 func (s *Statement) Goto() *Statement {
 	t := token{
 		content: "goto",
-		typ:     keywordToken,
-	}
-	*s = append(*s, t)
-	return s
-}
-
-// Switch inserts the switch keyword
-func Switch() *Statement {
-	return newStatement().Switch()
-}
-
-// Switch inserts the switch keyword
-func (g *Group) Switch() *Statement {
-	s := Switch()
-	g.items = append(g.items, s)
-	return s
-}
-
-// Switch inserts the switch keyword
-func (s *Statement) Switch() *Statement {
-	t := token{
-		content: "switch",
 		typ:     keywordToken,
 	}
 	*s = append(*s, t)

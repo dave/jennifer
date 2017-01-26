@@ -1,6 +1,6 @@
 package main
 
-var Keywords = []string{"break", "default", "func", "interface", "select", "case", "defer", "go", "struct", "chan", "else", "goto", "switch", "const", "fallthrough", "range", "type", "continue", "var"}
+var Keywords = []string{"break", "default", "func", "interface", "select", "case", "defer", "go", "struct", "chan", "else", "goto", "const", "fallthrough", "range", "type", "continue", "var"}
 
 // "return", "for" and "if" are special cases
 // "import" and "package" are handled automatically, so not needed.
@@ -127,6 +127,14 @@ var Blocks = []struct {
 		Desc:      "the for keyword, followed by a semicolon separated list",
 		List:      true,
 		Open:      "for ",
+		Close:     "",
+		Separator: ";",
+	},
+	{
+		Name:      "Switch",
+		Desc:      "the switch keyword, followed by a semicolon separated list",
+		List:      true,
+		Open:      "switch ",
 		Close:     "",
 		Separator: ";",
 	},
