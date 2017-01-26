@@ -75,6 +75,11 @@ func init() {
 }
 ```
 
+# Examples
+The tests are written mostly as examples - [see godoc.org](https://godoc.org/github.com/davelondon/jennifer/jen#pkg-examples) for an index.
+
+Most of the code is generated using jennifer itself, see the [gengen package](https://github.com/davelondon/jennifer/tree/master/genjen) for a real-world example us usage.
+
 # Identifiers 
 
 Identifiers are simple methods with no parameters. They render as the 
