@@ -13,6 +13,10 @@ func newStatement() *Statement {
 	return &Statement{}
 }
 
+func (s *Statement) Clone() *Statement {
+	return &Statement{s}
+}
+
 func (s *Statement) isNull(f *File) bool {
 	if s == nil {
 		return true

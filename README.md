@@ -176,7 +176,7 @@ fmt.Printf("%#v", c)
 // Output: break
 ```
 
-Keywords: `Break`, `Default`, `Func`, `Select`, `Case`, `Defer`, `Go`, `Struct`, `Chan`, `Else`, `Goto`, `Const`, `Fallthrough`, `Range`, `Type`, `Continue`, `Var`
+Keywords: `Break`, `Default`, `Func`, `Select`, `Defer`, `Go`, `Struct`, `Chan`, `Else`, `Goto`, `Const`, `Fallthrough`, `Range`, `Type`, `Continue`, `Var`
 
 Built-in types: `Bool`, `Byte`, `Complex64`, `Complex128`, `Error`, `Float32`, `Float64`, `Int`, `Int8`, `Int16`, `Int32`, `Int64`, `Rune`, `String`, `Uint`, `Uint8`, `Uint16`, `Uint32`, `Uint64`, `Uintptr`
 
@@ -184,7 +184,7 @@ Constants: `True`, `False`, `Iota`, `Nil`
 
 Also included is `Err` for the commonly used `err` variable.
 
-Note: `Interface`, `Map`, `Return`, `Switch`, `For` and `If` are special cases, 
+Note: `Interface`, `Map`, `Return`, `Switch`, `For`, `Case` and `If` are special cases, 
 and treated as blocks - see below.
 
 Note: The `import` and `package` keywords are always rendered automatically, so 
@@ -220,6 +220,7 @@ seperated by a separator token.
 | Values    | `{`           | `,`       | `}`     | `[]int{1, 2}` or `interface{}`    |
 | Index     | `[`           | `:`       | `]`     | `a[1:2]` or `[]int{}`             |
 | Block     | `{`           | `\n`      | `}`     | `func a() { ... }`                |
+| Case      | `case`        | `,`       |         | `switch a {case "b", "c": ... }`  |
 | CaseBlock | `:`           | `\n`      |         | `switch i {case 1: ... }`         |
 | Return    | `return`      | `,`       |         | `return a, b`                     |
 | If        | `if`          | `;`       |         | `if a, ok := b(); ok { ... }`     |
@@ -279,7 +280,36 @@ fmt.Printf("%#v", c)
 
 ### Block
 
-### CaseBlock
+### Switch, Case, CaseBlock
+`Switch`, `Case` and `CaseBlock` can be used to build `switch` statements:
+
+```go
+c := Switch(Id("a")).Block(
+    Case(Lit("1")).CaseBlock(
+        Return(Lit(1)),
+    ),
+    Case(Lit("2"), Lit("3")).CaseBlock(
+        Return(Lit(2)),
+    ),
+    Case(Lit("4")).CaseBlock(
+        Fallthrough(),
+    ),
+    Default().CaseBlock(
+        Return(Lit(3)),
+    ),
+)
+fmt.Printf("%#v", c)
+// Output: switch a {
+// case "1":
+// 	return 1
+// case "2", "3":
+// 	return 2
+// case "4":
+// 	fallthrough
+// default:
+// 	return 3
+// }
+```
 
 ### Assert
 
@@ -290,8 +320,6 @@ fmt.Printf("%#v", c)
 ### If
 
 ### For
-
-### Switch
 
 ### Interface
 `Interface` renders the interface keyword followed by a statement block:
@@ -312,31 +340,16 @@ fmt.Printf("%#v", c)
 // }
 ```
 
-### Alternate FooFunc methods
+### Alternate BlockFunc methods
 
 # Add
-`Add` adds the provided Code to the Statement. When the `Add` function ic 
-called, a new Statement is created. This is useful for cloning the contents of 
-an existing Statement. See "Pointers" below.
+`Add` adds the provided Code to the Statement.
  
 ```go
 ptr := Op("*")
 c := Id("a").Op("=").Add(ptr).Id("b")
 fmt.Printf("%#v", c)
 // Output: a = *b
-```
-
-```go
-a := Id("a")
-c := Block(
-    Add(a).Call(),
-    Add(a).Call(),
-)
-fmt.Printf("%#v", c)
-// Output: {
-// 	a()
-// 	a()
-// }
 ```
 
 # Do
@@ -460,13 +473,13 @@ fmt.Printf("%#v", c)
 // }
 ```
 
-Here we can prevent the double call by using `Add` to create a new `*Statement`:  
+Here we can prevent the double call by using `Clone` to create a new `*Statement`:  
 
 ```go
 a := Id("a")
 c := Block(
-    Add(a).Call(),
-    Add(a).Call(),
+    a.Clone().Call(),
+    a.Clone().Call(),
 )
 fmt.Printf("%#v", c)
 // Output: {

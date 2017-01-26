@@ -40,7 +40,7 @@ func ExampleGotchaPointerFixed() {
 	// }
 }
 
-func ExampleGotchaAdd() {
+func ExampleGotchaClone() {
 	a := Id("a")
 	c := Block(
 		a.Call(),
@@ -53,11 +53,11 @@ func ExampleGotchaAdd() {
 	// }
 }
 
-func ExampleGotchaAddFixed() {
+func ExampleGotchaCloneFixed() {
 	a := Id("a")
 	c := Block(
-		Add(a).Call(),
-		Add(a).Call(),
+		a.Clone().Call(),
+		a.Clone().Call(),
 	)
 	fmt.Printf("%#v", c)
 	// Output: {
@@ -81,20 +81,39 @@ func ExampleFile_Render() {
 	// func main() {}
 }
 
-func ExampleNil() {
-	var s *Statement
-	c := Func().Id("a").Params(
-		s,
-	)
-	fmt.Printf("%#v", c)
-	// Output: func a()
-}
-
 /*
 var Keywords = []string{"break", "default", "func", "interface", "select", "case", "defer", "go", "map", "struct", "chan", "else", "goto", "package", "switch", "const", "fallthrough", "if", "range", "type", "continue", "import", "var"}
 
  "return" and "for" are special cases
 */
+
+func ExampleSwitch() {
+	c := Switch(Id("a")).Block(
+		Case(Lit("1")).CaseBlock(
+			Return(Lit(1)),
+		),
+		Case(Lit("2"), Lit("3")).CaseBlock(
+			Return(Lit(2)),
+		),
+		Case(Lit("4")).CaseBlock(
+			Fallthrough(),
+		),
+		Default().CaseBlock(
+			Return(Lit(3)),
+		),
+	)
+	fmt.Printf("%#v", c)
+	// Output: switch a {
+	// case "1":
+	// 	return 1
+	// case "2", "3":
+	// 	return 2
+	// case "4":
+	// 	fallthrough
+	// default:
+	// 	return 3
+	// }
+}
 
 func ExampleAlias() {
 	f := NewFile("a")

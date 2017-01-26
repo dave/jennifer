@@ -9,6 +9,18 @@ import (
 	. "github.com/davelondon/jennifer/jen"
 )
 
+func TestNil(t *testing.T) {
+	var s *Statement
+	c := Func().Id("a").Params(
+		s,
+	)
+	got := fmt.Sprintf("%#v", c)
+	expect := "func a()"
+	if got != expect {
+		t.Fatalf("Got: %s, expect: %s", got, expect)
+	}
+}
+
 var cases = []tc{
 	{
 		desc:   `empty block`,

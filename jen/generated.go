@@ -724,6 +724,54 @@ func (s *Statement) InterfaceFunc(f func(*Group)) *Statement {
 	return s
 }
 
+// Case inserts the case keyword, followed by a comma separated list
+func Case(c ...Code) *Statement {
+	return newStatement().Case(c...)
+}
+
+// Case inserts the case keyword, followed by a comma separated list
+func (g *Group) Case(c ...Code) *Statement {
+	s := Case(c...)
+	g.items = append(g.items, s)
+	return s
+}
+
+// Case inserts the case keyword, followed by a comma separated list
+func (s *Statement) Case(c ...Code) *Statement {
+	g := &Group{
+		close:     "",
+		items:     c,
+		open:      "case ",
+		separator: ",",
+	}
+	*s = append(*s, g)
+	return s
+}
+
+// Case inserts the case keyword, followed by a comma separated list
+func CaseFunc(f func(*Group)) *Statement {
+	return newStatement().CaseFunc(f)
+}
+
+// Case inserts the case keyword, followed by a comma separated list
+func (g *Group) CaseFunc(f func(*Group)) *Statement {
+	s := CaseFunc(f)
+	g.items = append(g.items, s)
+	return s
+}
+
+// Case inserts the case keyword, followed by a comma separated list
+func (s *Statement) CaseFunc(f func(*Group)) *Statement {
+	g := &Group{
+		close:     "",
+		open:      "case ",
+		separator: ",",
+	}
+	f(g)
+	*s = append(*s, g)
+	return s
+}
+
 // Bool inserts the bool identifier
 func Bool() *Statement {
 	return newStatement().Bool()
@@ -1356,28 +1404,6 @@ func (g *Group) Select() *Statement {
 func (s *Statement) Select() *Statement {
 	t := token{
 		content: "select",
-		typ:     keywordToken,
-	}
-	*s = append(*s, t)
-	return s
-}
-
-// Case inserts the case keyword
-func Case() *Statement {
-	return newStatement().Case()
-}
-
-// Case inserts the case keyword
-func (g *Group) Case() *Statement {
-	s := Case()
-	g.items = append(g.items, s)
-	return s
-}
-
-// Case inserts the case keyword
-func (s *Statement) Case() *Statement {
-	t := token{
-		content: "case",
 		typ:     keywordToken,
 	}
 	*s = append(*s, t)

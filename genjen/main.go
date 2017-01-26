@@ -18,9 +18,9 @@ func main() {
 	// method.
 	redirect := func(
 		name string,
-		comment Code,
-		params []Code,
-		call []Code,
+		comment *Statement,
+		param *Statement,
+		call *Statement,
 	) {
 		/*
 			// {comment}
@@ -29,12 +29,8 @@ func main() {
 			}
 		*/
 		file.Add(comment)
-		file.Func().Id(name).Params(
-			params...,
-		).Op("*").Id("Statement").Block(
-			Return().Id("newStatement").Call().Op(".").Id(name).Call(
-				call...,
-			),
+		file.Func().Id(name).Params(param).Op("*").Id("Statement").Block(
+			Return().Id("newStatement").Call().Op(".").Id(name).Call(call),
 		)
 		/*
 			// {comment}
@@ -47,10 +43,8 @@ func main() {
 		file.Add(comment)
 		file.Func().Params(
 			Id("g").Op("*").Id("Group"),
-		).Id(name).Params(
-			params...,
-		).Op("*").Id("Statement").Block(
-			Id("s").Op(":=").Id(name).Params(call...),
+		).Id(name).Params(param).Op("*").Id("Statement").Block(
+			Id("s").Op(":=").Id(name).Params(call),
 			Id("g", "items").Op("=").Append(Id("g", "items"), Id("s")),
 			Return(Id("s")),
 		)
@@ -61,20 +55,20 @@ func main() {
 		if b.Name == "" {
 			continue
 		}
-		comment := *Commentf("%s inserts %s", b.Name, b.Desc)
+		comment := Commentf("%s inserts %s", b.Name, b.Desc)
 
 		var variadic Code
 		if b.List {
 			variadic = Op("...")
 		}
-		params := []Code{*Id("c").Add(variadic).Id("Code")}
-		call := []Code{*Id("c").Add(variadic)}
+		param := Id("c").Add(variadic).Id("Code")
+		call := Id("c").Add(variadic)
 
 		redirect(
 			b.Name,
-			comment,
-			params,
-			call,
+			comment.Clone(),
+			param.Clone(),
+			call.Clone(),
 		)
 
 		/*
@@ -89,11 +83,11 @@ func main() {
 				return s
 			}
 		*/
-		file.Add(comment)
+		file.Add(comment.Clone())
 		file.Func().Params(
 			Id("s").Op("*").Id("Statement"),
 		).Id(b.Name).Params(
-			params...,
+			param.Clone(),
 		).Op("*").Id("Statement").Block(
 			Id("g").Op(":=").Op("&").Id("Group").Dict(map[Code]Code{
 				Id("items"): Do(func(s *Statement) {
@@ -111,15 +105,15 @@ func main() {
 			Return(Id("s")),
 		)
 
-		funcParams := []Code{*Id("f").Func().Params(Op("*").Id("Group"))}
-		funcCall := []Code{*Id("f")}
+		funcParam := Id("f").Func().Params(Op("*").Id("Group"))
+		funcCall := Id("f")
 
 		funcName := b.Name + "Func"
 		redirect(
 			funcName,
-			comment,
-			funcParams,
-			funcCall,
+			comment.Clone(),
+			funcParam.Clone(),
+			funcCall.Clone(),
 		)
 
 		/*
@@ -134,11 +128,11 @@ func main() {
 				return s
 			}
 		*/
-		file.Add(comment)
+		file.Add(comment.Clone())
 		file.Func().Params(
 			Id("s").Op("*").Id("Statement"),
 		).Id(funcName).Params(
-			funcParams...,
+			funcParam.Clone(),
 		).Op("*").Id("Statement").Block(
 			Id("g").Op(":=").Op("&").Id("Group").Dict(map[Code]Code{
 				Id("open"):      Lit(b.Open),
@@ -177,7 +171,7 @@ func main() {
 
 	for _, t := range tokens {
 		t := t // used in closures
-		comment := *Commentf(
+		comment := Commentf(
 			"%s inserts the %s %s",
 			t.cap,
 			t.name,
@@ -185,7 +179,7 @@ func main() {
 		)
 		redirect(
 			t.cap,
-			comment,
+			comment.Clone(),
 			nil,
 			nil,
 		)
@@ -200,7 +194,7 @@ func main() {
 				return s
 			}
 		*/
-		file.Add(comment)
+		file.Add(comment.Clone())
 		file.Func().Params(
 			Id("s").Op("*").Id("Statement"),
 		).Id(t.cap).Params().Op("*").Id("Statement").Block(
@@ -216,19 +210,19 @@ func main() {
 	for _, f := range Functions {
 		f := f // used in closure
 		capName := strings.ToUpper(f[:1]) + f[1:]
-		comment := *Commentf(
+		comment := Commentf(
 			"%s inserts the built in function %s",
 			capName,
 			f,
 		)
-		params := []Code{*Id("c").Op("...").Id("Code")}
-		call := []Code{*Id("c").Op("...")}
+		param := Id("c").Op("...").Id("Code")
+		call := Id("c").Op("...")
 
 		redirect(
 			capName,
-			comment,
-			params,
-			call,
+			comment.Clone(),
+			param.Clone(),
+			call.Clone(),
 		)
 
 		/*
@@ -236,11 +230,11 @@ func main() {
 				return s.Id("{Name}").Call(c...)
 			}
 		*/
-		file.Add(comment)
+		file.Add(comment.Clone())
 		file.Func().Params(
 			Id("s").Op("*").Id("Statement"),
 		).Id(capName).Params(
-			params...,
+			param.Clone(),
 		).Op("*").Id("Statement").Block(
 			Return(
 				Id("s", "Id").Call(

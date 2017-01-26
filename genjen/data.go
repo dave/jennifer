@@ -1,8 +1,8 @@
 package main
 
-var Keywords = []string{"break", "default", "func", "select", "case", "defer", "go", "struct", "chan", "else", "goto", "const", "fallthrough", "range", "type", "continue", "var"}
+var Keywords = []string{"break", "default", "func", "select", "defer", "go", "struct", "chan", "else", "goto", "const", "fallthrough", "range", "type", "continue", "var"}
 
-// "return", "for", "interface" and "if" are special cases
+// "return", "for", "interface", "case" and "if" are special cases
 // "import" and "package" are handled automatically, so not needed.
 // "map" is treated as a block
 
@@ -145,5 +145,13 @@ var Blocks = []struct {
 		Open:      "interface{",
 		Close:     "}",
 		Separator: "\n",
+	},
+	{
+		Name:      "Case",
+		Desc:      "the case keyword, followed by a comma separated list",
+		List:      true,
+		Open:      "case ",
+		Close:     "",
+		Separator: ",",
 	},
 }
