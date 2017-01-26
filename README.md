@@ -358,12 +358,43 @@ fmt.Printf("%#v", c)
 // }
 ```
 
-
 ### Return
+`Return` renders the `return` keyword followed by a comma separated list of 
+Code items:
+
+```go
+c := Return(Id("a"), Id("b"))
+fmt.Printf("%#v", c)
+// Output: return a, b
+```
 
 ### If
+`If` renders the `if` keyword followed by a semicolon separated list of Code 
+items:
+
+```go
+c := If(Err().Op(":=").Id("a").Call(), Err().Op("!=").Nil()).Block(
+    Return(Err()),
+)
+fmt.Printf("%#v", c)
+// Output: if err := a(); err != nil {
+//  return err
+// }
+```
 
 ### For
+`For` renders the `for` keyword followed by a semicolon separated list of Code 
+items:
+
+```go
+c := For(Id("i").Op(":=").Lit(0), Id("i").Op("<").Lit(10), Id("i").Op("++")).Block(
+    Id("fmt.Println").Call(Id("i")),
+)
+fmt.Printf("%#v", c)
+// Output: for i := 0; i < 10; i++ {
+//  fmt.Println(i)
+// }
+```
 
 ### Interface
 `Interface` renders the interface keyword followed by a statement block:
@@ -473,15 +504,122 @@ fmt.Printf("%#v\n%#v", f("a", true), f("b", false))
 
 TODO: This probably isn't good enough for all cases. 
 
+```go
+c := Id("a").Op(":=").Lit("a")
+fmt.Printf("%#v", c)
+// Output: a := "a"
+```
+
+```go
+c := Id("a").Op(":=").Lit(1.5)
+fmt.Printf("%#v", c)
+// Output: a := 1.5
+```
+
 # Dict, DictFunc
+`Dict` takes a `map[Code]Code` and renders a list of colon separated key value 
+pairs, enclosed in curly braces. Use for map literals:
+
+```go
+c := Id("a").Op(":=").Map(String()).String().Dict(map[Code]Code{
+    Lit("a"): Lit("b"),
+    Lit("c"): Lit("b"),
+})
+fmt.Printf("%#v", c)
+// Output: a := map[string]string{
+// 	"a": "b",
+// 	"c": "d",
+// }
+```
+
+`DictFunc` does the same by executing the provided `func(map[Code]Code)`:
+
+```go
+c := Id("a").Op(":=").Map(String()).String().DictFunc(func(m map[Code]Code) {
+    m[Lit("a")] = Lit("b")
+    m[Lit("c")] = Lit("d")
+})
+fmt.Printf("%#v", c)
+// Output: a := map[string]string{
+// 	"a": "b",
+// 	"c": "d",
+// }
+```
 
 # Tag
+`Tag` renders a struct tag:
+
+```go
+c := Type().Id("foo").Struct().Block(
+    Id("A").String().Tag(map[string]string{"json": "a"}),
+    Id("B").Int().Tag(map[string]string{"json": "b", "bar": "baz"}),
+)
+fmt.Printf("%#v", c)
+// Output: type foo struct {
+// 	A string `json:"a"`
+// 	B int    `json:"b" bar:"baz"`
+// }
+```
 
 # Null, Empty
+`Null` adds a null item. Null items render nothing and are not followed by a 
+separator in lists.
+`Empty` adds an empty item. Empty items render nuothing but are followed by a 
+separator in lists.
+
+```go
+c := Id("a").Op(":=").Id("b").Index(Null(), Lit(1))
+fmt.Printf("%#v", c)
+// Output: a := b[1]
+```
+
+```go
+c := Id("a").Op(":=").Id("b").Index(Empty(), Lit(1))
+fmt.Printf("%#v", c)
+// Output: a := b[:1]
+```
 
 # Line
+`Line` inserts a blank line.
 
 # Comment, Commentf
+`Comment` adds a comment. If the provided string contains a newline, the 
+comment is formatted in multiline style:
+
+```go
+c := Comment("a")
+fmt.Printf("%#v", c)
+// Output: // a
+```
+
+```go
+c := Comment("a\nb")
+fmt.Printf("%#v", c)
+// Output: /*
+// a
+// b
+// */
+```
+
+```go
+c := Id("a").Call().Comment("b")
+fmt.Printf("%#v", c)
+// Output: a() // b
+```
+
+`Commentf` accepts a format string and a list of parameters:
+
+```go
+c := Commentf("a %d", 1)
+fmt.Printf("%#v", c)
+// Output: // a 1
+```
+
+```go
+c := Id("a").Call().Commentf("b %d", 1)
+fmt.Printf("%#v", c)
+// Output: a() // b 1
+```
 
 # File
 
@@ -510,12 +648,77 @@ fmt.Printf("%#v", f)
 ```
 
 ### PackageComment
+`PackageComment` adds a comment to the very top of the file, above the 
+`package` keyword:
+
+```go
+f := NewFile("c")
+f.PackageComment("a")
+f.PackageComment("b")
+f.Func().Id("init").Params().Block()
+fmt.Printf("%#v", f)
+// Output: // a
+// // b
+// package c
+//
+// func init() {}
+```
 
 ### Anon
+`Anon` adds an anonymous import:
+
+```go
+f := NewFile("c")
+f.Anon("a")
+f.Func().Id("init").Params().Block()
+fmt.Printf("%#v", f)
+// Output:
+// package c
+//
+// import _ "a"
+//
+// func init() {}
+```
 
 ### PackagePrefix
+If you're worried about package aliases conflicting with local variable names, 
+you can set a prefix here:
+
+```go
+f := NewFile("c")
+f.PackagePrefix("pkg")
+f.Func().Id("main").Params().Block(
+    Id("fmt.Println").Call(),
+)
+fmt.Printf("%#v", f)
+// Output:
+// package c
+//
+// import pkg_fmt "fmt"
+//
+// func main() {
+// 	pkg_fmt.Println()
+// }
+```
 
 ### Save, Render
+`Save` renders the file and saves to the filename provided. `Render` renders 
+the file to the provided writer:
+ 
+```go
+f := NewFile("a")
+f.Func().Id("main").Params().Block()
+buf := &bytes.Buffer{}
+err := f.Render(buf)
+if err != nil {
+    fmt.Println(err.Error())
+} else {
+    fmt.Println(buf.String())
+}
+// Output: package a
+//
+// func main() {}
+```
 
 # Pointers
 Be careful when passing `*Statement` around. Consider the following example:

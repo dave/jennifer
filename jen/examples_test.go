@@ -70,7 +70,7 @@ func ExampleFile_Render() {
 	f := NewFile("a")
 	f.Func().Id("main").Params().Block()
 	buf := &bytes.Buffer{}
-	err := f.Render(buf) // ignore error in example
+	err := f.Render(buf)
 	if err != nil {
 		fmt.Println(err.Error())
 	} else {
@@ -213,6 +213,18 @@ func ExampleNull() {
 	).Block()
 	fmt.Printf("%#v", c)
 	// Output: func foo(s string, i int) {}
+}
+
+func ExampleNull2() {
+	c := Id("a").Op(":=").Id("b").Index(Lit(1), Null())
+	fmt.Printf("%#v", c)
+	// Output: a := b[1]
+}
+
+func ExampleEmpty2() {
+	c := Id("a").Op(":=").Id("b").Index(Lit(1), Empty())
+	fmt.Printf("%#v", c)
+	// Output: a := b[1:]
 }
 
 func ExampleComplex() {
@@ -564,4 +576,34 @@ func ExampleFile_PackageComment() {
 	// package c
 	//
 	// func init() {}
+}
+
+func ExampleFile_Anon() {
+	f := NewFile("c")
+	f.Anon("a")
+	f.Func().Id("init").Params().Block()
+	fmt.Printf("%#v", f)
+	// Output:
+	// package c
+	//
+	// import _ "a"
+	//
+	// func init() {}
+}
+
+func ExampleFile_PackagePrefix() {
+	f := NewFile("c")
+	f.PackagePrefix("pkg")
+	f.Func().Id("main").Params().Block(
+		Id("fmt.Println").Call(),
+	)
+	fmt.Printf("%#v", f)
+	// Output:
+	// package c
+	//
+	// import pkg_fmt "fmt"
+	//
+	// func main() {
+	// 	pkg_fmt.Println()
+	// }
 }
