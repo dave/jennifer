@@ -7,19 +7,17 @@ import (
 	"io"
 )
 
-type Statement struct {
-	items []Code
-}
+type Statement []Code
 
 func newStatement() *Statement {
 	return &Statement{}
 }
 
-func (s *Statement) isNull() bool {
+func (s Statement) isNull() bool {
 	if s == nil {
 		return true
 	}
-	for _, c := range s.items {
+	for _, c := range s {
 		if !c.isNull() {
 			return false
 		}
@@ -27,9 +25,9 @@ func (s *Statement) isNull() bool {
 	return true
 }
 
-func (s *Statement) render(f *File, w io.Writer) error {
+func (s Statement) render(f *File, w io.Writer) error {
 	first := true
-	for _, code := range s.items {
+	for _, code := range s {
 		if code == nil || code.isNull() {
 			// Null() token produces no output but also
 			// no separator. Empty() token products no
@@ -49,7 +47,7 @@ func (s *Statement) render(f *File, w io.Writer) error {
 	return nil
 }
 
-func (s *Statement) GoString() string {
+func (s Statement) GoString() string {
 	f := NewFile("")
 	buf := &bytes.Buffer{}
 	if err := s.render(f, buf); err != nil {

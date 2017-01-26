@@ -20,7 +20,7 @@ func (s *Statement) Comment(str string) *Statement {
 	c := comment{
 		comment: str,
 	}
-	s.items = append(s.items, c)
+	*s = append(*s, c)
 	return s
 }
 
@@ -38,7 +38,7 @@ func (s *Statement) Commentf(format string, a ...interface{}) *Statement {
 	c := comment{
 		comment: fmt.Sprintf(format, a...),
 	}
-	s.items = append(s.items, c)
+	*s = append(*s, c)
 	return s
 }
 

@@ -21,7 +21,7 @@ func (s *Statement) Lit(v interface{}) *Statement {
 		typ:     literalToken,
 		content: v,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -40,7 +40,7 @@ func (s *Statement) LitFunc(f func() interface{}) *Statement {
 		typ:     literalToken,
 		content: f(),
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -61,7 +61,7 @@ func (s *Statement) Dict(m map[Code]Code) *Statement {
 	d := dict{
 		m: m,
 	}
-	s.items = append(s.items, d)
+	*s = append(*s, d)
 	return s
 }
 
@@ -81,7 +81,7 @@ func (s *Statement) DictFunc(f func(map[Code]Code)) *Statement {
 	ml := dict{
 		m: m,
 	}
-	s.items = append(s.items, ml)
+	*s = append(*s, ml)
 	return s
 }
 

@@ -82,7 +82,7 @@ func (s *Statement) Null() *Statement {
 	t := token{
 		typ: nullToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -102,13 +102,13 @@ func (g *Group) Empty() *Statement {
 
 // Empty token produces no output but is followed by a
 // separator in a list.
-func (g *Statement) Empty() *Statement {
+func (s *Statement) Empty() *Statement {
 	t := token{
 		typ:     operatorToken,
 		content: "",
 	}
-	g.items = append(g.items, t)
-	return g
+	*s = append(*s, t)
+	return s
 }
 
 func Op(op string) *Statement {
@@ -126,7 +126,7 @@ func (s *Statement) Op(op string) *Statement {
 		typ:     operatorToken,
 		content: op,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -153,13 +153,13 @@ func (s *Statement) Id(items ...interface{}) *Statement {
 				typ:     identifierToken,
 				content: item,
 			}
-			s.items = append(s.items, t)
+			*s = append(*s, t)
 		case Code:
 			if item.isNull() {
 				break
 			}
 			first = false
-			s.items = append(s.items, item)
+			*s = append(*s, item)
 		}
 	}
 	return s
@@ -180,7 +180,7 @@ func (s *Statement) Line() *Statement {
 		typ:     layoutToken,
 		content: "\n",
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -199,7 +199,7 @@ func (s *Statement) Dot() *Statement {
 		typ:     delimiterToken,
 		content: ".",
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -218,6 +218,6 @@ func (s *Statement) Comma() *Statement {
 		typ:     delimiterToken,
 		content: ",",
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }

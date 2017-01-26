@@ -6,6 +6,38 @@ import (
 	. "github.com/davelondon/jennifer/jen"
 )
 
+func ExampleGotcha() {
+	caller := func(s *Statement) *Statement {
+		return s.Call()
+	}
+	a := Id("a")
+	c := Block(
+		caller(a),
+		caller(a),
+	)
+	fmt.Printf("%#v", c)
+	// Output: {
+	// 	a()()
+	// 	a()()
+	// }
+}
+
+func ExampleGotchaFixed() {
+	caller := func(s Statement) *Statement {
+		return s.Call()
+	}
+	a := *Id("a")
+	c := Block(
+		caller(a),
+		caller(a),
+	)
+	fmt.Printf("%#v", c)
+	// Output: {
+	// 	a()
+	// 	a()
+	// }
+}
+
 /*
 var Keywords = []string{"break", "default", "func", "interface", "select", "case", "defer", "go", "map", "struct", "chan", "else", "goto", "package", "switch", "const", "fallthrough", "if", "range", "type", "continue", "import", "var"}
 

@@ -14,6 +14,6 @@ func (g *Group) Add(code ...Code) *Statement {
 
 // Add appends the provided code to the statement.
 func (s *Statement) Add(code ...Code) *Statement {
-	s.items = append(s.items, code...)
+	*s = append(*s, code...)
 	return s
 }

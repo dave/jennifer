@@ -61,18 +61,20 @@ func main() {
 		if b.Name == "" {
 			continue
 		}
-		comment := Commentf("%s inserts %s", b.Name, b.Desc)
+		comment := *Commentf("%s inserts %s", b.Name, b.Desc)
 
 		var variadic Code
 		if b.List {
 			variadic = Op("...")
 		}
+		params := []Code{*Id("c").Add(variadic).Id("Code")}
+		call := []Code{*Id("c").Add(variadic)}
 
 		redirect(
 			b.Name,
 			comment,
-			[]Code{Id("c").Add(variadic).Id("Code")},
-			[]Code{Id("c").Add(variadic)},
+			params,
+			call,
 		)
 
 		/*
@@ -81,7 +83,7 @@ func main() {
 					syntax: {Syntax},
 					items:  []Code{c}|c,
 				}
-				s.items = append(s.items, g)
+				*s = append(*s, g)
 				return s
 			}
 		*/
@@ -89,7 +91,7 @@ func main() {
 		file.Func().Params(
 			Id("s").Op("*").Id("Statement"),
 		).Id(b.Name).Params(
-			Id("c").Add(variadic).Id("Code"),
+			params...,
 		).Op("*").Id("Statement").Block(
 			Id("g").Op(":=").Op("&").Id("Group").Dict(map[Code]Code{
 				Id("syntax"): Id(b.Syntax),
@@ -101,16 +103,19 @@ func main() {
 					}
 				}),
 			}),
-			Id("s", "items").Op("=").Append(Id("s", "items"), Id("g")),
+			Op("*").Id("s").Op("=").Append(Op("*").Id("s"), Id("g")),
 			Return(Id("s")),
 		)
 
-		nameFunc := b.Name + "Func"
+		funcParams := []Code{*Id("f").Func().Params(Op("*").Id("Group"))}
+		funcCall := []Code{*Id("f")}
+
+		funcName := b.Name + "Func"
 		redirect(
-			nameFunc,
+			funcName,
 			comment,
-			[]Code{Id("f").Func().Params(Op("*").Id("Group"))},
-			[]Code{Id("f")},
+			funcParams,
+			funcCall,
 		)
 
 		/*
@@ -119,21 +124,21 @@ func main() {
 					syntax: {Syntax},
 				}
 				f(g)
-				s.items = append(s.items, g)
+				*s = append(*s, g)
 				return s
 			}
 		*/
 		file.Add(comment)
 		file.Func().Params(
 			Id("s").Op("*").Id("Statement"),
-		).Id(nameFunc).Params(
-			Id("f").Func().Params(Op("*").Id("Group")),
+		).Id(funcName).Params(
+			funcParams...,
 		).Op("*").Id("Statement").Block(
 			Id("g").Op(":=").Op("&").Id("Group").Dict(map[Code]Code{
 				Id("syntax"): Id(b.Syntax),
 			}),
 			Id("f").Call(Id("g")),
-			Id("s", "items").Op("=").Append(Id("s", "items"), Id("g")),
+			Op("*").Id("s").Op("=").Append(Op("*").Id("s"), Id("g")),
 			Return(Id("s")),
 		)
 	}
@@ -164,7 +169,7 @@ func main() {
 
 	for _, t := range tokens {
 		t := t // used in closures
-		comment := Commentf(
+		comment := *Commentf(
 			"%s inserts the %s %s",
 			t.cap,
 			t.name,
@@ -183,7 +188,7 @@ func main() {
 					typ:     {identifierToken|keywordToken},
 					content: "{Name}",
 				}
-				s.items = append(s.items, t)
+				*s = append(*s, t)
 				return s
 			}
 		*/
@@ -195,7 +200,7 @@ func main() {
 				Id("typ"):     Id(t.tokenType),
 				Id("content"): Lit(t.name),
 			}),
-			Id("s", "items").Op("=").Append(Id("s", "items"), Id("t")),
+			Op("*").Id("s").Op("=").Append(Op("*").Id("s"), Id("t")),
 			Return(Id("s")),
 		)
 	}
@@ -203,17 +208,19 @@ func main() {
 	for _, f := range Functions {
 		f := f // used in closure
 		capName := strings.ToUpper(f[:1]) + f[1:]
-		comment := Commentf(
+		comment := *Commentf(
 			"%s inserts the built in function %s",
 			capName,
 			f,
 		)
+		params := []Code{*Id("c").Op("...").Id("Code")}
+		call := []Code{*Id("c").Op("...")}
 
 		redirect(
 			capName,
 			comment,
-			[]Code{Id("c").Op("...").Id("Code")},
-			[]Code{Id("c").Op("...")},
+			params,
+			call,
 		)
 
 		/*
@@ -225,7 +232,7 @@ func main() {
 		file.Func().Params(
 			Id("s").Op("*").Id("Statement"),
 		).Id(capName).Params(
-			Id("c").Op("...").Id("Code"),
+			params...,
 		).Op("*").Id("Statement").Block(
 			Return(
 				Id("s", "Id").Call(

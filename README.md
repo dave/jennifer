@@ -193,3 +193,40 @@ fmt.Printf("%#v", c)
 // Output: []string{"a", "b"}
 ```
 
+# Pointers
+Be careful when passing *Statement around. Consider the following example:
+
+```go
+caller := func(s *Statement) *Statement {
+    return s.Call()
+}
+a := Id("a")
+c := Block(
+    caller(a),
+    caller(a),
+)
+fmt.Printf("%#v", c)
+// Output: {
+// 	a()()
+// 	a()()
+// }
+```
+
+`Id("a")` returns a `*Statement`, which the `Call()` method appends to twice. To
+avoid this, pass `Statement` instead of `*Statement`:
+
+```go
+caller := func(s Statement) *Statement {
+    return s.Call()
+}
+a := *Id("a")
+c := Block(
+    caller(a),
+    caller(a),
+)
+fmt.Printf("%#v", c)
+// Output: {
+// 	a()
+// 	a()
+// }
+```

@@ -23,7 +23,7 @@ func (s *Statement) Tag(items map[string]string) *Statement {
 	c := tag{
 		items: items,
 	}
-	s.items = append(s.items, c)
+	*s = append(*s, c)
 	return s
 }
 

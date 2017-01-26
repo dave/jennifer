@@ -22,7 +22,7 @@ func (s *Statement) Parens(c Code) *Statement {
 		items:  []Code{c},
 		syntax: parensSyntax,
 	}
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -44,7 +44,7 @@ func (s *Statement) ParensFunc(f func(*Group)) *Statement {
 		syntax: parensSyntax,
 	}
 	f(g)
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -66,7 +66,7 @@ func (s *Statement) List(c ...Code) *Statement {
 		items:  c,
 		syntax: listSyntax,
 	}
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -88,7 +88,7 @@ func (s *Statement) ListFunc(f func(*Group)) *Statement {
 		syntax: listSyntax,
 	}
 	f(g)
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -110,7 +110,7 @@ func (s *Statement) Values(c ...Code) *Statement {
 		items:  c,
 		syntax: valuesSyntax,
 	}
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -132,7 +132,7 @@ func (s *Statement) ValuesFunc(f func(*Group)) *Statement {
 		syntax: valuesSyntax,
 	}
 	f(g)
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -154,7 +154,7 @@ func (s *Statement) Slice(c ...Code) *Statement {
 		items:  c,
 		syntax: valuesSyntax,
 	}
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -176,7 +176,7 @@ func (s *Statement) SliceFunc(f func(*Group)) *Statement {
 		syntax: valuesSyntax,
 	}
 	f(g)
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -198,7 +198,7 @@ func (s *Statement) Index(c ...Code) *Statement {
 		items:  c,
 		syntax: indexSyntax,
 	}
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -220,7 +220,7 @@ func (s *Statement) IndexFunc(f func(*Group)) *Statement {
 		syntax: indexSyntax,
 	}
 	f(g)
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -242,7 +242,7 @@ func (s *Statement) Block(c ...Code) *Statement {
 		items:  c,
 		syntax: blockSyntax,
 	}
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -264,7 +264,7 @@ func (s *Statement) BlockFunc(f func(*Group)) *Statement {
 		syntax: blockSyntax,
 	}
 	f(g)
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -286,7 +286,7 @@ func (s *Statement) Call(c ...Code) *Statement {
 		items:  c,
 		syntax: callSyntax,
 	}
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -308,7 +308,7 @@ func (s *Statement) CallFunc(f func(*Group)) *Statement {
 		syntax: callSyntax,
 	}
 	f(g)
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -330,7 +330,7 @@ func (s *Statement) Params(c ...Code) *Statement {
 		items:  c,
 		syntax: paramsSyntax,
 	}
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -352,7 +352,7 @@ func (s *Statement) ParamsFunc(f func(*Group)) *Statement {
 		syntax: paramsSyntax,
 	}
 	f(g)
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -374,7 +374,7 @@ func (s *Statement) Decls(c ...Code) *Statement {
 		items:  c,
 		syntax: declsSyntax,
 	}
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -396,7 +396,7 @@ func (s *Statement) DeclsFunc(f func(*Group)) *Statement {
 		syntax: declsSyntax,
 	}
 	f(g)
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -418,7 +418,7 @@ func (s *Statement) CaseBlock(c ...Code) *Statement {
 		items:  c,
 		syntax: caseSyntax,
 	}
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -440,7 +440,7 @@ func (s *Statement) CaseBlockFunc(f func(*Group)) *Statement {
 		syntax: caseSyntax,
 	}
 	f(g)
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -462,7 +462,7 @@ func (s *Statement) Assert(c Code) *Statement {
 		items:  []Code{c},
 		syntax: assertSyntax,
 	}
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -484,7 +484,7 @@ func (s *Statement) AssertFunc(f func(*Group)) *Statement {
 		syntax: assertSyntax,
 	}
 	f(g)
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -506,7 +506,7 @@ func (s *Statement) Map(c Code) *Statement {
 		items:  []Code{c},
 		syntax: mapSyntax,
 	}
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -528,7 +528,7 @@ func (s *Statement) MapFunc(f func(*Group)) *Statement {
 		syntax: mapSyntax,
 	}
 	f(g)
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -550,7 +550,7 @@ func (s *Statement) If(c ...Code) *Statement {
 		items:  c,
 		syntax: ifSyntax,
 	}
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -572,7 +572,7 @@ func (s *Statement) IfFunc(f func(*Group)) *Statement {
 		syntax: ifSyntax,
 	}
 	f(g)
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -594,7 +594,7 @@ func (s *Statement) Return(c ...Code) *Statement {
 		items:  c,
 		syntax: returnSyntax,
 	}
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -616,7 +616,7 @@ func (s *Statement) ReturnFunc(f func(*Group)) *Statement {
 		syntax: returnSyntax,
 	}
 	f(g)
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -638,7 +638,7 @@ func (s *Statement) For(c ...Code) *Statement {
 		items:  c,
 		syntax: forSyntax,
 	}
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -660,7 +660,7 @@ func (s *Statement) ForFunc(f func(*Group)) *Statement {
 		syntax: forSyntax,
 	}
 	f(g)
-	s.items = append(s.items, g)
+	*s = append(*s, g)
 	return s
 }
 
@@ -682,7 +682,7 @@ func (s *Statement) Bool() *Statement {
 		content: "bool",
 		typ:     identifierToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -704,7 +704,7 @@ func (s *Statement) Byte() *Statement {
 		content: "byte",
 		typ:     identifierToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -726,7 +726,7 @@ func (s *Statement) Complex64() *Statement {
 		content: "complex64",
 		typ:     identifierToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -748,7 +748,7 @@ func (s *Statement) Complex128() *Statement {
 		content: "complex128",
 		typ:     identifierToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -770,7 +770,7 @@ func (s *Statement) Error() *Statement {
 		content: "error",
 		typ:     identifierToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -792,7 +792,7 @@ func (s *Statement) Float32() *Statement {
 		content: "float32",
 		typ:     identifierToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -814,7 +814,7 @@ func (s *Statement) Float64() *Statement {
 		content: "float64",
 		typ:     identifierToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -836,7 +836,7 @@ func (s *Statement) Int() *Statement {
 		content: "int",
 		typ:     identifierToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -858,7 +858,7 @@ func (s *Statement) Int8() *Statement {
 		content: "int8",
 		typ:     identifierToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -880,7 +880,7 @@ func (s *Statement) Int16() *Statement {
 		content: "int16",
 		typ:     identifierToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -902,7 +902,7 @@ func (s *Statement) Int32() *Statement {
 		content: "int32",
 		typ:     identifierToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -924,7 +924,7 @@ func (s *Statement) Int64() *Statement {
 		content: "int64",
 		typ:     identifierToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -946,7 +946,7 @@ func (s *Statement) Rune() *Statement {
 		content: "rune",
 		typ:     identifierToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -968,7 +968,7 @@ func (s *Statement) String() *Statement {
 		content: "string",
 		typ:     identifierToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -990,7 +990,7 @@ func (s *Statement) Uint() *Statement {
 		content: "uint",
 		typ:     identifierToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1012,7 +1012,7 @@ func (s *Statement) Uint8() *Statement {
 		content: "uint8",
 		typ:     identifierToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1034,7 +1034,7 @@ func (s *Statement) Uint16() *Statement {
 		content: "uint16",
 		typ:     identifierToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1056,7 +1056,7 @@ func (s *Statement) Uint32() *Statement {
 		content: "uint32",
 		typ:     identifierToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1078,7 +1078,7 @@ func (s *Statement) Uint64() *Statement {
 		content: "uint64",
 		typ:     identifierToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1100,7 +1100,7 @@ func (s *Statement) Uintptr() *Statement {
 		content: "uintptr",
 		typ:     identifierToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1122,7 +1122,7 @@ func (s *Statement) True() *Statement {
 		content: "true",
 		typ:     identifierToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1144,7 +1144,7 @@ func (s *Statement) False() *Statement {
 		content: "false",
 		typ:     identifierToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1166,7 +1166,7 @@ func (s *Statement) Iota() *Statement {
 		content: "iota",
 		typ:     identifierToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1188,7 +1188,7 @@ func (s *Statement) Nil() *Statement {
 		content: "nil",
 		typ:     identifierToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1210,7 +1210,7 @@ func (s *Statement) Err() *Statement {
 		content: "err",
 		typ:     identifierToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1232,7 +1232,7 @@ func (s *Statement) Break() *Statement {
 		content: "break",
 		typ:     keywordToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1254,7 +1254,7 @@ func (s *Statement) Default() *Statement {
 		content: "default",
 		typ:     keywordToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1276,7 +1276,7 @@ func (s *Statement) Func() *Statement {
 		content: "func",
 		typ:     keywordToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1298,7 +1298,7 @@ func (s *Statement) Interface() *Statement {
 		content: "interface",
 		typ:     keywordToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1320,7 +1320,7 @@ func (s *Statement) Select() *Statement {
 		content: "select",
 		typ:     keywordToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1342,7 +1342,7 @@ func (s *Statement) Case() *Statement {
 		content: "case",
 		typ:     keywordToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1364,7 +1364,7 @@ func (s *Statement) Defer() *Statement {
 		content: "defer",
 		typ:     keywordToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1386,7 +1386,7 @@ func (s *Statement) Go() *Statement {
 		content: "go",
 		typ:     keywordToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1408,7 +1408,7 @@ func (s *Statement) Struct() *Statement {
 		content: "struct",
 		typ:     keywordToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1430,7 +1430,7 @@ func (s *Statement) Chan() *Statement {
 		content: "chan",
 		typ:     keywordToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1452,7 +1452,7 @@ func (s *Statement) Else() *Statement {
 		content: "else",
 		typ:     keywordToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1474,7 +1474,7 @@ func (s *Statement) Goto() *Statement {
 		content: "goto",
 		typ:     keywordToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1496,7 +1496,7 @@ func (s *Statement) Switch() *Statement {
 		content: "switch",
 		typ:     keywordToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1518,7 +1518,7 @@ func (s *Statement) Const() *Statement {
 		content: "const",
 		typ:     keywordToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1540,7 +1540,7 @@ func (s *Statement) Fallthrough() *Statement {
 		content: "fallthrough",
 		typ:     keywordToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1562,7 +1562,7 @@ func (s *Statement) Range() *Statement {
 		content: "range",
 		typ:     keywordToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1584,7 +1584,7 @@ func (s *Statement) Type() *Statement {
 		content: "type",
 		typ:     keywordToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1606,7 +1606,7 @@ func (s *Statement) Continue() *Statement {
 		content: "continue",
 		typ:     keywordToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
@@ -1628,7 +1628,7 @@ func (s *Statement) Var() *Statement {
 		content: "var",
 		typ:     keywordToken,
 	}
-	s.items = append(s.items, t)
+	*s = append(*s, t)
 	return s
 }
 
