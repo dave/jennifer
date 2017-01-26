@@ -77,12 +77,27 @@ func init() {
 
 # NewFile
 
-Creates a new file
+NewFile Creates a new file. NewFilePath creates a new file while specifying the 
+package path - the package name is inferred from the path. NewFilePathName 
+additionally specifies the package name.
+
+```go
+f := NewFilePathName("a.b/c", "main")
+f.Func().Id("main").Params().Block(
+    Id("a.b/c.Foo").Call(),
+)
+fmt.Printf("%#v", f)
+// Output: package main
+//
+// func main() {
+// 	Foo()
+// }
+```
 
 # Identifiers 
 
-Identifiers are simple methods with no parameters. They simply output the 
-identifier token the code stream:
+Identifiers are simple methods with no parameters. They render as the 
+identifier token:
 
 ```go
 c := Break()
@@ -90,17 +105,19 @@ fmt.Printf("%#v", c)
 // Output: break
 ```
 
-Keywords: "break", "default", "func", "interface", "select", "case", "defer", "go", "struct", "chan", "else", "goto", "switch", "const", "fallthrough", "range", "type", "continue", "var"
+Keywords: `Break`, `Default`, `Func`, `Interface`, `Select`, `Case`, `Defer`, `Go`, `Struct`, `Chan`, `Else`, `Goto`, `Switch`, `Const`, `Fallthrough`, `Range`, `Type`, `Continue`, `Var`
 
-Built-in types: "bool", "byte", "complex64", "complex128", "error", "float32", "float64", "int", "int8", "int16", "int32", "int64", "rune", "string", "uint", "uint8", "uint16", "uint32", "uint64", "uintptr"
+Built-in types: `Bool`, `Byte`, `Complex64`, `Complex128`, `Error`, `Float32`, `Float64`, `Int`, `Int8`, `Int16`, `Int32`, `Int64`, `Rune`, `String`, `Uint`, `Uint8`, `Uint16`, `Uint32`, `Uint64`, `Uintptr`
 
-Constants: "true", "false", "iota", "nil"
+Constants: `True`, `False`, `Iota`, `Nil`
 
-We also include Err() for the commonly used variable "err".
+Also included is `Err` for the commonly used `err` variable.
 
-Note: "map", "return", "for" and "if" are special cases, and treated as blocks
+Note: `Map`, `Return`, `For` and `If` are special cases, and treated as 
+blocks - see below.
 
-Note: "import" and "package" are always handled automatically, so not included
+Note: The `import` and `package` keywords are always rendered automatically, so 
+not included.
 
 # Built-in functions
 
@@ -114,7 +131,7 @@ fmt.Printf("%#v", c)
 // Output: append(foo, bar)
 ```
 
-Functions: "append", "cap", "close", "complex", "copy", "delete", "imag", "len", "make", "new", "panic", "print", "println", "real", "recover"
+Functions: `Append`, `Cap`, `Close`, `Complex`, `Copy`, `Delete`, `Imag`, `Len`, `Make`, `New`, `Panic`, `Print`, `Println`, `Real`, `Recover`
 
 # Blocks
 

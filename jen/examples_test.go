@@ -375,6 +375,19 @@ func ExampleNewFilePath() {
 	// }
 }
 
+func ExampleNewFilePathName() {
+	f := NewFilePathName("a.b/c", "main")
+	f.Func().Id("main").Params().Block(
+		Id("a.b/c.Foo").Call(),
+	)
+	fmt.Printf("%#v", f)
+	// Output: package main
+	//
+	// func main() {
+	// 	Foo()
+	// }
+}
+
 func ExampleFile_PackageComment() {
 	f := NewFile("c")
 	f.PackageComment("a")
