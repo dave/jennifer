@@ -219,8 +219,8 @@ seperated by a separator token.
 | Params    | `(`           | `,`       | `)`     | `func (a *A) Foo(i int) { ... }`  |
 | Values    | `{`           | `,`       | `}`     | `[]int{1, 2}` or `interface{}`    |
 | Index     | `[`           | `:`       | `]`     | `a[1:2]` or `[]int{}`             |
-| Block     | `{\n`         | `\n`      | `}`     | `func a() { ... }`                |
-| CaseBlock | `:\n`         | `\n`      |         | `switch i {case 1: ... }`         |
+| Block     | `{`           | `\n`      | `}`     | `func a() { ... }`                |
+| CaseBlock | `:`           | `\n`      |         | `switch i {case 1: ... }`         |
 | Return    | `return`      | `,`       |         | `return a, b`                     |
 | If        | `if`          | `;`       |         | `if a, ok := b(); ok { ... }`     |
 | For       | `for`         | `;`       |         | `for i := 0; i < 10; i++ { ... }` |

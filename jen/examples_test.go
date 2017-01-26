@@ -3,6 +3,8 @@ package jen_test
 import (
 	"fmt"
 
+	"bytes"
+
 	. "github.com/davelondon/jennifer/jen"
 )
 
@@ -62,6 +64,30 @@ func ExampleGotchaAddFixed() {
 	// 	a()
 	// 	a()
 	// }
+}
+
+func ExampleFile_Render() {
+	f := NewFile("a")
+	f.Func().Id("main").Params().Block()
+	buf := &bytes.Buffer{}
+	err := f.Render(buf) // ignore error in example
+	if err != nil {
+		fmt.Println(err.Error())
+	} else {
+		fmt.Println(buf.String())
+	}
+	// Output: package a
+	//
+	// func main() {}
+}
+
+func ExampleNil() {
+	var s *Statement
+	c := Func().Id("a").Params(
+		s,
+	)
+	fmt.Printf("%#v", c)
+	// Output: func a()
 }
 
 /*

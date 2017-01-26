@@ -13,11 +13,11 @@ func newStatement() *Statement {
 	return &Statement{}
 }
 
-func (s Statement) isNull(f *File) bool {
+func (s *Statement) isNull(f *File) bool {
 	if s == nil {
 		return true
 	}
-	for _, c := range s {
+	for _, c := range *s {
 		if !c.isNull(f) {
 			return false
 		}
@@ -25,9 +25,9 @@ func (s Statement) isNull(f *File) bool {
 	return true
 }
 
-func (s Statement) render(f *File, w io.Writer) error {
+func (s *Statement) render(f *File, w io.Writer) error {
 	first := true
-	for _, code := range s {
+	for _, code := range *s {
 		if code == nil || code.isNull(f) {
 			// Null() token produces no output but also
 			// no separator. Empty() token products no
@@ -47,7 +47,7 @@ func (s Statement) render(f *File, w io.Writer) error {
 	return nil
 }
 
-func (s Statement) GoString() string {
+func (s *Statement) GoString() string {
 	f := NewFile("")
 	buf := &bytes.Buffer{}
 	if err := s.render(f, buf); err != nil {
