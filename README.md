@@ -117,13 +117,14 @@ Functions: `Append`, `Cap`, `Close`, `Complex`, `Copy`, `Delete`, `Imag`, `Len`,
 # Blocks
 
 Blocks take either a single code item or a varidic list of code items. The 
-items are rendered between open and closing toekns. Multiple items are 
-seperated by a seperator token:
+items are rendered between open and closing tokens. Multiple items are 
+seperated by a seperator token.
+
+# Blocks accepting a list of items:
 
 | Block  | Seperator | Opening  | Closing |
 | ------ | --------- | -------- | ------- |
 | List   | `,`       |          |         |
-| Parens | n/a       | `(`      | `)`     |
 | Call   | `,`       | `(`      | `)`     |
 | Params | `,`       | `(`      | `)`     |
 | Decls  | `;`       | `(`      | `)`     |
@@ -132,11 +133,17 @@ seperated by a seperator token:
 | Index  | `:`       | `[`      | `]`     |
 | Block  | `\n`      | `{\n`    | `}`     |
 | Case   | `\n`      | `:\n`    |         |
-| Assert | n/a       | `.(`     | `)`     |
-| Map    | n/a       | `map[`   | `]`     |
 | If     | `;`       | `if`     |         |
 | Return | `,`       | `return` |         |
 | For    | `;`       | `for`    |         |
+
+# Blocks accepting a single item:
+
+| Block  | Opening  | Closing |
+| ------ | -------- | ------- |
+| Parens | `(`      | `)`     |
+| Assert | `.(`     | `)`     |
+| Map    | `map[`   | `]`     |
 
 ### List
 `List` renders a comma seperated list with no open or closing tokens. Use for 
