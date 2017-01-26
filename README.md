@@ -127,6 +127,22 @@ fmt.Printf("%#v", c)
 // Output: c.Foo.Bar.Baz
 ```
 
+More complex chains can be formed by using Code items instead of strings:
+
+```go
+c := Id("a.b/c.Foo", Id("Bar").Call(), "Baz")
+fmt.Printf("%#v", c)
+// Output: c.Foo.Bar().Baz
+```
+
+More over the package import can be gained by using the `Alias` method to 
+specify the remote package:
+ 
+```go
+c := Id(Alias("a.b/c"), Id("Foo").Call(), "Bar")
+fmt.Printf("%#v", c)
+// Output: c.Foo().Bar
+```
 
 
 

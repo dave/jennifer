@@ -91,6 +91,19 @@ func ExampleAlias2() {
 	// Output: c.Foo().Bar
 }
 
+func ExampleAlias3() {
+	f := NewFilePath("a.b/c")
+	f.Func().Id("main").Params().Block(
+		Id(Alias("a.b/c"), "D").Call(),
+	)
+	fmt.Printf("%#v", f)
+	// Output: package c
+	//
+	// func main() {
+	// 	D()
+	// }
+}
+
 func ExampleId2() {
 	id := Id("foo.Bar", "Baz")
 	c := Id(id, "Qux").Call()
