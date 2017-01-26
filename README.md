@@ -81,7 +81,7 @@ The tests are written mostly as examples - [see godoc.org](https://godoc.org/git
 Most of the code is generated using jennifer itself, see the [genjen package](https://github.com/davelondon/jennifer/tree/master/genjen) for a real-world example of usage - it generates [generated.go](https://github.com/davelondon/jennifer/blob/master/jen/generated.go).
 
 # Rendering
-For testing, a `File` or `Statement` can be rendered `fmt` package:
+For testing, a `File` or `Statement` can be rendered with the `fmt` package:
 
 ```go
 c := Id("a").Call(Lit("b"))
@@ -109,7 +109,7 @@ fmt.Printf("%#v", c)
 // Output: gob.NewEncoder()
 ```
 
-The imports are automatically handled.
+The imports are automatically handled when used with a `File`.
 
 To access fields, more items may be added to the `Id` method:
 
@@ -135,8 +135,8 @@ fmt.Printf("%#v", c)
 // Output: c.Foo.Bar().Baz
 ```
 
-More over the package import can be gained by using the `Alias` method to 
-specify the remote package:
+More control over the package import can be gained by using the `Alias` method 
+to specify the remote package:
  
 ```go
 c := Id(Alias("a.b/c"), Id("Foo").Call(), "Bar")
@@ -144,13 +144,26 @@ fmt.Printf("%#v", c)
 // Output: c.Foo().Bar
 ```
 
-
-
-If more than one item is provided, they are joined using periods:
-
 # Op
+`Op` renders the provided string. Use for operators and tokens:
 
+```go
+c := Id("a").Op(":=").Id("b").Call()
+fmt.Printf("%#v", c)
+// Output: a := b()
+```
 
+```go
+c := Op("*").Id("a")
+fmt.Printf("%#v", c)
+// Output: *a
+```
+
+```go
+c := Id("a").Call(Id("b").Op("..."))
+fmt.Printf("%#v", c)
+// Output: a(b...)
+```
 
 # Identifiers 
 
@@ -281,13 +294,54 @@ fmt.Printf("%#v", c)
 
 ### Alternate FooFunc methods
 
-
-
 # Add
+`Add` adds the provided Code to the Statement. When the `Add` function ic 
+called, a new Statement is created. This is useful for cloning the contents of 
+an existing Statement. See "Pointers" below.
+ 
+```go
+ptr := Op("*")
+c := Id("a").Op("=").Add(ptr).Id("b")
+fmt.Printf("%#v", c)
+// Output: a = *b
+```
+
+```go
+a := Id("a")
+c := Block(
+    Add(a).Call(),
+    Add(a).Call(),
+)
+fmt.Printf("%#v", c)
+// Output: {
+// 	a()
+// 	a()
+// }
+```
 
 # Do
+`Do` takes a `func(*Statement)` and executes it on the current statement. This 
+is useful for embedding logic:
+
+```go
+f := func(name string, isMap bool) *Statement {
+    return Id(name).Op(":=").Do(func(s *Statement) {
+        if isMap {
+            s.Map(String()).String()
+        } else {
+            s.Index().String()
+        }
+    }).Values()
+}
+fmt.Printf("%#v\n%#v", f("a", true), f("b", false))
+// Output: a := map[string]string{}
+// b := []string{}
+```
 
 # Lit, LitFunc
+`Lit` renders a literal, using the format provided by `fmt.Sprintf("%#v", ...)`.
+
+TODO: This probably isn't good enough for all cases. 
 
 # Dict, DictFunc
 

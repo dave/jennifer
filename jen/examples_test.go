@@ -371,6 +371,21 @@ func ExampleGroup_Commentf() {
 
 //func Lit(v interface{}) *Group
 
+func ExampleDo() {
+	f := func(name string, isMap bool) *Statement {
+		return Id(name).Op(":=").Do(func(s *Statement) {
+			if isMap {
+				s.Map(String()).String()
+			} else {
+				s.Index().String()
+			}
+		}).Values()
+	}
+	fmt.Printf("%#v\n%#v", f("a", true), f("b", false))
+	// Output: a := map[string]string{}
+	// b := []string{}
+}
+
 func ExampleGroup_Dict() {
 	c := Id("a").Op(":=").Map(String()).String().Dict(map[Code]Code{
 		Lit("a"): Lit("b"),
