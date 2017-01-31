@@ -6,13 +6,13 @@ Jennifer is a code generator for Go:
 package main
 
 import (
-	"fmt"
+    "fmt"
 
-	. "github.com/davelondon/jennifer/jen"
+    . "github.com/davelondon/jennifer/jen"
 )
 
 func main() {
-	f := NewFile("main")
+    f := NewFile("main")
     f.Func().Id("main").Params().Block(
         Id("fmt.Println").Call(Lit("Hello, world")),
     )
@@ -40,13 +40,13 @@ Jennifer manages your imports and aliases:
 package main
 
 import (
-	"fmt"
+    "fmt"
 
-	. "github.com/davelondon/jennifer/jen"
+    . "github.com/davelondon/jennifer/jen"
 )
 
 func main() {
-	f := NewFilePath("a.b/c")
+    f := NewFilePath("a.b/c")
     f.Func().Id("init").Params().Block(
         Id("a.b/c.Foo").Call().Comment("Local package - alias is omitted."),
         Id("d.e/f.Bar").Call().Comment("Import is automatically added."),
