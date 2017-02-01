@@ -313,6 +313,12 @@ func ExampleGroup_Func() {
 var Types = []string{"bool", "byte", "complex64", "complex128", "error", "float32", "float64", "int", "int8", "int16", "int32", "int64", "rune", "string", "uint", "uint8", "uint16", "uint32", "uint64", "uintptr"}
 */
 
+func ExampleBool88() {
+	c := List(Id("a"), Id("b")).Op(":=").Sel(Id("a"), Id("b").Index(Lit(0)), Id("c")).Call()
+	fmt.Printf("%#v", c)
+	// Output: a, b := a.b[0].c()
+}
+
 func ExampleBool() {
 	c := List(Id("b"), Id("ok")).Op(":=").Id("a").Assert(Bool())
 	fmt.Printf("%#v", c)

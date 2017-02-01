@@ -184,6 +184,7 @@ token:
 
 | Group     | Opening       | Separator | Closing | Usage                             |
 | --------- | ------------- | --------- | ------- | --------------------------------- |
+| Sel       |               | `.`       |         | `foo.bar[0].baz()`                |
 | List      |               | `,`       |         | `a, b := c()`                     |
 | Call      | `(`           | `,`       | `)`     | `fmt.Println(b, c)`               |
 | Params    | `(`           | `,`       | `)`     | `func (a *A) Foo(i int) { ... }`  |
@@ -206,6 +207,20 @@ token:
 | Parens | `(`      | `)`     | `[]byte(s)` or `a / (b + c)` |
 | Assert | `.(`     | `)`     | `s, ok := i.(string)`        |
 | Map    | `map[`   | `]`     | `map[int]string`             |
+
+### Sel
+`Sel` renders a chain of selectors:
+
+```go
+c := Sel(
+    Qual("a.b/c", "Foo"),
+    Id("Bar").Call(),
+    Id("Baz").Index(Lit(0)),
+    Id("Qux"),
+)
+fmt.Printf("%#v", c)
+// Output: c.Foo.Bar().Baz[0].Qux
+```
 
 ### List
 `List` renders a comma seperated list with no open or closing tokens. Use for 
