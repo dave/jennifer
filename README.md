@@ -32,6 +32,11 @@ func main() {
 }
 ```
 
+# Install
+```
+go get -u github.com/davelondon/jennifer/jen
+```
+
 # Examples
 The tests are written mostly as examples - [see godoc.org](https://godoc.org/github.com/davelondon/jennifer/jen#pkg-examples) for an index.
 
