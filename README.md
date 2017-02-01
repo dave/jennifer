@@ -553,7 +553,7 @@ fmt.Printf("%#v", c)
 
 Note: struct tags are ordered by key when rendered.
 
-# Null, Empty
+# Null
 `Null` adds a null item. Null items render nothing and are not followed by a 
 separator in lists.
 
