@@ -3,6 +3,7 @@ package jen
 import (
 	"bytes"
 	"fmt"
+	"regexp"
 	"strings"
 )
 
@@ -123,5 +124,10 @@ func guessAlias(path string) string {
 	}
 	// alias should be lower case
 	alias = strings.ToLower(alias)
+
+	// alias should now only contain alphanumerics
+	importsRegex := regexp.MustCompile(`[^a-z0-9]`)
+	alias = importsRegex.ReplaceAllString(alias, "")
+
 	return alias
 }

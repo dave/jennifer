@@ -10,6 +10,7 @@ func TestGuessAlias(t *testing.T) {
 	data := map[string]string{
 		"A":        "a",
 		"a":        "a",
+		"a$":       "a",
 		"a/b":      "b",
 		"a/b/c":    "c",
 		"a/b/c-d":  "d",
