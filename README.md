@@ -73,9 +73,9 @@ fmt.Printf("%#v", c)
 // Output: gob.NewEncoder()
 ```
 
-The imports are automatically added when used with a `File`. If the path
-matches the local path, the package name is omitted. If package names conflict 
-they are automatically renamed:
+Imports are automatically added when used with a `File`. If the path matches 
+the local path, the package name is omitted. If package names conflict they are 
+automatically renamed:
 
 ```go
 f := NewFilePath("a.b/c")
