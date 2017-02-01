@@ -84,9 +84,9 @@ func ExampleFile_Render() {
 func ExampleStatement_Comment() {
 	f := NewFilePath("a.b/c")
 	f.Func().Id("init").Params().Block(
-		Id("a.b/c.Foo").Call().Comment("Local package - alias is omitted."),
-		Id("d.e/f.Bar").Call().Comment("Import is automatically added."),
-		Id("g.h/f.Baz").Call().Comment("Colliding package name is automatically renamed."),
+		Qual("a.b/c", "Foo").Call().Comment("Local package - alias is omitted."),
+		Qual("d.e/f", "Bar").Call().Comment("Import is automatically added."),
+		Qual("g.h/f", "Baz").Call().Comment("Colliding package name is automatically renamed."),
 	)
 	fmt.Printf("%#v", f)
 	// Output: package c
@@ -137,10 +137,10 @@ func ExampleSwitch() {
 	// }
 }
 
-func ExampleAlias() {
+func ExampleQual() {
 	f := NewFile("a")
 	f.Func().Id("main").Params().Block(
-		Id(Alias("encoding/gob"), "NewEncoder").Call(),
+		Qual("encoding/gob", "NewEncoder").Call(),
 	)
 	fmt.Printf("%#v", f)
 	// Output: package a
@@ -152,16 +152,16 @@ func ExampleAlias() {
 	// }
 }
 
-func ExampleAlias2() {
-	c := Id(Alias("a.b/c"), Id("Foo").Call(), "Bar")
+func ExampleQual2() {
+	c := Sel(Qual("a.b/c", "Foo").Call(), Id("Bar").Index(Lit(0)), Id("Baz"))
 	fmt.Printf("%#v", c)
-	// Output: c.Foo().Bar
+	// Output: c.Foo().Bar[0].Baz
 }
 
-func ExampleAlias3() {
+func ExampleQual3() {
 	f := NewFilePath("a.b/c")
 	f.Func().Id("main").Params().Block(
-		Id(Alias("a.b/c"), "D").Call(),
+		Qual("a.b/c", "D").Call(),
 	)
 	fmt.Printf("%#v", f)
 	// Output: package c
@@ -172,8 +172,8 @@ func ExampleAlias3() {
 }
 
 func ExampleId2() {
-	id := Id("foo.Bar", "Baz")
-	c := Id(id, "Qux").Call()
+	id := Sel(Qual("foo", "Bar"), Id("Baz"))
+	c := Sel(id, Id("Qux")).Call()
 	fmt.Printf("%#v", c)
 	// Output: foo.Bar.Baz.Qux()
 }
@@ -223,6 +223,7 @@ func ExampleAdd() {
 }
 
 func ExampleTag() {
+	// Note: Tags are ordered by key when rendered
 	c := Type().Id("foo").Struct().Block(
 		Id("A").String().Tag(map[string]string{"json": "a"}),
 		Id("B").Int().Tag(map[string]string{"json": "b", "bar": "baz"}),
@@ -230,7 +231,7 @@ func ExampleTag() {
 	fmt.Printf("%#v", c)
 	// Output: type foo struct {
 	// 	A string `json:"a"`
-	// 	B int    `json:"b" bar:"baz"`
+	// 	B int    `bar:"baz" json:"b"`
 	// }
 }
 
@@ -512,6 +513,18 @@ func ExampleGroup_DictFunc() {
 	// }
 }
 
+func ExampleDefs() {
+	c := Const().Defs(
+		Id("a").Op("=").Lit("a"),
+		Id("b").Op("=").Lit("b"),
+	)
+	fmt.Printf("%#v", c)
+	// Output: const (
+	// 	a = "a"
+	// 	b = "b"
+	// )
+}
+
 //func Id(names ...string) *Group
 
 func ExampleId_local() {
@@ -521,7 +534,7 @@ func ExampleId_local() {
 }
 
 func ExampleId_select() {
-	c := Id("a", "b", "c").Call()
+	c := Sel(Id("a"), Id("b"), Id("c")).Call()
 	fmt.Printf("%#v", c)
 	// Output: a.b.c()
 }
@@ -529,7 +542,7 @@ func ExampleId_select() {
 func ExampleId_remote() {
 	f := NewFile("main")
 	f.Func().Id("main").Params().Block(
-		Id("fmt.Println").Call(
+		Qual("fmt", "Println").Call(
 			Lit("Hello, world"),
 		),
 	)
@@ -552,7 +565,7 @@ func ExampleId_remote() {
 func ExampleNewFile() {
 	f := NewFile("main")
 	f.Func().Id("main").Params().Block(
-		Id("fmt.Println").Call(
+		Qual("fmt", "Println").Call(
 			Lit("Hello, world"),
 		),
 	)
@@ -569,9 +582,9 @@ func ExampleNewFile() {
 func ExampleNewFilePath() {
 	f := NewFilePath("a.b/c")
 	f.Func().Id("init").Params().Block(
-		Id("a.b/c.Local").Call(),
-		Id("d.e/f.Remote").Call(),
-		Id("g.h/f.Collision").Call(),
+		Qual("a.b/c", "Local").Call(),
+		Qual("d.e/f", "Remote").Call(),
+		Qual("g.h/f", "Collision").Call(),
 	)
 	fmt.Printf("%#v", f)
 	// Output: package c
@@ -591,7 +604,7 @@ func ExampleNewFilePath() {
 func ExampleNewFilePathName() {
 	f := NewFilePathName("a.b/c", "main")
 	f.Func().Id("main").Params().Block(
-		Id("a.b/c.Foo").Call(),
+		Qual("a.b/c", "Foo").Call(),
 	)
 	fmt.Printf("%#v", f)
 	// Output: package main
@@ -631,7 +644,7 @@ func ExampleFile_PackagePrefix() {
 	f := NewFile("c")
 	f.PackagePrefix("pkg")
 	f.Func().Id("main").Params().Block(
-		Id("fmt.Println").Call(),
+		Qual("fmt", "Println").Call(),
 	)
 	fmt.Printf("%#v", f)
 	// Output:

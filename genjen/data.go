@@ -66,6 +66,14 @@ var Groups = []struct {
 		Separator: "\n",
 	},
 	{
+		Name:      "Defs",
+		Desc:      "parenthesis containing a statement list",
+		List:      true,
+		Open:      "(",
+		Close:     ")",
+		Separator: "\n",
+	},
+	{
 		Name:      "Call",
 		Desc:      "parenthesis containing a comma separated list",
 		List:      true,
@@ -152,5 +160,13 @@ var Groups = []struct {
 		Open:      "case ",
 		Close:     "",
 		Separator: ",",
+	},
+	{
+		Name:      "Sel",
+		Desc:      "a group of selectors - items separated by periods",
+		List:      true,
+		Open:      "",
+		Close:     "",
+		Separator: ".",
 	},
 }

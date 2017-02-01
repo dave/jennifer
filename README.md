@@ -14,7 +14,7 @@ import (
 func main() {
     f := NewFile("main")
     f.Func().Id("main").Params().Block(
-        Id("fmt.Println").Call(Lit("Hello, world")),
+        Qual("fmt", "Println").Call(Lit("Hello, world")),
     )
     fmt.Printf("%#v", f)
 }
@@ -48,9 +48,9 @@ import (
 func main() {
     f := NewFilePath("a.b/c")
     f.Func().Id("init").Params().Block(
-        Id("a.b/c.Foo").Call().Comment("Local package - alias is omitted."),
-        Id("d.e/f.Bar").Call().Comment("Import is automatically added."),
-        Id("g.h/f.Baz").Call().Comment("Colliding package name is automatically renamed."),
+        Qual("a.b/c", "Foo").Call().Comment("Local package - alias is omitted."),
+        Qual("d.e/f", "Bar").Call().Comment("Import is automatically added."),
+        Qual("g.h/f", "Baz").Call().Comment("Colliding package name is automatically renamed."),
     )
     fmt.Printf("%#v", f)
 }
@@ -96,8 +96,8 @@ fmt.Printf("%#v", c)
 This is not recommended for use in production because any error will cause a 
 panic. For production use, `File.Render` or `File.Save` are preferred.
 
-# Id, Alias
-`Id` renders an identifier. For a local identifier, simply use a string:
+# Id, Sel, Qual
+`Id` renders an identifier:
  
 ```go
 c := Id("a")
@@ -105,48 +105,37 @@ fmt.Printf("%#v", c)
 // Output: a
 ```
 
-For a remote identifier, prefix with the full package path:
+For a qualified identifier, use `Qual`:
 
 ```go
-c := Id("encoding/gob.NewEncoder").Call()
+c := Qual("encoding/gob", "NewEncoder").Call()
 fmt.Printf("%#v", c)
 // Output: gob.NewEncoder()
 ```
 
-The imports are automatically handled when used with a `File`, and if the path
-matches the local path, the package alias is omitted from the rendered code.
-
-To access fields, more items may be added to the `Id` method:
+The imports are automatically added when used with a `File`, and if the path
+matches the local path, the package name is omitted from the rendered code:
 
 ```go
-c := Id("a", "b", "c")
-fmt.Printf("%#v", c)
-// Output: a.b.c
+f := NewFilePath("a.b/c")
+f.Var().Id("d").Qual("a.b/c", "D")
+fmt.Printf("%#v", f)
+// Output: package c
+//
+// var d D
 ```
 
-This can be combined with the remote syntax:
+To create a chain of selectors, use the `Sel` group function:
 
 ```go
-c := Id("a.b/c.Foo", "Bar", "Baz")
+c := Sel(
+    Qual("a.b/c", "Foo"),
+    Id("Bar").Call(),
+    Id("Baz").Index(Lit(0)),
+    Id("Qux"),
+)
 fmt.Printf("%#v", c)
-// Output: c.Foo.Bar.Baz
-```
-
-More complex chains can be formed by using Code items instead of strings:
-
-```go
-c := Id("a.b/c.Foo", Id("Bar").Call(), "Baz")
-fmt.Printf("%#v", c)
-// Output: c.Foo.Bar().Baz
-```
-
-More control over the package import can be gained by using the `Alias` method 
-to specify the remote package:
- 
-```go
-c := Id(Alias("a.b/c"), Id("Foo").Call(), "Bar")
-fmt.Printf("%#v", c)
-// Output: c.Foo().Bar
+// Output: c.Foo.Bar().Baz[0].Qux
 ```
 
 # Op
@@ -224,6 +213,7 @@ token:
 | Values    | `{`           | `,`       | `}`     | `[]int{1, 2}` or `interface{}`    |
 | Index     | `[`           | `:`       | `]`     | `a[1:2]` or `[]int{}`             |
 | Block     | `{`           | `\n`      | `}`     | `func a() { ... }`                |
+| Defs      | `(`           | `\n`      | `)`     | `const ( ... )`                   |
 | Case      | `case`        | `,`       |         | `switch a {case "b", "c": ... }`  |
 | CaseBlock | `:`           | `\n`      |         | `switch i {case 1: ... }`         |
 | Return    | `return`      | `,`       |         | `return a, b`                     |
@@ -328,6 +318,22 @@ fmt.Printf("%#v", c)
 // }
 ```
 
+### Defs
+`Defs` renders a list of statements enclosed in parenthesis. Use for definition 
+lists:
+
+```go
+c := Const().Defs(
+    Id("a").Op("=").Lit("a"),
+    Id("b").Op("=").Lit("b"),
+)
+fmt.Printf("%#v", c)
+// Output: const (
+// 	a = "a"
+// 	b = "b"
+// )
+```
+
 ### Switch, Case, CaseBlock
 `Switch`, `Case` and `CaseBlock` can be used to build `switch` statements:
 
@@ -386,7 +392,7 @@ fmt.Printf("%#v", c)
 
 ```go
 c := For(Id("i").Op(":=").Lit(0), Id("i").Op("<").Lit(10), Id("i").Op("++")).Block(
-    Id("fmt.Println").Call(Id("i")),
+    Qual("fmt", "Println").Call(Id("i")),
 )
 fmt.Printf("%#v", c)
 // Output: for i := 0; i < 10; i++ {
@@ -643,7 +649,7 @@ additionally specifies the package name.
 ```go
 f := NewFilePathName("a.b/c", "main")
 f.Func().Id("main").Params().Block(
-    Id("a.b/c.Foo").Call(),
+    Qual("a.b/c", "Foo").Call(),
 )
 fmt.Printf("%#v", f)
 // Output: package main
@@ -694,7 +700,7 @@ you can set a prefix here:
 f := NewFile("c")
 f.PackagePrefix("pkg")
 f.Func().Id("main").Params().Block(
-    Id("fmt.Println").Call(),
+    Qual("fmt", "Println").Call(),
 )
 fmt.Printf("%#v", f)
 // Output:

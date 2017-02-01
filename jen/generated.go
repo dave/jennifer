@@ -244,6 +244,54 @@ func (s *Statement) BlockFunc(f func(*Group)) *Statement {
 	return s
 }
 
+// Defs inserts parenthesis containing a statement list
+func Defs(c ...Code) *Statement {
+	return newStatement().Defs(c...)
+}
+
+// Defs inserts parenthesis containing a statement list
+func (g *Group) Defs(c ...Code) *Statement {
+	s := Defs(c...)
+	g.items = append(g.items, s)
+	return s
+}
+
+// Defs inserts parenthesis containing a statement list
+func (s *Statement) Defs(c ...Code) *Statement {
+	g := &Group{
+		close:     ")",
+		items:     c,
+		open:      "(",
+		separator: "\n",
+	}
+	*s = append(*s, g)
+	return s
+}
+
+// Defs inserts parenthesis containing a statement list
+func DefsFunc(f func(*Group)) *Statement {
+	return newStatement().DefsFunc(f)
+}
+
+// Defs inserts parenthesis containing a statement list
+func (g *Group) DefsFunc(f func(*Group)) *Statement {
+	s := DefsFunc(f)
+	g.items = append(g.items, s)
+	return s
+}
+
+// Defs inserts parenthesis containing a statement list
+func (s *Statement) DefsFunc(f func(*Group)) *Statement {
+	g := &Group{
+		close:     ")",
+		open:      "(",
+		separator: "\n",
+	}
+	f(g)
+	*s = append(*s, g)
+	return s
+}
+
 // Call inserts parenthesis containing a comma separated list
 func Call(c ...Code) *Statement {
 	return newStatement().Call(c...)
@@ -766,6 +814,54 @@ func (s *Statement) CaseFunc(f func(*Group)) *Statement {
 		close:     "",
 		open:      "case ",
 		separator: ",",
+	}
+	f(g)
+	*s = append(*s, g)
+	return s
+}
+
+// Sel inserts a group of selectors - items separated by periods
+func Sel(c ...Code) *Statement {
+	return newStatement().Sel(c...)
+}
+
+// Sel inserts a group of selectors - items separated by periods
+func (g *Group) Sel(c ...Code) *Statement {
+	s := Sel(c...)
+	g.items = append(g.items, s)
+	return s
+}
+
+// Sel inserts a group of selectors - items separated by periods
+func (s *Statement) Sel(c ...Code) *Statement {
+	g := &Group{
+		close:     "",
+		items:     c,
+		open:      "",
+		separator: ".",
+	}
+	*s = append(*s, g)
+	return s
+}
+
+// Sel inserts a group of selectors - items separated by periods
+func SelFunc(f func(*Group)) *Statement {
+	return newStatement().SelFunc(f)
+}
+
+// Sel inserts a group of selectors - items separated by periods
+func (g *Group) SelFunc(f func(*Group)) *Statement {
+	s := SelFunc(f)
+	g.items = append(g.items, s)
+	return s
+}
+
+// Sel inserts a group of selectors - items separated by periods
+func (s *Statement) SelFunc(f func(*Group)) *Statement {
+	g := &Group{
+		close:     "",
+		open:      "",
+		separator: ".",
 	}
 	f(g)
 	*s = append(*s, g)

@@ -3,6 +3,7 @@ package jen
 import (
 	"fmt"
 	"io"
+	"sort"
 	"strconv"
 )
 
@@ -43,7 +44,14 @@ func (t tag) render(f *File, w io.Writer) error {
 
 	var s string
 
-	for k, v := range t.items {
+	var sorted []string
+	for k, _ := range t.items {
+		sorted = append(sorted, k)
+	}
+	sort.Strings(sorted)
+
+	for _, k := range sorted {
+		v := t.items[k]
 		if len(s) > 0 {
 			s += " "
 		}

@@ -44,7 +44,7 @@ var cases = []tc{
 	},
 	{
 		desc:   `foreign id`,
-		code:   Id("x.y/z.a"),
+		code:   Qual("x.y/z", "a"),
 		expect: `z.a`,
 		expectImports: map[string]string{
 			"x.y/z": "z",
@@ -92,7 +92,7 @@ var cases = []tc{
 	},
 	{
 		desc: `call fmt.Sprintf`,
-		code: Id("fmt.Sprintf").Call(
+		code: Qual("fmt", "Sprintf").Call(
 			Lit("b"),
 			Id("c"),
 		),
@@ -144,12 +144,12 @@ var cases = []tc{
 	},
 	{
 		desc:   `field`,
-		code:   Id("a", "b"),
+		code:   Sel(Id("a"), Id("b")),
 		expect: `a.b`,
 	},
 	{
 		desc:   `method`,
-		code:   Id("a", "b").Call(Id("c"), Id("d")),
+		code:   Sel(Id("a"), Id("b")).Call(Id("c"), Id("d")),
 		expect: `a.b(c, d)`,
 	},
 	{
@@ -204,14 +204,27 @@ var cases = []tc{
 		expect: `a := "b"`,
 	},
 	{
-		desc:   `multi id`,
-		code:   Id("a", "b", "c"),
+		desc:   `sel`,
+		code:   Sel(Id("a"), Id("b"), Id("c")),
 		expect: `a.b.c`,
 	},
 	{
 		desc:   `do`,
-		code:   Id("a").Op(".").Do(func(s *Statement) { s.Id("b") }),
+		code:   Sel(Id("a"), Do(func(s *Statement) { s.Id("b") })),
 		expect: `a.b`,
+	},
+	{
+		desc:   `tags should be ordered`,
+		code:   Tag(map[string]string{"z": "1", "a": "2"}),
+		expect: "`a:\"2\" z:\"1\"`",
+	},
+	{
+		desc: `dict should be ordered`,
+		code: Map(String()).Int().Dict(map[Code]Code{Id("z"): Lit(1), Id("a"): Lit(2)}),
+		expect: `map[string]int{
+		a:2, 
+		z:1,
+		}`,
 	},
 }
 

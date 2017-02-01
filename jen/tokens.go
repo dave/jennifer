@@ -3,7 +3,6 @@ package jen
 import (
 	"fmt"
 	"io"
-	"strings"
 )
 
 type tokenType string
@@ -11,6 +10,7 @@ type tokenType string
 const (
 	packageToken    tokenType = "package"
 	identifierToken tokenType = "identifier"
+	qualifiedToken  tokenType = "qualified"
 	keywordToken    tokenType = "keyword"
 	operatorToken   tokenType = "operator"
 	delimiterToken  tokenType = "delimiter"
@@ -50,21 +50,7 @@ func (t token) render(f *File, w io.Writer) error {
 			return err
 		}
 	case identifierToken:
-		id := t.content.(string)
-		var name, path, alias, full string
-		if sep := strings.LastIndex(id, "."); sep > -1 {
-			name = id[sep+1:]
-			path = id[:sep]
-			alias = f.register(path)
-		} else {
-			name = id
-		}
-		if alias != "" {
-			full = fmt.Sprintf("%s.%s", alias, name)
-		} else {
-			full = fmt.Sprintf("%s", name)
-		}
-		if _, err := w.Write([]byte(full)); err != nil {
+		if _, err := w.Write([]byte(t.content.(string))); err != nil {
 			return err
 		}
 	case nullToken:
@@ -141,53 +127,46 @@ func (s *Statement) Op(op string) *Statement {
 	return s
 }
 
-func Alias(path string) *Statement {
-	return newStatement().Alias(path)
+func Id(name string) *Statement {
+	return newStatement().Id(name)
 }
 
-func (g *Group) Alias(path string) *Statement {
-	s := Alias(path)
+func (g *Group) Id(name string) *Statement {
+	s := Id(name)
 	g.items = append(g.items, s)
 	return s
 }
 
-func (s *Statement) Alias(path string) *Statement {
+func (s *Statement) Id(name string) *Statement {
 	t := token{
-		typ:     packageToken,
-		content: path,
+		typ:     identifierToken,
+		content: name,
 	}
 	*s = append(*s, t)
 	return s
 }
 
-func Id(items ...interface{}) *Statement {
-	return newStatement().Id(items...)
+func Qual(path, name string) *Statement {
+	return newStatement().Qual(path, name)
 }
 
-func (g *Group) Id(items ...interface{}) *Statement {
-	s := Id(items...)
+func (g *Group) Qual(path, name string) *Statement {
+	s := Qual(path, name)
 	g.items = append(g.items, s)
 	return s
 }
 
-func (s *Statement) Id(items ...interface{}) *Statement {
-	g := &Group{
-		open:      "",
-		close:     "",
-		separator: ".",
-	}
-	for _, item := range items {
-		switch item := item.(type) {
-		case string:
-			t := token{
-				typ:     identifierToken,
-				content: item,
-			}
-			g.items = append(g.items, t)
-		case Code:
-			g.items = append(g.items, item)
-		}
-	}
+func (s *Statement) Qual(path, name string) *Statement {
+	g := Sel(
+		token{
+			typ:     packageToken,
+			content: path,
+		},
+		token{
+			typ:     identifierToken,
+			content: name,
+		},
+	)
 	*s = append(*s, g)
 	return s
 }
