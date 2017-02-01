@@ -186,7 +186,7 @@ token:
 | List      |               | `,`       |         | `a, b := c()`                     |
 | Call      | `(`           | `,`       | `)`     | `fmt.Println(b, c)`               |
 | Params    | `(`           | `,`       | `)`     | `func (a *A) Foo(i int) { ... }`  |
-| Values    | `{`           | `,`       | `}`     | `[]int{1, 2}` or `interface{}`    |
+| Values    | `{`           | `,`       | `}`     | `[]int{1, 2}`                     |
 | Index     | `[`           | `:`       | `]`     | `a[1:2]` or `[]int{}`             |
 | Block     | `{`           | `\n`      | `}`     | `func a() { ... }`                |
 | Defs      | `(`           | `\n`      | `)`     | `const ( ... )`                   |
