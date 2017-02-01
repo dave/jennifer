@@ -642,7 +642,7 @@ func ExampleFile_Anon() {
 
 func ExampleFile_PackagePrefix() {
 	f := NewFile("c")
-	f.PackagePrefix("pkg")
+	f.PackagePrefix = "pkg"
 	f.Func().Id("main").Params().Block(
 		Qual("fmt", "Println").Call(),
 	)

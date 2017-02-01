@@ -34,43 +34,28 @@ func main() {
 
 # Imports
 
-Jennifer manages your imports and aliases:
+Jennifer manages your imports and qualified package names:
 
 ```go
-package main
-
-import (
-    "fmt"
-
-    . "github.com/davelondon/jennifer/jen"
+f := NewFilePath("a.b/c")
+f.Func().Id("init").Params().Block(
+    Qual("a.b/c", "Foo").Call().Comment("Local package - name is omitted."),
+    Qual("d.e/f", "Bar").Call().Comment("Import is automatically added."),
+    Qual("g.h/f", "Baz").Call().Comment("Colliding package name is renamed."),
 )
-
-func main() {
-    f := NewFilePath("a.b/c")
-    f.Func().Id("init").Params().Block(
-        Qual("a.b/c", "Foo").Call().Comment("Local package - alias is omitted."),
-        Qual("d.e/f", "Bar").Call().Comment("Import is automatically added."),
-        Qual("g.h/f", "Baz").Call().Comment("Colliding package name is automatically renamed."),
-    )
-    fmt.Printf("%#v", f)
-}
-```
-
-Output:
-
-```go
-package c
-
-import (
-    f "d.e/f"
-    f1 "g.h/f"
-)
-
-func init() {
-    Foo()    // Local package - alias is omitted.
-    f.Bar()  // Import is automatically added.
-    f1.Baz() // Colliding package name is automatically renamed.
-}
+fmt.Printf("%#v", f)
+// Output: package c
+// 
+// import (
+//  f "d.e/f"
+//  f1 "g.h/f"
+// )
+// 
+// func init() {
+//  Foo()    // Local package - name is omitted.
+//  f.Bar()  // Import is automatically added.
+//  f1.Baz() // Colliding package name is renamed.
+// } 
 ```
 
 # Examples
@@ -96,7 +81,7 @@ fmt.Printf("%#v", c)
 This is not recommended for use in production because any error will cause a 
 panic. For production use, `File.Render` or `File.Save` are preferred.
 
-# Id, Sel, Qual
+# Id
 `Id` renders an identifier:
  
 ```go
@@ -105,7 +90,8 @@ fmt.Printf("%#v", c)
 // Output: a
 ```
 
-For a qualified identifier, use `Qual`:
+# Qual
+`Qual` renders a qualified identifier:
 
 ```go
 c := Qual("encoding/gob", "NewEncoder").Call()
@@ -125,7 +111,8 @@ fmt.Printf("%#v", f)
 // var d D
 ```
 
-To create a chain of selectors, use the `Sel` group function:
+# Sel
+`Sel` renders a chain of selectors:
 
 ```go
 c := Sel(
@@ -139,7 +126,7 @@ fmt.Printf("%#v", c)
 ```
 
 # Op
-`Op` renders the provided string. Use for operators and tokens:
+`Op` renders the provided operators / token:
 
 ```go
 c := Id("a").Op(":=").Id("b").Call()
@@ -160,7 +147,6 @@ fmt.Printf("%#v", c)
 ```
 
 # Identifiers 
-
 Identifiers are simple methods with no parameters. They render as the 
 identifier token:
 
@@ -185,7 +171,6 @@ Note: The `import` and `package` keywords are always rendered automatically, so
 not included.
 
 # Built-in functions
-
 Built in functions render the function name followed by a comma seperated list 
 enclosed by parenthesis:
 
@@ -198,7 +183,6 @@ fmt.Printf("%#v", c)
 Functions: `Append`, `Cap`, `Close`, `Complex`, `Copy`, `Delete`, `Imag`, `Len`, `Make`, `New`, `Panic`, `Print`, `Println`, `Real`, `Recover`
 
 # Groups
-
 Groups take either a single item or a list of items. The items are rendered 
 between open and closing tokens. Multiple items are seperated by a separator 
 token:
@@ -456,7 +440,7 @@ fmt.Printf("%#v", c)
 ```
 
 ### Alternate GroupFunc methods
-All of the Group functions have GroupFunc functions that accept a 
+All of the Group functions are paired with GroupFunc functions that accept a 
 `func(*Group)`. Use these for embedding logic:
 
 ```go
@@ -493,8 +477,8 @@ fmt.Printf("%#v", c)
 ```
 
 # Do
-`Do` takes a `func(*Statement)` and executes it on the current statement. This 
-is useful for embedding logic:
+`Do` takes a `func(*Statement)` and executes it on the current statement. Use 
+this for embedding logic:
 
 ```go
 f := func(name string, isMap bool) *Statement {
@@ -558,6 +542,8 @@ fmt.Printf("%#v", c)
 // }
 ```
 
+Note: dicts are ordered by key when rendered.
+
 # Tag
 `Tag` renders a struct tag:
 
@@ -569,14 +555,14 @@ c := Type().Id("foo").Struct().Block(
 fmt.Printf("%#v", c)
 // Output: type foo struct {
 // 	A string `json:"a"`
-// 	B int    `json:"b" bar:"baz"`
+// 	B int    `bar:"baz" json:"b"`
 // }
 ```
 
+Note: struct tags are ordered by key when rendered.
+
 # Null, Empty
 `Null` adds a null item. Null items render nothing and are not followed by a 
-separator in lists.
-`Empty` adds an empty item. Empty items render nuothing but are followed by a 
 separator in lists.
 
 ```go
@@ -584,6 +570,10 @@ c := Id("a").Op(":=").Id("b").Index(Null(), Lit(1))
 fmt.Printf("%#v", c)
 // Output: a := b[1]
 ```
+
+# Empty
+`Empty` adds an empty item. Empty items render nothing but are followed by a 
+separator in lists.
 
 ```go
 c := Id("a").Op(":=").Id("b").Index(Empty(), Lit(1))
@@ -639,12 +629,11 @@ fmt.Printf("%#v", c)
 `NewFile` Creates a new file, with the specified package name. 
 
 ### NewFilePath
-`NewFilePath` creates a new file while specifying 
-the package path - the package name is inferred from the path.
+`NewFilePath` creates a new file while specifying the package path - the 
+package name is inferred from the path.
 
 ### NewFilePathName
-`NewFilePathName` 
-additionally specifies the package name.
+`NewFilePathName` creates a new file with the specified package path and name.
 
 ```go
 f := NewFilePathName("a.b/c", "main")
@@ -660,8 +649,8 @@ fmt.Printf("%#v", f)
 ```
 
 ### PackageComment
-`PackageComment` adds a comment to the very top of the file, above the 
-`package` keyword:
+`PackageComment` adds a comment to the top of the file, above the `package` 
+keyword:
 
 ```go
 f := NewFile("c")
@@ -694,11 +683,11 @@ fmt.Printf("%#v", f)
 
 ### PackagePrefix
 If you're worried about package aliases conflicting with local variable names, 
-you can set a prefix here:
+you can set a prefix:
 
 ```go
 f := NewFile("c")
-f.PackagePrefix("pkg")
+f.PackagePrefix = "pkg"
 f.Func().Id("main").Params().Block(
     Qual("fmt", "Println").Call(),
 )
@@ -713,9 +702,11 @@ fmt.Printf("%#v", f)
 // }
 ```
 
-### Save, Render
-`Save` renders the file and saves to the filename provided. `Render` renders 
-the file to the provided writer:
+### Save
+`Save` renders the file and saves to the filename provided.
+
+### Render
+`Render` renders the file to the provided writer:
  
 ```go
 f := NewFile("a")
