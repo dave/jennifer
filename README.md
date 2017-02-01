@@ -32,32 +32,6 @@ func main() {
 }
 ```
 
-# Imports
-
-Jennifer manages your imports and qualified package names:
-
-```go
-f := NewFilePath("a.b/c")
-f.Func().Id("init").Params().Block(
-    Qual("a.b/c", "Foo").Call().Comment("Local package - name is omitted."),
-    Qual("d.e/f", "Bar").Call().Comment("Import is automatically added."),
-    Qual("g.h/f", "Baz").Call().Comment("Colliding package name is renamed."),
-)
-fmt.Printf("%#v", f)
-// Output: package c
-// 
-// import (
-//  f "d.e/f"
-//  f1 "g.h/f"
-// )
-// 
-// func init() {
-//  Foo()    // Local package - name is omitted.
-//  f.Bar()  // Import is automatically added.
-//  f1.Baz() // Colliding package name is renamed.
-// } 
-```
-
 # Examples
 The tests are written mostly as examples - [see godoc.org](https://godoc.org/github.com/davelondon/jennifer/jen#pkg-examples) for an index.
 
@@ -99,9 +73,31 @@ fmt.Printf("%#v", c)
 // Output: gob.NewEncoder()
 ```
 
-The imports are automatically added when used with a `File`, and if the path
-matches the local path, the package name is omitted from the rendered code (see 
-above example).
+The imports are automatically added when used with a `File`, If the path
+matches the local path, the package name is omitted from the rendered code. If 
+package names conflict they are automatically renamed:
+
+```go
+f := NewFilePath("a.b/c")
+f.Func().Id("init").Params().Block(
+    Qual("a.b/c", "Foo").Call().Comment("Local package - name is omitted."),
+    Qual("d.e/f", "Bar").Call().Comment("Import is automatically added."),
+    Qual("g.h/f", "Baz").Call().Comment("Colliding package name is renamed."),
+)
+fmt.Printf("%#v", f)
+// Output: package c
+// 
+// import (
+//  f "d.e/f"
+//  f1 "g.h/f"
+// )
+// 
+// func init() {
+//  Foo()    // Local package - name is omitted.
+//  f.Bar()  // Import is automatically added.
+//  f1.Baz() // Colliding package name is renamed.
+// } 
+```
 
 # Sel
 `Sel` renders a chain of selectors:
