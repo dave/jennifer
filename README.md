@@ -100,16 +100,8 @@ fmt.Printf("%#v", c)
 ```
 
 The imports are automatically added when used with a `File`, and if the path
-matches the local path, the package name is omitted from the rendered code:
-
-```go
-f := NewFilePath("a.b/c")
-f.Var().Id("d").Qual("a.b/c", "D")
-fmt.Printf("%#v", f)
-// Output: package c
-//
-// var d D
-```
+matches the local path, the package name is omitted from the rendered code (see 
+above example).
 
 # Sel
 `Sel` renders a chain of selectors:
