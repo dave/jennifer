@@ -118,7 +118,7 @@ fmt.Printf("%#v", c)
 ```
 
 # Op
-`Op` renders the provided operators / token:
+`Op` renders the provided operator / token:
 
 ```go
 c := Id("a").Op(":=").Id("b").Call()
