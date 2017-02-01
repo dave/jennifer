@@ -62,12 +62,12 @@ var cases = []tc{
 	},
 	{
 		desc:   `simple if`,
-		code:   If().Id("a").Op("==").Lit("b").Block(),
+		code:   If(Id("a").Op("==").Lit("b")).Block(),
 		expect: `if a == "b" {}`,
 	},
 	{
 		desc: `simple if`,
-		code: If().Id("a").Op("==").Lit("b").Block(
+		code: If(Id("a").Op("==").Lit("b")).Block(
 			Id("a").Op("++"),
 		),
 		expect: `if a == "b" { a++ }`,
@@ -154,9 +154,9 @@ var cases = []tc{
 	},
 	{
 		desc: `if else`,
-		code: If().Id("a").Op("==").Lit(1).Block(
+		code: If(Id("a").Op("==").Lit(1)).Block(
 			Id("b").Op("=").Lit(1),
-		).Else().If().Id("a").Op("==").Lit(2).Block(
+		).Else().If(Id("a").Op("==").Lit(2)).Block(
 			Id("b").Op("=").Lit(2),
 		).Else().Block(
 			Id("b").Op("=").Lit(3),
