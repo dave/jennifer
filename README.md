@@ -104,20 +104,6 @@ fmt.Printf("%#v", f)
 // } 
 ```
 
-# Sel
-`Sel` renders a chain of selectors:
-
-```go
-c := Sel(
-    Qual("a.b/c", "Foo"),
-    Id("Bar").Call(),
-    Id("Baz").Index(Lit(0)),
-    Id("Qux"),
-)
-fmt.Printf("%#v", c)
-// Output: c.Foo.Bar().Baz[0].Qux
-```
-
 # Op
 `Op` renders the provided operator / token:
 
