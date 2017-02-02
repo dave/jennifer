@@ -8,31 +8,353 @@ import (
 	. "github.com/davelondon/jennifer/jen"
 )
 
-func ExampleStatement_Clone_gotcha() {
+func ExampleAdd() {
 	a := Id("a")
-	c := Block(
-		a.Call(),
-		a.Call(),
-	)
+	i := Int()
+	c := Var().Add(a, i)
 	fmt.Printf("%#v", c)
 	// Output:
-	// {
-	// 	a()()
-	// 	a()()
+	// var a int
+}
+
+func ExampleAppend() {
+	c := Append(Id("a"), Id("b"))
+	fmt.Printf("%#v", c)
+	// Output:
+	// append(a, b)
+}
+
+func ExampleAppend_more() {
+	c := Id("a").Op("=").Append(Id("a"), Id("b").Op("..."))
+	fmt.Printf("%#v", c)
+	// Output:
+	// a = append(a, b...)
+}
+
+func ExampleAssert() {
+	c := List(Id("b"), Id("ok")).Op(":=").Id("a").Assert(Bool())
+	fmt.Printf("%#v", c)
+	// Output:
+	// b, ok := a.(bool)
+}
+
+func ExampleBlock() {
+	c := Func().Id("foo").Params().Block(Id("a").Op("=").Id("b"))
+	fmt.Printf("%#v", c)
+	// Output:
+	// func foo() {
+	// 	a = b
 	// }
 }
 
-func ExampleStatement_Clone_fixed() {
+func ExampleBlockFunc() {
+	c := Func().Id("a").Params().BlockFunc(func(g *Group) {
+		g.Id("a").Op("++")
+		g.Id("b").Op("--")
+	})
+	fmt.Printf("%#v", c)
+	// Output:
+	// func a() {
+	// 	a++
+	//	b--
+	// }
+}
+
+func ExampleBool() {
+	c := Var().Id("b").Bool()
+	fmt.Printf("%#v", c)
+	// Output:
+	// var b bool
+}
+
+func ExampleBreak() {
+	c := For(
+		Id("i").Op(":=").Lit(0),
+		Id("i").Op("<").Lit(10),
+		Id("i").Op("++"),
+	).Block(
+		If(Id("i").Op(">").Lit(5)).Block(
+			Break(),
+		),
+	)
+	fmt.Printf("%#v", c)
+	// Output:
+	// for i := 0; i < 10; i++ {
+	// 	if i > 5 {
+	// 		break
+	// 	}
+	// }
+}
+
+func ExampleByte() {
+	c := Id("b").Op(":=").Id("a").Assert(Byte())
+	fmt.Printf("%#v", c)
+	// Output:
+	// b := a.(byte)
+}
+
+func ExampleCall() {
+	c := Qual("fmt", "Printf").Call(
+		Lit("%#v: %T\n"),
+		Id("a"),
+		Id("b"),
+	)
+	fmt.Printf("%#v", c)
+	// Output:
+	// fmt.Printf("%#v: %T\n", a, b)
+}
+
+func ExampleCallFunc() {
+	f := func(name string, second string) {
+		c := Id("foo").CallFunc(func(g *Group) {
+			g.Id(name)
+			if second != "" {
+				g.Lit(second)
+			}
+		})
+		fmt.Printf("%#v\n", c)
+	}
+	f("a", "b")
+	f("c", "")
+	// Output:
+	// foo(a, "b")
+	// foo(c)
+}
+
+func ExampleCap() {
+	c := Id("i").Op(":=").Cap(Id("v"))
+	fmt.Printf("%#v", c)
+	// Output:
+	// i := cap(v)
+}
+
+func ExampleCase() {
+	c := Switch(Id("person")).Block(
+		Case(Id("John"), Id("Peter")).CaseBlock(
+			Return(Lit("male")),
+		),
+		Case(Id("Gill")).CaseBlock(
+			Return(Lit("female")),
+		),
+	)
+	fmt.Printf("%#v", c)
+	// Output:
+	// switch person {
+	// case John, Peter:
+	// 	return "male"
+	// case Gill:
+	// 	return "female"
+	// }
+}
+
+func ExampleCaseBlock() {
+	c := Select().Block(
+		Case(Op("<-").Id("done")).CaseBlock(
+			Return(Nil()),
+		),
+		Case(List(Err(), Id("open")).Op(":=").Op("<-").Id("fail")).CaseBlock(
+			If(Op("!").Id("open")).Block(
+				Return(Err()),
+			),
+		),
+	)
+	fmt.Printf("%#v", c)
+	// Output:
+	// select {
+	// case <-done:
+	// 	return nil
+	// case err, open := <-fail:
+	// 	if !open {
+	// 		return err
+	// 	}
+	// }
+}
+
+func ExampleCaseBlockFunc() {
+	preventExitOnError := true
+	c := Select().Block(
+		Case(Op("<-").Id("done")).CaseBlock(
+			Return(Nil()),
+		),
+		Case(Err().Op(":=").Op("<-").Id("fail")).CaseBlockFunc(func(g *Group) {
+			if !preventExitOnError {
+				g.Return(Err())
+			} else {
+				g.Qual("fmt", "Println").Call(Err())
+			}
+		}),
+	)
+	fmt.Printf("%#v", c)
+	// Output:
+	// select {
+	// case <-done:
+	// 	return nil
+	// case err := <-fail:
+	// 	fmt.Println(err)
+	// }
+}
+
+func ExampleCaseFunc() {
+	samIsMale := false
+	c := Switch(Id("person")).Block(
+		CaseFunc(func(g *Group) {
+			g.Id("John")
+			g.Id("Peter")
+			if samIsMale {
+				g.Id("Sam")
+			}
+		}).CaseBlock(
+			Return(Lit("male")),
+		),
+		CaseFunc(func(g *Group) {
+			g.Id("Gill")
+			if !samIsMale {
+				g.Id("Sam")
+			}
+		}).CaseBlock(
+			Return(Lit("female")),
+		),
+	)
+	fmt.Printf("%#v", c)
+	// Output:
+	// switch person {
+	// case John, Peter:
+	// 	return "male"
+	// case Gill, Sam:
+	// 	return "female"
+	// }
+}
+
+func ExampleChan() {
+	c := Func().Id("init").Params().Block(
+		Id("c").Op(":=").Make(Chan().Qual("os", "Signal"), Lit(1)),
+		Qual("os/signal", "Notify").Call(Id("c"), Qual("os", "Interrupt")),
+		Qual("os/signal", "Notify").Call(Id("c"), Qual("syscall", "SIGTERM")),
+		Go().Func().Params().Block(
+			Op("<-").Id("c"),
+			Id("cancel").Call(),
+		).Call(),
+	)
+	fmt.Printf("%#v", c)
+	// Output:
+	// func init() {
+	// 	c := make(chan os.Signal, 1)
+	// 	signal.Notify(c, os.Interrupt)
+	// 	signal.Notify(c, syscall.SIGTERM)
+	// 	go func() {
+	// 		<-c
+	// 		cancel()
+	// 	}()
+	// }
+}
+
+/*
+func Close(c ...Code) *Statement
+func Comment(str string) *Statement
+func Commentf(format string, a ...interface{}) *Statement
+func Complex(c ...Code) *Statement
+func Complex128() *Statement
+func Complex64() *Statement
+func Const() *Statement
+func Continue() *Statement
+func Copy(c ...Code) *Statement
+func Default() *Statement
+func Defer() *Statement
+func Defs(c ...Code) *Statement
+func DefsFunc(f func(*Group)) *Statement
+func Delete(c ...Code) *Statement
+func Dict(m map[Code]Code) *Statement
+func DictFunc(f func(map[Code]Code)) *Statement
+func Do(f func(*Statement)) *Statement
+func Else() *Statement
+func Empty() *Statement
+func Err() *Statement
+func Error() *Statement
+func Fallthrough() *Statement
+func False() *Statement
+func Float32() *Statement
+func Float64() *Statement
+func For(c ...Code) *Statement
+func ForFunc(f func(*Group)) *Statement
+func Func() *Statement
+func Go() *Statement
+func Goto() *Statement
+func Id(name string) *Statement
+func If(c ...Code) *Statement
+func IfFunc(f func(*Group)) *Statement
+func Imag(c ...Code) *Statement
+func Index(c ...Code) *Statement
+func IndexFunc(f func(*Group)) *Statement
+func Int() *Statement
+func Int16() *Statement
+func Int32() *Statement
+func Int64() *Statement
+func Int8() *Statement
+func Interface(c ...Code) *Statement
+func InterfaceFunc(f func(*Group)) *Statement
+func Iota() *Statement
+func Len(c ...Code) *Statement
+func Line() *Statement
+func List(c ...Code) *Statement
+func ListFunc(f func(*Group)) *Statement
+func Lit(v interface{}) *Statement
+func LitFunc(f func() interface{}) *Statement
+func Make(c ...Code) *Statement
+func Map(c Code) *Statement
+func New(c ...Code) *Statement
+func Nil() *Statement
+func Null() *Statement
+func Op(op string) *Statement
+func Panic(c ...Code) *Statement
+func Params(c ...Code) *Statement
+func ParamsFunc(f func(*Group)) *Statement
+func Parens(c Code) *Statement
+func Print(c ...Code) *Statement
+func Println(c ...Code) *Statement
+func Qual(path, name string) *Statement
+func Range() *Statement
+func Real(c ...Code) *Statement
+func Recover(c ...Code) *Statement
+func Return(c ...Code) *Statement
+func ReturnFunc(f func(*Group)) *Statement
+func Rune() *Statement
+func Sel(c ...Code) *Statement
+func SelFunc(f func(*Group)) *Statement
+func Select() *Statement
+func String() *Statement
+func Struct() *Statement
+func Switch(c ...Code) *Statement
+func SwitchFunc(f func(*Group)) *Statement
+func Tag(items map[string]string) *Statement
+func True() *Statement
+func Type() *Statement
+func Uint() *Statement
+func Uint16() *Statement
+func Uint32() *Statement
+func Uint64() *Statement
+func Uint8() *Statement
+func Uintptr() *Statement
+func Values(c ...Code) *Statement
+func ValuesFunc(f func(*Group)) *Statement
+func Var() *Statement
+*/
+
+func ExampleStatement_Clone() {
 	a := Id("a")
+	b := Id("b")
 	c := Block(
-		a.Clone().Call(),
-		a.Clone().Call(),
+		a.Call(),
+		a.Call(),
+		b.Clone().Call(),
+		b.Clone().Call(),
 	)
 	fmt.Printf("%#v", c)
 	// Output:
 	// {
-	// 	a()
-	// 	a()
+	// 	a()()
+	// 	a()()
+	// 	b()
+	// 	b()
 	// }
 }
 
@@ -52,7 +374,7 @@ func ExampleFile_Render() {
 	// func main() {}
 }
 
-func ExampleStatement_Comment() {
+func ExampleComment() {
 	f := NewFilePath("a.b/c")
 	f.Func().Id("init").Params().Block(
 		Qual("a.b/c", "Foo").Call().Comment("Local package - alias is omitted."),
@@ -75,42 +397,14 @@ func ExampleStatement_Comment() {
 	// }
 }
 
-/*
-var Keywords = []string{"break", "default", "func", "interface", "select", "case", "defer", "go", "map", "struct", "chan", "else", "goto", "package", "switch", "const", "fallthrough", "if", "range", "type", "continue", "import", "var"}
-
- "return" and "for" are special cases
-*/
-
-func ExampleSwitch() {
-	c := Switch(Id("a")).Block(
-		Case(Lit("1")).CaseBlock(
-			Return(Lit(1)),
-		),
-		Case(Lit("2"), Lit("3")).CaseBlock(
-			Return(Lit(2)),
-		),
-		Case(Lit("4")).CaseBlock(
-			Fallthrough(),
-		),
-		Default().CaseBlock(
-			Return(Lit(3)),
-		),
-	)
+func ExampleQual() {
+	c := Sel(Qual("a.b/c", "Foo").Call(), Id("Bar").Index(Lit(0)), Id("Baz"))
 	fmt.Printf("%#v", c)
 	// Output:
-	// switch a {
-	// case "1":
-	// 	return 1
-	// case "2", "3":
-	// 	return 2
-	// case "4":
-	// 	fallthrough
-	// default:
-	// 	return 3
-	// }
+	// c.Foo().Bar[0].Baz
 }
 
-func ExampleQual() {
+func ExampleQual_file() {
 	f := NewFile("a")
 	f.Func().Id("main").Params().Block(
 		Qual("encoding/gob", "NewEncoder").Call(),
@@ -126,14 +420,7 @@ func ExampleQual() {
 	// }
 }
 
-func ExampleQual2() {
-	c := Sel(Qual("a.b/c", "Foo").Call(), Id("Bar").Index(Lit(0)), Id("Baz"))
-	fmt.Printf("%#v", c)
-	// Output:
-	// c.Foo().Bar[0].Baz
-}
-
-func ExampleQual3() {
+func ExampleQual_local() {
 	f := NewFilePath("a.b/c")
 	f.Func().Id("main").Params().Block(
 		Qual("a.b/c", "D").Call(),
@@ -147,7 +434,7 @@ func ExampleQual3() {
 	// }
 }
 
-func ExampleId2() {
+func ExampleId() {
 	id := Sel(Qual("foo", "Bar"), Id("Baz"))
 	c := Sel(id, Id("Qux")).Call()
 	fmt.Printf("%#v", c)
@@ -169,7 +456,7 @@ func ExampleErr() {
 	// }
 }
 
-func ExampleCaseBlock() {
+func ExampleSwitch() {
 	c := Switch().Id("foo").Block(
 		Case().Lit("a").CaseBlock(
 			Return(Lit(1)),
@@ -193,15 +480,6 @@ func ExampleCaseBlock() {
 	// }
 }
 
-func ExampleAdd() {
-	a := Id("a")
-	i := Int()
-	c := Var().Add(a, i)
-	fmt.Printf("%#v", c)
-	// Output:
-	// var a int
-}
-
 func ExampleTag() {
 	// Note: Tags are ordered by key when rendered
 	c := Type().Id("foo").Struct().Block(
@@ -216,7 +494,7 @@ func ExampleTag() {
 	// }
 }
 
-func ExampleNull() {
+func ExampleNull_and_nil() {
 	c := Func().Id("foo").Params(
 		nil,
 		Id("s").String(),
@@ -228,21 +506,21 @@ func ExampleNull() {
 	// func foo(s string, i int) {}
 }
 
-func ExampleNull2() {
+func ExampleNull_index() {
 	c := Id("a").Op(":=").Id("b").Index(Lit(1), Null())
 	fmt.Printf("%#v", c)
 	// Output:
 	// a := b[1]
 }
 
-func ExampleEmpty2() {
+func ExampleEmpty() {
 	c := Id("a").Op(":=").Id("b").Index(Lit(1), Empty())
 	fmt.Printf("%#v", c)
 	// Output:
 	// a := b[1:]
 }
 
-func ExampleComplex() {
+func ExampleBlock_complex() {
 	collection := func(name string, key Code, value Code) *Statement {
 		if key == nil {
 			// slice
@@ -264,110 +542,21 @@ func ExampleComplex() {
 	// }
 }
 
-func ExampleBreak() {
-	c := For(
-		Id("i").Op(":=").Lit(0),
-		Id("i").Op("<").Lit(10),
-		Id("i").Op("++"),
-	).Block(
-		If(Id("i").Op(">").Lit(5)).Block(
-			Break(),
-		),
-	)
-	fmt.Printf("%#v", c)
-	// Output:
-	// for i := 0; i < 10; i++ {
-	// 	if i > 5 {
-	// 		break
-	// 	}
-	// }
-}
-
-func ExampleFunc() {
+func ExampleFunc_declaration() {
 	c := Func().Id("a").Params().Block()
 	fmt.Printf("%#v", c)
 	// Output:
 	// func a() {}
 }
 
-func ExampleGroup_Func() {
+func ExampleFunc_literal() {
 	c := Id("a").Op(":=").Func().Params().Block()
 	fmt.Printf("%#v", c)
 	// Output:
 	// a := func() {}
 }
 
-/*
-var Types = []string{"bool", "byte", "complex64", "complex128", "error", "float32", "float64", "int", "int8", "int16", "int32", "int64", "rune", "string", "uint", "uint8", "uint16", "uint32", "uint64", "uintptr"}
-*/
-
-func ExampleBool() {
-	c := List(Id("b"), Id("ok")).Op(":=").Id("a").Assert(Bool())
-	fmt.Printf("%#v", c)
-	// Output:
-	// b, ok := a.(bool)
-}
-
-func ExampleGroup_Bool() {
-	c := Var().Id("a").Bool().Op("=").Lit(true)
-	fmt.Printf("%#v", c)
-	// Output:
-	// var a bool = true
-}
-
-func ExampleByte() {
-	c := Id("b").Op(":=").Id("a").Assert(Byte())
-	fmt.Printf("%#v", c)
-	// Output:
-	// b := a.(byte)
-}
-
-func ExampleGroup_Byte() {
-	c := Id("b").Op(":=").Index().Byte().Parens(Id("s"))
-	fmt.Printf("%#v", c)
-	// Output:
-	// b := []byte(s)
-}
-
-/*
-var Constants = []string{"true", "false", "iota"}
-*/
-
-/*
-var Zero = []string{"nil"}
-*/
-
-/*
-var Functions = []string{"append", "cap", "close", "complex", "copy", "delete", "imag", "len", "make", "new", "panic", "print", "println", "real", "recover"}
-*/
-func ExampleAppend() {
-	c := Id("a").Call(
-		Append(Id("b"), Id("c")),
-	)
-	fmt.Printf("%#v", c)
-	// Output:
-	// a(append(b, c))
-}
-
-func ExampleGroup_Append() {
-	c := Id("a").Op("=").Append(Id("a"), Id("b").Op("..."))
-	fmt.Printf("%#v", c)
-	// Output:
-	// a = append(a, b...)
-}
-
-/*
-Blocks: "Parens", "List", "Values", "Index", "Block","Call", "Params"
-*/
-
 func ExampleInterface() {
-	c := Var().Id("a").Interface()
-	fmt.Printf("%#v", c)
-	// Output:
-	// var a interface{}
-}
-
-func ExampleInterface2() {
 	c := Type().Id("a").Interface(
 		Id("b").Params().String(),
 	)
@@ -378,64 +567,28 @@ func ExampleInterface2() {
 	// }
 }
 
-func ExampleParens2() {
+func ExampleInterface_empty() {
+	c := Var().Id("a").Interface()
+	fmt.Printf("%#v", c)
+	// Output:
+	// var a interface{}
+}
+
+func ExampleParens() {
 	c := Id("a").Op("/").Parens(Id("b").Op("+").Id("c"))
 	fmt.Printf("%#v", c)
 	// Output:
 	// a / (b + c)
 }
 
-func ExampleValues2() {
+func ExampleValues() {
 	c := Index().String().Values(Lit("a"), Lit("b"))
 	fmt.Printf("%#v", c)
 	// Output:
 	// []string{"a", "b"}
 }
 
-func ExampleBlock() {
-	c := Block(Id("a").Op("=").Id("b"))
-	fmt.Printf("%#v", c)
-	// Output:
-	// {
-	// 	a = b
-	// }
-}
-
-func ExampleGroup_Block() {
-	c := If(Id("a").Op("==").Lit(1)).Block(
-		Return(),
-	)
-	fmt.Printf("%#v", c)
-	// Output:
-	// if a == 1 {
-	// 	return
-	// }
-}
-
-func ExampleGroup_BlockFunc() {
-	c := Func().Id("a").Params().BlockFunc(func(g *Group) {
-		g.Id("a").Op("++")
-		g.Id("b").Op("--")
-	})
-	fmt.Printf("%#v", c)
-	// Output:
-	// func a() {
-	// 	a++
-	//	b--
-	// }
-}
-
-func ExampleGroup_Call() {
-	c := Id("a").Call(Id("b"), Id("c"))
-	fmt.Printf("%#v", c)
-	// Output:
-	// a(b, c)
-}
-
-//func Comment(comments ...string) *Group
-//func Commentf(format string, a ...interface{}) *Group
-
-func ExampleComment() {
+func ExampleComment_simple() {
 	c := Comment("a")
 	fmt.Printf("%#v", c)
 	// Output:
@@ -452,32 +605,12 @@ func ExampleComment_multiline() {
 	// */
 }
 
-func ExampleGroup_Comment() {
-	c := Id("a").Call().Comment("b")
-	fmt.Printf("%#v", c)
-	// Output:
-	// a() // b
-}
-
 func ExampleCommentf() {
 	c := Commentf("a %d", 1)
 	fmt.Printf("%#v", c)
 	// Output:
 	// // a 1
 }
-
-func ExampleGroup_Commentf() {
-	c := Id("a").Call().Commentf("b %d", 1)
-	fmt.Printf("%#v", c)
-	// Output:
-	// a() // b 1
-}
-
-//func Do(f func(*Group)) *Group
-//func Empty() *Group
-//func For() *Group
-
-//func Lit(v interface{}) *Group
 
 func ExampleDo() {
 	f := func(name string, isMap bool) *Statement {
@@ -495,14 +628,14 @@ func ExampleDo() {
 	// b := []string{}
 }
 
-func ExampleGroup_Dict2() {
+func ExampleDict_nil() {
 	c := Id("a").Op(":=").Map(String()).String().Dict(nil)
 	fmt.Printf("%#v", c)
 	// Output:
 	// a := map[string]string{}
 }
 
-func ExampleGroup_Dict() {
+func ExampleDict() {
 	c := Id("a").Op(":=").Map(String()).String().Dict(map[Code]Code{
 		Lit("a"): Lit("b"),
 	})
@@ -513,7 +646,7 @@ func ExampleGroup_Dict() {
 	// }
 }
 
-func ExampleGroup_DictFunc() {
+func ExampleDictFunc() {
 	c := Id("a").Op(":=").Map(String()).String().DictFunc(func(m map[Code]Code) {
 		m[Lit("a")] = Lit("b")
 	})
@@ -536,8 +669,6 @@ func ExampleDefs() {
 	// 	b = "b"
 	// )
 }
-
-//func Id(names ...string) *Group
 
 func ExampleId_local() {
 	c := Id("a").Op(":=").Lit(1)
@@ -570,12 +701,6 @@ func ExampleId_remote() {
 	// 	fmt.Println("Hello, world")
 	// }
 }
-
-//func NewFile(name string) *Group
-//func NewFilePath(name, path string) *Group
-//func Null() *Group
-//func Op(op string) *Group
-//func Return(c ...Code) *Group
 
 func ExampleNewFile() {
 	f := NewFile("main")
