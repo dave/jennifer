@@ -113,42 +113,44 @@ func Render(w io.Writer) error {
 		funcParam := Id("f").Func().Params(Op("*").Id("Group"))
 		funcCall := Id("f")
 
-		funcName := b.Name + "Func"
-		redirect(
-			funcName,
-			comment,
-			funcParam,
-			funcCall,
-		)
+		if b.List {
+			funcName := b.Name + "Func"
+			redirect(
+				funcName,
+				comment,
+				funcParam,
+				funcCall,
+			)
 
-		/*
-			// {comment}
-			func (s *Statement) {NameFunc}(f func(*Group)) *Statement {
-				g := &Group{
-					open:      "{Open}",
-					close:     "{Close}",
-					separator: "{Separator}",
+			/*
+				// {comment}
+				func (s *Statement) {NameFunc}(f func(*Group)) *Statement {
+					g := &Group{
+						open:      "{Open}",
+						close:     "{Close}",
+						separator: "{Separator}",
+					}
+					f(g)
+					*s = append(*s, g)
+					return s
 				}
-				f(g)
-				*s = append(*s, g)
-				return s
-			}
-		*/
-		file.Add(comment)
-		file.Func().Params(
-			Id("s").Op("*").Id("Statement"),
-		).Id(funcName).Params(
-			funcParam,
-		).Op("*").Id("Statement").Block(
-			Id("g").Op(":=").Op("&").Id("Group").Dict(map[Code]Code{
-				Id("open"):      Lit(b.Open),
-				Id("close"):     Lit(b.Close),
-				Id("separator"): Lit(b.Separator),
-			}),
-			Id("f").Call(Id("g")),
-			Op("*").Id("s").Op("=").Append(Op("*").Id("s"), Id("g")),
-			Return(Id("s")),
-		)
+			*/
+			file.Add(comment)
+			file.Func().Params(
+				Id("s").Op("*").Id("Statement"),
+			).Id(funcName).Params(
+				funcParam,
+			).Op("*").Id("Statement").Block(
+				Id("g").Op(":=").Op("&").Id("Group").Dict(map[Code]Code{
+					Id("open"):      Lit(b.Open),
+					Id("close"):     Lit(b.Close),
+					Id("separator"): Lit(b.Separator),
+				}),
+				Id("f").Call(Id("g")),
+				Op("*").Id("s").Op("=").Append(Op("*").Id("s"), Id("g")),
+				Return(Id("s")),
+			)
+		}
 	}
 
 	type tkn struct {

@@ -28,30 +28,6 @@ func (s *Statement) Parens(c Code) *Statement {
 	return s
 }
 
-// Parens inserts parenthesis
-func ParensFunc(f func(*Group)) *Statement {
-	return newStatement().ParensFunc(f)
-}
-
-// Parens inserts parenthesis
-func (g *Group) ParensFunc(f func(*Group)) *Statement {
-	s := ParensFunc(f)
-	g.items = append(g.items, s)
-	return s
-}
-
-// Parens inserts parenthesis
-func (s *Statement) ParensFunc(f func(*Group)) *Statement {
-	g := &Group{
-		close:     ")",
-		open:      "(",
-		separator: "",
-	}
-	f(g)
-	*s = append(*s, g)
-	return s
-}
-
 // List inserts a comma separated list
 func List(c ...Code) *Statement {
 	return newStatement().List(c...)
@@ -460,30 +436,6 @@ func (s *Statement) Assert(c Code) *Statement {
 	return s
 }
 
-// Assert inserts a type assertion
-func AssertFunc(f func(*Group)) *Statement {
-	return newStatement().AssertFunc(f)
-}
-
-// Assert inserts a type assertion
-func (g *Group) AssertFunc(f func(*Group)) *Statement {
-	s := AssertFunc(f)
-	g.items = append(g.items, s)
-	return s
-}
-
-// Assert inserts a type assertion
-func (s *Statement) AssertFunc(f func(*Group)) *Statement {
-	g := &Group{
-		close:     ")",
-		open:      ".(",
-		separator: "",
-	}
-	f(g)
-	*s = append(*s, g)
-	return s
-}
-
 // Map inserts the map keyword, followed by square brackets
 func Map(c Code) *Statement {
 	return newStatement().Map(c)
@@ -504,30 +456,6 @@ func (s *Statement) Map(c Code) *Statement {
 		open:      "map[",
 		separator: "",
 	}
-	*s = append(*s, g)
-	return s
-}
-
-// Map inserts the map keyword, followed by square brackets
-func MapFunc(f func(*Group)) *Statement {
-	return newStatement().MapFunc(f)
-}
-
-// Map inserts the map keyword, followed by square brackets
-func (g *Group) MapFunc(f func(*Group)) *Statement {
-	s := MapFunc(f)
-	g.items = append(g.items, s)
-	return s
-}
-
-// Map inserts the map keyword, followed by square brackets
-func (s *Statement) MapFunc(f func(*Group)) *Statement {
-	g := &Group{
-		close:     "]",
-		open:      "map[",
-		separator: "",
-	}
-	f(g)
 	*s = append(*s, g)
 	return s
 }
