@@ -91,7 +91,7 @@ var Groups = []struct {
 	},
 	{
 		Name:      "CaseBlock",
-		Desc:      "a statement list preceeded by a colon",
+		Desc:      "a statement list preceded by a colon",
 		List:      true,
 		Open:      ":",
 		Close:     "",

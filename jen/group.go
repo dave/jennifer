@@ -44,7 +44,7 @@ func (g *Group) render(f *File, w io.Writer) error {
 			continue
 		}
 		if first && g.separator == "\n" {
-			// For blocks seperated with new lines, we always insert a new line
+			// For blocks separated with new lines, we always insert a new line
 			// before the first item (but only if there is an item).
 			if _, err := w.Write([]byte("\n")); err != nil {
 				return err
@@ -61,7 +61,7 @@ func (g *Group) render(f *File, w io.Writer) error {
 		first = false
 	}
 	if !first && g.separator == "\n" && g.close != "" {
-		// For blocks seperated with new lines and with a closing token, we
+		// For blocks separated with new lines and with a closing token, we
 		// always insert a new line after the last item (but only if there is
 		// an item). This is to ensure that if the statement finishes with a
 		// comment, the closing token is not commented out.

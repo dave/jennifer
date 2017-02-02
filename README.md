@@ -150,7 +150,7 @@ Note: The `import` and `package` keywords are always rendered automatically, so
 not included.
 
 # Built-in functions
-Built in functions render the function name followed by a comma seperated list 
+Built in functions render the function name followed by a comma separated list 
 enclosed by parenthesis:
 
 ```go
@@ -163,7 +163,7 @@ Functions: `Append`, `Cap`, `Close`, `Complex`, `Copy`, `Delete`, `Imag`, `Len`,
 
 # Groups
 Groups take either a single item or a list of items. The items are rendered 
-between open and closing tokens. Multiple items are seperated by a separator 
+between open and closing tokens. Multiple items are separated by a separator 
 token:
 
 ### Groups accepting a list of items:
@@ -209,7 +209,7 @@ fmt.Printf("%#v", c)
 ```
 
 ### List
-`List` renders a comma seperated list with no open or closing tokens. Use for 
+`List` renders a comma separated list with no open or closing tokens. Use for 
 multiple return functions:
 
 ```go
@@ -219,7 +219,7 @@ fmt.Printf("%#v", c)
 ```
 
 ### Call
-`Call` renders a comma seperated list enclosed by parenthesis. Use for function
+`Call` renders a comma separated list enclosed by parenthesis. Use for function
 calls:
 
 ```go
@@ -229,7 +229,7 @@ fmt.Printf("%#v", c)
 ```
 
 ### Params
-`Params` renders a comma seperated list enclosed by parenthesis. Use for 
+`Params` renders a comma separated list enclosed by parenthesis. Use for 
 function parameters and method receivers:
 
 ```go
@@ -239,7 +239,7 @@ fmt.Printf("%#v", c)
 ```
 
 ### Index
-`Index` renders a colon seperated list enclosed by square brackets. Use for 
+`Index` renders a colon separated list enclosed by square brackets. Use for 
 array / slice indexes and definitions:
 
 ```go
@@ -261,7 +261,7 @@ fmt.Printf("%#v", c)
 ```
 
 ### Values
-`Values` renders a comma seperated list enclosed by curly braces. Use for slice 
+`Values` renders a comma separated list enclosed by curly braces. Use for slice 
 literals:
 
 ```go

@@ -388,19 +388,19 @@ func (s *Statement) ParamsFunc(f func(*Group)) *Statement {
 	return s
 }
 
-// CaseBlock inserts a statement list preceeded by a colon
+// CaseBlock inserts a statement list preceded by a colon
 func CaseBlock(c ...Code) *Statement {
 	return newStatement().CaseBlock(c...)
 }
 
-// CaseBlock inserts a statement list preceeded by a colon
+// CaseBlock inserts a statement list preceded by a colon
 func (g *Group) CaseBlock(c ...Code) *Statement {
 	s := CaseBlock(c...)
 	g.items = append(g.items, s)
 	return s
 }
 
-// CaseBlock inserts a statement list preceeded by a colon
+// CaseBlock inserts a statement list preceded by a colon
 func (s *Statement) CaseBlock(c ...Code) *Statement {
 	g := &Group{
 		close:     "",
@@ -412,19 +412,19 @@ func (s *Statement) CaseBlock(c ...Code) *Statement {
 	return s
 }
 
-// CaseBlock inserts a statement list preceeded by a colon
+// CaseBlock inserts a statement list preceded by a colon
 func CaseBlockFunc(f func(*Group)) *Statement {
 	return newStatement().CaseBlockFunc(f)
 }
 
-// CaseBlock inserts a statement list preceeded by a colon
+// CaseBlock inserts a statement list preceded by a colon
 func (g *Group) CaseBlockFunc(f func(*Group)) *Statement {
 	s := CaseBlockFunc(f)
 	g.items = append(g.items, s)
 	return s
 }
 
-// CaseBlock inserts a statement list preceeded by a colon
+// CaseBlock inserts a statement list preceded by a colon
 func (s *Statement) CaseBlockFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     "",
