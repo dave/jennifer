@@ -70,9 +70,9 @@ func Render(w io.Writer) error {
 
 		redirect(
 			b.Name,
-			comment.Clone(),
-			param.Clone(),
-			call.Clone(),
+			comment,
+			param,
+			call,
 		)
 
 		/*
@@ -88,11 +88,11 @@ func Render(w io.Writer) error {
 				return s
 			}
 		*/
-		file.Add(comment.Clone())
+		file.Add(comment)
 		file.Func().Params(
 			Id("s").Op("*").Id("Statement"),
 		).Id(b.Name).Params(
-			param.Clone(),
+			param,
 		).Op("*").Id("Statement").Block(
 			Id("g").Op(":=").Op("&").Id("Group").Dict(map[Code]Code{
 				Id("items"): Do(func(s *Statement) {
@@ -116,9 +116,9 @@ func Render(w io.Writer) error {
 		funcName := b.Name + "Func"
 		redirect(
 			funcName,
-			comment.Clone(),
-			funcParam.Clone(),
-			funcCall.Clone(),
+			comment,
+			funcParam,
+			funcCall,
 		)
 
 		/*
@@ -134,11 +134,11 @@ func Render(w io.Writer) error {
 				return s
 			}
 		*/
-		file.Add(comment.Clone())
+		file.Add(comment)
 		file.Func().Params(
 			Id("s").Op("*").Id("Statement"),
 		).Id(funcName).Params(
-			funcParam.Clone(),
+			funcParam,
 		).Op("*").Id("Statement").Block(
 			Id("g").Op(":=").Op("&").Id("Group").Dict(map[Code]Code{
 				Id("open"):      Lit(b.Open),
@@ -185,7 +185,7 @@ func Render(w io.Writer) error {
 		)
 		redirect(
 			t.cap,
-			comment.Clone(),
+			comment,
 			nil,
 			nil,
 		)
@@ -201,7 +201,7 @@ func Render(w io.Writer) error {
 				return s
 			}
 		*/
-		file.Add(comment.Clone())
+		file.Add(comment)
 		file.Func().Params(
 			Id("s").Op("*").Id("Statement"),
 		).Id(t.cap).Params().Op("*").Id("Statement").Block(
@@ -227,9 +227,9 @@ func Render(w io.Writer) error {
 
 		redirect(
 			capName,
-			comment.Clone(),
-			param.Clone(),
-			call.Clone(),
+			comment,
+			param,
+			call,
 		)
 
 		/*
@@ -238,11 +238,11 @@ func Render(w io.Writer) error {
 				return s.Id("{Name}").Call(c...)
 			}
 		*/
-		file.Add(comment.Clone())
+		file.Add(comment)
 		file.Func().Params(
 			Id("s").Op("*").Id("Statement"),
 		).Id(capName).Params(
-			param.Clone(),
+			param,
 		).Op("*").Id("Statement").Block(
 			Return(
 				Sel(
