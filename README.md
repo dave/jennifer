@@ -174,17 +174,17 @@ token:
 | List      |               | `,`       |         | `a, b := c()`                     |
 | Call      | `(`           | `,`       | `)`     | `fmt.Println(b, c)`               |
 | Params    | `(`           | `,`       | `)`     | `func (a *A) Foo(i int) { ... }`  |
-| Values    | `{`           | `,`       | `}`     | `[]int{1, 2}`                     |
 | Index     | `[`           | `:`       | `]`     | `a[1:2]` or `[]int{}`             |
+| Values    | `{`           | `,`       | `}`     | `[]int{1, 2}`                     |
 | Block     | `{`           | `\n`      | `}`     | `func a() { ... }`                |
 | Defs      | `(`           | `\n`      | `)`     | `const ( ... )`                   |
+| Interface | `interface {` | `\n`      | `}`     | `interface { ... }`               |
+| Switch    | `switch`      | `;`       |         | `switch a { ... }`                |
 | Case      | `case`        | `,`       |         | `switch a {case "b", "c": ... }`  |
 | CaseBlock | `:`           | `\n`      |         | `switch i {case 1: ... }`         |
 | Return    | `return`      | `,`       |         | `return a, b`                     |
 | If        | `if`          | `;`       |         | `if a, ok := b(); ok { ... }`     |
 | For       | `for`         | `;`       |         | `for i := 0; i < 10; i++ { ... }` |
-| Switch    | `switch`      | `;`       |         | `switch a { ... }`                |
-| Interface | `interface {` | `\n`      | `}`     | `interface { ... }`               |
 
 ### Groups accepting a single item:
 
@@ -216,16 +216,6 @@ multiple return functions:
 c := List(Id("a"), Id("b")).Op(":=").Id("c").Call()
 fmt.Printf("%#v", c)
 // Output: a, b := c()
-```
-
-### Values
-`Values` renders a comma seperated list enclosed by curly braces. Use for slice 
-literals:
-
-```go
-c := Index().String().Values(Lit("a"), Lit("b"))
-fmt.Printf("%#v", c)
-// Output: []string{"a", "b"}
 ```
 
 ### Call
@@ -270,6 +260,16 @@ fmt.Printf("%#v", c)
 // Output: a := b[1:]
 ```
 
+### Values
+`Values` renders a comma seperated list enclosed by curly braces. Use for slice 
+literals:
+
+```go
+c := Index().String().Values(Lit("a"), Lit("b"))
+fmt.Printf("%#v", c)
+// Output: []string{"a", "b"}
+```
+
 ### Block
 `Block` renders a statement list enclosed by curly braces. Use for all code 
 blocks:
@@ -310,6 +310,25 @@ fmt.Printf("%#v", c)
 // 	a = "a"
 // 	b = "b"
 // )
+```
+
+### Interface
+`Interface` renders the interface keyword followed by a statement block:
+
+```go
+c := Var().Id("a").Interface()
+fmt.Printf("%#v", c)
+// Output: var a interface{}
+```
+
+```go
+c := Type().Id("a").Interface(
+    Id("b").Params().String(),
+)
+fmt.Printf("%#v", c)
+// Output: type a interface {
+// 	b() string
+// }
 ```
 
 ### Switch, Case, CaseBlock
@@ -375,25 +394,6 @@ c := For(Id("i").Op(":=").Lit(0), Id("i").Op("<").Lit(10), Id("i").Op("++")).Blo
 fmt.Printf("%#v", c)
 // Output: for i := 0; i < 10; i++ {
 //  fmt.Println(i)
-// }
-```
-
-### Interface
-`Interface` renders the interface keyword followed by a statement block:
-
-```go
-c := Var().Id("a").Interface()
-fmt.Printf("%#v", c)
-// Output: var a interface{}
-```
-
-```go
-c := Type().Id("a").Interface(
-    Id("b").Params().String(),
-)
-fmt.Printf("%#v", c)
-// Output: type a interface {
-// 	b() string
 // }
 ```
 
