@@ -1252,6 +1252,30 @@ func (s *Statement) Goto(label Code) *Statement {
 	return s
 }
 
+// Defer renders the defer keyword followed by a single item.
+func Defer(expression Code) *Statement {
+	return newStatement().Defer(expression)
+}
+
+// Defer renders the defer keyword followed by a single item.
+func (g *Group) Defer(expression Code) *Statement {
+	s := Defer(expression)
+	g.items = append(g.items, s)
+	return s
+}
+
+// Defer renders the defer keyword followed by a single item.
+func (s *Statement) Defer(expression Code) *Statement {
+	g := &Group{
+		close:     "",
+		items:     []Code{expression},
+		open:      "defer ",
+		separator: "",
+	}
+	*s = append(*s, g)
+	return s
+}
+
 // Bool renders the bool identifier.
 func Bool() *Statement {
 	return newStatement().Bool()
@@ -1884,28 +1908,6 @@ func (g *Group) Select() *Statement {
 func (s *Statement) Select() *Statement {
 	t := token{
 		content: "select",
-		typ:     keywordToken,
-	}
-	*s = append(*s, t)
-	return s
-}
-
-// Defer renders the defer keyword.
-func Defer() *Statement {
-	return newStatement().Defer()
-}
-
-// Defer renders the defer keyword.
-func (g *Group) Defer() *Statement {
-	s := Defer()
-	g.items = append(g.items, s)
-	return s
-}
-
-// Defer renders the defer keyword.
-func (s *Statement) Defer() *Statement {
-	t := token{
-		content: "defer",
 		typ:     keywordToken,
 	}
 	*s = append(*s, t)

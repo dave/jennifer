@@ -339,6 +339,12 @@ func ValuesFunc(f func(*Group)) *Statement
 func Var() *Statement
 */
 
+func ExampleDefer() {
+	c := Defer(Id("foo").Call())
+	fmt.Printf("%#v", c)
+	// Output: defer foo()
+}
+
 func ExampleGoto() {
 	c := Goto(Id("Outer"))
 	fmt.Printf("%#v", c)
