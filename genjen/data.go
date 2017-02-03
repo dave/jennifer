@@ -27,7 +27,7 @@ var Groups = []struct {
 }{
 	{
 		Name:      "Parens",
-		Desc:      "parenthesis",
+		Desc:      "renders a single item in parenthesis. Use for type conversion or to specify evaluation order.",
 		List:      false,
 		Open:      "(",
 		Close:     ")",
@@ -35,7 +35,7 @@ var Groups = []struct {
 	},
 	{
 		Name:      "List",
-		Desc:      "a comma separated list",
+		Desc:      "renders a comma separated list with no open or closing tokens. Use for multiple return functions.",
 		List:      true,
 		Open:      "",
 		Close:     "",
@@ -43,7 +43,7 @@ var Groups = []struct {
 	},
 	{
 		Name:      "Values",
-		Desc:      "curly braces containing a comma separated list",
+		Desc:      "renders a comma separated list enclosed by curly braces. Use for slice literals.",
 		List:      true,
 		Open:      "{",
 		Close:     "}",
@@ -51,7 +51,7 @@ var Groups = []struct {
 	},
 	{
 		Name:      "Index",
-		Desc:      "square brackets containing a colon separated list",
+		Desc:      "renders a colon separated list enclosed by square brackets. Use for array / slice indexes and definitions.",
 		List:      true,
 		Open:      "[",
 		Close:     "]",
@@ -59,7 +59,7 @@ var Groups = []struct {
 	},
 	{
 		Name:      "Block",
-		Desc:      "curly braces containing a statement list",
+		Desc:      "renders a statement list enclosed by curly braces. Use for all code blocks.",
 		List:      true,
 		Open:      "{",
 		Close:     "}",
@@ -67,7 +67,7 @@ var Groups = []struct {
 	},
 	{
 		Name:      "Defs",
-		Desc:      "parenthesis containing a statement list",
+		Desc:      "renders a list of statements enclosed in parenthesis. Use for definition lists.",
 		List:      true,
 		Open:      "(",
 		Close:     ")",
@@ -75,7 +75,7 @@ var Groups = []struct {
 	},
 	{
 		Name:      "Call",
-		Desc:      "parenthesis containing a comma separated list",
+		Desc:      "renders a comma separated list enclosed by parenthesis. Use for function calls.",
 		List:      true,
 		Open:      "(",
 		Close:     ")",
@@ -83,7 +83,7 @@ var Groups = []struct {
 	},
 	{
 		Name:      "Params",
-		Desc:      "parenthesis containing a comma separated list",
+		Desc:      "renders a comma separated list enclosed by parenthesis. Use for function parameters and method receivers.",
 		List:      true,
 		Open:      "(",
 		Close:     ")",
@@ -91,7 +91,7 @@ var Groups = []struct {
 	},
 	{
 		Name:      "CaseBlock",
-		Desc:      "a statement list preceded by a colon",
+		Desc:      "renders a statement list preceded by a colon. Use to build switch / select statements.",
 		List:      true,
 		Open:      ":",
 		Close:     "",
@@ -99,7 +99,7 @@ var Groups = []struct {
 	},
 	{
 		Name:      "Assert",
-		Desc:      "a type assertion",
+		Desc:      "renders a period followed by a single item enclosed by parenthesis. Use for type assertions.",
 		List:      false,
 		Open:      ".(",
 		Close:     ")",
@@ -107,7 +107,7 @@ var Groups = []struct {
 	},
 	{
 		Name:      "Map",
-		Desc:      "the map keyword, followed by square brackets",
+		Desc:      "renders the map keyword followed by a single item enclosed by square brackets. Use for map definitions.",
 		List:      false,
 		Open:      "map[",
 		Close:     "]",
@@ -115,7 +115,7 @@ var Groups = []struct {
 	},
 	{
 		Name:      "If",
-		Desc:      "the if keyword, followed by a semicolon separated list",
+		Desc:      "renders the if keyword followed by a semicolon separated list.",
 		List:      true,
 		Open:      "if ",
 		Close:     "",
@@ -123,7 +123,7 @@ var Groups = []struct {
 	},
 	{
 		Name:      "Return",
-		Desc:      "the return keyword, followed by a comma separated list",
+		Desc:      "renders the return keyword, followed by a comma separated list.",
 		List:      true,
 		Open:      "return ",
 		Close:     "",
@@ -131,7 +131,7 @@ var Groups = []struct {
 	},
 	{
 		Name:      "For",
-		Desc:      "the for keyword, followed by a semicolon separated list",
+		Desc:      "renders the for keyword, followed by a semicolon separated list.",
 		List:      true,
 		Open:      "for ",
 		Close:     "",
@@ -139,7 +139,7 @@ var Groups = []struct {
 	},
 	{
 		Name:      "Switch",
-		Desc:      "the switch keyword, followed by a semicolon separated list",
+		Desc:      "renders the switch keyword, followed by a semicolon separated list.",
 		List:      true,
 		Open:      "switch ",
 		Close:     "",
@@ -147,7 +147,7 @@ var Groups = []struct {
 	},
 	{
 		Name:      "Interface",
-		Desc:      "the interface keyword, followed by curly braces containing a statement list",
+		Desc:      "renders the interface keyword, followed by curly braces containing a statement list.",
 		List:      true,
 		Open:      "interface{",
 		Close:     "}",
@@ -155,7 +155,7 @@ var Groups = []struct {
 	},
 	{
 		Name:      "Case",
-		Desc:      "the case keyword, followed by a comma separated list",
+		Desc:      "renders the case keyword, followed by a comma separated list.",
 		List:      true,
 		Open:      "case ",
 		Close:     "",
@@ -163,7 +163,7 @@ var Groups = []struct {
 	},
 	{
 		Name:      "Sel",
-		Desc:      "a group of selectors - items separated by periods",
+		Desc:      "renders a chain of selectors separated by periods.",
 		List:      true,
 		Open:      "",
 		Close:     "",

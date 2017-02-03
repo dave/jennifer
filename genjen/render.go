@@ -59,7 +59,7 @@ func Render(w io.Writer) error {
 		if b.Name == "" {
 			continue
 		}
-		comment := Commentf("%s inserts %s", b.Name, b.Desc)
+		comment := Commentf("%s %s", b.Name, b.Desc)
 
 		var variadic Code
 		if b.List {
@@ -110,6 +110,7 @@ func Render(w io.Writer) error {
 			Return(Id("s")),
 		)
 
+		funcComment := Commentf("%sFunc %s", b.Name, b.Desc)
 		funcParam := Id("f").Func().Params(Op("*").Id("Group"))
 		funcCall := Id("f")
 
@@ -117,7 +118,7 @@ func Render(w io.Writer) error {
 			funcName := b.Name + "Func"
 			redirect(
 				funcName,
-				comment,
+				funcComment,
 				funcParam,
 				funcCall,
 			)
@@ -135,7 +136,7 @@ func Render(w io.Writer) error {
 					return s
 				}
 			*/
-			file.Add(comment)
+			file.Add(funcComment)
 			file.Func().Params(
 				Id("s").Op("*").Id("Statement"),
 			).Id(funcName).Params(

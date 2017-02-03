@@ -195,7 +195,7 @@ token:
 | Map    | `map[`   | `]`     | `map[int]string`             |
 
 ### Sel
-`Sel` renders a chain of selectors:
+`Sel` renders a chain of selectors separated by periods:
 
 ```go
 c := Sel(
