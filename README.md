@@ -135,7 +135,7 @@ fmt.Printf("%#v", c)
 // Output: break
 ```
 
-Keywords: `Break`, `Default`, `Func`, `Select`, `Go`, `Chan`, `Else`, `Const`, `Fallthrough`, `Range`, `Type`, `Continue`, `Var`
+Keywords: `Break`, `Default`, `Func`, `Select`, `Chan`, `Else`, `Const`, `Fallthrough`, `Type`, `Continue`, `Var`
 
 Built-in types: `Bool`, `Byte`, `Complex64`, `Complex128`, `Error`, `Float32`, `Float64`, `Int`, `Int8`, `Int16`, `Int32`, `Int64`, `Rune`, `String`, `Uint`, `Uint8`, `Uint16`, `Uint32`, `Uint64`, `Uintptr`
 
@@ -143,11 +143,140 @@ Constants: `True`, `False`, `Iota`, `Nil`
 
 Also included is `Err` for the commonly used `err` variable.
 
-Note: `Interface`, `Struct`, `Map`, `Return`, `Switch`, `For`, `Case`, `Goto`, 
-`Defer` and `If` are special cases, and treated as groups - see below.
-
 Note: The `import` and `package` keywords are always rendered automatically, so 
 not included.
+
+# Special keywords
+`Goto`, `Defer`, `Go`, `Range` all render the keyword followed by a single 
+item:
+
+```go
+c := Goto(Id("Outer"))
+fmt.Printf("%#v", c)
+// Output: goto Outer
+```
+
+```go
+c := Defer(Id("foo").Call())
+fmt.Printf("%#v", c)
+// Output: defer foo()
+```
+
+### Interface, Struct
+`Interface` and `Struct` render the keyword followed by a statement list 
+enclosed by curly braces: 
+
+```go
+c := Var().Id("a").Interface()
+fmt.Printf("%#v", c)
+// Output: var a interface{}
+```
+
+```go
+c := Type().Id("a").Interface(
+    Id("b").Params().String(),
+)
+fmt.Printf("%#v", c)
+// Output: type a interface {
+// 	b() string
+// }
+```
+
+```go
+c := Id("c").Op(":=").Make(Chan().Struct())
+fmt.Printf("%#v", c)
+// Output:
+// c := make(chan struct{})
+```
+
+```go
+c := Type().Id("foo").Struct(
+    List(Id("x"), Id("y")).Int(),
+    Id("u").Float32(),
+)
+fmt.Printf("%#v", c)
+// Output:
+// type foo struct {
+// 	x, y int
+// 	u    float32
+// }
+```
+
+### Switch, Case, CaseBlock
+`Switch`, `Case` and `CaseBlock` can be used to build `switch` statements:
+
+```go
+c := Switch(Id("a")).Block(
+    Case(Lit("1")).CaseBlock(
+        Return(Lit(1)),
+    ),
+    Case(Lit("2"), Lit("3")).CaseBlock(
+        Return(Lit(2)),
+    ),
+    Case(Lit("4")).CaseBlock(
+        Fallthrough(),
+    ),
+    Default().CaseBlock(
+        Return(Lit(3)),
+    ),
+)
+fmt.Printf("%#v", c)
+// Output: switch a {
+// case "1":
+// 	return 1
+// case "2", "3":
+// 	return 2
+// case "4":
+// 	fallthrough
+// default:
+// 	return 3
+// }
+```
+
+### Map
+`Map` renders the `map` keyword followed by a single item enclosed by square 
+brackets. Use for map definitions:
+
+```go
+c := Id("a").Op(":=").Map(String()).String().Values()
+fmt.Printf("%#v", c)
+// Output: a := map[string]string{}
+```
+
+### Return
+`Return` renders the `return` keyword followed by a comma separated list:
+
+```go
+c := Return(Id("a"), Id("b"))
+fmt.Printf("%#v", c)
+// Output: return a, b
+```
+
+### If
+`If` renders the `if` keyword followed by a semicolon separated list:
+
+```go
+c := If(Err().Op(":=").Id("a").Call(), Err().Op("!=").Nil()).Block(
+    Return(Err()),
+)
+fmt.Printf("%#v", c)
+// Output: if err := a(); err != nil {
+//  return err
+// }
+```
+
+### For
+`For` renders the `for` keyword followed by a semicolon separated list:
+
+```go
+c := For(Id("i").Op(":=").Lit(0), Id("i").Op("<").Lit(10), Id("i").Op("++")).Block(
+    Qual("fmt", "Println").Call(Id("i")),
+)
+fmt.Printf("%#v", c)
+// Output: for i := 0; i < 10; i++ {
+//  fmt.Println(i)
+// }
+```
 
 # Built-in functions
 Built in functions render the function name followed by a comma separated list 
@@ -178,14 +307,6 @@ token:
 | Values    | `{`           | `,`       | `}`     | `[]int{1, 2}`                     |
 | Block     | `{`           | `\n`      | `}`     | `func a() { ... }`                |
 | Defs      | `(`           | `\n`      | `)`     | `const ( ... )`                   |
-| Interface | `interface {` | `\n`      | `}`     | `interface { ... }`               |
-| Struct    | `struct {`    | `\n`      | `}`     | `struct { ... }`                  |
-| Switch    | `switch`      | `;`       |         | `switch a { ... }`                |
-| Case      | `case`        | `,`       |         | `switch a {case "b", "c": ... }`  |
-| CaseBlock | `:`           | `\n`      |         | `switch i {case 1: ... }`         |
-| Return    | `return`      | `,`       |         | `return a, b`                     |
-| If        | `if`          | `;`       |         | `if a, ok := b(); ok { ... }`     |
-| For       | `for`         | `;`       |         | `for i := 0; i < 10; i++ { ... }` |
 
 ### Groups accepting a single item:
 
@@ -193,9 +314,6 @@ token:
 | ------ | -------- | ------- | ---------------------------- |
 | Parens | `(`      | `)`     | `[]byte(s)` or `a / (b + c)` |
 | Assert | `.(`     | `)`     | `s, ok := i.(string)`        |
-| Map    | `map[`   | `]`     | `map[int]string`             |
-| Goto   | `goto`   |         | `goto Foo`                   |
-| Defer  | `defer`  |         | `defer foo()`                |
 
 ### Sel
 `Sel` renders a chain of selectors separated by periods:
@@ -315,116 +433,6 @@ fmt.Printf("%#v", c)
 // )
 ```
 
-### Interface
-`Interface` renders the `interface` keyword followed by curly braces containing 
-a method list:
-
-```go
-c := Var().Id("a").Interface()
-fmt.Printf("%#v", c)
-// Output: var a interface{}
-```
-
-```go
-c := Type().Id("a").Interface(
-    Id("b").Params().String(),
-)
-fmt.Printf("%#v", c)
-// Output: type a interface {
-// 	b() string
-// }
-```
-
-### Struct
-`Struct` renders the `struct` keyword followed by curly braces containing a 
-field list:
-
-```go
-c := Id("c").Op(":=").Make(Chan().Struct())
-fmt.Printf("%#v", c)
-// Output:
-// c := make(chan struct{})
-```
-
-```go
-c := Type().Id("foo").Struct(
-    List(Id("x"), Id("y")).Int(),
-    Id("u").Float32(),
-)
-fmt.Printf("%#v", c)
-// Output:
-// type foo struct {
-// 	x, y int
-// 	u    float32
-// }
-```
-
-### Switch, Case, CaseBlock
-`Switch`, `Case` and `CaseBlock` can be used to build `switch` statements:
-
-```go
-c := Switch(Id("a")).Block(
-    Case(Lit("1")).CaseBlock(
-        Return(Lit(1)),
-    ),
-    Case(Lit("2"), Lit("3")).CaseBlock(
-        Return(Lit(2)),
-    ),
-    Case(Lit("4")).CaseBlock(
-        Fallthrough(),
-    ),
-    Default().CaseBlock(
-        Return(Lit(3)),
-    ),
-)
-fmt.Printf("%#v", c)
-// Output: switch a {
-// case "1":
-// 	return 1
-// case "2", "3":
-// 	return 2
-// case "4":
-// 	fallthrough
-// default:
-// 	return 3
-// }
-```
-
-### Return
-`Return` renders the `return` keyword followed by a comma separated list:
-
-```go
-c := Return(Id("a"), Id("b"))
-fmt.Printf("%#v", c)
-// Output: return a, b
-```
-
-### If
-`If` renders the `if` keyword followed by a semicolon separated list:
-
-```go
-c := If(Err().Op(":=").Id("a").Call(), Err().Op("!=").Nil()).Block(
-    Return(Err()),
-)
-fmt.Printf("%#v", c)
-// Output: if err := a(); err != nil {
-//  return err
-// }
-```
-
-### For
-`For` renders the `for` keyword followed by a semicolon separated list:
-
-```go
-c := For(Id("i").Op(":=").Lit(0), Id("i").Op("<").Lit(10), Id("i").Op("++")).Block(
-    Qual("fmt", "Println").Call(Id("i")),
-)
-fmt.Printf("%#v", c)
-// Output: for i := 0; i < 10; i++ {
-//  fmt.Println(i)
-// }
-```
-
 ### Parens
 `Parens` renders a single item in parenthesis. Use for type conversion or to 
 specify evaluation order:
@@ -451,35 +459,7 @@ fmt.Printf("%#v", c)
 // Output: a = b.(string)
 ```
 
-### Map
-`Map` renders the `map` keyword followed by a single item enclosed by square 
-brackets. Use for map definitions:
-
-```go
-c := Id("a").Op(":=").Map(String()).String().Values()
-fmt.Printf("%#v", c)
-// Output: a := map[string]string{}
-```
-
-### Goto
-`Goto` renders the `goto` keyword followed by a single item:
-
-```go
-c := Goto(Id("Outer"))
-fmt.Printf("%#v", c)
-// Output: goto Outer
-```
-
-### Defer
-`Defer` renders the `defer` keyword followed by a single item:
-
-```go
-c := Defer(Id("foo").Call())
-fmt.Printf("%#v", c)
-// Output: defer foo()
-```
-
-### Alternate GroupFunc methods
+# GroupFunc methods
 Group functions that accept a variadic list of arguments are paired with 
 GroupFunc functions that accept a `func(*Group)`. Use these for embedding logic:
 
@@ -536,9 +516,8 @@ fmt.Printf("%#v\n%#v", f("a", true), f("b", false))
 ```
 
 # Lit, LitFunc
-`Lit` renders a literal, using the format provided by `fmt.Sprintf("%#v", ...)`.
-
-TODO: This probably isn't good enough for all cases. 
+`Lit` renders a literal, using the format provided by the `fmt` package `%#v` 
+verb. 
 
 ```go
 c := Id("a").Op(":=").Lit("a")

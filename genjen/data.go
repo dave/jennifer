@@ -1,9 +1,9 @@
 package main
 
-var Keywords = []string{"break", "default", "func", "select", "go", "chan", "else", "const", "fallthrough", "range", "type", "continue", "var"}
+var Keywords = []string{"break", "default", "func", "select", "chan", "else", "const", "fallthrough", "type", "continue", "var"}
 
-// "return", "map", "switch", "for", "interface", "struct", "case", "goto", "defer" and
-// "if" are special cases.
+// "return", "map", "switch", "for", "interface", "struct", "case", "goto",
+// "defer", "if", "go", and "range" are special cases.
 // "import" and "package" are handled automatically, so not needed.
 
 var Identifiers = []string{"bool", "byte", "complex64", "complex128", "error", "float32", "float64", "int", "int8", "int16", "int32", "int64", "rune", "string", "uint", "uint8", "uint16", "uint32", "uint64", "uintptr", "true", "false", "iota", "nil", "err"}
@@ -338,6 +338,22 @@ var Groups = []struct {
 		Desc:       "renders the defer keyword followed by a single item.",
 		Variadic:   false,
 		Open:       "defer ",
+		Close:      "",
+		Parameters: []string{"expression"},
+	},
+	{
+		Name:       "Go",
+		Desc:       "renders the go keyword followed by a single item.",
+		Variadic:   false,
+		Open:       "go ",
+		Close:      "",
+		Parameters: []string{"expression"},
+	},
+	{
+		Name:       "Range",
+		Desc:       "renders the range keyword followed by a single item.",
+		Variadic:   false,
+		Open:       "range ",
 		Close:      "",
 		Parameters: []string{"expression"},
 	},
