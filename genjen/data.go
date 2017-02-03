@@ -1,8 +1,8 @@
 package main
 
-var Keywords = []string{"break", "default", "func", "select", "go", "struct", "chan", "else", "const", "fallthrough", "range", "type", "continue", "var"}
+var Keywords = []string{"break", "default", "func", "select", "go", "chan", "else", "const", "fallthrough", "range", "type", "continue", "var"}
 
-// "return", "map", "switch", "for", "interface", "case", "goto", "defer" and
+// "return", "map", "switch", "for", "interface", "struct", "case", "goto", "defer" and
 // "if" are special cases.
 // "import" and "package" are handled automatically, so not needed.
 
@@ -128,7 +128,7 @@ var Groups = []struct {
 	},
 	{
 		Name:       "Return",
-		Desc:       "renders the return keyword, followed by a comma separated list.",
+		Desc:       "renders the return keyword followed by a comma separated list.",
 		Variadic:   true,
 		Open:       "return ",
 		Close:      "",
@@ -137,7 +137,7 @@ var Groups = []struct {
 	},
 	{
 		Name:       "For",
-		Desc:       "renders the for keyword, followed by a semicolon separated list.",
+		Desc:       "renders the for keyword followed by a semicolon separated list.",
 		Variadic:   true,
 		Open:       "for ",
 		Close:      "",
@@ -146,7 +146,7 @@ var Groups = []struct {
 	},
 	{
 		Name:       "Switch",
-		Desc:       "renders the switch keyword, followed by a semicolon separated list.",
+		Desc:       "renders the switch keyword followed by a semicolon separated list.",
 		Variadic:   true,
 		Open:       "switch ",
 		Close:      "",
@@ -155,7 +155,7 @@ var Groups = []struct {
 	},
 	{
 		Name:       "Interface",
-		Desc:       "renders the interface keyword, followed by curly braces containing a statement list.",
+		Desc:       "renders the interface keyword followed by curly braces containing a method list.",
 		Variadic:   true,
 		Open:       "interface{",
 		Close:      "}",
@@ -163,8 +163,17 @@ var Groups = []struct {
 		Parameters: []string{"methods"},
 	},
 	{
+		Name:       "Struct",
+		Desc:       "renders the struct keyword followed by curly braces containing a field list.",
+		Variadic:   true,
+		Open:       "struct{",
+		Close:      "}",
+		Separator:  "\n",
+		Parameters: []string{"fields"},
+	},
+	{
 		Name:       "Case",
-		Desc:       "renders the case keyword, followed by a comma separated list.",
+		Desc:       "renders the case keyword followed by a comma separated list.",
 		Variadic:   true,
 		Open:       "case ",
 		Close:      "",

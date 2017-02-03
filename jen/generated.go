@@ -508,19 +508,19 @@ func (s *Statement) IfFunc(f func(*Group)) *Statement {
 	return s
 }
 
-// Return renders the return keyword, followed by a comma separated list.
+// Return renders the return keyword followed by a comma separated list.
 func Return(results ...Code) *Statement {
 	return newStatement().Return(results...)
 }
 
-// Return renders the return keyword, followed by a comma separated list.
+// Return renders the return keyword followed by a comma separated list.
 func (g *Group) Return(results ...Code) *Statement {
 	s := Return(results...)
 	g.items = append(g.items, s)
 	return s
 }
 
-// Return renders the return keyword, followed by a comma separated list.
+// Return renders the return keyword followed by a comma separated list.
 func (s *Statement) Return(results ...Code) *Statement {
 	g := &Group{
 		close:     "",
@@ -532,19 +532,19 @@ func (s *Statement) Return(results ...Code) *Statement {
 	return s
 }
 
-// ReturnFunc renders the return keyword, followed by a comma separated list.
+// ReturnFunc renders the return keyword followed by a comma separated list.
 func ReturnFunc(f func(*Group)) *Statement {
 	return newStatement().ReturnFunc(f)
 }
 
-// ReturnFunc renders the return keyword, followed by a comma separated list.
+// ReturnFunc renders the return keyword followed by a comma separated list.
 func (g *Group) ReturnFunc(f func(*Group)) *Statement {
 	s := ReturnFunc(f)
 	g.items = append(g.items, s)
 	return s
 }
 
-// ReturnFunc renders the return keyword, followed by a comma separated list.
+// ReturnFunc renders the return keyword followed by a comma separated list.
 func (s *Statement) ReturnFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     "",
@@ -556,19 +556,19 @@ func (s *Statement) ReturnFunc(f func(*Group)) *Statement {
 	return s
 }
 
-// For renders the for keyword, followed by a semicolon separated list.
+// For renders the for keyword followed by a semicolon separated list.
 func For(conditions ...Code) *Statement {
 	return newStatement().For(conditions...)
 }
 
-// For renders the for keyword, followed by a semicolon separated list.
+// For renders the for keyword followed by a semicolon separated list.
 func (g *Group) For(conditions ...Code) *Statement {
 	s := For(conditions...)
 	g.items = append(g.items, s)
 	return s
 }
 
-// For renders the for keyword, followed by a semicolon separated list.
+// For renders the for keyword followed by a semicolon separated list.
 func (s *Statement) For(conditions ...Code) *Statement {
 	g := &Group{
 		close:     "",
@@ -580,19 +580,19 @@ func (s *Statement) For(conditions ...Code) *Statement {
 	return s
 }
 
-// ForFunc renders the for keyword, followed by a semicolon separated list.
+// ForFunc renders the for keyword followed by a semicolon separated list.
 func ForFunc(f func(*Group)) *Statement {
 	return newStatement().ForFunc(f)
 }
 
-// ForFunc renders the for keyword, followed by a semicolon separated list.
+// ForFunc renders the for keyword followed by a semicolon separated list.
 func (g *Group) ForFunc(f func(*Group)) *Statement {
 	s := ForFunc(f)
 	g.items = append(g.items, s)
 	return s
 }
 
-// ForFunc renders the for keyword, followed by a semicolon separated list.
+// ForFunc renders the for keyword followed by a semicolon separated list.
 func (s *Statement) ForFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     "",
@@ -604,19 +604,19 @@ func (s *Statement) ForFunc(f func(*Group)) *Statement {
 	return s
 }
 
-// Switch renders the switch keyword, followed by a semicolon separated list.
+// Switch renders the switch keyword followed by a semicolon separated list.
 func Switch(conditions ...Code) *Statement {
 	return newStatement().Switch(conditions...)
 }
 
-// Switch renders the switch keyword, followed by a semicolon separated list.
+// Switch renders the switch keyword followed by a semicolon separated list.
 func (g *Group) Switch(conditions ...Code) *Statement {
 	s := Switch(conditions...)
 	g.items = append(g.items, s)
 	return s
 }
 
-// Switch renders the switch keyword, followed by a semicolon separated list.
+// Switch renders the switch keyword followed by a semicolon separated list.
 func (s *Statement) Switch(conditions ...Code) *Statement {
 	g := &Group{
 		close:     "",
@@ -628,19 +628,19 @@ func (s *Statement) Switch(conditions ...Code) *Statement {
 	return s
 }
 
-// SwitchFunc renders the switch keyword, followed by a semicolon separated list.
+// SwitchFunc renders the switch keyword followed by a semicolon separated list.
 func SwitchFunc(f func(*Group)) *Statement {
 	return newStatement().SwitchFunc(f)
 }
 
-// SwitchFunc renders the switch keyword, followed by a semicolon separated list.
+// SwitchFunc renders the switch keyword followed by a semicolon separated list.
 func (g *Group) SwitchFunc(f func(*Group)) *Statement {
 	s := SwitchFunc(f)
 	g.items = append(g.items, s)
 	return s
 }
 
-// SwitchFunc renders the switch keyword, followed by a semicolon separated list.
+// SwitchFunc renders the switch keyword followed by a semicolon separated list.
 func (s *Statement) SwitchFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     "",
@@ -652,19 +652,19 @@ func (s *Statement) SwitchFunc(f func(*Group)) *Statement {
 	return s
 }
 
-// Interface renders the interface keyword, followed by curly braces containing a statement list.
+// Interface renders the interface keyword followed by curly braces containing a method list.
 func Interface(methods ...Code) *Statement {
 	return newStatement().Interface(methods...)
 }
 
-// Interface renders the interface keyword, followed by curly braces containing a statement list.
+// Interface renders the interface keyword followed by curly braces containing a method list.
 func (g *Group) Interface(methods ...Code) *Statement {
 	s := Interface(methods...)
 	g.items = append(g.items, s)
 	return s
 }
 
-// Interface renders the interface keyword, followed by curly braces containing a statement list.
+// Interface renders the interface keyword followed by curly braces containing a method list.
 func (s *Statement) Interface(methods ...Code) *Statement {
 	g := &Group{
 		close:     "}",
@@ -676,19 +676,19 @@ func (s *Statement) Interface(methods ...Code) *Statement {
 	return s
 }
 
-// InterfaceFunc renders the interface keyword, followed by curly braces containing a statement list.
+// InterfaceFunc renders the interface keyword followed by curly braces containing a method list.
 func InterfaceFunc(f func(*Group)) *Statement {
 	return newStatement().InterfaceFunc(f)
 }
 
-// InterfaceFunc renders the interface keyword, followed by curly braces containing a statement list.
+// InterfaceFunc renders the interface keyword followed by curly braces containing a method list.
 func (g *Group) InterfaceFunc(f func(*Group)) *Statement {
 	s := InterfaceFunc(f)
 	g.items = append(g.items, s)
 	return s
 }
 
-// InterfaceFunc renders the interface keyword, followed by curly braces containing a statement list.
+// InterfaceFunc renders the interface keyword followed by curly braces containing a method list.
 func (s *Statement) InterfaceFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     "}",
@@ -700,19 +700,67 @@ func (s *Statement) InterfaceFunc(f func(*Group)) *Statement {
 	return s
 }
 
-// Case renders the case keyword, followed by a comma separated list.
+// Struct renders the struct keyword followed by curly braces containing a field list.
+func Struct(fields ...Code) *Statement {
+	return newStatement().Struct(fields...)
+}
+
+// Struct renders the struct keyword followed by curly braces containing a field list.
+func (g *Group) Struct(fields ...Code) *Statement {
+	s := Struct(fields...)
+	g.items = append(g.items, s)
+	return s
+}
+
+// Struct renders the struct keyword followed by curly braces containing a field list.
+func (s *Statement) Struct(fields ...Code) *Statement {
+	g := &Group{
+		close:     "}",
+		items:     fields,
+		open:      "struct{",
+		separator: "\n",
+	}
+	*s = append(*s, g)
+	return s
+}
+
+// StructFunc renders the struct keyword followed by curly braces containing a field list.
+func StructFunc(f func(*Group)) *Statement {
+	return newStatement().StructFunc(f)
+}
+
+// StructFunc renders the struct keyword followed by curly braces containing a field list.
+func (g *Group) StructFunc(f func(*Group)) *Statement {
+	s := StructFunc(f)
+	g.items = append(g.items, s)
+	return s
+}
+
+// StructFunc renders the struct keyword followed by curly braces containing a field list.
+func (s *Statement) StructFunc(f func(*Group)) *Statement {
+	g := &Group{
+		close:     "}",
+		open:      "struct{",
+		separator: "\n",
+	}
+	f(g)
+	*s = append(*s, g)
+	return s
+}
+
+// Case renders the case keyword followed by a comma separated list.
 func Case(cases ...Code) *Statement {
 	return newStatement().Case(cases...)
 }
 
-// Case renders the case keyword, followed by a comma separated list.
+// Case renders the case keyword followed by a comma separated list.
 func (g *Group) Case(cases ...Code) *Statement {
 	s := Case(cases...)
 	g.items = append(g.items, s)
 	return s
 }
 
-// Case renders the case keyword, followed by a comma separated list.
+// Case renders the case keyword followed by a comma separated list.
 func (s *Statement) Case(cases ...Code) *Statement {
 	g := &Group{
 		close:     "",
@@ -724,19 +772,19 @@ func (s *Statement) Case(cases ...Code) *Statement {
 	return s
 }
 
-// CaseFunc renders the case keyword, followed by a comma separated list.
+// CaseFunc renders the case keyword followed by a comma separated list.
 func CaseFunc(f func(*Group)) *Statement {
 	return newStatement().CaseFunc(f)
 }
 
-// CaseFunc renders the case keyword, followed by a comma separated list.
+// CaseFunc renders the case keyword followed by a comma separated list.
 func (g *Group) CaseFunc(f func(*Group)) *Statement {
 	s := CaseFunc(f)
 	g.items = append(g.items, s)
 	return s
 }
 
-// CaseFunc renders the case keyword, followed by a comma separated list.
+// CaseFunc renders the case keyword followed by a comma separated list.
 func (s *Statement) CaseFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     "",
@@ -1930,28 +1978,6 @@ func (g *Group) Go() *Statement {
 func (s *Statement) Go() *Statement {
 	t := token{
 		content: "go",
-		typ:     keywordToken,
-	}
-	*s = append(*s, t)
-	return s
-}
-
-// Struct renders the struct keyword.
-func Struct() *Statement {
-	return newStatement().Struct()
-}
-
-// Struct renders the struct keyword.
-func (g *Group) Struct() *Statement {
-	s := Struct()
-	g.items = append(g.items, s)
-	return s
-}
-
-// Struct renders the struct keyword.
-func (s *Statement) Struct() *Statement {
-	t := token{
-		content: "struct",
 		typ:     keywordToken,
 	}
 	*s = append(*s, t)

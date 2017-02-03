@@ -339,6 +339,32 @@ func ValuesFunc(f func(*Group)) *Statement
 func Var() *Statement
 */
 
+func ExampleStruct_empty() {
+	c := Id("c").Op(":=").Make(Chan().Struct())
+	fmt.Printf("%#v", c)
+	// Output:
+	// c := make(chan struct{})
+}
+
+func ExampleStruct() {
+	c := Type().Id("foo").Struct(
+		List(Id("x"), Id("y")).Int(),
+		Id("u").Float32(),
+		Id("_").Float32().Comment("padding"),
+		Id("A").Op("*").Index().Int(),
+		Id("F").Func().Params(),
+	)
+	fmt.Printf("%#v", c)
+	// Output:
+	// type foo struct {
+	// 	x, y int
+	// 	u    float32
+	// 	_    float32 // padding
+	// 	A    *[]int
+	// 	F    func()
+	// }
+}
+
 func ExampleDefer() {
 	c := Defer(Id("foo").Call())
 	fmt.Printf("%#v", c)
@@ -494,7 +520,7 @@ func ExampleSwitch() {
 
 func ExampleTag() {
 	// Note: Tags are ordered by key when rendered
-	c := Type().Id("foo").Struct().Block(
+	c := Type().Id("foo").Struct(
 		Id("A").String().Tag(map[string]string{"json": "a"}),
 		Id("B").Int().Tag(map[string]string{"json": "b", "bar": "baz"}),
 	)

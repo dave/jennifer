@@ -135,7 +135,7 @@ fmt.Printf("%#v", c)
 // Output: break
 ```
 
-Keywords: `Break`, `Default`, `Func`, `Select`, `Go`, `Struct`, `Chan`, `Else`, `Const`, `Fallthrough`, `Range`, `Type`, `Continue`, `Var`
+Keywords: `Break`, `Default`, `Func`, `Select`, `Go`, `Chan`, `Else`, `Const`, `Fallthrough`, `Range`, `Type`, `Continue`, `Var`
 
 Built-in types: `Bool`, `Byte`, `Complex64`, `Complex128`, `Error`, `Float32`, `Float64`, `Int`, `Int8`, `Int16`, `Int32`, `Int64`, `Rune`, `String`, `Uint`, `Uint8`, `Uint16`, `Uint32`, `Uint64`, `Uintptr`
 
@@ -143,8 +143,8 @@ Constants: `True`, `False`, `Iota`, `Nil`
 
 Also included is `Err` for the commonly used `err` variable.
 
-Note: `Interface`, `Map`, `Return`, `Switch`, `For`, `Case`, `Goto`, `Defer` and `If` 
-are special cases, and treated as groups - see below.
+Note: `Interface`, `Struct`, `Map`, `Return`, `Switch`, `For`, `Case`, `Goto`, 
+`Defer` and `If` are special cases, and treated as groups - see below.
 
 Note: The `import` and `package` keywords are always rendered automatically, so 
 not included.
@@ -179,6 +179,7 @@ token:
 | Block     | `{`           | `\n`      | `}`     | `func a() { ... }`                |
 | Defs      | `(`           | `\n`      | `)`     | `const ( ... )`                   |
 | Interface | `interface {` | `\n`      | `}`     | `interface { ... }`               |
+| Struct    | `struct {`    | `\n`      | `}`     | `struct { ... }`                  |
 | Switch    | `switch`      | `;`       |         | `switch a { ... }`                |
 | Case      | `case`        | `,`       |         | `switch a {case "b", "c": ... }`  |
 | CaseBlock | `:`           | `\n`      |         | `switch i {case 1: ... }`         |
@@ -315,7 +316,8 @@ fmt.Printf("%#v", c)
 ```
 
 ### Interface
-`Interface` renders the interface keyword followed by a statement block:
+`Interface` renders the `interface` keyword followed by curly braces containing 
+a method list:
 
 ```go
 c := Var().Id("a").Interface()
@@ -330,6 +332,30 @@ c := Type().Id("a").Interface(
 fmt.Printf("%#v", c)
 // Output: type a interface {
 // 	b() string
+// }
+```
+
+### Struct
+`Struct` renders the `struct` keyword followed by curly braces containing a 
+field list:
+
+```go
+c := Id("c").Op(":=").Make(Chan().Struct())
+fmt.Printf("%#v", c)
+// Output:
+// c := make(chan struct{})
+```
+
+```go
+c := Type().Id("foo").Struct(
+    List(Id("x"), Id("y")).Int(),
+    Id("u").Float32(),
+)
+fmt.Printf("%#v", c)
+// Output:
+// type foo struct {
+// 	x, y int
+// 	u    float32
 // }
 ```
 
@@ -562,7 +588,7 @@ Note: dicts are ordered by key when rendered.
 `Tag` renders a struct tag:
 
 ```go
-c := Type().Id("foo").Struct().Block(
+c := Type().Id("foo").Struct(
     Id("A").String().Tag(map[string]string{"json": "a"}),
     Id("B").Int().Tag(map[string]string{"json": "b", "bar": "baz"}),
 )
