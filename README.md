@@ -240,7 +240,10 @@ fmt.Printf("%#v", c)
 `If` renders the `if` keyword followed by a semicolon separated list:
 
 ```go
-c := If(Err().Op(":=").Id("a").Call(), Err().Op("!=").Nil()).Block(
+c := If(
+    Err().Op(":=").Id("a").Call(),
+    Err().Op("!=").Nil(),
+).Block(
     Return(Err()),
 )
 fmt.Printf("%#v", c)
@@ -253,7 +256,11 @@ fmt.Printf("%#v", c)
 `For` renders the `for` keyword followed by a semicolon separated list:
 
 ```go
-c := For(Id("i").Op(":=").Lit(0), Id("i").Op("<").Lit(10), Id("i").Op("++")).Block(
+c := For(
+    Id("i").Op(":=").Lit(0),
+    Id("i").Op("<").Lit(10),
+    Id("i").Op("++"),
+).Block(
     Qual("fmt", "Println").Call(Id("i")),
 )
 fmt.Printf("%#v", c)
