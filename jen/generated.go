@@ -1276,102 +1276,6 @@ func (s *Statement) Recover() *Statement {
 	return s
 }
 
-// Goto renders the goto keyword followed by a single item.
-func Goto(label Code) *Statement {
-	return newStatement().Goto(label)
-}
-
-// Goto renders the goto keyword followed by a single item.
-func (g *Group) Goto(label Code) *Statement {
-	s := Goto(label)
-	g.items = append(g.items, s)
-	return s
-}
-
-// Goto renders the goto keyword followed by a single item.
-func (s *Statement) Goto(label Code) *Statement {
-	g := &Group{
-		close:     "",
-		items:     []Code{label},
-		open:      "goto ",
-		separator: "",
-	}
-	*s = append(*s, g)
-	return s
-}
-
-// Defer renders the defer keyword followed by a single item.
-func Defer(expression Code) *Statement {
-	return newStatement().Defer(expression)
-}
-
-// Defer renders the defer keyword followed by a single item.
-func (g *Group) Defer(expression Code) *Statement {
-	s := Defer(expression)
-	g.items = append(g.items, s)
-	return s
-}
-
-// Defer renders the defer keyword followed by a single item.
-func (s *Statement) Defer(expression Code) *Statement {
-	g := &Group{
-		close:     "",
-		items:     []Code{expression},
-		open:      "defer ",
-		separator: "",
-	}
-	*s = append(*s, g)
-	return s
-}
-
-// Go renders the go keyword followed by a single item.
-func Go(expression Code) *Statement {
-	return newStatement().Go(expression)
-}
-
-// Go renders the go keyword followed by a single item.
-func (g *Group) Go(expression Code) *Statement {
-	s := Go(expression)
-	g.items = append(g.items, s)
-	return s
-}
-
-// Go renders the go keyword followed by a single item.
-func (s *Statement) Go(expression Code) *Statement {
-	g := &Group{
-		close:     "",
-		items:     []Code{expression},
-		open:      "go ",
-		separator: "",
-	}
-	*s = append(*s, g)
-	return s
-}
-
-// Range renders the range keyword followed by a single item.
-func Range(expression Code) *Statement {
-	return newStatement().Range(expression)
-}
-
-// Range renders the range keyword followed by a single item.
-func (g *Group) Range(expression Code) *Statement {
-	s := Range(expression)
-	g.items = append(g.items, s)
-	return s
-}
-
-// Range renders the range keyword followed by a single item.
-func (s *Statement) Range(expression Code) *Statement {
-	g := &Group{
-		close:     "",
-		items:     []Code{expression},
-		open:      "range ",
-		separator: "",
-	}
-	*s = append(*s, g)
-	return s
-}
-
 // Bool renders the bool identifier.
 func Bool() *Statement {
 	return newStatement().Bool()
@@ -2158,6 +2062,94 @@ func (g *Group) Var() *Statement {
 func (s *Statement) Var() *Statement {
 	t := token{
 		content: "var",
+		typ:     keywordToken,
+	}
+	*s = append(*s, t)
+	return s
+}
+
+// Goto renders the goto keyword.
+func Goto() *Statement {
+	return newStatement().Goto()
+}
+
+// Goto renders the goto keyword.
+func (g *Group) Goto() *Statement {
+	s := Goto()
+	g.items = append(g.items, s)
+	return s
+}
+
+// Goto renders the goto keyword.
+func (s *Statement) Goto() *Statement {
+	t := token{
+		content: "goto",
+		typ:     keywordToken,
+	}
+	*s = append(*s, t)
+	return s
+}
+
+// Defer renders the defer keyword.
+func Defer() *Statement {
+	return newStatement().Defer()
+}
+
+// Defer renders the defer keyword.
+func (g *Group) Defer() *Statement {
+	s := Defer()
+	g.items = append(g.items, s)
+	return s
+}
+
+// Defer renders the defer keyword.
+func (s *Statement) Defer() *Statement {
+	t := token{
+		content: "defer",
+		typ:     keywordToken,
+	}
+	*s = append(*s, t)
+	return s
+}
+
+// Go renders the go keyword.
+func Go() *Statement {
+	return newStatement().Go()
+}
+
+// Go renders the go keyword.
+func (g *Group) Go() *Statement {
+	s := Go()
+	g.items = append(g.items, s)
+	return s
+}
+
+// Go renders the go keyword.
+func (s *Statement) Go() *Statement {
+	t := token{
+		content: "go",
+		typ:     keywordToken,
+	}
+	*s = append(*s, t)
+	return s
+}
+
+// Range renders the range keyword.
+func Range() *Statement {
+	return newStatement().Range()
+}
+
+// Range renders the range keyword.
+func (g *Group) Range() *Statement {
+	s := Range()
+	g.items = append(g.items, s)
+	return s
+}
+
+// Range renders the range keyword.
+func (s *Statement) Range() *Statement {
+	t := token{
+		content: "range",
 		typ:     keywordToken,
 	}
 	*s = append(*s, t)

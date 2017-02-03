@@ -135,7 +135,7 @@ fmt.Printf("%#v", c)
 // Output: break
 ```
 
-Keywords: `Break`, `Default`, `Func`, `Select`, `Chan`, `Else`, `Const`, `Fallthrough`, `Type`, `Continue`, `Var`
+Keywords: `Break`, `Default`, `Func`, `Select`, `Chan`, `Else`, `Const`, `Fallthrough`, `Type`, `Continue`, `Var`, `Goto`, `Defer`, `Go`, `Range`
 
 Built-in types: `Bool`, `Byte`, `Complex64`, `Complex128`, `Error`, `Float32`, `Float64`, `Int`, `Int8`, `Int16`, `Int32`, `Int64`, `Rune`, `String`, `Uint`, `Uint8`, `Uint16`, `Uint32`, `Uint64`, `Uintptr`
 
@@ -145,22 +145,6 @@ Also included is `Err` for the commonly used `err` variable.
 
 Note: The `import` and `package` keywords are always rendered automatically, so 
 not included.
-
-# Special keywords
-`Goto`, `Defer`, `Go`, `Range` all render the keyword followed by a single 
-item:
-
-```go
-c := Goto(Id("Outer"))
-fmt.Printf("%#v", c)
-// Output: goto Outer
-```
-
-```go
-c := Defer(Id("foo").Call())
-fmt.Printf("%#v", c)
-// Output: defer foo()
-```
 
 ### Interface, Struct
 `Interface` and `Struct` render the keyword followed by a statement list 
