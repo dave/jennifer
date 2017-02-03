@@ -454,8 +454,8 @@ fmt.Printf("%#v", c)
 ```
 
 ### Alternate GroupFunc methods
-All of the Group functions are paired with GroupFunc functions that accept a 
-`func(*Group)`. Use these for embedding logic:
+Group functions that accept a variadic list of arguments are paired with 
+GroupFunc functions that accept a `func(*Group)`. Use these for embedding logic:
 
 ```go
 increment = true
