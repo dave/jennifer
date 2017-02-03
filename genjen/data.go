@@ -1,8 +1,8 @@
 package main
 
-var Keywords = []string{"break", "default", "func", "select", "defer", "go", "struct", "chan", "else", "goto", "const", "fallthrough", "range", "type", "continue", "var"}
+var Keywords = []string{"break", "default", "func", "select", "defer", "go", "struct", "chan", "else", "const", "fallthrough", "range", "type", "continue", "var"}
 
-// "return", "map", "switch", "for", "interface", "case" and "if" are special cases
+// "return", "map", "switch", "for", "interface", "case", "goto" and "if" are special cases
 // "import" and "package" are handled automatically, so not needed.
 
 var Identifiers = []string{"bool", "byte", "complex64", "complex128", "error", "float32", "float64", "int", "int8", "int16", "int32", "int64", "rune", "string", "uint", "uint8", "uint16", "uint32", "uint64", "uintptr", "true", "false", "iota", "nil", "err"}
@@ -314,5 +314,13 @@ var Groups = []struct {
 		Close:      ")",
 		Separator:  ",",
 		Parameters: []string{},
+	},
+	{
+		Name:       "Goto",
+		Desc:       "renders the goto keyword followed by a single item.",
+		Variadic:   false,
+		Open:       "goto ",
+		Close:      "",
+		Parameters: []string{"label"},
 	},
 }

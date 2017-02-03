@@ -135,7 +135,7 @@ fmt.Printf("%#v", c)
 // Output: break
 ```
 
-Keywords: `Break`, `Default`, `Func`, `Select`, `Defer`, `Go`, `Struct`, `Chan`, `Else`, `Goto`, `Const`, `Fallthrough`, `Range`, `Type`, `Continue`, `Var`
+Keywords: `Break`, `Default`, `Func`, `Select`, `Defer`, `Go`, `Struct`, `Chan`, `Else`, `Const`, `Fallthrough`, `Range`, `Type`, `Continue`, `Var`
 
 Built-in types: `Bool`, `Byte`, `Complex64`, `Complex128`, `Error`, `Float32`, `Float64`, `Int`, `Int8`, `Int16`, `Int32`, `Int64`, `Rune`, `String`, `Uint`, `Uint8`, `Uint16`, `Uint32`, `Uint64`, `Uintptr`
 
@@ -143,8 +143,8 @@ Constants: `True`, `False`, `Iota`, `Nil`
 
 Also included is `Err` for the commonly used `err` variable.
 
-Note: `Interface`, `Map`, `Return`, `Switch`, `For`, `Case` and `If` are special 
-cases, and treated as groups - see below.
+Note: `Interface`, `Map`, `Return`, `Switch`, `For`, `Case`, `Goto` and `If` 
+are special cases, and treated as groups - see below.
 
 Note: The `import` and `package` keywords are always rendered automatically, so 
 not included.
@@ -193,6 +193,7 @@ token:
 | Parens | `(`      | `)`     | `[]byte(s)` or `a / (b + c)` |
 | Assert | `.(`     | `)`     | `s, ok := i.(string)`        |
 | Map    | `map[`   | `]`     | `map[int]string`             |
+| Goto   | `goto`   |         | `goto Foo`                   |
 
 ### Sel
 `Sel` renders a chain of selectors separated by periods:
@@ -431,6 +432,14 @@ brackets. Use for map definitions:
 c := Id("a").Op(":=").Map(String()).String().Values()
 fmt.Printf("%#v", c)
 // Output: a := map[string]string{}
+```
+
+### Goto
+`Goto` renders the goto keyword followed by a single item:
+```go
+c := Goto(Id("Outer"))
+fmt.Printf("%#v", c)
+// Output: goto Outer
 ```
 
 ### Alternate GroupFunc methods

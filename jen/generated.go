@@ -1228,6 +1228,30 @@ func (s *Statement) Recover() *Statement {
 	return s
 }
 
+// Goto renders the goto keyword followed by a single item.
+func Goto(label Code) *Statement {
+	return newStatement().Goto(label)
+}
+
+// Goto renders the goto keyword followed by a single item.
+func (g *Group) Goto(label Code) *Statement {
+	s := Goto(label)
+	g.items = append(g.items, s)
+	return s
+}
+
+// Goto renders the goto keyword followed by a single item.
+func (s *Statement) Goto(label Code) *Statement {
+	g := &Group{
+		close:     "",
+		items:     []Code{label},
+		open:      "goto ",
+		separator: "",
+	}
+	*s = append(*s, g)
+	return s
+}
+
 // Bool renders the bool identifier.
 func Bool() *Statement {
 	return newStatement().Bool()
@@ -1970,28 +1994,6 @@ func (g *Group) Else() *Statement {
 func (s *Statement) Else() *Statement {
 	t := token{
 		content: "else",
-		typ:     keywordToken,
-	}
-	*s = append(*s, t)
-	return s
-}
-
-// Goto renders the goto keyword.
-func Goto() *Statement {
-	return newStatement().Goto()
-}
-
-// Goto renders the goto keyword.
-func (g *Group) Goto() *Statement {
-	s := Goto()
-	g.items = append(g.items, s)
-	return s
-}
-
-// Goto renders the goto keyword.
-func (s *Statement) Goto() *Statement {
-	t := token{
-		content: "goto",
 		typ:     keywordToken,
 	}
 	*s = append(*s, t)

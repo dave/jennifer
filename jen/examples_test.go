@@ -339,6 +339,12 @@ func ValuesFunc(f func(*Group)) *Statement
 func Var() *Statement
 */
 
+func ExampleGoto() {
+	c := Goto(Id("Outer"))
+	fmt.Printf("%#v", c)
+	// Output: goto Outer
+}
+
 func ExampleStatement_Clone() {
 	a := Id("a")
 	b := Id("b")
