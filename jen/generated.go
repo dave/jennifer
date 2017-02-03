@@ -1324,6 +1324,54 @@ func (s *Statement) Defer(expression Code) *Statement {
 	return s
 }
 
+// Go renders the go keyword followed by a single item.
+func Go(expression Code) *Statement {
+	return newStatement().Go(expression)
+}
+
+// Go renders the go keyword followed by a single item.
+func (g *Group) Go(expression Code) *Statement {
+	s := Go(expression)
+	g.items = append(g.items, s)
+	return s
+}
+
+// Go renders the go keyword followed by a single item.
+func (s *Statement) Go(expression Code) *Statement {
+	g := &Group{
+		close:     "",
+		items:     []Code{expression},
+		open:      "go ",
+		separator: "",
+	}
+	*s = append(*s, g)
+	return s
+}
+
+// Range renders the range keyword followed by a single item.
+func Range(expression Code) *Statement {
+	return newStatement().Range(expression)
+}
+
+// Range renders the range keyword followed by a single item.
+func (g *Group) Range(expression Code) *Statement {
+	s := Range(expression)
+	g.items = append(g.items, s)
+	return s
+}
+
+// Range renders the range keyword followed by a single item.
+func (s *Statement) Range(expression Code) *Statement {
+	g := &Group{
+		close:     "",
+		items:     []Code{expression},
+		open:      "range ",
+		separator: "",
+	}
+	*s = append(*s, g)
+	return s
+}
+
 // Bool renders the bool identifier.
 func Bool() *Statement {
 	return newStatement().Bool()
@@ -1962,28 +2010,6 @@ func (s *Statement) Select() *Statement {
 	return s
 }
 
-// Go renders the go keyword.
-func Go() *Statement {
-	return newStatement().Go()
-}
-
-// Go renders the go keyword.
-func (g *Group) Go() *Statement {
-	s := Go()
-	g.items = append(g.items, s)
-	return s
-}
-
-// Go renders the go keyword.
-func (s *Statement) Go() *Statement {
-	t := token{
-		content: "go",
-		typ:     keywordToken,
-	}
-	*s = append(*s, t)
-	return s
-}
-
 // Chan renders the chan keyword.
 func Chan() *Statement {
 	return newStatement().Chan()
@@ -2066,28 +2092,6 @@ func (g *Group) Fallthrough() *Statement {
 func (s *Statement) Fallthrough() *Statement {
 	t := token{
 		content: "fallthrough",
-		typ:     keywordToken,
-	}
-	*s = append(*s, t)
-	return s
-}
-
-// Range renders the range keyword.
-func Range() *Statement {
-	return newStatement().Range()
-}
-
-// Range renders the range keyword.
-func (g *Group) Range() *Statement {
-	s := Range()
-	g.items = append(g.items, s)
-	return s
-}
-
-// Range renders the range keyword.
-func (s *Statement) Range() *Statement {
-	t := token{
-		content: "range",
 		typ:     keywordToken,
 	}
 	*s = append(*s, t)

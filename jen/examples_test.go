@@ -230,10 +230,10 @@ func ExampleChan() {
 		Id("c").Op(":=").Make(Chan().Qual("os", "Signal"), Lit(1)),
 		Qual("os/signal", "Notify").Call(Id("c"), Qual("os", "Interrupt")),
 		Qual("os/signal", "Notify").Call(Id("c"), Qual("syscall", "SIGTERM")),
-		Go().Func().Params().Block(
+		Go(Func().Params().Block(
 			Op("<-").Id("c"),
 			Id("cancel").Call(),
-		).Call(),
+		).Call()),
 	)
 	fmt.Printf("%#v", c)
 	// Output:
