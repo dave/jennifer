@@ -129,8 +129,8 @@ var cases = []tc{
 	},
 	{
 		desc:   `built in func`,
-		code:   New(Id("a"), Id("b")),
-		expect: `new(a, b)`,
+		code:   New(Id("a")),
+		expect: `new(a)`,
 	},
 	{
 		desc:   `multip`,
