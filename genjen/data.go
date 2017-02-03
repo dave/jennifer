@@ -5,15 +5,7 @@ var Keywords = []string{"break", "default", "func", "select", "defer", "go", "st
 // "return", "map", "switch", "for", "interface", "case" and "if" are special cases
 // "import" and "package" are handled automatically, so not needed.
 
-var Types = []string{"bool", "byte", "complex64", "complex128", "error", "float32", "float64", "int", "int8", "int16", "int32", "int64", "rune", "string", "uint", "uint8", "uint16", "uint32", "uint64", "uintptr"}
-
-var Constants = []string{"true", "false", "iota"}
-
-var Zero = []string{"nil"}
-
-var Errs = []string{"err"}
-
-var Identifiers = append(append(append(append([]string{}, Types...), Constants...), Zero...), Errs...)
+var Identifiers = []string{"bool", "byte", "complex64", "complex128", "error", "float32", "float64", "int", "int8", "int16", "int32", "int64", "rune", "string", "uint", "uint8", "uint16", "uint32", "uint64", "uintptr", "true", "false", "iota", "nil", "err"}
 
 var Groups = []struct {
 	Name        string   // name of the function / method
