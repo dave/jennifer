@@ -194,7 +194,7 @@ token:
 | Assert | `.(`     | `)`     | `s, ok := i.(string)`        |
 | Map    | `map[`   | `]`     | `map[int]string`             |
 | Goto   | `goto`   |         | `goto Foo`                   |
-Defer
+| Defer  | `defer`  |         | `defer foo()`                |
 
 ### Sel
 `Sel` renders a chain of selectors separated by periods:
