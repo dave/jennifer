@@ -1,0 +1,15 @@
+language: go
+go:
+    - 1.7
+go_import_path: github.com/davelondon/jennifer/
+notificaitons:
+  email:
+    recipients: dave@brophy.uk
+    on_failure: always
+install:
+  - go get -u github.com/davelondon/kerr/kcov
+  - go get -t -v ./...
+script:
+  - kcov -r github.com/davelondon/jennifer
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
