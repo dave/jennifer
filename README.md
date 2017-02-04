@@ -522,6 +522,8 @@ fmt.Printf("%#v", c)
 // Output: a := 1.5
 ```
 
+`LitFunc` generates the value to render by executing the provided function.
+
 # Dict, DictFunc
 `Dict` takes a `map[Code]Code` and renders a list of colon separated key value 
 pairs, enclosed in curly braces. Use for map literals:
@@ -619,7 +621,16 @@ fmt.Printf("%#v", c)
 // Output: a() // b
 ```
 
-`Commentf` accepts a format string and a list of parameters:
+If the comment string starts with `//` or `/*`, the automatic formatting is 
+disabled and the string is rendered directly:
+
+```go
+c := Id("foo").Call(Comment("/* inline */")).Comment("//close")
+fmt.Printf("%#v", c)
+// Output: foo( /* inline */ ) //close
+```
+
+`Commentf` adds a comment, using a format string and a list of parameters:
 
 ```go
 c := Commentf("a %d", 1)
@@ -634,6 +645,8 @@ fmt.Printf("%#v", c)
 ```
 
 # File
+`File` represents a single source file. Package imports are managed automaticaly 
+by File.
 
 ### NewFile
 `NewFile` Creates a new file, with the specified package name. 

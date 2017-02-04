@@ -1,9 +1,12 @@
 package main
 
+// Keywords is a list of simple keywords
 var Keywords = []string{"break", "default", "func", "select", "chan", "else", "const", "fallthrough", "type", "continue", "var", "goto", "defer", "go", "range"}
 
+// Identifiers is a list of simple identifiers
 var Identifiers = []string{"bool", "byte", "complex64", "complex128", "error", "float32", "float64", "int", "int8", "int16", "int32", "int64", "rune", "string", "uint", "uint8", "uint16", "uint32", "uint64", "uintptr", "true", "false", "iota", "nil", "err"}
 
+// Groups is a list of complex groups
 var Groups = []struct {
 	Name        string   // name of the function / method
 	Desc        string   // comment appended to name

@@ -45,7 +45,7 @@ func (t tag) render(f *File, w io.Writer) error {
 	var s string
 
 	var sorted []string
-	for k, _ := range t.items {
+	for k := range t.items {
 		sorted = append(sorted, k)
 	}
 	sort.Strings(sorted)

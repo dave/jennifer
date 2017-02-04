@@ -339,6 +339,13 @@ func ValuesFunc(f func(*Group)) *Statement
 func Var() *Statement
 */
 
+func ExampleComment_formatting_disabled() {
+	c := Id("foo").Call(Comment("/* inline */")).Comment("//close")
+	fmt.Printf("%#v", c)
+	// Output:
+	// foo( /* inline */ ) //close
+}
+
 func ExampleStruct_empty() {
 	c := Id("c").Op(":=").Make(Chan().Struct())
 	fmt.Printf("%#v", c)

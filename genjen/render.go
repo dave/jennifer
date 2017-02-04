@@ -7,6 +7,7 @@ import (
 	. "github.com/davelondon/jennifer/jen"
 )
 
+// Render the file
 func Render(w io.Writer) error {
 	file := NewFile("jen")
 
@@ -35,7 +36,7 @@ func Render(w io.Writer) error {
 			callParams = append(callParams, Id(name).Add(variadic))
 		}
 
-		renderFunctionAndGroupMethod(
+		addFunctionAndGroupMethod(
 			file,
 			b.Name,
 			comment,
@@ -88,7 +89,7 @@ func Render(w io.Writer) error {
 
 		if b.Variadic && !b.PreventFunc {
 			funcName := b.Name + "Func"
-			renderFunctionAndGroupMethod(
+			addFunctionAndGroupMethod(
 				file,
 				funcName,
 				funcComment,
@@ -159,7 +160,7 @@ func Render(w io.Writer) error {
 			t.name,
 			t.tokenDesc,
 		)
-		renderFunctionAndGroupMethod(
+		addFunctionAndGroupMethod(
 			file,
 			t.cap,
 			comment,
@@ -196,7 +197,7 @@ func Render(w io.Writer) error {
 
 // For each method on *Statement, this this generates a package level
 // function and a method on *Group, both with the same name.
-func renderFunctionAndGroupMethod(
+func addFunctionAndGroupMethod(
 	file *File,
 	name string,
 	comment *Statement,

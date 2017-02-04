@@ -59,22 +59,22 @@ func (t token) render(f *File, w io.Writer) error {
 	return nil
 }
 
-// Null token produces no output but also no separator
-// in a list.
+// Null adds a null item. Null items render nothing and are not followed by a
+// separator in lists.
 func Null() *Statement {
 	return newStatement().Null()
 }
 
-// Null token produces no output but also no separator
-// in a list.
+// Null adds a null item. Null items render nothing and are not followed by a
+// separator in lists.
 func (g *Group) Null() *Statement {
 	s := Null()
 	g.items = append(g.items, s)
 	return s
 }
 
-// Null token produces no output but also no separator
-// in a list.
+// Null adds a null item. Null items render nothing and are not followed by a
+// separator in lists.
 func (s *Statement) Null() *Statement {
 	t := token{
 		typ: nullToken,
@@ -83,22 +83,22 @@ func (s *Statement) Null() *Statement {
 	return s
 }
 
-// Empty token produces no output but is followed by a
-// separator in a list.
+// Empty adds an empty item. Empty items render nothing but are followed by a
+// separator in lists.
 func Empty() *Statement {
 	return newStatement().Empty()
 }
 
-// Empty token produces no output but is followed by a
-// separator in a list.
+// Empty adds an empty item. Empty items render nothing but are followed by a
+// separator in lists.
 func (g *Group) Empty() *Statement {
 	s := Empty()
 	g.items = append(g.items, s)
 	return s
 }
 
-// Empty token produces no output but is followed by a
-// separator in a list.
+// Empty adds an empty item. Empty items render nothing but are followed by a
+// separator in lists.
 func (s *Statement) Empty() *Statement {
 	t := token{
 		typ:     operatorToken,
@@ -108,16 +108,19 @@ func (s *Statement) Empty() *Statement {
 	return s
 }
 
+// Op renders the provided operator / token.
 func Op(op string) *Statement {
 	return newStatement().Op(op)
 }
 
+// Op renders the provided operator / token.
 func (g *Group) Op(op string) *Statement {
 	s := Op(op)
 	g.items = append(g.items, s)
 	return s
 }
 
+// Op renders the provided operator / token.
 func (s *Statement) Op(op string) *Statement {
 	t := token{
 		typ:     operatorToken,
@@ -127,16 +130,19 @@ func (s *Statement) Op(op string) *Statement {
 	return s
 }
 
+// Id renders an identifier.
 func Id(name string) *Statement {
 	return newStatement().Id(name)
 }
 
+// Id renders an identifier.
 func (g *Group) Id(name string) *Statement {
 	s := Id(name)
 	g.items = append(g.items, s)
 	return s
 }
 
+// Id renders an identifier.
 func (s *Statement) Id(name string) *Statement {
 	t := token{
 		typ:     identifierToken,
@@ -146,16 +152,25 @@ func (s *Statement) Id(name string) *Statement {
 	return s
 }
 
+// Qual renders a qualified identifier. Imports are automatically added when
+// used with a File. If the path matches the local path, the package name is
+// omitted. If package names conflict they are automatically renamed.
 func Qual(path, name string) *Statement {
 	return newStatement().Qual(path, name)
 }
 
+// Qual renders a qualified identifier. Imports are automatically added when
+// used with a File. If the path matches the local path, the package name is
+// omitted. If package names conflict they are automatically renamed.
 func (g *Group) Qual(path, name string) *Statement {
 	s := Qual(path, name)
 	g.items = append(g.items, s)
 	return s
 }
 
+// Qual renders a qualified identifier. Imports are automatically added when
+// used with a File. If the path matches the local path, the package name is
+// omitted. If package names conflict they are automatically renamed.
 func (s *Statement) Qual(path, name string) *Statement {
 	g := Sel(
 		token{
@@ -171,16 +186,19 @@ func (s *Statement) Qual(path, name string) *Statement {
 	return s
 }
 
+// Line inserts a blank line.
 func Line() *Statement {
 	return newStatement().Line()
 }
 
+// Line inserts a blank line.
 func (g *Group) Line() *Statement {
 	s := Line()
 	g.items = append(g.items, s)
 	return s
 }
 
+// Line inserts a blank line.
 func (s *Statement) Line() *Statement {
 	t := token{
 		typ:     layoutToken,

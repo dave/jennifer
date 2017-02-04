@@ -7,6 +7,8 @@ import (
 	"io"
 )
 
+// Group represents a list of Code items, separated by tokens with an optional
+// open and close token.
 type Group struct {
 	items     []Code
 	open      string
@@ -78,6 +80,7 @@ func (g *Group) render(f *File, w io.Writer) error {
 	return nil
 }
 
+// GoString renders the Group for testing. Any error will cause a panic.
 func (g *Group) GoString() string {
 	f := NewFile("")
 	buf := &bytes.Buffer{}

@@ -12,11 +12,13 @@ import (
 	"strconv"
 )
 
+// Code represents an item of code that can be rendered.
 type Code interface {
 	render(f *File, w io.Writer) error
 	isNull(f *File) bool
 }
 
+// Save renders the file and saves to the filename provided.
 func (f *File) Save(filename string) error {
 	buf := &bytes.Buffer{}
 	if err := f.Render(buf); err != nil {
@@ -28,6 +30,7 @@ func (f *File) Save(filename string) error {
 	return nil
 }
 
+// Render renders the file to the provided writer.
 func (f *File) Render(w io.Writer) error {
 	body := &bytes.Buffer{}
 	if err := f.render(f, body); err != nil {

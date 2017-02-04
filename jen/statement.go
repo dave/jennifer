@@ -7,12 +7,16 @@ import (
 	"io"
 )
 
+// Statement represents a simple list of code items. When rendered the items
+// are separated by spaces.
 type Statement []Code
 
 func newStatement() *Statement {
 	return &Statement{}
 }
 
+// Clone makes a copy of the Statement, so further tokens can be appended
+// without affecting the original.
 func (s *Statement) Clone() *Statement {
 	return &Statement{s}
 }
@@ -51,6 +55,7 @@ func (s *Statement) render(f *File, w io.Writer) error {
 	return nil
 }
 
+// GoString renders the Statement for testing. Any error will cause a panic.
 func (s *Statement) GoString() string {
 	f := NewFile("")
 	buf := &bytes.Buffer{}
