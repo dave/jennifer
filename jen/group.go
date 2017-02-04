@@ -37,32 +37,11 @@ func (g *Group) render(f *File, w io.Writer) error {
 			return err
 		}
 	}
-	first := true
-	for _, code := range g.items {
-		if code == nil || code.isNull(f) {
-			// Null() token produces no output but also
-			// no separator. Empty() token products no
-			// output but adds a separator.
-			continue
-		}
-		if first && g.separator == "\n" {
-			// For blocks separated with new lines, we always insert a new line
-			// before the first item (but only if there is an item).
-			if _, err := w.Write([]byte("\n")); err != nil {
-				return err
-			}
-		}
-		if !first && g.separator != "" {
-			if _, err := w.Write([]byte(g.separator)); err != nil {
-				return err
-			}
-		}
-		if err := code.render(f, w); err != nil {
-			return err
-		}
-		first = false
+	isNull, err := g.renderItems(f, w)
+	if err != nil {
+		return err
 	}
-	if !first && g.separator == "\n" && g.close != "" {
+	if !isNull && g.separator == "\n" && g.close != "" {
 		// For blocks separated with new lines and with a closing token, we
 		// always insert a new line after the last item (but only if there is
 		// an item). This is to ensure that if the statement finishes with a
@@ -78,6 +57,35 @@ func (g *Group) render(f *File, w io.Writer) error {
 		}
 	}
 	return nil
+}
+
+func (g *Group) renderItems(f *File, w io.Writer) (isNull bool, err error) {
+	first := true
+	for _, code := range g.items {
+		if code == nil || code.isNull(f) {
+			// Null() token produces no output but also
+			// no separator. Empty() token products no
+			// output but adds a separator.
+			continue
+		}
+		if first && g.separator == "\n" {
+			// For blocks separated with new lines, we always insert a new line
+			// before the first item (but only if there is an item).
+			if _, err := w.Write([]byte("\n")); err != nil {
+				return false, err
+			}
+		}
+		if !first && g.separator != "" {
+			if _, err := w.Write([]byte(g.separator)); err != nil {
+				return false, err
+			}
+		}
+		if err := code.render(f, w); err != nil {
+			return false, err
+		}
+		first = false
+	}
+	return first, nil
 }
 
 // GoString renders the Group for testing. Any error will cause a panic.

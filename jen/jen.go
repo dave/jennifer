@@ -51,6 +51,24 @@ func (f *File) Render(w io.Writer) error {
 	if _, err := fmt.Fprintf(source, "package %s\n\n", f.name); err != nil {
 		return err
 	}
+	if err := f.renderImports(source); err != nil {
+		return err
+	}
+	if _, err := source.Write(body.Bytes()); err != nil {
+		return err
+	}
+	formatted, err := format.Source(source.Bytes())
+	if err != nil {
+		return fmt.Errorf("Error %s while formatting source:\n%s", err, source.String())
+	}
+	_, err = w.Write(formatted)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (f *File) renderImports(source io.Writer) error {
 	if len(f.imports) == 1 {
 		for path, alias := range f.imports {
 			if _, err := fmt.Fprintf(source, "import %s %s\n\n", alias, strconv.Quote(path)); err != nil {
@@ -76,17 +94,6 @@ func (f *File) Render(w io.Writer) error {
 		if _, err := fmt.Fprint(source, ")\n\n"); err != nil {
 			return err
 		}
-	}
-	if _, err := source.Write(body.Bytes()); err != nil {
-		return err
-	}
-	formatted, err := format.Source(source.Bytes())
-	if err != nil {
-		return fmt.Errorf("Error %s while formatting source:\n%s", err, source.String())
-	}
-	_, err = w.Write(formatted)
-	if err != nil {
-		return err
 	}
 	return nil
 }
