@@ -11,7 +11,7 @@ import (
 func TestRender(t *testing.T) {
 
 	buf := &bytes.Buffer{}
-	if err := Render(buf); err != nil {
+	if err := render(buf); err != nil {
 		t.Fatal(err.Error())
 	}
 	generatedString := buf.String()
