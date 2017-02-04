@@ -1,3 +1,4 @@
+// Package jen is a code generator for Go
 //go:generate go get github.com/davelondon/jennifer/genjen
 //go:generate genjen
 package jen
