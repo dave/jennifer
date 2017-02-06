@@ -248,11 +248,94 @@ func ExampleChan() {
 	// }
 }
 
+func ExampleClose() {
+	c := Block(
+		Id("ch").Op(":=").Make(Chan().Struct()),
+		Go().Func().Params().Block(
+			Op("<-").Id("ch"),
+			Qual("fmt", "Println").Call(Lit("done.")),
+		).Call(),
+		Close(Id("ch")),
+	)
+	fmt.Printf("%#v", c)
+	// Output:
+	// {
+	// 	ch := make(chan struct{})
+	// 	go func() {
+	// 		<-ch
+	// 		fmt.Println("done.")
+	// 	}()
+	// 	close(ch)
+	// }
+}
+
+func ExampleComment() {
+	f := NewFile("a")
+	f.Comment("Foo returns the string \"foo\"")
+	f.Func().Id("Foo").Params().String().Block(
+		Return(Lit("foo")),
+	)
+	fmt.Printf("%#v", f)
+	// Output:
+	// package a
+	//
+	// // Foo returns the string "foo"
+	// func Foo() string {
+	// 	return "foo"
+	// }
+}
+
+func ExampleComment_multiline() {
+	c := Comment("a\nb")
+	fmt.Printf("%#v", c)
+	// Output:
+	// /*
+	// a
+	// b
+	// */
+}
+
+func ExampleComment_formatting_disabled() {
+	c := Id("foo").Call(Comment("/* inline */")).Comment("//no-space")
+	fmt.Printf("%#v", c)
+	// Output:
+	// foo( /* inline */ ) //no-space
+}
+
+func ExampleCommentf() {
+	name := "Foo"
+	output := "foo"
+	f := NewFile("a")
+	f.Commentf("%s returns the string \"%s\"", name, output)
+	f.Func().Id(name).Params().String().Block(
+		Return(Lit(output)),
+	)
+	fmt.Printf("%#v", f)
+	// Output:
+	// package a
+	//
+	// // Foo returns the string "foo"
+	// func Foo() string {
+	// 	return "foo"
+	// }
+}
+
+func ExampleComplex() {
+	c := Func().Id("main").Params().Block(
+		Id("c1").Op(":=").Lit(1+3.75i),
+		Id("c2").Op(":=").Complex(Lit(1), Lit(3.75)),
+		Qual("fmt", "Println").Call(Id("c1").Op("==").Id("c2")),
+	)
+	fmt.Printf("%#v", c)
+	// Output:
+	// func main() {
+	// 	c1 := (1 + 3.75i)
+	// 	c2 := complex(1, 3.75)
+	// 	fmt.Println(c1 == c2)
+	// }
+}
+
 /*
-func Close(c ...Code) *Statement
-func Comment(str string) *Statement
-func Commentf(format string, a ...interface{}) *Statement
-func Complex(c ...Code) *Statement
 func Complex128() *Statement
 func Complex64() *Statement
 func Const() *Statement
@@ -339,11 +422,27 @@ func ValuesFunc(f func(*Group)) *Statement
 func Var() *Statement
 */
 
-func ExampleComment_formatting_disabled() {
-	c := Id("foo").Call(Comment("/* inline */")).Comment("//close")
-	fmt.Printf("%#v", c)
+func ExampleNewFilePath() {
+	f := NewFilePath("a.b/c")
+	f.Func().Id("init").Params().Block(
+		Qual("a.b/c", "Foo").Call().Comment("Local package - alias is omitted."),
+		Qual("d.e/f", "Bar").Call().Comment("Import is automatically added."),
+		Qual("g.h/f", "Baz").Call().Comment("Colliding package name is automatically renamed."),
+	)
+	fmt.Printf("%#v", f)
 	// Output:
-	// foo( /* inline */ ) //close
+	// package c
+	//
+	// import (
+	// 	f "d.e/f"
+	// 	f1 "g.h/f"
+	// )
+	//
+	// func init() {
+	// 	Foo()    // Local package - alias is omitted.
+	// 	f.Bar()  // Import is automatically added.
+	// 	f1.Baz() // Colliding package name is automatically renamed.
+	// }
 }
 
 func ExampleStruct_empty() {
@@ -417,29 +516,6 @@ func ExampleFile_Render() {
 	// package a
 	//
 	// func main() {}
-}
-
-func ExampleComment() {
-	f := NewFilePath("a.b/c")
-	f.Func().Id("init").Params().Block(
-		Qual("a.b/c", "Foo").Call().Comment("Local package - alias is omitted."),
-		Qual("d.e/f", "Bar").Call().Comment("Import is automatically added."),
-		Qual("g.h/f", "Baz").Call().Comment("Colliding package name is automatically renamed."),
-	)
-	fmt.Printf("%#v", f)
-	// Output:
-	// package c
-	//
-	// import (
-	// 	f "d.e/f"
-	// 	f1 "g.h/f"
-	// )
-	//
-	// func init() {
-	// 	Foo()    // Local package - alias is omitted.
-	// 	f.Bar()  // Import is automatically added.
-	// 	f1.Baz() // Colliding package name is automatically renamed.
-	// }
 }
 
 func ExampleQual() {
@@ -633,30 +709,6 @@ func ExampleValues() {
 	// []string{"a", "b"}
 }
 
-func ExampleComment_simple() {
-	c := Comment("a")
-	fmt.Printf("%#v", c)
-	// Output:
-	// // a
-}
-
-func ExampleComment_multiline() {
-	c := Comment("a\nb")
-	fmt.Printf("%#v", c)
-	// Output:
-	// /*
-	// a
-	// b
-	// */
-}
-
-func ExampleCommentf() {
-	c := Commentf("a %d", 1)
-	fmt.Printf("%#v", c)
-	// Output:
-	// // a 1
-}
-
 func ExampleDo() {
 	f := func(name string, isMap bool) *Statement {
 		return Id(name).Op(":=").Do(func(s *Statement) {
@@ -762,29 +814,6 @@ func ExampleNewFile() {
 	//
 	// func main() {
 	// 	fmt.Println("Hello, world")
-	// }
-}
-
-func ExampleNewFilePath() {
-	f := NewFilePath("a.b/c")
-	f.Func().Id("init").Params().Block(
-		Qual("a.b/c", "Local").Call(),
-		Qual("d.e/f", "Remote").Call(),
-		Qual("g.h/f", "Collision").Call(),
-	)
-	fmt.Printf("%#v", f)
-	// Output:
-	// package c
-	//
-	// import (
-	// 	f "d.e/f"
-	// 	f1 "g.h/f"
-	// )
-	//
-	// func init() {
-	// 	Local()
-	// 	f.Remote()
-	// 	f1.Collision()
 	// }
 }
 
