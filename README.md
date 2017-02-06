@@ -67,9 +67,9 @@ panic. For production use, `File.Render` or `File.Save` are preferred.
 `Id` renders an identifier:
  
 ```go
-c := Id("a")
+c := Id("a").Op(":=").Lit(1)
 fmt.Printf("%#v", c)
-// Output: a
+// Output: a := 1
 ```
 
 # Qual
