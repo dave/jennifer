@@ -335,9 +335,37 @@ func ExampleComplex() {
 	// }
 }
 
+func ExampleComplex128() {
+	c := Func().Id("main").Params().Block(
+		Var().Id("c").Complex128(),
+		Id("c").Op("=").Lit(1+2i),
+		Qual("fmt", "Println").Call(Id("c")),
+	)
+	fmt.Printf("%#v", c)
+	// Output:
+	// func main() {
+	// 	var c complex128
+	// 	c = (1 + 2i)
+	// 	fmt.Println(c)
+	// }
+}
+
+func ExampleComplex64() {
+	c := Func().Id("main").Params().Block(
+		Var().Id("c64").Complex64(),
+		Id("c64").Op("=").Complex(Lit(5), Float32().Parens(Lit(2))),
+		Qual("fmt", "Printf").Call(Lit("%T\n"), Id("c64")),
+	)
+	fmt.Printf("%#v", c)
+	// Output:
+	// func main() {
+	// 	var c64 complex64
+	// 	c64 = complex(5, float32(2))
+	// 	fmt.Printf("%T\n", c64)
+	// }
+}
+
 /*
-func Complex128() *Statement
-func Complex64() *Statement
 func Const() *Statement
 func Continue() *Statement
 func Copy(c ...Code) *Statement
