@@ -39,7 +39,9 @@ func ExampleAssert() {
 }
 
 func ExampleBlock() {
-	c := Func().Id("foo").Params().Block(Id("a").Op("=").Id("b"))
+	c := Func().Id("foo").Params().Block(
+		Id("a").Op("=").Id("b"),
+	)
 	fmt.Printf("%#v", c)
 	// Output:
 	// func foo() {
@@ -102,6 +104,12 @@ func ExampleCall() {
 	fmt.Printf("%#v", c)
 	// Output:
 	// fmt.Printf("%#v: %T\n", a, b)
+}
+
+func ExampleCall_fmt() {
+	c := Id("a").Call(Lit("b"))
+	fmt.Printf("%#v", c)
+	// Output: a("b")
 }
 
 func ExampleCallFunc() {
@@ -546,26 +554,40 @@ func ExampleFile_Render() {
 	// func main() {}
 }
 
-func ExampleQual() {
+func ExampleSel() {
 	c := Sel(Qual("a.b/c", "Foo").Call(), Id("Bar").Index(Lit(0)), Id("Baz"))
 	fmt.Printf("%#v", c)
 	// Output:
 	// c.Foo().Bar[0].Baz
 }
 
+func ExampleQual() {
+	c := Qual("encoding/gob", "NewEncoder").Call()
+	fmt.Printf("%#v", c)
+	// Output:
+	// gob.NewEncoder()
+}
+
 func ExampleQual_file() {
-	f := NewFile("a")
-	f.Func().Id("main").Params().Block(
-		Qual("encoding/gob", "NewEncoder").Call(),
+	f := NewFilePath("a.b/c")
+	f.Func().Id("init").Params().Block(
+		Qual("a.b/c", "Foo").Call().Comment("Local package - name is omitted."),
+		Qual("d.e/f", "Bar").Call().Comment("Import is automatically added."),
+		Qual("g.h/f", "Baz").Call().Comment("Colliding package name is renamed."),
 	)
 	fmt.Printf("%#v", f)
 	// Output:
-	// package a
+	// package c
 	//
-	// import gob "encoding/gob"
+	// import (
+	// 	f "d.e/f"
+	// 	f1 "g.h/f"
+	// )
 	//
-	// func main() {
-	// 	gob.NewEncoder()
+	// func init() {
+	// 	Foo()    // Local package - name is omitted.
+	// 	f.Bar()  // Import is automatically added.
+	// 	f1.Baz() // Colliding package name is renamed.
 	// }
 }
 
@@ -584,11 +606,14 @@ func ExampleQual_local() {
 }
 
 func ExampleId() {
-	id := Sel(Qual("foo", "Bar"), Id("Baz"))
-	c := Sel(id, Id("Qux")).Call()
+	c := If(Id("i").Op("==").Id("j")).Block(
+		Return(Id("i")),
+	)
 	fmt.Printf("%#v", c)
 	// Output:
-	// foo.Bar.Baz.Qux()
+	// if i == j {
+	// 	return i
+	// }
 }
 
 func ExampleErr() {
