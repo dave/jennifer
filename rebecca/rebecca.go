@@ -62,18 +62,14 @@ func (m *CodeMap) ExampleFunc(plain bool) func(in string) string {
 		return fmt.Sprintf(`[Example](https://godoc.org/%s#example-%s):
 %sgo
 %s
-%s
-Output:
-%sgo
-%s
+// Output:
+// %s
 %s`,
 			m.pkg,
-			strings.Replace(in, "_", "-", -1),
+			strings.Replace(in, "_", "-", -1)[len("Example"):],
 			quotes,
 			strings.Trim(buf.String(), "\n"),
-			quotes,
-			quotes,
-			strings.Trim(e.Output, "\n"),
+			strings.Replace(strings.Trim(e.Output, "\n"), "\n", "\n// ", -1),
 			quotes)
 	}
 }
@@ -82,7 +78,7 @@ func (m *CodeMap) LinkFunc(in string) string {
 	return fmt.Sprintf(
 		"[Example](https://godoc.org/%s#example-%s):",
 		m.pkg,
-		strings.Replace(in, "_", "-", -1))
+		strings.Replace(in, "_", "-", -1)[len("Example"):])
 }
 
 func (m *CodeMap) OutputFunc(in string) string {
@@ -93,8 +89,8 @@ func (m *CodeMap) OutputFunc(in string) string {
 	return strings.Trim(e.Output, "\n")
 }
 
-var docRegex = regexp.MustCompile(`(\w+)\(([0-9\-, ]+)\)`)
-var sectionRegex = regexp.MustCompile(`(\d+)(-?)(\d*)`)
+var docRegex = regexp.MustCompile(`(\w+)\[([0-9:, ]+)\]`)
+var sectionRegex = regexp.MustCompile(`(\d+)(:?)(\d*)`)
 
 func (m *CodeMap) DocFunc(in string) string {
 
@@ -115,11 +111,11 @@ func (m *CodeMap) DocFunc(in string) string {
 				// single sentance index, of the form "i"
 				start, _ = strconv.Atoi(parts[1])
 				end = start + 1
-			case parts[1] == "" && parts[2] == "-":
+			case parts[1] == "" && parts[2] == ":":
 				// of the form: "-i"
 				start = 0
 				end, _ = strconv.Atoi(parts[2])
-			case parts[2] == "-" && parts[3] == "":
+			case parts[2] == ":" && parts[3] == "":
 				// of the form: "i-"
 				start, _ = strconv.Atoi(parts[1])
 				end = len(sentances) - 1
@@ -195,6 +191,17 @@ func (m *CodeMap) scanPkg(name string, p *ast.Package) error {
 					//fmt.Println(s.Name, d.Doc.Text())
 					name := fmt.Sprint(s.Name)
 					m.Comments[name] = d.Doc.Text()
+					if t, ok := s.Type.(*ast.StructType); ok {
+						for _, f := range t.Fields.List {
+							if f.Doc.Text() == "" {
+								continue
+							}
+							if f.Names[0].IsExported() {
+								fieldName := fmt.Sprint(name, ".", f.Names[0])
+								m.Comments[fieldName] = f.Doc.Text()
+							}
+						}
+					}
 				case *ast.ValueSpec:
 					//fmt.Println(s.Names[0], d.Doc.Text())
 					if len(s.Names) == 0 {

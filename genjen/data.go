@@ -25,7 +25,7 @@ var groups = []struct {
 	},
 	{
 		name:       "List",
-		comment:    "renders a comma separated list with no open or closing tokens. Use for multiple return functions.",
+		comment:    "renders a comma separated list. Use for multiple return functions.",
 		variadic:   true,
 		opening:    "",
 		closing:    "",
@@ -52,7 +52,7 @@ var groups = []struct {
 	},
 	{
 		name:       "Block",
-		comment:    "renders a statement list enclosed by curly braces. Use for all code blocks.",
+		comment:    "renders a statement list enclosed by curly braces. Use for code blocks.",
 		variadic:   true,
 		opening:    "{",
 		closing:    "}",
@@ -61,7 +61,7 @@ var groups = []struct {
 	},
 	{
 		name:       "Defs",
-		comment:    "renders a list of statements enclosed in parenthesis. Use for definition lists.",
+		comment:    "renders a statement list enclosed in parenthesis. Use for definition lists.",
 		variadic:   true,
 		opening:    "(",
 		closing:    ")",
@@ -106,7 +106,7 @@ var groups = []struct {
 	},
 	{
 		name:       "Map",
-		comment:    "renders the map keyword followed by a single item enclosed by square brackets. Use for map definitions.",
+		comment:    "renders the keyword followed by a single item enclosed by square brackets. Use for map definitions",
 		variadic:   false,
 		opening:    "map[",
 		closing:    "]",
@@ -115,7 +115,7 @@ var groups = []struct {
 	},
 	{
 		name:       "If",
-		comment:    "renders the if keyword followed by a semicolon separated list.",
+		comment:    "renders the keyword followed by a semicolon separated list.",
 		variadic:   true,
 		opening:    "if ",
 		closing:    "",
@@ -124,7 +124,7 @@ var groups = []struct {
 	},
 	{
 		name:       "Return",
-		comment:    "renders the return keyword followed by a comma separated list.",
+		comment:    "renders the keyword followed by a comma separated list.",
 		variadic:   true,
 		opening:    "return ",
 		closing:    "",
@@ -133,7 +133,7 @@ var groups = []struct {
 	},
 	{
 		name:       "For",
-		comment:    "renders the for keyword followed by a semicolon separated list.",
+		comment:    "renders the keyword followed by a semicolon separated list.",
 		variadic:   true,
 		opening:    "for ",
 		closing:    "",
@@ -142,7 +142,7 @@ var groups = []struct {
 	},
 	{
 		name:       "Switch",
-		comment:    "renders the switch keyword followed by a semicolon separated list.",
+		comment:    "renders the keyword followed by a semicolon separated list.",
 		variadic:   true,
 		opening:    "switch ",
 		closing:    "",
@@ -151,7 +151,7 @@ var groups = []struct {
 	},
 	{
 		name:       "Interface",
-		comment:    "renders the interface keyword followed by curly braces containing a method list.",
+		comment:    "renders the keyword followed by a method list enclosed by curly braces.",
 		variadic:   true,
 		opening:    "interface{",
 		closing:    "}",
@@ -160,7 +160,7 @@ var groups = []struct {
 	},
 	{
 		name:       "Struct",
-		comment:    "renders the struct keyword followed by curly braces containing a field list.",
+		comment:    "renders the keyword followed by a field list enclosed by curly braces.",
 		variadic:   true,
 		opening:    "struct{",
 		closing:    "}",
@@ -169,7 +169,7 @@ var groups = []struct {
 	},
 	{
 		name:       "Case",
-		comment:    "renders the case keyword followed by a comma separated list.",
+		comment:    "renders the keyword followed by a comma separated list.",
 		variadic:   true,
 		opening:    "case ",
 		closing:    "",
@@ -178,7 +178,7 @@ var groups = []struct {
 	},
 	{
 		name:       "Sel",
-		comment:    "renders a chain of selectors separated by periods.",
+		comment:    "renders a period sep arated list. Use for a chain of selectors.",
 		variadic:   true,
 		opening:    "",
 		closing:    "",
@@ -259,13 +259,13 @@ var groups = []struct {
 	},
 	{
 		name:        "Make",
-		comment:     "renders the make built-in function.",
+		comment:     "renders the make built-in function. The final parameter of the make function is optional, so it is represented by a variadic parameter list.",
 		variadic:    true,
 		opening:     "make(",
 		closing:     ")",
 		separator:   ",",
 		parameters:  []string{"args"},
-		preventFunc: true, // the underlying function is not variadic, so we prevent the xxxFunc function
+		preventFunc: true, // the underlying function is not variadic, so we prevent the MakeFunc variation
 	},
 	{
 		name:       "New",

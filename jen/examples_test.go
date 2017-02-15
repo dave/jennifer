@@ -9,6 +9,14 @@ import (
 )
 
 func ExampleAdd() {
+	ptr := Op("*")
+	c := Id("a").Op("=").Add(ptr).Id("b")
+	fmt.Printf("%#v", c)
+	// Output:
+	// a = *b
+}
+
+func ExampleAdd_var() {
 	a := Id("a")
 	i := Int()
 	c := Var().Add(a, i)
@@ -49,16 +57,30 @@ func ExampleBlock() {
 	// }
 }
 
+func ExampleBlock_if() {
+	c := If(Id("a").Op(">").Lit(10)).Block(
+		Id("a").Op("=").Id("a").Op("/").Lit(2),
+	)
+	fmt.Printf("%#v", c)
+	// Output:
+	// if a > 10 {
+	// 	a = a / 2
+	// }
+}
+
 func ExampleBlockFunc() {
+	increment := true
 	c := Func().Id("a").Params().BlockFunc(func(g *Group) {
-		g.Id("a").Op("++")
-		g.Id("b").Op("--")
+		if increment {
+			g.Id("a").Op("++")
+		} else {
+			g.Id("a").Op("--")
+		}
 	})
 	fmt.Printf("%#v", c)
 	// Output:
 	// func a() {
 	// 	a++
-	//	b--
 	// }
 }
 
@@ -109,7 +131,8 @@ func ExampleCall() {
 func ExampleCall_fmt() {
 	c := Id("a").Call(Lit("b"))
 	fmt.Printf("%#v", c)
-	// Output: a("b")
+	// Output:
+	// a("b")
 }
 
 func ExampleCallFunc() {
@@ -281,7 +304,7 @@ func ExampleComment() {
 	f := NewFile("a")
 	f.Comment("Foo returns the string \"foo\"")
 	f.Func().Id("Foo").Params().String().Block(
-		Return(Lit("foo")),
+		Return(Lit("foo")).Comment("return the string foo"),
 	)
 	fmt.Printf("%#v", f)
 	// Output:
@@ -289,7 +312,7 @@ func ExampleComment() {
 	//
 	// // Foo returns the string "foo"
 	// func Foo() string {
-	// 	return "foo"
+	// 	return "foo" // return the string foo
 	// }
 }
 
@@ -458,6 +481,59 @@ func ValuesFunc(f func(*Group)) *Statement
 func Var() *Statement
 */
 
+func ExampleParams() {
+	c := Func().Params(Id("a").Id("A")).Id("foo").Params(Id("b").String()).String().Block(
+		Return(Id("b")),
+	)
+	fmt.Printf("%#v", c)
+	// Output:
+	// func (a A) foo(b string) string {
+	// 	return b
+	// }
+}
+
+func ExampleIndex() {
+	c := Var().Id("a").Index().String()
+	fmt.Printf("%#v", c)
+	// Output:
+	// var a []string
+}
+
+func ExampleIndex_index() {
+	c := Id("a").Op(":=").Id("b").Index(Lit(0), Lit(1))
+	fmt.Printf("%#v", c)
+	// Output:
+	// a := b[0:1]
+}
+
+func ExampleIndex_empty() {
+	c := Id("a").Op(":=").Id("b").Index(Lit(1), Empty())
+	fmt.Printf("%#v", c)
+	// Output:
+	// a := b[1:]
+}
+
+func ExampleOp() {
+	c := Id("a").Op(":=").Id("b").Call()
+	fmt.Printf("%#v", c)
+	// Output:
+	// a := b()
+}
+
+func ExampleOp_star() {
+	c := Id("a").Op("=").Op("*").Id("b")
+	fmt.Printf("%#v", c)
+	// Output:
+	// a = *b
+}
+
+func ExampleOp_variadic() {
+	c := Id("a").Call(Id("b").Op("..."))
+	fmt.Printf("%#v", c)
+	// Output:
+	// a(b...)
+}
+
 func ExampleNewFilePath() {
 	f := NewFilePath("a.b/c")
 	f.Func().Id("init").Params().Block(
@@ -492,49 +568,54 @@ func ExampleStruct() {
 	c := Type().Id("foo").Struct(
 		List(Id("x"), Id("y")).Int(),
 		Id("u").Float32(),
-		Id("_").Float32().Comment("padding"),
-		Id("A").Op("*").Index().Int(),
-		Id("F").Func().Params(),
 	)
 	fmt.Printf("%#v", c)
 	// Output:
 	// type foo struct {
 	// 	x, y int
 	// 	u    float32
-	// 	_    float32 // padding
-	// 	A    *[]int
-	// 	F    func()
 	// }
 }
 
 func ExampleDefer() {
 	c := Defer().Id("foo").Call()
 	fmt.Printf("%#v", c)
-	// Output: defer foo()
+	// Output:
+	// defer foo()
 }
 
 func ExampleGoto() {
 	c := Goto().Id("Outer")
 	fmt.Printf("%#v", c)
-	// Output: goto Outer
+	// Output:
+	// goto Outer
 }
 
-func ExampleStatement_Clone() {
+func ExampleStatement_Clone_broken() {
 	a := Id("a")
-	b := Id("b")
 	c := Block(
 		a.Call(),
 		a.Call(),
-		b.Clone().Call(),
-		b.Clone().Call(),
 	)
 	fmt.Printf("%#v", c)
 	// Output:
 	// {
 	// 	a()()
 	// 	a()()
-	// 	b()
-	// 	b()
+	// }
+}
+
+func ExampleStatement_Clone_fixed() {
+	a := Id("a")
+	c := Block(
+		a.Clone().Call(),
+		a.Clone().Call(),
+	)
+	fmt.Printf("%#v", c)
+	// Output:
+	// {
+	// 	a()
+	// 	a()
 	// }
 }
 
@@ -554,11 +635,39 @@ func ExampleFile_Render() {
 	// func main() {}
 }
 
+func ExampleLit() {
+	c := Id("a").Op(":=").Lit("a")
+	fmt.Printf("%#v", c)
+	// Output:
+	// a := "a"
+}
+
+func ExampleLit_float() {
+	c := Id("a").Op(":=").Lit(1.5)
+	fmt.Printf("%#v", c)
+	// Output:
+	// a := 1.5
+}
+
+func ExampleLitFunc() {
+	c := Id("a").Op(":=").LitFunc(func() interface{} { return 1 + 1 })
+	fmt.Printf("%#v", c)
+	// Output:
+	// a := 2
+}
+
 func ExampleSel() {
 	c := Sel(Qual("a.b/c", "Foo").Call(), Id("Bar").Index(Lit(0)), Id("Baz"))
 	fmt.Printf("%#v", c)
 	// Output:
 	// c.Foo().Bar[0].Baz
+}
+
+func ExampleList() {
+	c := List(Id("a"), Id("b")).Op(":=").Id("c").Call()
+	fmt.Printf("%#v", c)
+	// Output:
+	// a, b := c()
 }
 
 func ExampleQual() {
@@ -631,12 +740,15 @@ func ExampleErr() {
 }
 
 func ExampleSwitch() {
-	c := Switch().Id("foo").Block(
-		Case().Lit("a").CaseBlock(
+	c := Switch(Id("a")).Block(
+		Case(Lit("1")).CaseBlock(
 			Return(Lit(1)),
 		),
-		Case().Lit("b").CaseBlock(
+		Case(Lit("2"), Lit("3")).CaseBlock(
 			Return(Lit(2)),
+		),
+		Case(Lit("4")).CaseBlock(
+			Fallthrough(),
 		),
 		Default().CaseBlock(
 			Return(Lit(3)),
@@ -644,11 +756,13 @@ func ExampleSwitch() {
 	)
 	fmt.Printf("%#v", c)
 	// Output:
-	// switch foo {
-	// case "a":
+	// switch a {
+	// case "1":
 	// 	return 1
-	// case "b":
+	// case "2", "3":
 	// 	return 2
+	// case "4":
+	// 	fallthrough
 	// default:
 	// 	return 3
 	// }
@@ -749,6 +863,13 @@ func ExampleInterface_empty() {
 }
 
 func ExampleParens() {
+	c := Id("b").Op(":=").Index().Byte().Parens(Id("s"))
+	fmt.Printf("%#v", c)
+	// Output:
+	// b := []byte(s)
+}
+
+func ExampleParens_order() {
 	c := Id("a").Op("/").Parens(Id("b").Op("+").Id("c"))
 	fmt.Printf("%#v", c)
 	// Output:
@@ -778,8 +899,15 @@ func ExampleDo() {
 	// b := []string{}
 }
 
-func ExampleDict_nil() {
-	c := Id("a").Op(":=").Map(String()).String().Dict(nil)
+func ExampleReturn() {
+	c := Return(Id("a"), Id("b"))
+	fmt.Printf("%#v", c)
+	// Output:
+	// return a, b
+}
+
+func ExampleMap() {
+	c := Id("a").Op(":=").Map(String()).String().Values()
 	fmt.Printf("%#v", c)
 	// Output:
 	// a := map[string]string{}
@@ -788,22 +916,33 @@ func ExampleDict_nil() {
 func ExampleDict() {
 	c := Id("a").Op(":=").Map(String()).String().Dict(map[Code]Code{
 		Lit("a"): Lit("b"),
+		Lit("c"): Lit("d"),
 	})
 	fmt.Printf("%#v", c)
 	// Output:
 	// a := map[string]string{
 	// 	"a": "b",
+	// 	"c": "d",
 	// }
+}
+
+func ExampleDict_nil() {
+	c := Id("a").Op(":=").Map(String()).String().Dict(nil)
+	fmt.Printf("%#v", c)
+	// Output:
+	// a := map[string]string{}
 }
 
 func ExampleDictFunc() {
 	c := Id("a").Op(":=").Map(String()).String().DictFunc(func(m map[Code]Code) {
 		m[Lit("a")] = Lit("b")
+		m[Lit("c")] = Lit("d")
 	})
 	fmt.Printf("%#v", c)
 	// Output:
 	// a := map[string]string{
 	// 	"a": "b",
+	// 	"c": "d",
 	// }
 }
 
@@ -818,6 +957,20 @@ func ExampleDefs() {
 	// 	a = "a"
 	// 	b = "b"
 	// )
+}
+
+func ExampleIf() {
+	c := If(
+		Err().Op(":=").Id("a").Call(),
+		Err().Op("!=").Nil(),
+	).Block(
+		Return(Err()),
+	)
+	fmt.Printf("%#v", c)
+	// Output:
+	// if err := a(); err != nil {
+	// 	return err
+	// }
 }
 
 func ExampleId_local() {
@@ -849,6 +1002,21 @@ func ExampleId_remote() {
 	//
 	// func main() {
 	// 	fmt.Println("Hello, world")
+	// }
+}
+
+func ExampleFor() {
+	c := For(
+		Id("i").Op(":=").Lit(0),
+		Id("i").Op("<").Lit(10),
+		Id("i").Op("++"),
+	).Block(
+		Qual("fmt", "Println").Call(Id("i")),
+	)
+	fmt.Printf("%#v", c)
+	// Output:
+	// for i := 0; i < 10; i++ {
+	// 	fmt.Println(i)
 	// }
 }
 

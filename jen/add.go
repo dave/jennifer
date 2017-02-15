@@ -1,18 +1,18 @@
 package jen
 
-// Add creates a new statement and appends the provided code.
+// Add appends the provided items to the statement.
 func Add(code ...Code) *Statement {
 	return newStatement().Add(code...)
 }
 
-// Add creates a new statement in the group and appends the provided code.
+// Add appends the provided items to the statement.
 func (g *Group) Add(code ...Code) *Statement {
 	s := Add(code...)
 	g.items = append(g.items, s)
 	return s
 }
 
-// Add appends the provided code to the statement.
+// Add appends the provided items to the statement.
 func (s *Statement) Add(code ...Code) *Statement {
 	*s = append(*s, code...)
 	return s

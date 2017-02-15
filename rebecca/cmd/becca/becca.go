@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"flag"
+	"io/ioutil"
 	"os"
 	"text/template"
 
@@ -45,5 +47,11 @@ func main() {
 
 	tpl := template.Must(template.New("main").Funcs(funcMap).ParseGlob("*.md.tpl"))
 
-	tpl.ExecuteTemplate(os.Stdout, "README1.md.tpl", nil)
+	buf := &bytes.Buffer{}
+	if err := tpl.ExecuteTemplate(buf, "README.md.tpl", nil); err != nil {
+		log.Fatal(err)
+	}
+	if err := ioutil.WriteFile("README.md", buf.Bytes(), 0644); err != nil {
+		log.Fatal(err)
+	}
 }

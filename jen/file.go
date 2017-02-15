@@ -57,7 +57,7 @@ type File struct {
 }
 
 // PackageComment adds a comment to the top of the file, above the package
-// keyword:
+// keyword.
 func (f *File) PackageComment(comment string) {
 	f.comments = append(f.comments, comment)
 }

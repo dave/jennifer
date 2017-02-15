@@ -7,19 +7,19 @@ import (
 	"strconv"
 )
 
-// Tag adds a struct tag
+// Tag renders a struct tag
 func Tag(items map[string]string) *Statement {
 	return newStatement().Tag(items)
 }
 
-// Tag adds a struct tag
+// Tag renders a struct tag
 func (g *Group) Tag(items map[string]string) *Statement {
 	s := Tag(items)
 	g.items = append(g.items, s)
 	return s
 }
 
-// Tag adds a struct tag
+// Tag renders a struct tag
 func (s *Statement) Tag(items map[string]string) *Statement {
 	c := tag{
 		items: items,
