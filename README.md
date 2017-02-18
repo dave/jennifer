@@ -355,7 +355,11 @@ fmt.Printf("%#v", c)
 Sel renders a period separated list. Use for a chain of selectors.
 
 ```go
-c := Sel(Qual("a.b/c", "Foo").Call(), Id("Bar").Index(Lit(0)), Id("Baz"))
+c := Sel(
+	Qual("a.b/c", "Foo").Call(),
+	Id("Bar").Index(Lit(0)),
+	Id("Baz"),
+)
 fmt.Printf("%#v", c)
 // Output:
 // c.Foo().Bar[0].Baz
@@ -365,10 +369,10 @@ fmt.Printf("%#v", c)
 List renders a comma separated list. Use for multiple return functions.
 
 ```go
-c := List(Id("a"), Id("b")).Op(":=").Id("c").Call()
+c := List(Id("a"), Err()).Op(":=").Id("b").Call()
 fmt.Printf("%#v", c)
 // Output:
-// a, b := c()
+// a, err := b()
 ```
 
 ### Call
@@ -389,13 +393,18 @@ fmt.Printf("%#v", c)
 Params renders a comma separated list enclosed by parenthesis. Use for function parameters and method receivers.
 
 ```go
-c := Func().Params(Id("a").Id("A")).Id("foo").Params(Id("b").String()).String().Block(
-	Return(Id("b")),
+c := Func().Params(
+	Id("a").Id("A"),
+).Id("foo").Params(
+	Id("b"),
+	Id("c").String(),
+).String().Block(
+	Return(Id("b").Op("+").Id("c")),
 )
 fmt.Printf("%#v", c)
 // Output:
-// func (a A) foo(b string) string {
-// 	return b
+// func (a A) foo(b, c string) string {
+// 	return b + c
 // }
 ```
 

@@ -482,13 +482,18 @@ func Var() *Statement
 */
 
 func ExampleParams() {
-	c := Func().Params(Id("a").Id("A")).Id("foo").Params(Id("b").String()).String().Block(
-		Return(Id("b")),
+	c := Func().Params(
+		Id("a").Id("A"),
+	).Id("foo").Params(
+		Id("b"),
+		Id("c").String(),
+	).String().Block(
+		Return(Id("b").Op("+").Id("c")),
 	)
 	fmt.Printf("%#v", c)
 	// Output:
-	// func (a A) foo(b string) string {
-	// 	return b
+	// func (a A) foo(b, c string) string {
+	// 	return b + c
 	// }
 }
 
@@ -657,17 +662,21 @@ func ExampleLitFunc() {
 }
 
 func ExampleSel() {
-	c := Sel(Qual("a.b/c", "Foo").Call(), Id("Bar").Index(Lit(0)), Id("Baz"))
+	c := Sel(
+		Qual("a.b/c", "Foo").Call(),
+		Id("Bar").Index(Lit(0)),
+		Id("Baz"),
+	)
 	fmt.Printf("%#v", c)
 	// Output:
 	// c.Foo().Bar[0].Baz
 }
 
 func ExampleList() {
-	c := List(Id("a"), Id("b")).Op(":=").Id("c").Call()
+	c := List(Id("a"), Err()).Op(":=").Id("b").Call()
 	fmt.Printf("%#v", c)
 	// Output:
-	// a, b := c()
+	// a, err := b()
 }
 
 func ExampleQual() {
