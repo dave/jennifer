@@ -49,11 +49,15 @@ func ExampleAssert() {
 func ExampleBlock() {
 	c := Func().Id("foo").Params().Block(
 		Id("a").Op("=").Id("b"),
+		Id("b").Op("++"),
+		Return(Id("b")),
 	)
 	fmt.Printf("%#v", c)
 	// Output:
-	// func foo() {
+	// func foo() string {
 	// 	a = b
+	// 	b++
+	// 	return b
 	// }
 }
 

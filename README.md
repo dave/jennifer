@@ -448,11 +448,15 @@ Block renders a statement list enclosed by curly braces. Use for code blocks.
 ```go
 c := Func().Id("foo").Params().Block(
 	Id("a").Op("=").Id("b"),
+	Id("b").Op("++"),
+	Return(Id("b")),
 )
 fmt.Printf("%#v", c)
 // Output:
-// func foo() {
+// func foo() string {
 // 	a = b
+// 	b++
+// 	return b
 // }
 ```
 
