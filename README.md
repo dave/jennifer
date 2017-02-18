@@ -234,8 +234,8 @@ fmt.Printf("%#v", c)
 # Special keywords
 
 ### Interface, Struct
-Interface and Struct render the keyword followed statement list enclosed by 
-curly braces.
+Interface and Struct render the keyword followed by a statement list enclosed 
+by curly braces.
 
 [Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Interface-empty):
 ```go

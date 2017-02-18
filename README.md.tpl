@@ -135,8 +135,8 @@ functions that accept a func(*Group). These are used to embed logic.
 # Special keywords
 
 ### Interface, Struct
-Interface and Struct render the keyword followed statement list enclosed by 
-curly braces.
+Interface and Struct render the keyword followed by a statement list enclosed 
+by curly braces.
 
 {{ "ExampleInterface_empty" | example }}
 
