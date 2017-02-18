@@ -178,37 +178,37 @@ Built-in functions taking one or more items:
 Some keywords are always followed by another construct. These take one or more 
 items and render them as follows:
  
-| Keyword   | Opening       | Separator | Closing | Usage                                   |
-| --------- | ------------- | --------- | ------- | --------------------------------------- |
-| Return    |               | `,`       |         | `return a, b`                           |
-| If        |               | `;`       |         | `if i, err := a(); err != nil { ... }`  |
-| For       |               | `;`       |         | `for i := 0; i < 10; i++ { ... }`       |
-| Switch    |               | `;`       |         | `switch a { ... }`                      |
-| Case      |               | `,`       |         | `case a, b: ...`                        |
-| Interface | `{`           | `\n`      | `}`     | `interface { ... }`                     |
-| Struct    | `{`           | `\n`      | `}`     | `struct { ... }`                        |
-| Map       | `[`           |           | `]`     | `map[string]`                           |
+| Keyword                          | Opening       | Separator | Closing | Usage                                   |
+| -------------------------------- | ------------- | --------- | ------- | --------------------------------------- |
+| [Return](#return)                |               | `,`       |         | `return a, b`                           |
+| [If](#if-for)                    |               | `;`       |         | `if i, err := a(); err != nil { ... }`  |
+| [For](#if-for)                   |               | `;`       |         | `for i := 0; i < 10; i++ { ... }`       |
+| [Switch](#switch-case-caseblock) |               | `;`       |         | `switch a { ... }`                      |
+| [Case](#switch-case-caseblock)   |               | `,`       |         | `case a, b: ...`                        |
+| [Interface](#interface-struct)   | `{`           | `\n`      | `}`     | `interface { ... }`                     |
+| [Struct](#interface-struct)      | `{`           | `\n`      | `}`     | `struct { ... }`                        |
+| [Map](#map)                      | `[`           |           | `]`     | `map[string]`                           |
 
 Groups accept a list of items and render them as follows:
 
-| Group     | Opening       | Separator | Closing | Usage                             |
-| --------- | ------------- | --------- | ------- | --------------------------------- |
-| Sel       |               | `.`       |         | `foo.bar[0].baz()`                |
-| List      |               | `,`       |         | `a, b := c()`                     |
-| Call      | `(`           | `,`       | `)`     | `fmt.Println(b, c)`               |
-| Params    | `(`           | `,`       | `)`     | `func (a *A) Foo(i int) { ... }`  |
-| Index     | `[`           | `:`       | `]`     | `a[1:2]` or `[]int{}`             |
-| Values    | `{`           | `,`       | `}`     | `[]int{1, 2}`                     |
-| Block     | `{`           | `\n`      | `}`     | `func a() { ... }`                |
-| Defs      | `(`           | `\n`      | `)`     | `const ( ... )`                   |
-| CaseBlock | `:`           | `\n`      |         | `case a: ...`                     |
+| Group             | Opening       | Separator | Closing | Usage                             |
+| ----------------- | ------------- | --------- | ------- | --------------------------------- |
+| [Sel](#sel)       |               | `.`       |         | `foo.bar[0].baz()`                |
+| [List](#list)     |               | `,`       |         | `a, b := c()`                     |
+| [Call](#call)     | `(`           | `,`       | `)`     | `fmt.Println(b, c)`               |
+| [Params](#params) | `(`           | `,`       | `)`     | `func (a *A) Foo(i int) { ... }`  |
+| [Index](#index)   | `[`           | `:`       | `]`     | `a[1:2]` or `[]int{}`             |
+| [Values](#values) | `{`           | `,`       | `}`     | `[]int{1, 2}`                     |
+| [Block](#block)   | `{`           | `\n`      | `}`     | `func a() { ... }`                |
+| [Defs](#defs)     | `(`           | `\n`      | `)`     | `const ( ... )`                   |
+| [CaseBlock](#switch-case-caseblock) | `:`           | `\n`      |         | `case a: ...`                     |
 
 These groups accept a single item:
 
-| Group  | Opening  | Closing | Usage                        |
-| ------ | -------- | ------- | ---------------------------- |
-| Parens | `(`      | `)`     | `[]byte(s)` or `a / (b + c)` |
-| Assert | `.(`     | `)`     | `s, ok := i.(string)`        |
+| Group             | Opening  | Closing | Usage                        |
+| ----------------- | -------- | ------- | ---------------------------- |
+| [Parens](#parens) | `(`      | `)`     | `[]byte(s)` or `a / (b + c)` |
+| [Assert](#assert) | `.(`     | `)`     | `s, ok := i.(string)`        |
 
 # GroupFunc methods
 All constructs that accept a variadic list of items are paired with GroupFunc 
@@ -313,7 +313,7 @@ fmt.Printf("%#v", c)
 ```
 
 ### Map
-Map renders the map keyword followed by a single item enclosed by square brackets. Use for map definitions.
+Map renders the keyword followed by a single item enclosed by square brackets. Use for map definitions
 
 [Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Map):
 ```go
@@ -324,7 +324,7 @@ fmt.Printf("%#v", c)
 ```
 
 ### Return
-Return renders the return keyword followed by a comma separated list.
+Return renders the keyword followed by a comma separated list.
 
 [Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Return):
 ```go
@@ -371,7 +371,7 @@ fmt.Printf("%#v", c)
 # Groups
 
 ### Sel
-Sel renders a chain of selectors separated by periods.
+Sel renders a period sep arated list. Use for a chain of selectors.
 
 [Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Sel):
 ```go
@@ -382,7 +382,7 @@ fmt.Printf("%#v", c)
 ```
 
 ### List
-List renders a comma separated list with no open or closing tokens. Use for multiple return functions.
+List renders a comma separated list. Use for multiple return functions.
 
 [Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-List):
 ```go
@@ -461,7 +461,7 @@ fmt.Printf("%#v", c)
 ```
 
 ### Block
-Block renders a statement list enclosed by curly braces. Use for all code blocks.
+Block renders a statement list enclosed by curly braces. Use for code blocks.
 
 [Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Block):
 ```go
@@ -488,7 +488,7 @@ fmt.Printf("%#v", c)
 ```
 
 ### Defs
-Defs renders a list of statements enclosed in parenthesis. Use for definition lists.
+Defs renders a statement list enclosed in parenthesis. Use for definition lists.
 
 [Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Defs):
 ```go

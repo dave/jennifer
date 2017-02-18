@@ -94,37 +94,37 @@ Built-in functions taking one or more items:
 Some keywords are always followed by another construct. These take one or more 
 items and render them as follows:
  
-| Keyword   | Opening       | Separator | Closing | Usage                                   |
-| --------- | ------------- | --------- | ------- | --------------------------------------- |
-| Return    |               | `,`       |         | `return a, b`                           |
-| If        |               | `;`       |         | `if i, err := a(); err != nil { ... }`  |
-| For       |               | `;`       |         | `for i := 0; i < 10; i++ { ... }`       |
-| Switch    |               | `;`       |         | `switch a { ... }`                      |
-| Case      |               | `,`       |         | `case a, b: ...`                        |
-| Interface | `{`           | `\n`      | `}`     | `interface { ... }`                     |
-| Struct    | `{`           | `\n`      | `}`     | `struct { ... }`                        |
-| Map       | `[`           |           | `]`     | `map[string]`                           |
+| Keyword                          | Opening       | Separator | Closing | Usage                                   |
+| -------------------------------- | ------------- | --------- | ------- | --------------------------------------- |
+| [Return](#return)                |               | `,`       |         | `return a, b`                           |
+| [If](#if-for)                    |               | `;`       |         | `if i, err := a(); err != nil { ... }`  |
+| [For](#if-for)                   |               | `;`       |         | `for i := 0; i < 10; i++ { ... }`       |
+| [Switch](#switch-case-caseblock) |               | `;`       |         | `switch a { ... }`                      |
+| [Case](#switch-case-caseblock)   |               | `,`       |         | `case a, b: ...`                        |
+| [Interface](#interface-struct)   | `{`           | `\n`      | `}`     | `interface { ... }`                     |
+| [Struct](#interface-struct)      | `{`           | `\n`      | `}`     | `struct { ... }`                        |
+| [Map](#map)                      | `[`           |           | `]`     | `map[string]`                           |
 
 Groups accept a list of items and render them as follows:
 
-| Group     | Opening       | Separator | Closing | Usage                             |
-| --------- | ------------- | --------- | ------- | --------------------------------- |
-| Sel       |               | `.`       |         | `foo.bar[0].baz()`                |
-| List      |               | `,`       |         | `a, b := c()`                     |
-| Call      | `(`           | `,`       | `)`     | `fmt.Println(b, c)`               |
-| Params    | `(`           | `,`       | `)`     | `func (a *A) Foo(i int) { ... }`  |
-| Index     | `[`           | `:`       | `]`     | `a[1:2]` or `[]int{}`             |
-| Values    | `{`           | `,`       | `}`     | `[]int{1, 2}`                     |
-| Block     | `{`           | `\n`      | `}`     | `func a() { ... }`                |
-| Defs      | `(`           | `\n`      | `)`     | `const ( ... )`                   |
-| CaseBlock | `:`           | `\n`      |         | `case a: ...`                     |
+| Group             | Opening       | Separator | Closing | Usage                             |
+| ----------------- | ------------- | --------- | ------- | --------------------------------- |
+| [Sel](#sel)       |               | `.`       |         | `foo.bar[0].baz()`                |
+| [List](#list)     |               | `,`       |         | `a, b := c()`                     |
+| [Call](#call)     | `(`           | `,`       | `)`     | `fmt.Println(b, c)`               |
+| [Params](#params) | `(`           | `,`       | `)`     | `func (a *A) Foo(i int) { ... }`  |
+| [Index](#index)   | `[`           | `:`       | `]`     | `a[1:2]` or `[]int{}`             |
+| [Values](#values) | `{`           | `,`       | `}`     | `[]int{1, 2}`                     |
+| [Block](#block)   | `{`           | `\n`      | `}`     | `func a() { ... }`                |
+| [Defs](#defs)     | `(`           | `\n`      | `)`     | `const ( ... )`                   |
+| [CaseBlock](#switch-case-caseblock) | `:`           | `\n`      |         | `case a: ...`                     |
 
 These groups accept a single item:
 
-| Group  | Opening  | Closing | Usage                        |
-| ------ | -------- | ------- | ---------------------------- |
-| Parens | `(`      | `)`     | `[]byte(s)` or `a / (b + c)` |
-| Assert | `.(`     | `)`     | `s, ok := i.(string)`        |
+| Group             | Opening  | Closing | Usage                        |
+| ----------------- | -------- | ------- | ---------------------------- |
+| [Parens](#parens) | `(`      | `)`     | `[]byte(s)` or `a / (b + c)` |
+| [Assert](#assert) | `.(`     | `)`     | `s, ok := i.(string)`        |
 
 # GroupFunc methods
 All constructs that accept a variadic list of items are paired with GroupFunc 
