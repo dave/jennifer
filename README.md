@@ -706,12 +706,12 @@ fmt.Printf("%#v", c)
 Commentf adds a comment, using a format string and a list of parameters.
 
 ```go
-name := "Foo"
-output := "foo"
-c := Commentf("%s returns the string \"%s\"", name, output)
+name := "foo"
+val := "bar"
+c := Id(name).Op(":=").Lit(val).Commentf("%s is the string \"%s\"", name, val)
 fmt.Printf("%#v", c)
 // Output:
-// // Foo returns the string "foo"
+// foo := "bar" // foo is the string "bar"
 ```
 
 # File
