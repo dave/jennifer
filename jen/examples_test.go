@@ -336,19 +336,10 @@ func ExampleComment_formatting_disabled() {
 func ExampleCommentf() {
 	name := "Foo"
 	output := "foo"
-	f := NewFile("a")
-	f.Commentf("%s returns the string \"%s\"", name, output)
-	f.Func().Id(name).Params().String().Block(
-		Return(Lit(output)),
-	)
-	fmt.Printf("%#v", f)
+	c := Commentf("%s returns the string \"%s\"", name, output)
+	fmt.Printf("%#v", c)
 	// Output:
-	// package a
-	//
 	// // Foo returns the string "foo"
-	// func Foo() string {
-	// 	return "foo"
-	// }
 }
 
 func ExampleComplex() {
