@@ -313,7 +313,7 @@ fmt.Printf("%#v", c)
 ```
 
 ### Map
-Map renders the keyword followed by a single item enclosed by square brackets. Use for map definitions
+Map renders the keyword followed by a single item enclosed by square brackets. Use for map definitions.
 
 [Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Map):
 ```go

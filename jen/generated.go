@@ -436,19 +436,19 @@ func (s *Statement) Assert(typ Code) *Statement {
 	return s
 }
 
-// Map renders the keyword followed by a single item enclosed by square brackets. Use for map definitions
+// Map renders the keyword followed by a single item enclosed by square brackets. Use for map definitions.
 func Map(typ Code) *Statement {
 	return newStatement().Map(typ)
 }
 
-// Map renders the keyword followed by a single item enclosed by square brackets. Use for map definitions
+// Map renders the keyword followed by a single item enclosed by square brackets. Use for map definitions.
 func (g *Group) Map(typ Code) *Statement {
 	s := Map(typ)
 	g.items = append(g.items, s)
 	return s
 }
 
-// Map renders the keyword followed by a single item enclosed by square brackets. Use for map definitions
+// Map renders the keyword followed by a single item enclosed by square brackets. Use for map definitions.
 func (s *Statement) Map(typ Code) *Statement {
 	g := &Group{
 		close:     "]",

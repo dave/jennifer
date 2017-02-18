@@ -106,7 +106,7 @@ var groups = []struct {
 	},
 	{
 		name:       "Map",
-		comment:    "renders the keyword followed by a single item enclosed by square brackets. Use for map definitions",
+		comment:    "renders the keyword followed by a single item enclosed by square brackets. Use for map definitions.",
 		variadic:   false,
 		opening:    "map[",
 		closing:    "]",
