@@ -59,14 +59,11 @@ func (m *CodeMap) ExampleFunc(plain bool) func(in string) string {
 			printer.Fprint(buf, m.fset, e.Code)
 		}
 		quotes := "```"
-		return fmt.Sprintf(`[Example](https://godoc.org/%s#example-%s):
-%sgo
+		return fmt.Sprintf(`%sgo
 %s
 // Output:
 // %s
 %s`,
-			m.pkg,
-			strings.Replace(in, "_", "-", -1)[len("Example"):],
 			quotes,
 			strings.Trim(buf.String(), "\n"),
 			strings.Replace(strings.Trim(e.Output, "\n"), "\n", "\n// ", -1),

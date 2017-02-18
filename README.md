@@ -3,7 +3,6 @@
 # Jennifer
 Jennifer is a code generator for Go.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-NewFile):
 ```go
 package main
 
@@ -52,7 +51,6 @@ A much larger implementation of jennifer [can be found in the kego project](http
 For testing, a File or Statement can be rendered with the fmt package 
 using the %#v verb.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Call-fmt):
 ```go
 c := Id("a").Call(Lit("b"))
 fmt.Printf("%#v", c)
@@ -67,7 +65,6 @@ preferred.
 # Id
 Id renders an identifier.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Id):
 ```go
 c := If(Id("i").Op("==").Id("j")).Block(
 	Return(Id("i")),
@@ -82,7 +79,6 @@ fmt.Printf("%#v", c)
 # Qual
 Qual renders a qualified identifier.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Qual):
 ```go
 c := Qual("encoding/gob", "NewEncoder").Call()
 fmt.Printf("%#v", c)
@@ -94,7 +90,6 @@ fmt.Printf("%#v", c)
 used with a File. If the path matches the local path, the package name is
 omitted. If package names conflict they are automatically renamed.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Qual-file):
 ```go
 f := NewFilePath("a.b/c")
 f.Func().Id("init").Params().Block(
@@ -121,7 +116,6 @@ fmt.Printf("%#v", f)
 # Op
 Op renders the provided operator / token.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Op):
 ```go
 c := Id("a").Op(":=").Id("b").Call()
 fmt.Printf("%#v", c)
@@ -129,7 +123,6 @@ fmt.Printf("%#v", c)
 // a := b()
 ```
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Op-star):
 ```go
 c := Id("a").Op("=").Op("*").Id("b")
 fmt.Printf("%#v", c)
@@ -137,7 +130,6 @@ fmt.Printf("%#v", c)
 // a = *b
 ```
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Op-variadic):
 ```go
 c := Id("a").Call(Id("b").Op("..."))
 fmt.Printf("%#v", c)
@@ -150,7 +142,6 @@ Many of the language constructs that jennifer emits are presented as functions
 taking zero or more items as parameters. For example, here the Append function 
 takes two items and renders them appropriately:
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Append-more):
 ```go
 c := Id("a").Op("=").Append(Id("a"), Id("b").Op("..."))
 fmt.Printf("%#v", c)
@@ -214,7 +205,6 @@ These groups accept a single item:
 All constructs that accept a variadic list of items are paired with GroupFunc 
 functions that accept a func(*Group). These are used to embed logic.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-BlockFunc):
 ```go
 increment := true
 c := Func().Id("a").Params().BlockFunc(func(g *Group) {
@@ -237,7 +227,6 @@ fmt.Printf("%#v", c)
 Interface and Struct render the keyword followed by a statement list enclosed 
 by curly braces.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Interface-empty):
 ```go
 c := Var().Id("a").Interface()
 fmt.Printf("%#v", c)
@@ -245,7 +234,6 @@ fmt.Printf("%#v", c)
 // var a interface{}
 ```
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Interface):
 ```go
 c := Type().Id("a").Interface(
 	Id("b").Params().String(),
@@ -257,7 +245,6 @@ fmt.Printf("%#v", c)
 // }
 ```
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Struct-empty):
 ```go
 c := Id("c").Op(":=").Make(Chan().Struct())
 fmt.Printf("%#v", c)
@@ -265,7 +252,6 @@ fmt.Printf("%#v", c)
 // c := make(chan struct{})
 ```
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Struct):
 ```go
 c := Type().Id("foo").Struct(
 	List(Id("x"), Id("y")).Int(),
@@ -282,7 +268,6 @@ fmt.Printf("%#v", c)
 ### Switch, Case, CaseBlock
 Switch, Case and CaseBlock are used to build switch statements:
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Switch):
 ```go
 c := Switch(Id("a")).Block(
 	Case(Lit("1")).CaseBlock(
@@ -315,7 +300,6 @@ fmt.Printf("%#v", c)
 ### Map
 Map renders the keyword followed by a single item enclosed by square brackets. Use for map definitions.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Map):
 ```go
 c := Id("a").Op(":=").Map(String()).String().Values()
 fmt.Printf("%#v", c)
@@ -326,7 +310,6 @@ fmt.Printf("%#v", c)
 ### Return
 Return renders the keyword followed by a comma separated list.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Return):
 ```go
 c := Return(Id("a"), Id("b"))
 fmt.Printf("%#v", c)
@@ -337,7 +320,6 @@ fmt.Printf("%#v", c)
 ### If, For
 If and For render the keyword followed by a semicolon separated list.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-If):
 ```go
 c := If(
 	Err().Op(":=").Id("a").Call(),
@@ -352,7 +334,6 @@ fmt.Printf("%#v", c)
 // }
 ```
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-For):
 ```go
 c := For(
 	Id("i").Op(":=").Lit(0),
@@ -373,7 +354,6 @@ fmt.Printf("%#v", c)
 ### Sel
 Sel renders a period sep arated list. Use for a chain of selectors.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Sel):
 ```go
 c := Sel(Qual("a.b/c", "Foo").Call(), Id("Bar").Index(Lit(0)), Id("Baz"))
 fmt.Printf("%#v", c)
@@ -384,7 +364,6 @@ fmt.Printf("%#v", c)
 ### List
 List renders a comma separated list. Use for multiple return functions.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-List):
 ```go
 c := List(Id("a"), Id("b")).Op(":=").Id("c").Call()
 fmt.Printf("%#v", c)
@@ -395,7 +374,6 @@ fmt.Printf("%#v", c)
 ### Call
 Call renders a comma separated list enclosed by parenthesis. Use for function calls.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Call):
 ```go
 c := Qual("fmt", "Printf").Call(
 	Lit("%#v: %T\n"),
@@ -410,7 +388,6 @@ fmt.Printf("%#v", c)
 ### Params
 Params renders a comma separated list enclosed by parenthesis. Use for function parameters and method receivers.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Params):
 ```go
 c := Func().Params(Id("a").Id("A")).Id("foo").Params(Id("b").String()).String().Block(
 	Return(Id("b")),
@@ -425,7 +402,6 @@ fmt.Printf("%#v", c)
 ### Index
 Index renders a colon separated list enclosed by square brackets. Use for array / slice indexes and definitions.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Index):
 ```go
 c := Var().Id("a").Index().String()
 fmt.Printf("%#v", c)
@@ -433,7 +409,6 @@ fmt.Printf("%#v", c)
 // var a []string
 ```
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Index-index):
 ```go
 c := Id("a").Op(":=").Id("b").Index(Lit(0), Lit(1))
 fmt.Printf("%#v", c)
@@ -441,7 +416,6 @@ fmt.Printf("%#v", c)
 // a := b[0:1]
 ```
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Index-empty):
 ```go
 c := Id("a").Op(":=").Id("b").Index(Lit(1), Empty())
 fmt.Printf("%#v", c)
@@ -452,7 +426,6 @@ fmt.Printf("%#v", c)
 ### Values
 Values renders a comma separated list enclosed by curly braces. Use for slice literals.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Values):
 ```go
 c := Index().String().Values(Lit("a"), Lit("b"))
 fmt.Printf("%#v", c)
@@ -463,7 +436,6 @@ fmt.Printf("%#v", c)
 ### Block
 Block renders a statement list enclosed by curly braces. Use for code blocks.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Block):
 ```go
 c := Func().Id("foo").Params().Block(
 	Id("a").Op("=").Id("b"),
@@ -475,7 +447,6 @@ fmt.Printf("%#v", c)
 // }
 ```
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Block-if):
 ```go
 c := If(Id("a").Op(">").Lit(10)).Block(
 	Id("a").Op("=").Id("a").Op("/").Lit(2),
@@ -490,7 +461,6 @@ fmt.Printf("%#v", c)
 ### Defs
 Defs renders a statement list enclosed in parenthesis. Use for definition lists.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Defs):
 ```go
 c := Const().Defs(
 	Id("a").Op("=").Lit("a"),
@@ -507,7 +477,6 @@ fmt.Printf("%#v", c)
 ### Parens
 Parens renders a single item in parenthesis. Use for type conversion or to specify evaluation order.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Parens):
 ```go
 c := Id("b").Op(":=").Index().Byte().Parens(Id("s"))
 fmt.Printf("%#v", c)
@@ -515,7 +484,6 @@ fmt.Printf("%#v", c)
 // b := []byte(s)
 ```
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Parens-order):
 ```go
 c := Id("a").Op("/").Parens(Id("b").Op("+").Id("c"))
 fmt.Printf("%#v", c)
@@ -526,7 +494,6 @@ fmt.Printf("%#v", c)
 ### Assert
 Assert renders a period followed by a single item enclosed by parenthesis. Use for type assertions.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Assert):
 ```go
 c := List(Id("b"), Id("ok")).Op(":=").Id("a").Assert(Bool())
 fmt.Printf("%#v", c)
@@ -537,7 +504,6 @@ fmt.Printf("%#v", c)
 # Add
 Add appends the provided items to the statement.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Add):
 ```go
 ptr := Op("*")
 c := Id("a").Op("=").Add(ptr).Id("b")
@@ -546,7 +512,6 @@ fmt.Printf("%#v", c)
 // a = *b
 ```
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Add-var):
 ```go
 a := Id("a")
 i := Int()
@@ -560,7 +525,6 @@ fmt.Printf("%#v", c)
 Do calls the provided function with the statement as a parameter. Use for
 embedding logic.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Do):
 ```go
 f := func(name string, isMap bool) *Statement {
 	return Id(name).Op(":=").Do(func(s *Statement) {
@@ -581,7 +545,6 @@ fmt.Printf("%#v\n%#v", f("a", true), f("b", false))
 Lit renders a literal, using the format provided by the fmt package %#v
 verb.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Lit):
 ```go
 c := Id("a").Op(":=").Lit("a")
 fmt.Printf("%#v", c)
@@ -589,7 +552,6 @@ fmt.Printf("%#v", c)
 // a := "a"
 ```
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Lit-float):
 ```go
 c := Id("a").Op(":=").Lit(1.5)
 fmt.Printf("%#v", c)
@@ -600,7 +562,6 @@ fmt.Printf("%#v", c)
  LitFunc generates the value to render by executing the provided
 function.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-LitFunc):
 ```go
 c := Id("a").Op(":=").LitFunc(func() interface{} { return 1 + 1 })
 fmt.Printf("%#v", c)
@@ -612,7 +573,6 @@ fmt.Printf("%#v", c)
 Dict takes a map[Code]Code and renders a list of colon separated key value
 pairs, enclosed in curly braces. Use for map literals.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Dict):
 ```go
 c := Id("a").Op(":=").Map(String()).String().Dict(map[Code]Code{
 	Lit("a"):	Lit("b"),
@@ -628,7 +588,6 @@ fmt.Printf("%#v", c)
 
 DictFunc executes a func(map[Code]Code) to generate the value.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-DictFunc):
 ```go
 c := Id("a").Op(":=").Map(String()).String().DictFunc(func(m map[Code]Code) {
 	m[Lit("a")] = Lit("b")
@@ -647,7 +606,6 @@ Note: the items are ordered by key when rendered to ensure repeatable code.
 # Tag
 Tag renders a struct tag
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Tag):
 ```go
 c := Type().Id("foo").Struct(
 	Id("A").String().Tag(map[string]string{"json": "a"}),
@@ -669,7 +627,6 @@ separator in lists.
 
 In lists, nil will produce the same effect.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Null-and-nil):
 ```go
 c := Func().Id("foo").Params(
 	nil,
@@ -686,7 +643,6 @@ fmt.Printf("%#v", c)
 Empty adds an empty item. Empty items render nothing but are followed by a
 separator in lists.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Empty):
 ```go
 c := Id("a").Op(":=").Id("b").Index(Lit(1), Empty())
 fmt.Printf("%#v", c)
@@ -701,7 +657,6 @@ Line inserts a blank line.
 Comment adds a comment. If the provided string contains a newline, the
 comment is formatted in multiline style.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Comment):
 ```go
 f := NewFile("a")
 f.Comment("Foo returns the string \"foo\"")
@@ -718,7 +673,6 @@ fmt.Printf("%#v", f)
 // }
 ```
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Comment-multiline):
 ```go
 c := Comment("a\nb")
 fmt.Printf("%#v", c)
@@ -733,7 +687,6 @@ fmt.Printf("%#v", c)
 with "//" or "/*", the automatic formatting is disabled and the string is
 rendered directly.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Comment-formatting-disabled):
 ```go
 c := Id("foo").Call(Comment("/* inline */")).Comment("//no-space")
 fmt.Printf("%#v", c)
@@ -743,7 +696,6 @@ fmt.Printf("%#v", c)
 
 Commentf adds a comment, using a format string and a list of parameters.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Commentf):
 ```go
 name := "Foo"
 output := "foo"
@@ -776,7 +728,6 @@ package name is inferred from the path.
 ### NewFilePathName
 NewFilePathName creates a new file with the specified package path and name.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-NewFilePathName):
 ```go
 f := NewFilePathName("a.b/c", "main")
 f.Func().Id("main").Params().Block(
@@ -795,7 +746,6 @@ fmt.Printf("%#v", f)
 PackageComment adds a comment to the top of the file, above the package
 keyword.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-File-PackageComment):
 ```go
 f := NewFile("c")
 f.PackageComment("a")
@@ -813,7 +763,6 @@ fmt.Printf("%#v", f)
 ### Anon
 Anon adds an anonymous import:
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-File-Anon):
 ```go
 f := NewFile("c")
 f.Anon("a")
@@ -831,7 +780,6 @@ fmt.Printf("%#v", f)
 If you're worried about package aliases conflicting with local variable
 names, you can set a prefix here. Package foo becomes {prefix}_foo.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-File-PackagePrefix):
 ```go
 f := NewFile("c")
 f.PackagePrefix = "pkg"
@@ -855,7 +803,6 @@ Save renders the file and saves to the filename provided.
 ### Render
 Render renders the file to the provided writer.
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-File-Render):
 ```go
 f := NewFile("a")
 f.Func().Id("main").Params().Block()
@@ -875,7 +822,6 @@ if err != nil {
 # Clone
 Be careful when passing *Statement. Consider the following... 
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Statement-Clone-broken):
 ```go
 a := Id("a")
 c := Block(
@@ -894,7 +840,6 @@ Id("a") returns a *Statement, which the Call() method appends to twice. To
 avoid this, use Clone. Clone makes a copy of the Statement, so further tokens can be appended
 without affecting the original.  
 
-[Example](https://godoc.org/github.com/davelondon/jennifer/jen#example-Statement-Clone-fixed):
 ```go
 a := Id("a")
 c := Block(

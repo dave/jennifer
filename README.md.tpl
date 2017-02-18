@@ -3,7 +3,6 @@
 # Jennifer
 Jennifer is a code generator for Go.
 
-{{ "ExampleNewFile" | link }}
 ```go
 package main
 
