@@ -47,7 +47,7 @@ func ExampleAssert() {
 }
 
 func ExampleBlock() {
-	c := Func().Id("foo").Params().Block(
+	c := Func().Id("foo").Params().String().Block(
 		Id("a").Op("=").Id("b"),
 		Id("b").Op("++"),
 		Return(Id("b")),

@@ -446,7 +446,7 @@ fmt.Printf("%#v", c)
 Block renders a statement list enclosed by curly braces. Use for code blocks.
 
 ```go
-c := Func().Id("foo").Params().Block(
+c := Func().Id("foo").Params().String().Block(
 	Id("a").Op("=").Id("b"),
 	Id("b").Op("++"),
 	Return(Id("b")),
