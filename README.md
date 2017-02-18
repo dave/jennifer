@@ -352,7 +352,7 @@ fmt.Printf("%#v", c)
 # Groups
 
 ### Sel
-Sel renders a period sep arated list. Use for a chain of selectors.
+Sel renders a period separated list. Use for a chain of selectors.
 
 ```go
 c := Sel(Qual("a.b/c", "Foo").Call(), Id("Bar").Index(Lit(0)), Id("Baz"))

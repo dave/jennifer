@@ -178,7 +178,7 @@ var groups = []struct {
 	},
 	{
 		name:       "Sel",
-		comment:    "renders a period sep arated list. Use for a chain of selectors.",
+		comment:    "renders a period separated list. Use for a chain of selectors.",
 		variadic:   true,
 		opening:    "",
 		closing:    "",

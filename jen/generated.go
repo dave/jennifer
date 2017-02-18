@@ -796,19 +796,19 @@ func (s *Statement) CaseFunc(f func(*Group)) *Statement {
 	return s
 }
 
-// Sel renders a period sep arated list. Use for a chain of selectors.
+// Sel renders a period separated list. Use for a chain of selectors.
 func Sel(selectors ...Code) *Statement {
 	return newStatement().Sel(selectors...)
 }
 
-// Sel renders a period sep arated list. Use for a chain of selectors.
+// Sel renders a period separated list. Use for a chain of selectors.
 func (g *Group) Sel(selectors ...Code) *Statement {
 	s := Sel(selectors...)
 	g.items = append(g.items, s)
 	return s
 }
 
-// Sel renders a period sep arated list. Use for a chain of selectors.
+// Sel renders a period separated list. Use for a chain of selectors.
 func (s *Statement) Sel(selectors ...Code) *Statement {
 	g := &Group{
 		close:     "",
@@ -820,19 +820,19 @@ func (s *Statement) Sel(selectors ...Code) *Statement {
 	return s
 }
 
-// SelFunc renders a period sep arated list. Use for a chain of selectors.
+// SelFunc renders a period separated list. Use for a chain of selectors.
 func SelFunc(f func(*Group)) *Statement {
 	return newStatement().SelFunc(f)
 }
 
-// SelFunc renders a period sep arated list. Use for a chain of selectors.
+// SelFunc renders a period separated list. Use for a chain of selectors.
 func (g *Group) SelFunc(f func(*Group)) *Statement {
 	s := SelFunc(f)
 	g.items = append(g.items, s)
 	return s
 }
 
-// SelFunc renders a period sep arated list. Use for a chain of selectors.
+// SelFunc renders a period separated list. Use for a chain of selectors.
 func (s *Statement) SelFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     "",
