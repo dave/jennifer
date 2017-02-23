@@ -86,7 +86,7 @@ fmt.Printf("%#v", c)
 // gob.NewEncoder()
 ```
 
- Imports are automatically added when
+Imports are automatically added when
 used with a File. If the path matches the local path, the package name is
 omitted. If package names conflict they are automatically renamed.
 
@@ -572,7 +572,7 @@ fmt.Printf("%#v", c)
 // a := 1.5
 ```
 
- LitFunc generates the value to render by executing the provided
+LitFunc generates the value to render by executing the provided
 function.
 
 ```go
@@ -696,7 +696,7 @@ fmt.Printf("%#v", c)
 // */
 ```
 
- If the comment string starts
+If the comment string starts
 with "//" or "/*", the automatic formatting is disabled and the string is
 rendered directly.
 
