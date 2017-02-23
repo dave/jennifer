@@ -284,7 +284,7 @@ In lists, nil will produce the same effect.
 {{ "Line" | doc }}
 
 # Comment, Commentf
-{{ "Comment[0:2]" | doc }}
+{{ "Comment[:2]" | doc }}
 
 {{ "ExampleComment" | example }}
 
