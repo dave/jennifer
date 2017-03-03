@@ -779,56 +779,6 @@ func (s *Statement) CaseFunc(f func(*Group)) *Statement {
 	return s
 }
 
-// Sel renders a period separated list. Use for a chain of selectors.
-func Sel(selectors ...Code) *Statement {
-	return newStatement().Sel(selectors...)
-}
-
-// Sel renders a period separated list. Use for a chain of selectors.
-func (g *Group) Sel(selectors ...Code) *Statement {
-	s := Sel(selectors...)
-	g.items = append(g.items, s)
-	return s
-}
-
-// Sel renders a period separated list. Use for a chain of selectors.
-func (s *Statement) Sel(selectors ...Code) *Statement {
-	g := &Group{
-		close:     "",
-		items:     selectors,
-		name:      "sel",
-		open:      "",
-		separator: ".",
-	}
-	*s = append(*s, g)
-	return s
-}
-
-// SelFunc renders a period separated list. Use for a chain of selectors.
-func SelFunc(f func(*Group)) *Statement {
-	return newStatement().SelFunc(f)
-}
-
-// SelFunc renders a period separated list. Use for a chain of selectors.
-func (g *Group) SelFunc(f func(*Group)) *Statement {
-	s := SelFunc(f)
-	g.items = append(g.items, s)
-	return s
-}
-
-// SelFunc renders a period separated list. Use for a chain of selectors.
-func (s *Statement) SelFunc(f func(*Group)) *Statement {
-	g := &Group{
-		close:     "",
-		name:      "sel",
-		open:      "",
-		separator: ".",
-	}
-	f(g)
-	*s = append(*s, g)
-	return s
-}
-
 // Append renders the append built-in function.
 func Append(args ...Code) *Statement {
 	return newStatement().Append(args...)
@@ -1295,7 +1245,7 @@ func (g *Group) Bool() *Statement {
 func (s *Statement) Bool() *Statement {
 	t := token{
 		content: "bool",
-		typ:     identifierToken,
+		typ:     predeclaredToken,
 	}
 	*s = append(*s, t)
 	return s
@@ -1317,7 +1267,7 @@ func (g *Group) Byte() *Statement {
 func (s *Statement) Byte() *Statement {
 	t := token{
 		content: "byte",
-		typ:     identifierToken,
+		typ:     predeclaredToken,
 	}
 	*s = append(*s, t)
 	return s
@@ -1339,7 +1289,7 @@ func (g *Group) Complex64() *Statement {
 func (s *Statement) Complex64() *Statement {
 	t := token{
 		content: "complex64",
-		typ:     identifierToken,
+		typ:     predeclaredToken,
 	}
 	*s = append(*s, t)
 	return s
@@ -1361,7 +1311,7 @@ func (g *Group) Complex128() *Statement {
 func (s *Statement) Complex128() *Statement {
 	t := token{
 		content: "complex128",
-		typ:     identifierToken,
+		typ:     predeclaredToken,
 	}
 	*s = append(*s, t)
 	return s
@@ -1383,7 +1333,7 @@ func (g *Group) Error() *Statement {
 func (s *Statement) Error() *Statement {
 	t := token{
 		content: "error",
-		typ:     identifierToken,
+		typ:     predeclaredToken,
 	}
 	*s = append(*s, t)
 	return s
@@ -1405,7 +1355,7 @@ func (g *Group) Float32() *Statement {
 func (s *Statement) Float32() *Statement {
 	t := token{
 		content: "float32",
-		typ:     identifierToken,
+		typ:     predeclaredToken,
 	}
 	*s = append(*s, t)
 	return s
@@ -1427,7 +1377,7 @@ func (g *Group) Float64() *Statement {
 func (s *Statement) Float64() *Statement {
 	t := token{
 		content: "float64",
-		typ:     identifierToken,
+		typ:     predeclaredToken,
 	}
 	*s = append(*s, t)
 	return s
@@ -1449,7 +1399,7 @@ func (g *Group) Int() *Statement {
 func (s *Statement) Int() *Statement {
 	t := token{
 		content: "int",
-		typ:     identifierToken,
+		typ:     predeclaredToken,
 	}
 	*s = append(*s, t)
 	return s
@@ -1471,7 +1421,7 @@ func (g *Group) Int8() *Statement {
 func (s *Statement) Int8() *Statement {
 	t := token{
 		content: "int8",
-		typ:     identifierToken,
+		typ:     predeclaredToken,
 	}
 	*s = append(*s, t)
 	return s
@@ -1493,7 +1443,7 @@ func (g *Group) Int16() *Statement {
 func (s *Statement) Int16() *Statement {
 	t := token{
 		content: "int16",
-		typ:     identifierToken,
+		typ:     predeclaredToken,
 	}
 	*s = append(*s, t)
 	return s
@@ -1515,7 +1465,7 @@ func (g *Group) Int32() *Statement {
 func (s *Statement) Int32() *Statement {
 	t := token{
 		content: "int32",
-		typ:     identifierToken,
+		typ:     predeclaredToken,
 	}
 	*s = append(*s, t)
 	return s
@@ -1537,7 +1487,7 @@ func (g *Group) Int64() *Statement {
 func (s *Statement) Int64() *Statement {
 	t := token{
 		content: "int64",
-		typ:     identifierToken,
+		typ:     predeclaredToken,
 	}
 	*s = append(*s, t)
 	return s
@@ -1559,7 +1509,7 @@ func (g *Group) Rune() *Statement {
 func (s *Statement) Rune() *Statement {
 	t := token{
 		content: "rune",
-		typ:     identifierToken,
+		typ:     predeclaredToken,
 	}
 	*s = append(*s, t)
 	return s
@@ -1581,7 +1531,7 @@ func (g *Group) String() *Statement {
 func (s *Statement) String() *Statement {
 	t := token{
 		content: "string",
-		typ:     identifierToken,
+		typ:     predeclaredToken,
 	}
 	*s = append(*s, t)
 	return s
@@ -1603,7 +1553,7 @@ func (g *Group) Uint() *Statement {
 func (s *Statement) Uint() *Statement {
 	t := token{
 		content: "uint",
-		typ:     identifierToken,
+		typ:     predeclaredToken,
 	}
 	*s = append(*s, t)
 	return s
@@ -1625,7 +1575,7 @@ func (g *Group) Uint8() *Statement {
 func (s *Statement) Uint8() *Statement {
 	t := token{
 		content: "uint8",
-		typ:     identifierToken,
+		typ:     predeclaredToken,
 	}
 	*s = append(*s, t)
 	return s
@@ -1647,7 +1597,7 @@ func (g *Group) Uint16() *Statement {
 func (s *Statement) Uint16() *Statement {
 	t := token{
 		content: "uint16",
-		typ:     identifierToken,
+		typ:     predeclaredToken,
 	}
 	*s = append(*s, t)
 	return s
@@ -1669,7 +1619,7 @@ func (g *Group) Uint32() *Statement {
 func (s *Statement) Uint32() *Statement {
 	t := token{
 		content: "uint32",
-		typ:     identifierToken,
+		typ:     predeclaredToken,
 	}
 	*s = append(*s, t)
 	return s
@@ -1691,7 +1641,7 @@ func (g *Group) Uint64() *Statement {
 func (s *Statement) Uint64() *Statement {
 	t := token{
 		content: "uint64",
-		typ:     identifierToken,
+		typ:     predeclaredToken,
 	}
 	*s = append(*s, t)
 	return s
@@ -1713,7 +1663,7 @@ func (g *Group) Uintptr() *Statement {
 func (s *Statement) Uintptr() *Statement {
 	t := token{
 		content: "uintptr",
-		typ:     identifierToken,
+		typ:     predeclaredToken,
 	}
 	*s = append(*s, t)
 	return s
@@ -1735,7 +1685,7 @@ func (g *Group) True() *Statement {
 func (s *Statement) True() *Statement {
 	t := token{
 		content: "true",
-		typ:     identifierToken,
+		typ:     predeclaredToken,
 	}
 	*s = append(*s, t)
 	return s
@@ -1757,7 +1707,7 @@ func (g *Group) False() *Statement {
 func (s *Statement) False() *Statement {
 	t := token{
 		content: "false",
-		typ:     identifierToken,
+		typ:     predeclaredToken,
 	}
 	*s = append(*s, t)
 	return s
@@ -1779,7 +1729,7 @@ func (g *Group) Iota() *Statement {
 func (s *Statement) Iota() *Statement {
 	t := token{
 		content: "iota",
-		typ:     identifierToken,
+		typ:     predeclaredToken,
 	}
 	*s = append(*s, t)
 	return s
@@ -1801,29 +1751,7 @@ func (g *Group) Nil() *Statement {
 func (s *Statement) Nil() *Statement {
 	t := token{
 		content: "nil",
-		typ:     identifierToken,
-	}
-	*s = append(*s, t)
-	return s
-}
-
-// Err renders the err identifier.
-func Err() *Statement {
-	return newStatement().Err()
-}
-
-// Err renders the err identifier.
-func (g *Group) Err() *Statement {
-	s := Err()
-	g.items = append(g.items, s)
-	return s
-}
-
-// Err renders the err identifier.
-func (s *Statement) Err() *Statement {
-	t := token{
-		content: "err",
-		typ:     identifierToken,
+		typ:     predeclaredToken,
 	}
 	*s = append(*s, t)
 	return s
@@ -2154,6 +2082,28 @@ func (s *Statement) Range() *Statement {
 	t := token{
 		content: "range",
 		typ:     keywordToken,
+	}
+	*s = append(*s, t)
+	return s
+}
+
+// Err renders the err identifier.
+func Err() *Statement {
+	return newStatement().Err()
+}
+
+// Err renders the err identifier.
+func (g *Group) Err() *Statement {
+	s := Err()
+	g.items = append(g.items, s)
+	return s
+}
+
+// Err renders the err identifier.
+func (s *Statement) Err() *Statement {
+	t := token{
+		content: "err",
+		typ:     identifierToken,
 	}
 	*s = append(*s, t)
 	return s

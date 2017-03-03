@@ -8,15 +8,14 @@ import (
 type tokenType string
 
 const (
-	packageToken    tokenType = "package"
-	identifierToken tokenType = "identifier"
-	qualifiedToken  tokenType = "qualified"
-	keywordToken    tokenType = "keyword"
-	operatorToken   tokenType = "operator"
-	delimiterToken  tokenType = "delimiter"
-	literalToken    tokenType = "literal"
-	nullToken       tokenType = "null"
-	layoutToken     tokenType = "layout"
+	packageToken     tokenType = "package"
+	identifierToken  tokenType = "identifier"
+	predeclaredToken tokenType = "predeclared"
+	keywordToken     tokenType = "keyword"
+	operatorToken    tokenType = "operator"
+	literalToken     tokenType = "literal"
+	nullToken        tokenType = "null"
+	layoutToken      tokenType = "layout"
 )
 
 type token struct {
@@ -32,7 +31,7 @@ func (t token) isNull(f *File) bool {
 	return t.typ == nullToken
 }
 
-func (t token) render(f *File, w io.Writer, s *Statement) error {
+func (t token) render(f *File, w io.Writer, s *Statement, container *Group) error {
 	switch t.typ {
 	case literalToken:
 		// TODO: Does this work in all cases?
@@ -49,7 +48,16 @@ func (t token) render(f *File, w io.Writer, s *Statement) error {
 		if _, err := w.Write([]byte(alias)); err != nil {
 			return err
 		}
+	case predeclaredToken:
+		if _, err := w.Write([]byte(t.content.(string))); err != nil {
+			return err
+		}
 	case identifierToken:
+		if shouldAddDot(s, t, container) {
+			if _, err := w.Write([]byte(".")); err != nil {
+				return err
+			}
+		}
 		if _, err := w.Write([]byte(t.content.(string))); err != nil {
 			return err
 		}
@@ -57,6 +65,25 @@ func (t token) render(f *File, w io.Writer, s *Statement) error {
 		// do nothing
 	}
 	return nil
+}
+
+func shouldAddDot(statement *Statement, current Code, container *Group) bool {
+	if container != nil && container.name == "params" {
+		return false
+	}
+	prev := statement.previous(current)
+	if prev == nil {
+		return false
+	}
+	grp, isGrp := prev.(*Group)
+	tkn, isTkn := prev.(token)
+	if isTkn && tkn.typ == identifierToken || isGrp && (grp.name == "qual" || grp.name == "parens" || grp.name == "assert") {
+		return true
+	}
+	if isGrp && (grp.name == "call" || grp.name == "index") {
+		return shouldAddDot(statement, prev, container)
+	}
+	return false
 }
 
 // Null adds a null item. Null items render nothing and are not followed by a
@@ -172,16 +199,20 @@ func (g *Group) Qual(path, name string) *Statement {
 // used with a File. If the path matches the local path, the package name is
 // omitted. If package names conflict they are automatically renamed.
 func (s *Statement) Qual(path, name string) *Statement {
-	g := Sel(
-		token{
-			typ:     packageToken,
-			content: path,
-		},
-		token{
-			typ:     identifierToken,
-			content: name,
-		},
-	)
+	g := &Group{
+		close:     "",
+		name:      "qual",
+		open:      "",
+		separator: ".",
+	}
+	g.Add(token{
+		typ:     packageToken,
+		content: path,
+	})
+	g.Add(token{
+		typ:     identifierToken,
+		content: name,
+	})
 	*s = append(*s, g)
 	return s
 }

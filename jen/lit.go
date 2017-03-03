@@ -120,7 +120,7 @@ func (l dict) isNull(f *File) bool {
 	return false
 }
 
-func (l dict) render(f *File, w io.Writer, s *Statement) error {
+func (l dict) render(f *File, w io.Writer, s *Statement, container *Group) error {
 	if _, err := w.Write([]byte("{")); err != nil {
 		return err
 	}
@@ -134,7 +134,7 @@ func (l dict) render(f *File, w io.Writer, s *Statement) error {
 	keys := []string{}
 	for k, v := range l.m {
 		buf := &bytes.Buffer{}
-		if err := k.render(f, buf, nil); err != nil {
+		if err := k.render(f, buf, nil, nil); err != nil {
 			return err
 		}
 		keys = append(keys, buf.String())
@@ -155,13 +155,13 @@ func (l dict) render(f *File, w io.Writer, s *Statement) error {
 			}
 			first = false
 		}
-		if err := k.render(f, w, nil); err != nil {
+		if err := k.render(f, w, nil, nil); err != nil {
 			return err
 		}
 		if _, err := w.Write([]byte(":")); err != nil {
 			return err
 		}
-		if err := v.render(f, w, nil); err != nil {
+		if err := v.render(f, w, nil, nil); err != nil {
 			return err
 		}
 		if _, err := w.Write([]byte(",\n")); err != nil {

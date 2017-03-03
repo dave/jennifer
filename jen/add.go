@@ -14,6 +14,14 @@ func (g *Group) Add(code ...Code) *Statement {
 
 // Add appends the provided items to the statement.
 func (s *Statement) Add(code ...Code) *Statement {
-	*s = append(*s, code...)
+	for _, item := range code {
+		if st, ok := item.(*Statement); ok && st != nil {
+			for _, inner := range *st {
+				s.Add(inner)
+			}
+		} else {
+			*s = append(*s, item)
+		}
+	}
 	return s
 }

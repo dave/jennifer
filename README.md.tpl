@@ -108,7 +108,6 @@ Groups accept a list of items and render them as follows:
 
 | Group                  | Opening | Separator | Closing | Usage                             |
 | ---------------------- | ------- | --------- | ------- | --------------------------------- |
-| [Sel](#sel)            |         | `.`       |         | `foo.bar[0].baz()`                |
 | [List](#list)          |         | `,`       |         | `a, b := c()`                     |
 | [Call](#call)          | `(`     | `,`       | `)`     | `fmt.Println(b, c)`               |
 | [Params](#params)      | `(`     | `,`       | `)`     | `func (a *A) Foo(i int) { ... }`  |
@@ -170,11 +169,6 @@ If and For render the keyword followed by a semicolon separated list.
 {{ "ExampleFor" | example }}
 
 # Groups
-
-### Sel
-{{ "Sel" | doc }}
-
-{{ "ExampleSel" | example }}
 
 ### List
 {{ "List" | doc }}
