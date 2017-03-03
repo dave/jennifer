@@ -36,13 +36,13 @@ func (t tag) isNull(f *File) bool {
 	return len(t.items) == 0
 }
 
-func (t tag) render(f *File, w io.Writer) error {
+func (t tag) render(f *File, w io.Writer, s *Statement) error {
 
 	if t.isNull(f) {
 		return nil
 	}
 
-	var s string
+	var str string
 
 	var sorted []string
 	for k := range t.items {
@@ -52,19 +52,19 @@ func (t tag) render(f *File, w io.Writer) error {
 
 	for _, k := range sorted {
 		v := t.items[k]
-		if len(s) > 0 {
-			s += " "
+		if len(str) > 0 {
+			str += " "
 		}
-		s += fmt.Sprintf(`%s:"%s"`, k, v)
+		str += fmt.Sprintf(`%s:"%s"`, k, v)
 	}
 
-	if strconv.CanBackquote(s) {
-		s = "`" + s + "`"
+	if strconv.CanBackquote(str) {
+		str = "`" + str + "`"
 	} else {
-		s = strconv.Quote(s)
+		str = strconv.Quote(str)
 	}
 
-	if _, err := w.Write([]byte(s)); err != nil {
+	if _, err := w.Write([]byte(str)); err != nil {
 		return err
 	}
 

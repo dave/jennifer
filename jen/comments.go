@@ -74,7 +74,7 @@ func (c comment) isNull(f *File) bool {
 	return false
 }
 
-func (c comment) render(f *File, w io.Writer) error {
+func (c comment) render(f *File, w io.Writer, s *Statement) error {
 	if strings.HasPrefix(c.comment, "//") || strings.HasPrefix(c.comment, "/*") {
 		// automatic formatting disabled.
 		if _, err := w.Write([]byte(c.comment)); err != nil {

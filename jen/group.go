@@ -10,6 +10,7 @@ import (
 // Group represents a list of Code items, separated by tokens with an optional
 // open and close token.
 type Group struct {
+	name      string
 	items     []Code
 	open      string
 	close     string
@@ -31,7 +32,19 @@ func (g *Group) isNull(f *File) bool {
 	return true
 }
 
-func (g *Group) render(f *File, w io.Writer) error {
+func (g *Group) render(f *File, w io.Writer, s *Statement) error {
+	if g.name == "block" && s != nil {
+		// Special CaseBlock format for then the previous item in the statement
+		// is a Case group or the default keyword.
+		prev := s.previous(g)
+		grp, isGrp := prev.(*Group)
+		tkn, isTkn := prev.(token)
+		if isGrp && grp.name == "case" || isTkn && tkn.content == "default" {
+			g.open = ":"
+			g.close = ""
+			g.separator = "\n"
+		}
+	}
 	if g.open != "" {
 		if _, err := w.Write([]byte(g.open)); err != nil {
 			return err
@@ -80,7 +93,7 @@ func (g *Group) renderItems(f *File, w io.Writer) (isNull bool, err error) {
 				return false, err
 			}
 		}
-		if err := code.render(f, w); err != nil {
+		if err := code.render(f, w, nil); err != nil {
 			return false, err
 		}
 		first = false
@@ -92,7 +105,7 @@ func (g *Group) renderItems(f *File, w io.Writer) (isNull bool, err error) {
 func (g *Group) GoString() string {
 	f := NewFile("")
 	buf := &bytes.Buffer{}
-	if err := g.render(f, buf); err != nil {
+	if err := g.render(f, buf, nil); err != nil {
 		panic(err)
 	}
 	b, err := format.Source(buf.Bytes())

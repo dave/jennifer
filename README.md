@@ -174,25 +174,27 @@ items and render them as follows:
 | [Return](#return)                |               | `,`       |         | `return a, b`                           |
 | [If](#if-for)                    |               | `;`       |         | `if i, err := a(); err != nil { ... }`  |
 | [For](#if-for)                   |               | `;`       |         | `for i := 0; i < 10; i++ { ... }`       |
-| [Switch](#switch-case-caseblock) |               | `;`       |         | `switch a { ... }`                      |
-| [Case](#switch-case-caseblock)   |               | `,`       |         | `case a, b: ...`                        |
+| [Switch](#switch-case)           |               | `;`       |         | `switch a { ... }`                      |
+| [Case](#switch-case)             |               | `,`       |         | `case a, b: ...`                        |
 | [Interface](#interface-struct)   | `{`           | `\n`      | `}`     | `interface { ... }`                     |
 | [Struct](#interface-struct)      | `{`           | `\n`      | `}`     | `struct { ... }`                        |
 | [Map](#map)                      | `[`           |           | `]`     | `map[string]`                           |
 
 Groups accept a list of items and render them as follows:
 
-| Group             | Opening       | Separator | Closing | Usage                             |
-| ----------------- | ------------- | --------- | ------- | --------------------------------- |
-| [Sel](#sel)       |               | `.`       |         | `foo.bar[0].baz()`                |
-| [List](#list)     |               | `,`       |         | `a, b := c()`                     |
-| [Call](#call)     | `(`           | `,`       | `)`     | `fmt.Println(b, c)`               |
-| [Params](#params) | `(`           | `,`       | `)`     | `func (a *A) Foo(i int) { ... }`  |
-| [Index](#index)   | `[`           | `:`       | `]`     | `a[1:2]` or `[]int{}`             |
-| [Values](#values) | `{`           | `,`       | `}`     | `[]int{1, 2}`                     |
-| [Block](#block)   | `{`           | `\n`      | `}`     | `func a() { ... }`                |
-| [Defs](#defs)     | `(`           | `\n`      | `)`     | `const ( ... )`                   |
-| [CaseBlock](#switch-case-caseblock) | `:`           | `\n`      |         | `case a: ...`                     |
+| Group                  | Opening | Separator | Closing | Usage                             |
+| ---------------------- | ------- | --------- | ------- | --------------------------------- |
+| [Sel](#sel)            |         | `.`       |         | `foo.bar[0].baz()`                |
+| [List](#list)          |         | `,`       |         | `a, b := c()`                     |
+| [Call](#call)          | `(`     | `,`       | `)`     | `fmt.Println(b, c)`               |
+| [Params](#params)      | `(`     | `,`       | `)`     | `func (a *A) Foo(i int) { ... }`  |
+| [Index](#index)        | `[`     | `:`       | `]`     | `a[1:2]` or `[]int{}`             |
+| [Values](#values)      | `{`     | `,`       | `}`     | `[]int{1, 2}`                     |
+| [Defs](#defs)          | `(`     | `\n`      | `)`     | `const ( ... )`                   |
+| [Block](#block)        | `{`     | `\n`      | `}`     | `func a() { ... }`                |
+| [Block](#switch-case)* | `:`     | `\n`      |         | `switch a { case b: ... }`        |
+
+<nowiki>*</nowiki> Block: A special case applies when used directly after Case or Default, where it renders a statement list preceded by a colon. This allows use in switch and select statements.
 
 These groups accept a single item:
 
@@ -265,21 +267,21 @@ fmt.Printf("%#v", c)
 // }
 ```
 
-### Switch, Case, CaseBlock
-Switch, Case and CaseBlock are used to build switch statements:
+### Switch, Case
+Switch, Case and Block are used to build switch statements:
 
 ```go
 c := Switch(Id("a")).Block(
-	Case(Lit("1")).CaseBlock(
+	Case(Lit("1")).Block(
 		Return(Lit(1)),
 	),
-	Case(Lit("2"), Lit("3")).CaseBlock(
+	Case(Lit("2"), Lit("3")).Block(
 		Return(Lit(2)),
 	),
-	Case(Lit("4")).CaseBlock(
+	Case(Lit("4")).Block(
 		Fallthrough(),
 	),
-	Default().CaseBlock(
+	Default().Block(
 		Return(Lit(3)),
 	),
 )
@@ -470,6 +472,8 @@ fmt.Printf("%#v", c)
 // 	a = a / 2
 // }
 ```
+
+A special case applies when used directly after Case or Default, where it renders a statement list preceded by a colon. This allows use in switch and select statements. [See example](#switch-case).
 
 ### Defs
 Defs renders a statement list enclosed in parenthesis. Use for definition lists.

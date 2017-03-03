@@ -165,10 +165,10 @@ func ExampleCap() {
 
 func ExampleCase() {
 	c := Switch(Id("person")).Block(
-		Case(Id("John"), Id("Peter")).CaseBlock(
+		Case(Id("John"), Id("Peter")).Block(
 			Return(Lit("male")),
 		),
-		Case(Id("Gill")).CaseBlock(
+		Case(Id("Gill")).Block(
 			Return(Lit("female")),
 		),
 	)
@@ -182,12 +182,12 @@ func ExampleCase() {
 	// }
 }
 
-func ExampleCaseBlock() {
+func ExampleBlock_case() {
 	c := Select().Block(
-		Case(Op("<-").Id("done")).CaseBlock(
+		Case(Op("<-").Id("done")).Block(
 			Return(Nil()),
 		),
-		Case(List(Err(), Id("open")).Op(":=").Op("<-").Id("fail")).CaseBlock(
+		Case(List(Err(), Id("open")).Op(":=").Op("<-").Id("fail")).Block(
 			If(Op("!").Id("open")).Block(
 				Return(Err()),
 			),
@@ -205,13 +205,13 @@ func ExampleCaseBlock() {
 	// }
 }
 
-func ExampleCaseBlockFunc() {
+func ExampleBlockFunc_case() {
 	preventExitOnError := true
 	c := Select().Block(
-		Case(Op("<-").Id("done")).CaseBlock(
+		Case(Op("<-").Id("done")).Block(
 			Return(Nil()),
 		),
-		Case(Err().Op(":=").Op("<-").Id("fail")).CaseBlockFunc(func(g *Group) {
+		Case(Err().Op(":=").Op("<-").Id("fail")).BlockFunc(func(g *Group) {
 			if !preventExitOnError {
 				g.Return(Err())
 			} else {
@@ -238,7 +238,7 @@ func ExampleCaseFunc() {
 			if samIsMale {
 				g.Id("Sam")
 			}
-		}).CaseBlock(
+		}).Block(
 			Return(Lit("male")),
 		),
 		CaseFunc(func(g *Group) {
@@ -246,7 +246,7 @@ func ExampleCaseFunc() {
 			if !samIsMale {
 				g.Id("Sam")
 			}
-		}).CaseBlock(
+		}).Block(
 			Return(Lit("female")),
 		),
 	)
@@ -745,16 +745,16 @@ func ExampleErr() {
 
 func ExampleSwitch() {
 	c := Switch(Id("a")).Block(
-		Case(Lit("1")).CaseBlock(
+		Case(Lit("1")).Block(
 			Return(Lit(1)),
 		),
-		Case(Lit("2"), Lit("3")).CaseBlock(
+		Case(Lit("2"), Lit("3")).Block(
 			Return(Lit(2)),
 		),
-		Case(Lit("4")).CaseBlock(
+		Case(Lit("4")).Block(
 			Fallthrough(),
 		),
-		Default().CaseBlock(
+		Default().Block(
 			Return(Lit(3)),
 		),
 	)
