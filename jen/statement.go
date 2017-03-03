@@ -21,6 +21,20 @@ func (s *Statement) Clone() *Statement {
 	return &Statement{s}
 }
 
+func (s *Statement) previous(c Code) Code {
+	index := -1
+	for i, item := range *s {
+		if item == c {
+			index = i
+			break
+		}
+	}
+	if index > 0 {
+		return (*s)[index-1]
+	}
+	return nil
+}
+
 func (s *Statement) isNull(f *File) bool {
 	if s == nil {
 		return true
@@ -33,7 +47,7 @@ func (s *Statement) isNull(f *File) bool {
 	return true
 }
 
-func (s *Statement) render(f *File, w io.Writer) error {
+func (s *Statement) render(f *File, w io.Writer, _ *Statement) error {
 	first := true
 	for _, code := range *s {
 		if code == nil || code.isNull(f) {
@@ -47,7 +61,7 @@ func (s *Statement) render(f *File, w io.Writer) error {
 				return err
 			}
 		}
-		if err := code.render(f, w); err != nil {
+		if err := code.render(f, w, s); err != nil {
 			return err
 		}
 		first = false
@@ -59,7 +73,7 @@ func (s *Statement) render(f *File, w io.Writer) error {
 func (s *Statement) GoString() string {
 	f := NewFile("")
 	buf := &bytes.Buffer{}
-	if err := s.render(f, buf); err != nil {
+	if err := s.render(f, buf, nil); err != nil {
 		panic(err)
 	}
 	b, err := format.Source(buf.Bytes())

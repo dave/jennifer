@@ -116,7 +116,6 @@ Groups accept a list of items and render them as follows:
 | [Values](#values) | `{`           | `,`       | `}`     | `[]int{1, 2}`                     |
 | [Block](#block)   | `{`           | `\n`      | `}`     | `func a() { ... }`                |
 | [Defs](#defs)     | `(`           | `\n`      | `)`     | `const ( ... )`                   |
-| [CaseBlock](#switch-case-caseblock) | `:`           | `\n`      |         | `case a: ...`                     |
 
 These groups accept a single item:
 
@@ -145,8 +144,8 @@ by curly braces.
 
 {{ "ExampleStruct" | example }}
 
-### Switch, Case, CaseBlock
-Switch, Case and CaseBlock are used to build switch statements:
+### Switch, Case, Block
+Switch, Case and Block are used to build switch statements:
 
 {{ "ExampleSwitch" | example }}
 

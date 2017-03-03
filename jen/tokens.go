@@ -32,7 +32,7 @@ func (t token) isNull(f *File) bool {
 	return t.typ == nullToken
 }
 
-func (t token) render(f *File, w io.Writer) error {
+func (t token) render(f *File, w io.Writer, s *Statement) error {
 	switch t.typ {
 	case literalToken:
 		// TODO: Does this work in all cases?

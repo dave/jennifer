@@ -21,6 +21,7 @@ func (s *Statement) Parens(item Code) *Statement {
 	g := &Group{
 		close:     ")",
 		items:     []Code{item},
+		name:      "Parens",
 		open:      "(",
 		separator: "",
 	}
@@ -45,6 +46,7 @@ func (s *Statement) List(items ...Code) *Statement {
 	g := &Group{
 		close:     "",
 		items:     items,
+		name:      "List",
 		open:      "",
 		separator: ",",
 	}
@@ -68,6 +70,7 @@ func (g *Group) ListFunc(f func(*Group)) *Statement {
 func (s *Statement) ListFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     "",
+		name:      "List",
 		open:      "",
 		separator: ",",
 	}
@@ -93,6 +96,7 @@ func (s *Statement) Values(values ...Code) *Statement {
 	g := &Group{
 		close:     "}",
 		items:     values,
+		name:      "Values",
 		open:      "{",
 		separator: ",",
 	}
@@ -116,6 +120,7 @@ func (g *Group) ValuesFunc(f func(*Group)) *Statement {
 func (s *Statement) ValuesFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     "}",
+		name:      "Values",
 		open:      "{",
 		separator: ",",
 	}
@@ -141,6 +146,7 @@ func (s *Statement) Index(items ...Code) *Statement {
 	g := &Group{
 		close:     "]",
 		items:     items,
+		name:      "Index",
 		open:      "[",
 		separator: ":",
 	}
@@ -164,6 +170,7 @@ func (g *Group) IndexFunc(f func(*Group)) *Statement {
 func (s *Statement) IndexFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     "]",
+		name:      "Index",
 		open:      "[",
 		separator: ":",
 	}
@@ -189,6 +196,7 @@ func (s *Statement) Block(statements ...Code) *Statement {
 	g := &Group{
 		close:     "}",
 		items:     statements,
+		name:      "Block",
 		open:      "{",
 		separator: "\n",
 	}
@@ -212,6 +220,7 @@ func (g *Group) BlockFunc(f func(*Group)) *Statement {
 func (s *Statement) BlockFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     "}",
+		name:      "Block",
 		open:      "{",
 		separator: "\n",
 	}
@@ -237,6 +246,7 @@ func (s *Statement) Defs(definitions ...Code) *Statement {
 	g := &Group{
 		close:     ")",
 		items:     definitions,
+		name:      "Defs",
 		open:      "(",
 		separator: "\n",
 	}
@@ -260,6 +270,7 @@ func (g *Group) DefsFunc(f func(*Group)) *Statement {
 func (s *Statement) DefsFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     ")",
+		name:      "Defs",
 		open:      "(",
 		separator: "\n",
 	}
@@ -285,6 +296,7 @@ func (s *Statement) Call(params ...Code) *Statement {
 	g := &Group{
 		close:     ")",
 		items:     params,
+		name:      "Call",
 		open:      "(",
 		separator: ",",
 	}
@@ -308,6 +320,7 @@ func (g *Group) CallFunc(f func(*Group)) *Statement {
 func (s *Statement) CallFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     ")",
+		name:      "Call",
 		open:      "(",
 		separator: ",",
 	}
@@ -333,6 +346,7 @@ func (s *Statement) Params(params ...Code) *Statement {
 	g := &Group{
 		close:     ")",
 		items:     params,
+		name:      "Params",
 		open:      "(",
 		separator: ",",
 	}
@@ -356,56 +370,9 @@ func (g *Group) ParamsFunc(f func(*Group)) *Statement {
 func (s *Statement) ParamsFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     ")",
+		name:      "Params",
 		open:      "(",
 		separator: ",",
-	}
-	f(g)
-	*s = append(*s, g)
-	return s
-}
-
-// CaseBlock renders a statement list preceded by a colon. Use to build switch / select statements.
-func CaseBlock(statements ...Code) *Statement {
-	return newStatement().CaseBlock(statements...)
-}
-
-// CaseBlock renders a statement list preceded by a colon. Use to build switch / select statements.
-func (g *Group) CaseBlock(statements ...Code) *Statement {
-	s := CaseBlock(statements...)
-	g.items = append(g.items, s)
-	return s
-}
-
-// CaseBlock renders a statement list preceded by a colon. Use to build switch / select statements.
-func (s *Statement) CaseBlock(statements ...Code) *Statement {
-	g := &Group{
-		close:     "",
-		items:     statements,
-		open:      ":",
-		separator: "\n",
-	}
-	*s = append(*s, g)
-	return s
-}
-
-// CaseBlockFunc renders a statement list preceded by a colon. Use to build switch / select statements.
-func CaseBlockFunc(f func(*Group)) *Statement {
-	return newStatement().CaseBlockFunc(f)
-}
-
-// CaseBlockFunc renders a statement list preceded by a colon. Use to build switch / select statements.
-func (g *Group) CaseBlockFunc(f func(*Group)) *Statement {
-	s := CaseBlockFunc(f)
-	g.items = append(g.items, s)
-	return s
-}
-
-// CaseBlockFunc renders a statement list preceded by a colon. Use to build switch / select statements.
-func (s *Statement) CaseBlockFunc(f func(*Group)) *Statement {
-	g := &Group{
-		close:     "",
-		open:      ":",
-		separator: "\n",
 	}
 	f(g)
 	*s = append(*s, g)
@@ -429,6 +396,7 @@ func (s *Statement) Assert(typ Code) *Statement {
 	g := &Group{
 		close:     ")",
 		items:     []Code{typ},
+		name:      "Assert",
 		open:      ".(",
 		separator: "",
 	}
@@ -453,6 +421,7 @@ func (s *Statement) Map(typ Code) *Statement {
 	g := &Group{
 		close:     "]",
 		items:     []Code{typ},
+		name:      "Map",
 		open:      "map[",
 		separator: "",
 	}
@@ -477,6 +446,7 @@ func (s *Statement) If(conditions ...Code) *Statement {
 	g := &Group{
 		close:     "",
 		items:     conditions,
+		name:      "If",
 		open:      "if ",
 		separator: ";",
 	}
@@ -500,6 +470,7 @@ func (g *Group) IfFunc(f func(*Group)) *Statement {
 func (s *Statement) IfFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     "",
+		name:      "If",
 		open:      "if ",
 		separator: ";",
 	}
@@ -525,6 +496,7 @@ func (s *Statement) Return(results ...Code) *Statement {
 	g := &Group{
 		close:     "",
 		items:     results,
+		name:      "Return",
 		open:      "return ",
 		separator: ",",
 	}
@@ -548,6 +520,7 @@ func (g *Group) ReturnFunc(f func(*Group)) *Statement {
 func (s *Statement) ReturnFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     "",
+		name:      "Return",
 		open:      "return ",
 		separator: ",",
 	}
@@ -573,6 +546,7 @@ func (s *Statement) For(conditions ...Code) *Statement {
 	g := &Group{
 		close:     "",
 		items:     conditions,
+		name:      "For",
 		open:      "for ",
 		separator: ";",
 	}
@@ -596,6 +570,7 @@ func (g *Group) ForFunc(f func(*Group)) *Statement {
 func (s *Statement) ForFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     "",
+		name:      "For",
 		open:      "for ",
 		separator: ";",
 	}
@@ -621,6 +596,7 @@ func (s *Statement) Switch(conditions ...Code) *Statement {
 	g := &Group{
 		close:     "",
 		items:     conditions,
+		name:      "Switch",
 		open:      "switch ",
 		separator: ";",
 	}
@@ -644,6 +620,7 @@ func (g *Group) SwitchFunc(f func(*Group)) *Statement {
 func (s *Statement) SwitchFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     "",
+		name:      "Switch",
 		open:      "switch ",
 		separator: ";",
 	}
@@ -669,6 +646,7 @@ func (s *Statement) Interface(methods ...Code) *Statement {
 	g := &Group{
 		close:     "}",
 		items:     methods,
+		name:      "Interface",
 		open:      "interface{",
 		separator: "\n",
 	}
@@ -692,6 +670,7 @@ func (g *Group) InterfaceFunc(f func(*Group)) *Statement {
 func (s *Statement) InterfaceFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     "}",
+		name:      "Interface",
 		open:      "interface{",
 		separator: "\n",
 	}
@@ -717,6 +696,7 @@ func (s *Statement) Struct(fields ...Code) *Statement {
 	g := &Group{
 		close:     "}",
 		items:     fields,
+		name:      "Struct",
 		open:      "struct{",
 		separator: "\n",
 	}
@@ -740,6 +720,7 @@ func (g *Group) StructFunc(f func(*Group)) *Statement {
 func (s *Statement) StructFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     "}",
+		name:      "Struct",
 		open:      "struct{",
 		separator: "\n",
 	}
@@ -765,6 +746,7 @@ func (s *Statement) Case(cases ...Code) *Statement {
 	g := &Group{
 		close:     "",
 		items:     cases,
+		name:      "Case",
 		open:      "case ",
 		separator: ",",
 	}
@@ -788,6 +770,7 @@ func (g *Group) CaseFunc(f func(*Group)) *Statement {
 func (s *Statement) CaseFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     "",
+		name:      "Case",
 		open:      "case ",
 		separator: ",",
 	}
@@ -813,6 +796,7 @@ func (s *Statement) Sel(selectors ...Code) *Statement {
 	g := &Group{
 		close:     "",
 		items:     selectors,
+		name:      "Sel",
 		open:      "",
 		separator: ".",
 	}
@@ -836,6 +820,7 @@ func (g *Group) SelFunc(f func(*Group)) *Statement {
 func (s *Statement) SelFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     "",
+		name:      "Sel",
 		open:      "",
 		separator: ".",
 	}
@@ -861,6 +846,7 @@ func (s *Statement) Append(args ...Code) *Statement {
 	g := &Group{
 		close:     ")",
 		items:     args,
+		name:      "Append",
 		open:      "append(",
 		separator: ",",
 	}
@@ -884,6 +870,7 @@ func (g *Group) AppendFunc(f func(*Group)) *Statement {
 func (s *Statement) AppendFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     ")",
+		name:      "Append",
 		open:      "append(",
 		separator: ",",
 	}
@@ -909,6 +896,7 @@ func (s *Statement) Cap(v Code) *Statement {
 	g := &Group{
 		close:     ")",
 		items:     []Code{v},
+		name:      "Cap",
 		open:      "cap(",
 		separator: ",",
 	}
@@ -933,6 +921,7 @@ func (s *Statement) Close(c Code) *Statement {
 	g := &Group{
 		close:     ")",
 		items:     []Code{c},
+		name:      "Close",
 		open:      "close(",
 		separator: ",",
 	}
@@ -957,6 +946,7 @@ func (s *Statement) Complex(r Code, i Code) *Statement {
 	g := &Group{
 		close:     ")",
 		items:     []Code{r, i},
+		name:      "Complex",
 		open:      "complex(",
 		separator: ",",
 	}
@@ -981,6 +971,7 @@ func (s *Statement) Copy(dst Code, src Code) *Statement {
 	g := &Group{
 		close:     ")",
 		items:     []Code{dst, src},
+		name:      "Copy",
 		open:      "copy(",
 		separator: ",",
 	}
@@ -1005,6 +996,7 @@ func (s *Statement) Delete(m Code, key Code) *Statement {
 	g := &Group{
 		close:     ")",
 		items:     []Code{m, key},
+		name:      "Delete",
 		open:      "delete(",
 		separator: ",",
 	}
@@ -1029,6 +1021,7 @@ func (s *Statement) Imag(c Code) *Statement {
 	g := &Group{
 		close:     ")",
 		items:     []Code{c},
+		name:      "Imag",
 		open:      "imag(",
 		separator: ",",
 	}
@@ -1053,6 +1046,7 @@ func (s *Statement) Len(v Code) *Statement {
 	g := &Group{
 		close:     ")",
 		items:     []Code{v},
+		name:      "Len",
 		open:      "len(",
 		separator: ",",
 	}
@@ -1077,6 +1071,7 @@ func (s *Statement) Make(args ...Code) *Statement {
 	g := &Group{
 		close:     ")",
 		items:     args,
+		name:      "Make",
 		open:      "make(",
 		separator: ",",
 	}
@@ -1101,6 +1096,7 @@ func (s *Statement) New(typ Code) *Statement {
 	g := &Group{
 		close:     ")",
 		items:     []Code{typ},
+		name:      "New",
 		open:      "new(",
 		separator: ",",
 	}
@@ -1125,6 +1121,7 @@ func (s *Statement) Panic(v Code) *Statement {
 	g := &Group{
 		close:     ")",
 		items:     []Code{v},
+		name:      "Panic",
 		open:      "panic(",
 		separator: ",",
 	}
@@ -1149,6 +1146,7 @@ func (s *Statement) Print(args ...Code) *Statement {
 	g := &Group{
 		close:     ")",
 		items:     args,
+		name:      "Print",
 		open:      "print(",
 		separator: ",",
 	}
@@ -1172,6 +1170,7 @@ func (g *Group) PrintFunc(f func(*Group)) *Statement {
 func (s *Statement) PrintFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     ")",
+		name:      "Print",
 		open:      "print(",
 		separator: ",",
 	}
@@ -1197,6 +1196,7 @@ func (s *Statement) Println(args ...Code) *Statement {
 	g := &Group{
 		close:     ")",
 		items:     args,
+		name:      "Println",
 		open:      "println(",
 		separator: ",",
 	}
@@ -1220,6 +1220,7 @@ func (g *Group) PrintlnFunc(f func(*Group)) *Statement {
 func (s *Statement) PrintlnFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     ")",
+		name:      "Println",
 		open:      "println(",
 		separator: ",",
 	}
@@ -1245,6 +1246,7 @@ func (s *Statement) Real(c Code) *Statement {
 	g := &Group{
 		close:     ")",
 		items:     []Code{c},
+		name:      "Real",
 		open:      "real(",
 		separator: ",",
 	}
@@ -1269,6 +1271,7 @@ func (s *Statement) Recover() *Statement {
 	g := &Group{
 		close:     ")",
 		items:     []Code{},
+		name:      "Recover",
 		open:      "recover(",
 		separator: ",",
 	}

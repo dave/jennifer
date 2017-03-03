@@ -13,7 +13,7 @@ import (
 
 // Code represents an item of code that can be rendered.
 type Code interface {
-	render(f *File, w io.Writer) error
+	render(f *File, w io.Writer, s *Statement) error
 	isNull(f *File) bool
 }
 
@@ -32,13 +32,13 @@ func (f *File) Save(filename string) error {
 // Render renders the file to the provided writer.
 func (f *File) Render(w io.Writer) error {
 	body := &bytes.Buffer{}
-	if err := f.render(f, body); err != nil {
+	if err := f.render(f, body, nil); err != nil {
 		return err
 	}
 	source := &bytes.Buffer{}
 	if f.comments != nil {
 		for _, c := range f.comments {
-			if err := Comment(c).render(f, source); err != nil {
+			if err := Comment(c).render(f, source, nil); err != nil {
 				return err
 			}
 			if _, err := fmt.Fprint(source, "\n"); err != nil {

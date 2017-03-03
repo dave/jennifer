@@ -87,15 +87,6 @@ var groups = []struct {
 		parameters: []string{"params"},
 	},
 	{
-		name:       "CaseBlock",
-		comment:    "renders a statement list preceded by a colon. Use to build switch / select statements.",
-		variadic:   true,
-		opening:    ":",
-		closing:    "",
-		separator:  "\n",
-		parameters: []string{"statements"},
-	},
-	{
 		name:       "Assert",
 		comment:    "renders a period followed by a single item enclosed by parenthesis. Use for type assertions.",
 		variadic:   false,

@@ -48,6 +48,7 @@ func render(w io.Writer) error {
 			func (s *Statement) <name>(<funcParams>) *Statement {
 				g := &Group{
 					items:     []Code{<paramNames>}|<paramNames[0]>,
+					name:      "<name>",
 					open:      "<opening>",
 					close:     "<closing>",
 					separator: "<separator>",
@@ -74,6 +75,7 @@ func render(w io.Writer) error {
 						})
 					}
 				}),
+				Id("name"):      Lit(b.name),
 				Id("open"):      Lit(b.opening),
 				Id("close"):     Lit(b.closing),
 				Id("separator"): Lit(b.separator),
@@ -100,6 +102,7 @@ func render(w io.Writer) error {
 				// <funcComment>
 				func (s *Statement) <funcName>(f func(*Group)) *Statement {
 					g := &Group{
+						name:      "<name>",
 						open:      "<opening>",
 						close:     "<closing>",
 						separator: "<separator>",
@@ -116,6 +119,7 @@ func render(w io.Writer) error {
 				funcFuncParams...,
 			).Op("*").Id("Statement").Block(
 				Id("g").Op(":=").Op("&").Id("Group").Dict(map[Code]Code{
+					Id("name"):      Lit(b.name),
 					Id("open"):      Lit(b.opening),
 					Id("close"):     Lit(b.closing),
 					Id("separator"): Lit(b.separator),

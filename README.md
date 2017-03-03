@@ -192,7 +192,6 @@ Groups accept a list of items and render them as follows:
 | [Values](#values) | `{`           | `,`       | `}`     | `[]int{1, 2}`                     |
 | [Block](#block)   | `{`           | `\n`      | `}`     | `func a() { ... }`                |
 | [Defs](#defs)     | `(`           | `\n`      | `)`     | `const ( ... )`                   |
-| [CaseBlock](#switch-case-caseblock) | `:`           | `\n`      |         | `case a: ...`                     |
 
 These groups accept a single item:
 
@@ -265,21 +264,21 @@ fmt.Printf("%#v", c)
 // }
 ```
 
-### Switch, Case, CaseBlock
-Switch, Case and CaseBlock are used to build switch statements:
+### Switch, Case, Block
+Switch, Case and Block are used to build switch statements:
 
 ```go
 c := Switch(Id("a")).Block(
-	Case(Lit("1")).CaseBlock(
+	Case(Lit("1")).Block(
 		Return(Lit(1)),
 	),
-	Case(Lit("2"), Lit("3")).CaseBlock(
+	Case(Lit("2"), Lit("3")).Block(
 		Return(Lit(2)),
 	),
-	Case(Lit("4")).CaseBlock(
+	Case(Lit("4")).Block(
 		Fallthrough(),
 	),
-	Default().CaseBlock(
+	Default().Block(
 		Return(Lit(3)),
 	),
 )
