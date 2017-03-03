@@ -98,24 +98,27 @@ items and render them as follows:
 | [Return](#return)                |               | `,`       |         | `return a, b`                           |
 | [If](#if-for)                    |               | `;`       |         | `if i, err := a(); err != nil { ... }`  |
 | [For](#if-for)                   |               | `;`       |         | `for i := 0; i < 10; i++ { ... }`       |
-| [Switch](#switch-case-caseblock) |               | `;`       |         | `switch a { ... }`                      |
-| [Case](#switch-case-caseblock)   |               | `,`       |         | `case a, b: ...`                        |
+| [Switch](#switch-case)           |               | `;`       |         | `switch a { ... }`                      |
+| [Case](#switch-case)             |               | `,`       |         | `case a, b: ...`                        |
 | [Interface](#interface-struct)   | `{`           | `\n`      | `}`     | `interface { ... }`                     |
 | [Struct](#interface-struct)      | `{`           | `\n`      | `}`     | `struct { ... }`                        |
 | [Map](#map)                      | `[`           |           | `]`     | `map[string]`                           |
 
 Groups accept a list of items and render them as follows:
 
-| Group             | Opening       | Separator | Closing | Usage                             |
-| ----------------- | ------------- | --------- | ------- | --------------------------------- |
-| [Sel](#sel)       |               | `.`       |         | `foo.bar[0].baz()`                |
-| [List](#list)     |               | `,`       |         | `a, b := c()`                     |
-| [Call](#call)     | `(`           | `,`       | `)`     | `fmt.Println(b, c)`               |
-| [Params](#params) | `(`           | `,`       | `)`     | `func (a *A) Foo(i int) { ... }`  |
-| [Index](#index)   | `[`           | `:`       | `]`     | `a[1:2]` or `[]int{}`             |
-| [Values](#values) | `{`           | `,`       | `}`     | `[]int{1, 2}`                     |
-| [Block](#block)   | `{`           | `\n`      | `}`     | `func a() { ... }`                |
-| [Defs](#defs)     | `(`           | `\n`      | `)`     | `const ( ... )`                   |
+| Group                  | Opening | Separator | Closing | Usage                             |
+| ---------------------- | ------- | --------- | ------- | --------------------------------- |
+| [Sel](#sel)            |         | `.`       |         | `foo.bar[0].baz()`                |
+| [List](#list)          |         | `,`       |         | `a, b := c()`                     |
+| [Call](#call)          | `(`     | `,`       | `)`     | `fmt.Println(b, c)`               |
+| [Params](#params)      | `(`     | `,`       | `)`     | `func (a *A) Foo(i int) { ... }`  |
+| [Index](#index)        | `[`     | `:`       | `]`     | `a[1:2]` or `[]int{}`             |
+| [Values](#values)      | `{`     | `,`       | `}`     | `[]int{1, 2}`                     |
+| [Defs](#defs)          | `(`     | `\n`      | `)`     | `const ( ... )`                   |
+| [Block](#block)        | `{`     | `\n`      | `}`     | `func a() { ... }`                |
+| [Block](#switch-case)* | `:`     | `\n`      |         | `switch a { case b: ... }`        |
+
+<nowiki>*</nowiki> Block: {{ "Block[2:]" | doc }}
 
 These groups accept a single item:
 
@@ -144,7 +147,7 @@ by curly braces.
 
 {{ "ExampleStruct" | example }}
 
-### Switch, Case, Block
+### Switch, Case
 Switch, Case and Block are used to build switch statements:
 
 {{ "ExampleSwitch" | example }}
@@ -203,11 +206,13 @@ If and For render the keyword followed by a semicolon separated list.
 {{ "ExampleValues" | example }}
 
 ### Block
-{{ "Block" | doc }}
+{{ "Block[:2]" | doc }}
 
 {{ "ExampleBlock" | example }}
 
 {{ "ExampleBlock_if" | example }}
+
+{{ "Block[2:]" | doc }} [See example](#switch-case).
 
 ### Defs
 {{ "Defs" | doc }}

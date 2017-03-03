@@ -179,19 +179,19 @@ func (s *Statement) IndexFunc(f func(*Group)) *Statement {
 	return s
 }
 
-// Block renders a statement list enclosed by curly braces. Use for code blocks.
+// Block renders a statement list enclosed by curly braces. Use for code blocks. A special case applies when used directly after Case or Default, where it renders a statement list preceded by a colon. This allows use in switch and select statements.
 func Block(statements ...Code) *Statement {
 	return newStatement().Block(statements...)
 }
 
-// Block renders a statement list enclosed by curly braces. Use for code blocks.
+// Block renders a statement list enclosed by curly braces. Use for code blocks. A special case applies when used directly after Case or Default, where it renders a statement list preceded by a colon. This allows use in switch and select statements.
 func (g *Group) Block(statements ...Code) *Statement {
 	s := Block(statements...)
 	g.items = append(g.items, s)
 	return s
 }
 
-// Block renders a statement list enclosed by curly braces. Use for code blocks.
+// Block renders a statement list enclosed by curly braces. Use for code blocks. A special case applies when used directly after Case or Default, where it renders a statement list preceded by a colon. This allows use in switch and select statements.
 func (s *Statement) Block(statements ...Code) *Statement {
 	g := &Group{
 		close:     "}",
@@ -204,19 +204,19 @@ func (s *Statement) Block(statements ...Code) *Statement {
 	return s
 }
 
-// BlockFunc renders a statement list enclosed by curly braces. Use for code blocks.
+// BlockFunc renders a statement list enclosed by curly braces. Use for code blocks. A special case applies when used directly after Case or Default, where it renders a statement list preceded by a colon. This allows use in switch and select statements.
 func BlockFunc(f func(*Group)) *Statement {
 	return newStatement().BlockFunc(f)
 }
 
-// BlockFunc renders a statement list enclosed by curly braces. Use for code blocks.
+// BlockFunc renders a statement list enclosed by curly braces. Use for code blocks. A special case applies when used directly after Case or Default, where it renders a statement list preceded by a colon. This allows use in switch and select statements.
 func (g *Group) BlockFunc(f func(*Group)) *Statement {
 	s := BlockFunc(f)
 	g.items = append(g.items, s)
 	return s
 }
 
-// BlockFunc renders a statement list enclosed by curly braces. Use for code blocks.
+// BlockFunc renders a statement list enclosed by curly braces. Use for code blocks. A special case applies when used directly after Case or Default, where it renders a statement list preceded by a colon. This allows use in switch and select statements.
 func (s *Statement) BlockFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     "}",
