@@ -75,7 +75,7 @@ func render(w io.Writer) error {
 						})
 					}
 				}),
-				Id("name"):      Lit(b.name),
+				Id("name"):      Lit(strings.ToLower(b.name)),
 				Id("open"):      Lit(b.opening),
 				Id("close"):     Lit(b.closing),
 				Id("separator"): Lit(b.separator),
@@ -119,7 +119,7 @@ func render(w io.Writer) error {
 				funcFuncParams...,
 			).Op("*").Id("Statement").Block(
 				Id("g").Op(":=").Op("&").Id("Group").Dict(map[Code]Code{
-					Id("name"):      Lit(b.name),
+					Id("name"):      Lit(strings.ToLower(b.name)),
 					Id("open"):      Lit(b.opening),
 					Id("close"):     Lit(b.closing),
 					Id("separator"): Lit(b.separator),
