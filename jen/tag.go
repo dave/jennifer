@@ -36,7 +36,7 @@ func (t tag) isNull(f *File) bool {
 	return len(t.items) == 0
 }
 
-func (t tag) render(f *File, w io.Writer, s *Statement) error {
+func (t tag) render(f *File, w io.Writer, s *Statement, container *Group) error {
 
 	if t.isNull(f) {
 		return nil

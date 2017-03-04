@@ -32,7 +32,7 @@ func (g *Group) isNull(f *File) bool {
 	return true
 }
 
-func (g *Group) render(f *File, w io.Writer, s *Statement) error {
+func (g *Group) render(f *File, w io.Writer, s *Statement, container *Group) error {
 	if g.name == "block" && s != nil {
 		// Special CaseBlock format for then the previous item in the statement
 		// is a Case group or the default keyword.
@@ -93,7 +93,7 @@ func (g *Group) renderItems(f *File, w io.Writer) (isNull bool, err error) {
 				return false, err
 			}
 		}
-		if err := code.render(f, w, nil); err != nil {
+		if err := code.render(f, w, nil, g); err != nil {
 			return false, err
 		}
 		first = false
@@ -105,7 +105,7 @@ func (g *Group) renderItems(f *File, w io.Writer) (isNull bool, err error) {
 func (g *Group) GoString() string {
 	f := NewFile("")
 	buf := &bytes.Buffer{}
-	if err := g.render(f, buf, nil); err != nil {
+	if err := g.render(f, buf, nil, nil); err != nil {
 		panic(err)
 	}
 	b, err := format.Source(buf.Bytes())

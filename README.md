@@ -184,7 +184,6 @@ Groups accept a list of items and render them as follows:
 
 | Group                  | Opening | Separator | Closing | Usage                             |
 | ---------------------- | ------- | --------- | ------- | --------------------------------- |
-| [Sel](#sel)            |         | `.`       |         | `foo.bar[0].baz()`                |
 | [List](#list)          |         | `,`       |         | `a, b := c()`                     |
 | [Call](#call)          | `(`     | `,`       | `)`     | `fmt.Println(b, c)`               |
 | [Params](#params)      | `(`     | `,`       | `)`     | `func (a *A) Foo(i int) { ... }`  |
@@ -352,20 +351,6 @@ fmt.Printf("%#v", c)
 ```
 
 # Groups
-
-### Sel
-Sel renders a period separated list. Use for a chain of selectors.
-
-```go
-c := Sel(
-	Qual("a.b/c", "Foo").Call(),
-	Id("Bar").Index(Lit(0)),
-	Id("Baz"),
-)
-fmt.Printf("%#v", c)
-// Output:
-// c.Foo().Bar[0].Baz
-```
 
 ### List
 List renders a comma separated list. Use for multiple return functions.

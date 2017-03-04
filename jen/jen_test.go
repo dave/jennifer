@@ -144,12 +144,12 @@ var cases = []tc{
 	},
 	{
 		desc:   `field`,
-		code:   Sel(Id("a"), Id("b")),
+		code:   Id("a").Id("b"),
 		expect: `a.b`,
 	},
 	{
 		desc:   `method`,
-		code:   Sel(Id("a"), Id("b")).Call(Id("c"), Id("d")),
+		code:   Id("a").Id("b").Call(Id("c"), Id("d")),
 		expect: `a.b(c, d)`,
 	},
 	{
@@ -205,12 +205,12 @@ var cases = []tc{
 	},
 	{
 		desc:   `sel`,
-		code:   Sel(Id("a"), Id("b"), Id("c")),
+		code:   Id("a").Id("b").Id("c"),
 		expect: `a.b.c`,
 	},
 	{
 		desc:   `do`,
-		code:   Sel(Id("a"), Do(func(s *Statement) { s.Id("b") })),
+		code:   Id("a").Do(func(s *Statement) { s.Id("b") }),
 		expect: `a.b`,
 	},
 	{

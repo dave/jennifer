@@ -2,7 +2,9 @@ package main
 
 var keywords = []string{"break", "default", "func", "select", "chan", "else", "const", "fallthrough", "type", "continue", "var", "goto", "defer", "go", "range"}
 
-var identifiers = []string{"bool", "byte", "complex64", "complex128", "error", "float32", "float64", "int", "int8", "int16", "int32", "int64", "rune", "string", "uint", "uint8", "uint16", "uint32", "uint64", "uintptr", "true", "false", "iota", "nil", "err"}
+var predeclared = []string{"bool", "byte", "complex64", "complex128", "error", "float32", "float64", "int", "int8", "int16", "int32", "int64", "rune", "string", "uint", "uint8", "uint16", "uint32", "uint64", "uintptr", "true", "false", "iota", "nil"}
+
+var ids = []string{"err"}
 
 var groups = []struct {
 	name        string   // name of the function / method
@@ -166,15 +168,6 @@ var groups = []struct {
 		closing:    "",
 		separator:  ",",
 		parameters: []string{"cases"},
-	},
-	{
-		name:       "Sel",
-		comment:    "renders a period separated list. Use for a chain of selectors.",
-		variadic:   true,
-		opening:    "",
-		closing:    "",
-		separator:  ".",
-		parameters: []string{"selectors"},
 	},
 	{
 		name:       "Append",

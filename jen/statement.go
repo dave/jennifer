@@ -18,7 +18,7 @@ func newStatement() *Statement {
 // Clone makes a copy of the Statement, so further tokens can be appended
 // without affecting the original.
 func (s *Statement) Clone() *Statement {
-	return &Statement{s}
+	return Add(s)
 }
 
 func (s *Statement) previous(c Code) Code {
@@ -47,7 +47,7 @@ func (s *Statement) isNull(f *File) bool {
 	return true
 }
 
-func (s *Statement) render(f *File, w io.Writer, _ *Statement) error {
+func (s *Statement) render(f *File, w io.Writer, st *Statement, container *Group) error {
 	first := true
 	for _, code := range *s {
 		if code == nil || code.isNull(f) {
@@ -61,7 +61,7 @@ func (s *Statement) render(f *File, w io.Writer, _ *Statement) error {
 				return err
 			}
 		}
-		if err := code.render(f, w, s); err != nil {
+		if err := code.render(f, w, s, container); err != nil {
 			return err
 		}
 		first = false
@@ -73,7 +73,7 @@ func (s *Statement) render(f *File, w io.Writer, _ *Statement) error {
 func (s *Statement) GoString() string {
 	f := NewFile("")
 	buf := &bytes.Buffer{}
-	if err := s.render(f, buf, nil); err != nil {
+	if err := s.render(f, buf, nil, nil); err != nil {
 		panic(err)
 	}
 	b, err := format.Source(buf.Bytes())

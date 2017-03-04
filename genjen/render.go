@@ -138,11 +138,11 @@ func render(w io.Writer) error {
 		tokenDesc string
 	}
 	tokens := []tkn{}
-	for _, v := range identifiers {
+	for _, v := range predeclared {
 		tokens = append(tokens, tkn{
 			token:     v,
 			name:      strings.ToUpper(v[:1]) + v[1:],
-			tokenType: "identifierToken",
+			tokenType: "predeclaredToken",
 			tokenDesc: "identifier",
 		})
 	}
@@ -152,6 +152,14 @@ func render(w io.Writer) error {
 			name:      strings.ToUpper(v[:1]) + v[1:],
 			tokenType: "keywordToken",
 			tokenDesc: "keyword",
+		})
+	}
+	for _, v := range ids {
+		tokens = append(tokens, tkn{
+			token:     v,
+			name:      strings.ToUpper(v[:1]) + v[1:],
+			tokenType: "identifierToken",
+			tokenDesc: "identifier",
 		})
 	}
 
@@ -216,10 +224,7 @@ func addFunctionAndGroupMethod(
 	file.Add(comment)
 	file.Func().Id(name).Params(funcParams...).Op("*").Id("Statement").Block(
 		Return(
-			Sel(
-				Id("newStatement").Call(),
-				Id(name).Call(callParams...),
-			),
+			Id("newStatement").Call().Id(name).Call(callParams...),
 		),
 	)
 	/*
@@ -235,7 +240,7 @@ func addFunctionAndGroupMethod(
 		Id("g").Op("*").Id("Group"),
 	).Id(name).Params(funcParams...).Op("*").Id("Statement").Block(
 		Id("s").Op(":=").Id(name).Params(callParams...),
-		Sel(Id("g"), Id("items")).Op("=").Append(Sel(Id("g"), Id("items")), Id("s")),
+		Id("g").Id("items").Op("=").Append(Id("g").Id("items"), Id("s")),
 		Return(Id("s")),
 	)
 }
