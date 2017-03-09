@@ -39,7 +39,7 @@ func (t token) render(f *File, w io.Writer, s *Statement) error {
 		if _, err := w.Write([]byte(fmt.Sprintf("%#v", t.content))); err != nil {
 			return err
 		}
-	case keywordToken, operatorToken, layoutToken:
+	case keywordToken, operatorToken, layoutToken, delimiterToken:
 		if _, err := w.Write([]byte(fmt.Sprintf("%s", t.content))); err != nil {
 			return err
 		}
@@ -130,6 +130,32 @@ func (s *Statement) Op(op string) *Statement {
 	return s
 }
 
+// Dot renders a period followed by an identifier. Use for fields and selectors.
+func Dot(name string) *Statement {
+	return newStatement().Dot(name)
+}
+
+// Dot renders a period followed by an identifier. Use for fields and selectors.
+func (g *Group) Dot(name string) *Statement {
+	s := Dot(name)
+	g.items = append(g.items, s)
+	return s
+}
+
+// Dot renders a period followed by an identifier. Use for fields and selectors.
+func (s *Statement) Dot(name string) *Statement {
+	d := token{
+		typ:     delimiterToken,
+		content: ".",
+	}
+	t := token{
+		typ:     identifierToken,
+		content: name,
+	}
+	*s = append(*s, d, t)
+	return s
+}
+
 // Id renders an identifier.
 func Id(name string) *Statement {
 	return newStatement().Id(name)
@@ -172,16 +198,22 @@ func (g *Group) Qual(path, name string) *Statement {
 // used with a File. If the path matches the local path, the package name is
 // omitted. If package names conflict they are automatically renamed.
 func (s *Statement) Qual(path, name string) *Statement {
-	g := Sel(
-		token{
-			typ:     packageToken,
-			content: path,
+	g := &Group{
+		close: "",
+		items: []Code{
+			token{
+				typ:     packageToken,
+				content: path,
+			},
+			token{
+				typ:     identifierToken,
+				content: name,
+			},
 		},
-		token{
-			typ:     identifierToken,
-			content: name,
-		},
-	)
+		name:      "qual",
+		open:      "",
+		separator: ".",
+	}
 	*s = append(*s, g)
 	return s
 }

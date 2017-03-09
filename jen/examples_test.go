@@ -455,8 +455,6 @@ func Recover(c ...Code) *Statement
 func Return(c ...Code) *Statement
 func ReturnFunc(f func(*Group)) *Statement
 func Rune() *Statement
-func Sel(c ...Code) *Statement
-func SelFunc(f func(*Group)) *Statement
 func Select() *Statement
 func String() *Statement
 func Struct() *Statement
@@ -656,12 +654,8 @@ func ExampleLitFunc() {
 	// a := 2
 }
 
-func ExampleSel() {
-	c := Sel(
-		Qual("a.b/c", "Foo").Call(),
-		Id("Bar").Index(Lit(0)),
-		Id("Baz"),
-	)
+func ExampleDot() {
+	c := Qual("a.b/c", "Foo").Call().Dot("Bar").Index(Lit(0)).Dot("Baz")
 	fmt.Printf("%#v", c)
 	// Output:
 	// c.Foo().Bar[0].Baz
@@ -985,7 +979,7 @@ func ExampleId_local() {
 }
 
 func ExampleId_select() {
-	c := Sel(Id("a"), Id("b"), Id("c")).Call()
+	c := Id("a").Dot("b").Dot("c").Call()
 	fmt.Printf("%#v", c)
 	// Output:
 	// a.b.c()
