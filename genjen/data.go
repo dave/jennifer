@@ -168,15 +168,6 @@ var groups = []struct {
 		parameters: []string{"cases"},
 	},
 	{
-		name:       "Sel",
-		comment:    "renders a period separated list. Use for a chain of selectors.",
-		variadic:   true,
-		opening:    "",
-		closing:    "",
-		separator:  ".",
-		parameters: []string{"selectors"},
-	},
-	{
 		name:       "Append",
 		comment:    "renders the append built-in function.",
 		variadic:   true,

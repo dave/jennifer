@@ -215,12 +215,7 @@ func addFunctionAndGroupMethod(
 	*/
 	file.Add(comment)
 	file.Func().Id(name).Params(funcParams...).Op("*").Id("Statement").Block(
-		Return(
-			Sel(
-				Id("newStatement").Call(),
-				Id(name).Call(callParams...),
-			),
-		),
+		Return(Id("newStatement").Call().Dot(name).Call(callParams...)),
 	)
 	/*
 		// <comment>
@@ -235,7 +230,7 @@ func addFunctionAndGroupMethod(
 		Id("g").Op("*").Id("Group"),
 	).Id(name).Params(funcParams...).Op("*").Id("Statement").Block(
 		Id("s").Op(":=").Id(name).Params(callParams...),
-		Sel(Id("g"), Id("items")).Op("=").Append(Sel(Id("g"), Id("items")), Id("s")),
+		Id("g").Dot("items").Op("=").Append(Id("g").Dot("items"), Id("s")),
 		Return(Id("s")),
 	)
 }
