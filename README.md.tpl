@@ -106,11 +106,11 @@ Special cases for [If, For](#if-for), [Interface, Struct](#interface-struct), [S
 Several methods render curly braces, summarized below: 
 
 | Name                           | Prefix       | Separator | Example                              |
-| ------------------------------ | ------------ | --------- | ------------------------------------ |
+| ------------------------------ | ------------ | --------- | -------------------------------------|
 | [Block](#block)                |              | `\n`      | `func a() { ... }` or `if a { ... }` |
 | [Interface](#interface-struct) | `interface`  | `\n`      | `interface { ... }`                  |
 | [Struct](#interface-struct)    | `struct`     | `\n`      | `struct { ... }`                     |
-| [Values](#values)              |              | `,`       | `[]int{1, 2}`                        |
+| [Values](#values)              |              | `,`       | `[]int{1, 2}` or `A{B: "c"}`         |
 
 ### Block
 {{ "Block[:2]" | doc }}
@@ -215,10 +215,11 @@ Switch, Select, Case and Block are used to build switch or select statements:
 
 {{ "ExampleValues" | example }}
 
-### Dict
 {{ "Dict" | doc }}
 
-{{ "ExampleDict" | example }}
+{{ "ExampleValues_dict_multiple" | example }}
+
+{{ "ExampleValues_dict_composite" | example }}
 
 {{ "DictFunc[0]" | doc }}
 

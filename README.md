@@ -190,11 +190,11 @@ fmt.Printf("%#v", c)
 Several methods render curly braces, summarized below: 
 
 | Name                           | Prefix       | Separator | Example                              |
-| ------------------------------ | ------------ | --------- | ------------------------------------ |
+| ------------------------------ | ------------ | --------- | -------------------------------------|
 | [Block](#block)                |              | `\n`      | `func a() { ... }` or `if a { ... }` |
 | [Interface](#interface-struct) | `interface`  | `\n`      | `interface { ... }`                  |
 | [Struct](#interface-struct)    | `struct`     | `\n`      | `struct { ... }`                     |
-| [Values](#values)              |              | `,`       | `[]int{1, 2}`                        |
+| [Values](#values)              |              | `,`       | `[]int{1, 2}` or `A{B: "c"}`         |
 
 ### Block
 Block renders a statement list enclosed by curly braces. Use for code blocks.
@@ -442,7 +442,7 @@ fmt.Printf("%#v", c)
 Map renders the keyword followed by a single item enclosed by square brackets. Use for map definitions.
 
 ```go
-c := Id("a").Op(":=").Map(String()).String().Dict(nil)
+c := Id("a").Op(":=").Map(String()).String().Values()
 fmt.Printf("%#v", c)
 // Output:
 // a := map[string]string{}
@@ -482,30 +482,42 @@ fmt.Printf("%#v", c)
 // []string{"a", "b"}
 ```
 
-### Dict
-Dict takes a map[Code]Code and renders a list of colon separated key value
-pairs, enclosed in curly braces. Use for map or composite literals.
+Dict renders as key/value pairs. Use with Values for map or composite
+literals.
 
 ```go
-c := Id("a").Op(":=").Map(String()).String().Dict(map[Code]Code{
+c := Map(String()).String().Values(Dict{
 	Lit("a"):	Lit("b"),
 	Lit("c"):	Lit("d"),
 })
 fmt.Printf("%#v", c)
 // Output:
-// a := map[string]string{
+// map[string]string{
 // 	"a": "b",
 // 	"c": "d",
 // }
 ```
 
-DictFunc executes a func(map[Code]Code) to generate the value.
+```go
+c := Op("&").Id("Person").Values(Dict{
+	Id("Age"):	Lit(1),
+	Id("Name"):	Lit("a"),
+})
+fmt.Printf("%#v", c)
+// Output:
+// &Person{
+// 	Age:  1,
+// 	Name: "a",
+// }
+```
+
+DictFunc executes a func(Dict) to generate the value.
 
 ```go
-c := Id("a").Op(":=").Map(String()).String().DictFunc(func(m map[Code]Code) {
-	m[Lit("a")] = Lit("b")
-	m[Lit("c")] = Lit("d")
-})
+c := Id("a").Op(":=").Map(String()).String().Values(DictFunc(func(d Dict) {
+	d[Lit("a")] = Lit("b")
+	d[Lit("c")] = Lit("d")
+}))
 fmt.Printf("%#v", c)
 // Output:
 // a := map[string]string{

@@ -8,6 +8,41 @@ import (
 	. "github.com/davelondon/jennifer/jen"
 )
 
+func ExampleValues_dict_single() {
+	c := Map(String()).String().Values(Dict{
+		Lit("a"): Lit("b"),
+	})
+	fmt.Printf("%#v", c)
+	// Output:
+	// map[string]string{"a": "b"}
+}
+
+func ExampleValues_dict_multiple() {
+	c := Map(String()).String().Values(Dict{
+		Lit("a"): Lit("b"),
+		Lit("c"): Lit("d"),
+	})
+	fmt.Printf("%#v", c)
+	// Output:
+	// map[string]string{
+	// 	"a": "b",
+	// 	"c": "d",
+	// }
+}
+
+func ExampleValues_dict_composite() {
+	c := Op("&").Id("Person").Values(Dict{
+		Id("Age"):  Lit(1),
+		Id("Name"): Lit("a"),
+	})
+	fmt.Printf("%#v", c)
+	// Output:
+	// &Person{
+	// 	Age:  1,
+	// 	Name: "a",
+	// }
+}
+
 func ExampleAdd() {
 	ptr := Op("*")
 	c := Id("a").Op("=").Add(ptr).Id("b")
@@ -400,8 +435,6 @@ func Defer() *Statement
 func Defs(c ...Code) *Statement
 func DefsFunc(f func(*Group)) *Statement
 func Delete(c ...Code) *Statement
-func Dict(m map[Code]Code) *Statement
-func DictFunc(f func(map[Code]Code)) *Statement
 func Do(f func(*Statement)) *Statement
 func Else() *Statement
 func Empty() *Statement
@@ -905,14 +938,14 @@ func ExampleReturn() {
 }
 
 func ExampleMap() {
-	c := Id("a").Op(":=").Map(String()).String().Dict(nil)
+	c := Id("a").Op(":=").Map(String()).String().Values()
 	fmt.Printf("%#v", c)
 	// Output:
 	// a := map[string]string{}
 }
 
 func ExampleDict() {
-	c := Id("a").Op(":=").Map(String()).String().Dict(map[Code]Code{
+	c := Id("a").Op(":=").Map(String()).String().Values(Dict{
 		Lit("a"): Lit("b"),
 		Lit("c"): Lit("d"),
 	})
@@ -925,17 +958,17 @@ func ExampleDict() {
 }
 
 func ExampleDict_nil() {
-	c := Id("a").Op(":=").Map(String()).String().Dict(nil)
+	c := Id("a").Op(":=").Map(String()).String().Values()
 	fmt.Printf("%#v", c)
 	// Output:
 	// a := map[string]string{}
 }
 
 func ExampleDictFunc() {
-	c := Id("a").Op(":=").Map(String()).String().DictFunc(func(m map[Code]Code) {
-		m[Lit("a")] = Lit("b")
-		m[Lit("c")] = Lit("d")
-	})
+	c := Id("a").Op(":=").Map(String()).String().Values(DictFunc(func(d Dict) {
+		d[Lit("a")] = Lit("b")
+		d[Lit("c")] = Lit("d")
+	}))
 	fmt.Printf("%#v", c)
 	// Output:
 	// a := map[string]string{

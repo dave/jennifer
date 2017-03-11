@@ -81,6 +81,11 @@ func (g *Group) renderItems(f *File, w io.Writer) (isNull bool, err error) {
 			// output but adds a separator.
 			continue
 		}
+		if g.name == "values" {
+			if _, ok := code.(Dict); ok && len(g.items) > 1 {
+				panic("Error in Values: if Dict is used, must be one item only")
+			}
+		}
 		if first && g.separator == "\n" {
 			// For blocks separated with new lines, we always insert a new line
 			// before the first item (but only if there is an item).

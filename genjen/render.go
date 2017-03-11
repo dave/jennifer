@@ -63,7 +63,7 @@ func render(w io.Writer) error {
 		).Id(b.name).Params(
 			funcParams...,
 		).Op("*").Id("Statement").Block(
-			Id("g").Op(":=").Op("&").Id("Group").Dict(map[Code]Code{
+			Id("g").Op(":=").Op("&").Id("Group").Values(Dict{
 				Id("items"): Do(func(s *Statement) {
 					if b.variadic {
 						s.Id(b.parameters[0])
@@ -118,7 +118,7 @@ func render(w io.Writer) error {
 			).Id(funcName).Params(
 				funcFuncParams...,
 			).Op("*").Id("Statement").Block(
-				Id("g").Op(":=").Op("&").Id("Group").Dict(map[Code]Code{
+				Id("g").Op(":=").Op("&").Id("Group").Values(Dict{
 					Id("name"):      Lit(strings.ToLower(b.name)),
 					Id("open"):      Lit(b.opening),
 					Id("close"):     Lit(b.closing),
@@ -186,7 +186,7 @@ func render(w io.Writer) error {
 		file.Func().Params(
 			Id("s").Op("*").Id("Statement"),
 		).Id(t.name).Params().Op("*").Id("Statement").Block(
-			Id("t").Op(":=").Id("token").Dict(map[Code]Code{
+			Id("t").Op(":=").Id("token").Values(Dict{
 				Id("typ"):     Id(t.tokenType),
 				Id("content"): Lit(t.token),
 			}),
