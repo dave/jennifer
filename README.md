@@ -397,31 +397,31 @@ fmt.Printf("%#v", c)
 Switch, Select, Case and Block are used to build switch or select statements:
 
 ```go
-c := Switch(Id("a")).Block(
-	Case(Lit("1")).Block(
-		Return(Lit(1)),
+c := Switch(Id("value").Dot("Kind").Call()).Block(
+	Case(Qual("reflect", "Float32"), Qual("reflect", "Float64")).Block(
+		Return(Lit("float")),
 	),
-	Case(Lit("2"), Lit("3")).Block(
-		Return(Lit(2)),
+	Case(Qual("reflect", "Bool")).Block(
+		Return(Lit("bool")),
 	),
-	Case(Lit("4")).Block(
+	Case(Qual("reflect", "Uintptr")).Block(
 		Fallthrough(),
 	),
 	Default().Block(
-		Return(Lit(3)),
+		Return(Lit("none")),
 	),
 )
 fmt.Printf("%#v", c)
 // Output:
-// switch a {
-// case "1":
-// 	return 1
-// case "2", "3":
-// 	return 2
-// case "4":
+// switch value.Kind() {
+// case reflect.Float32, reflect.Float64:
+// 	return "float"
+// case reflect.Bool:
+// 	return "bool"
+// case reflect.Uintptr:
 // 	fallthrough
 // default:
-// 	return 3
+// 	return "none"
 // }
 ```
 
