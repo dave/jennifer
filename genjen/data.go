@@ -34,7 +34,7 @@ var groups = []struct {
 	},
 	{
 		name:       "Values",
-		comment:    "renders a comma separated list enclosed by curly braces. Use for slice literals.",
+		comment:    "renders a comma separated list enclosed by curly braces. Use for slice or composite literals.",
 		variadic:   true,
 		opening:    "{",
 		closing:    "}",
@@ -52,7 +52,7 @@ var groups = []struct {
 	},
 	{
 		name:       "Block",
-		comment:    "renders a statement list enclosed by curly braces. Use for code blocks. A special case applies when used directly after Case or Default, where it renders a statement list preceded by a colon. This allows use in switch and select statements.",
+		comment:    "renders a statement list enclosed by curly braces. Use for code blocks. A special case applies when used directly after Case or Default, where the braces are omitted. This allows use in switch and select statements.",
 		variadic:   true,
 		opening:    "{",
 		closing:    "}",
@@ -163,7 +163,7 @@ var groups = []struct {
 		comment:    "renders the keyword followed by a comma separated list.",
 		variadic:   true,
 		opening:    "case ",
-		closing:    "",
+		closing:    ":",
 		separator:  ",",
 		parameters: []string{"cases"},
 	},

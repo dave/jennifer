@@ -43,6 +43,12 @@ func (t token) render(f *File, w io.Writer, s *Statement) error {
 		if _, err := w.Write([]byte(fmt.Sprintf("%s", t.content))); err != nil {
 			return err
 		}
+		if t.content.(string) == "default" {
+			// Special case for Default, which must always be followed by a colon
+			if _, err := w.Write([]byte(":")); err != nil {
+				return err
+			}
+		}
 	case packageToken:
 		path := t.content.(string)
 		alias := f.register(path)
