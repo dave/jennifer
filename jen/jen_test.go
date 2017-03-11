@@ -179,21 +179,57 @@ var cases = []tc{
 		expect: `a(b, c)`,
 	},
 	{
-		desc: `map literal`,
-		code: Id("a").Dict(map[Code]Code{
+		desc: `map literal single`,
+		code: Id("a").Values(Dict{
 			Id("b"): Id("c"),
+		}),
+		expect: `a{b: c}`,
+	},
+	{
+		desc: `map literal null`,
+		code: Id("a").Values(Dict{
+			Null():  Id("c"),
+			Id("b"): Null(),
+			Id("b"): Id("c"),
+		}),
+		expect: `a{b: c}`,
+	},
+	{
+		desc: `map literal multiple`,
+		code: Id("a").Values(Dict{
+			Id("b"): Id("c"),
+			Id("d"): Id("e"),
 		}),
 		expect: `a{
 			b: c,
+			d: e,
 		}`,
 	},
 	{
-		desc: `map literal func`,
-		code: Id("a").DictFunc(func(m map[Code]Code) {
-			m[Id("b")] = Id("c")
-		}),
+		desc: `map literal func single`,
+		code: Id("a").Values(DictFunc(func(d Dict) {
+			d[Id("b")] = Id("c")
+		})),
+		expect: `a{b: c}`,
+	},
+	{
+		desc: `map literal func single null`,
+		code: Id("a").Values(DictFunc(func(d Dict) {
+			d[Null()] = Id("c")
+			d[Id("b")] = Null()
+			d[Id("b")] = Id("c")
+		})),
+		expect: `a{b: c}`,
+	},
+	{
+		desc: `map literal func multiple`,
+		code: Id("a").Values(DictFunc(func(d Dict) {
+			d[Id("b")] = Id("c")
+			d[Id("d")] = Id("e")
+		})),
 		expect: `a{
 			b: c,
+			d: e,
 		}`,
 	},
 	{
@@ -220,7 +256,7 @@ var cases = []tc{
 	},
 	{
 		desc: `dict should be ordered`,
-		code: Map(String()).Int().Dict(map[Code]Code{Id("z"): Lit(1), Id("a"): Lit(2)}),
+		code: Map(String()).Int().Values(Dict{Id("z"): Lit(1), Id("a"): Lit(2)}),
 		expect: `map[string]int{
 		a:2, 
 		z:1,
