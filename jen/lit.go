@@ -60,13 +60,13 @@ func (s *Statement) LitFunc(f func() interface{}) *Statement {
 }
 
 // Dict takes a map[Code]Code and renders a list of colon separated key value
-// pairs, enclosed in curly braces. Use for map literals.
+// pairs, enclosed in curly braces. Use for map or composite literals.
 func Dict(m map[Code]Code) *Statement {
 	return newStatement().Dict(m)
 }
 
 // Dict takes a map[Code]Code and renders a list of colon separated key value
-// pairs, enclosed in curly braces. Use for map literals.
+// pairs, enclosed in curly braces. Use for map or composite literals.
 func (g *Group) Dict(m map[Code]Code) *Statement {
 	s := Dict(m)
 	g.items = append(g.items, s)
@@ -74,7 +74,7 @@ func (g *Group) Dict(m map[Code]Code) *Statement {
 }
 
 // Dict takes a map[Code]Code and renders a list of colon separated key value
-// pairs, enclosed in curly braces. Use for map literals.
+// pairs, enclosed in curly braces. Use for map or composite literals.
 func (s *Statement) Dict(m map[Code]Code) *Statement {
 	d := dict{
 		m: m,
@@ -85,14 +85,14 @@ func (s *Statement) Dict(m map[Code]Code) *Statement {
 
 // DictFunc executes a func(map[Code]Code) to generate the value. The value is
 // rendered as a list of colon separated key value pairs, enclosed in curly
-// braces. Use for map literals.
+// braces. Use for map or composite literals.
 func DictFunc(f func(map[Code]Code)) *Statement {
 	return newStatement().DictFunc(f)
 }
 
 // DictFunc executes a func(map[Code]Code) to generate the value. The value is
 // rendered as a list of colon separated key value pairs, enclosed in curly
-// braces. Use for map literals.
+// braces. Use for map or composite literals.
 func (g *Group) DictFunc(f func(map[Code]Code)) *Statement {
 	s := DictFunc(f)
 	g.items = append(g.items, s)
@@ -101,7 +101,7 @@ func (g *Group) DictFunc(f func(map[Code]Code)) *Statement {
 
 // DictFunc executes a func(map[Code]Code) to generate the value. The value is
 // rendered as a list of colon separated key value pairs, enclosed in curly
-// braces. Use for map literals.
+// braces. Use for map or composite literals.
 func (s *Statement) DictFunc(f func(map[Code]Code)) *Statement {
 	m := map[Code]Code{}
 	f(m)

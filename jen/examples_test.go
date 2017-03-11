@@ -905,7 +905,7 @@ func ExampleReturn() {
 }
 
 func ExampleMap() {
-	c := Id("a").Op(":=").Map(String()).String().Values()
+	c := Id("a").Op(":=").Map(String()).String().Dict(nil)
 	fmt.Printf("%#v", c)
 	// Output:
 	// a := map[string]string{}
@@ -1021,9 +1021,7 @@ func ExampleFor() {
 func ExampleNewFile() {
 	f := NewFile("main")
 	f.Func().Id("main").Params().Block(
-		Qual("fmt", "Println").Call(
-			Lit("Hello, world"),
-		),
+		Qual("fmt", "Println").Call(Lit("Hello, world")),
 	)
 	fmt.Printf("%#v", f)
 	// Output:

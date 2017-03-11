@@ -79,19 +79,19 @@ func (s *Statement) ListFunc(f func(*Group)) *Statement {
 	return s
 }
 
-// Values renders a comma separated list enclosed by curly braces. Use for slice literals.
+// Values renders a comma separated list enclosed by curly braces. Use for slice or composite literals.
 func Values(values ...Code) *Statement {
 	return newStatement().Values(values...)
 }
 
-// Values renders a comma separated list enclosed by curly braces. Use for slice literals.
+// Values renders a comma separated list enclosed by curly braces. Use for slice or composite literals.
 func (g *Group) Values(values ...Code) *Statement {
 	s := Values(values...)
 	g.items = append(g.items, s)
 	return s
 }
 
-// Values renders a comma separated list enclosed by curly braces. Use for slice literals.
+// Values renders a comma separated list enclosed by curly braces. Use for slice or composite literals.
 func (s *Statement) Values(values ...Code) *Statement {
 	g := &Group{
 		close:     "}",
@@ -104,19 +104,19 @@ func (s *Statement) Values(values ...Code) *Statement {
 	return s
 }
 
-// ValuesFunc renders a comma separated list enclosed by curly braces. Use for slice literals.
+// ValuesFunc renders a comma separated list enclosed by curly braces. Use for slice or composite literals.
 func ValuesFunc(f func(*Group)) *Statement {
 	return newStatement().ValuesFunc(f)
 }
 
-// ValuesFunc renders a comma separated list enclosed by curly braces. Use for slice literals.
+// ValuesFunc renders a comma separated list enclosed by curly braces. Use for slice or composite literals.
 func (g *Group) ValuesFunc(f func(*Group)) *Statement {
 	s := ValuesFunc(f)
 	g.items = append(g.items, s)
 	return s
 }
 
-// ValuesFunc renders a comma separated list enclosed by curly braces. Use for slice literals.
+// ValuesFunc renders a comma separated list enclosed by curly braces. Use for slice or composite literals.
 func (s *Statement) ValuesFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     "}",
@@ -179,19 +179,19 @@ func (s *Statement) IndexFunc(f func(*Group)) *Statement {
 	return s
 }
 
-// Block renders a statement list enclosed by curly braces. Use for code blocks. A special case applies when used directly after Case or Default, where it renders a statement list preceded by a colon. This allows use in switch and select statements.
+// Block renders a statement list enclosed by curly braces. Use for code blocks. A special case applies when used directly after Case or Default, where the braces are omitted. This allows use in switch and select statements.
 func Block(statements ...Code) *Statement {
 	return newStatement().Block(statements...)
 }
 
-// Block renders a statement list enclosed by curly braces. Use for code blocks. A special case applies when used directly after Case or Default, where it renders a statement list preceded by a colon. This allows use in switch and select statements.
+// Block renders a statement list enclosed by curly braces. Use for code blocks. A special case applies when used directly after Case or Default, where the braces are omitted. This allows use in switch and select statements.
 func (g *Group) Block(statements ...Code) *Statement {
 	s := Block(statements...)
 	g.items = append(g.items, s)
 	return s
 }
 
-// Block renders a statement list enclosed by curly braces. Use for code blocks. A special case applies when used directly after Case or Default, where it renders a statement list preceded by a colon. This allows use in switch and select statements.
+// Block renders a statement list enclosed by curly braces. Use for code blocks. A special case applies when used directly after Case or Default, where the braces are omitted. This allows use in switch and select statements.
 func (s *Statement) Block(statements ...Code) *Statement {
 	g := &Group{
 		close:     "}",
@@ -204,19 +204,19 @@ func (s *Statement) Block(statements ...Code) *Statement {
 	return s
 }
 
-// BlockFunc renders a statement list enclosed by curly braces. Use for code blocks. A special case applies when used directly after Case or Default, where it renders a statement list preceded by a colon. This allows use in switch and select statements.
+// BlockFunc renders a statement list enclosed by curly braces. Use for code blocks. A special case applies when used directly after Case or Default, where the braces are omitted. This allows use in switch and select statements.
 func BlockFunc(f func(*Group)) *Statement {
 	return newStatement().BlockFunc(f)
 }
 
-// BlockFunc renders a statement list enclosed by curly braces. Use for code blocks. A special case applies when used directly after Case or Default, where it renders a statement list preceded by a colon. This allows use in switch and select statements.
+// BlockFunc renders a statement list enclosed by curly braces. Use for code blocks. A special case applies when used directly after Case or Default, where the braces are omitted. This allows use in switch and select statements.
 func (g *Group) BlockFunc(f func(*Group)) *Statement {
 	s := BlockFunc(f)
 	g.items = append(g.items, s)
 	return s
 }
 
-// BlockFunc renders a statement list enclosed by curly braces. Use for code blocks. A special case applies when used directly after Case or Default, where it renders a statement list preceded by a colon. This allows use in switch and select statements.
+// BlockFunc renders a statement list enclosed by curly braces. Use for code blocks. A special case applies when used directly after Case or Default, where the braces are omitted. This allows use in switch and select statements.
 func (s *Statement) BlockFunc(f func(*Group)) *Statement {
 	g := &Group{
 		close:     "}",
@@ -744,7 +744,7 @@ func (g *Group) Case(cases ...Code) *Statement {
 // Case renders the keyword followed by a comma separated list.
 func (s *Statement) Case(cases ...Code) *Statement {
 	g := &Group{
-		close:     "",
+		close:     ":",
 		items:     cases,
 		name:      "case",
 		open:      "case ",
@@ -769,7 +769,7 @@ func (g *Group) CaseFunc(f func(*Group)) *Statement {
 // CaseFunc renders the keyword followed by a comma separated list.
 func (s *Statement) CaseFunc(f func(*Group)) *Statement {
 	g := &Group{
-		close:     "",
+		close:     ":",
 		name:      "case",
 		open:      "case ",
 		separator: ",",
