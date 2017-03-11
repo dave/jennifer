@@ -110,12 +110,12 @@ f.Func().Id("init").Params().Block(
 fmt.Printf("%#v", f)
 // Output:
 // package c
-// 
+//
 // import (
 // 	f "d.e/f"
 // 	f1 "g.h/f"
 // )
-// 
+//
 // func init() {
 // 	Foo()    // Local package - name is omitted.
 // 	f.Bar()  // Import is automatically added.
@@ -575,7 +575,7 @@ f.Func().Id("Foo").Params().String().Block(
 fmt.Printf("%#v", f)
 // Output:
 // package a
-// 
+//
 // // Foo returns the string "foo"
 // func Foo() string {
 // 	return "foo" // return the string foo
@@ -790,7 +790,7 @@ f.Func().Id("main").Params().Block(
 fmt.Printf("%#v", f)
 // Output:
 // package main
-// 
+//
 // func main() {
 // 	Foo()
 // }
@@ -814,7 +814,7 @@ if err != nil {
 }
 // Output:
 // package a
-// 
+//
 // func main() {}
 ```
 
@@ -828,9 +828,9 @@ f.Func().Id("init").Params().Block()
 fmt.Printf("%#v", f)
 // Output:
 // package c
-// 
+//
 // import _ "a"
-// 
+//
 // func init() {}
 ```
 
@@ -848,7 +848,7 @@ fmt.Printf("%#v", f)
 // // a
 // // b
 // package c
-// 
+//
 // func init() {}
 ```
 
@@ -865,9 +865,9 @@ f.Func().Id("main").Params().Block(
 fmt.Printf("%#v", f)
 // Output:
 // package c
-// 
+//
 // import pkg_fmt "fmt"
-// 
+//
 // func main() {
 // 	pkg_fmt.Println()
 // }

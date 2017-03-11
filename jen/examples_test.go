@@ -800,7 +800,6 @@ func ExampleSwitch() {
 }
 
 func ExampleTag() {
-	// Note: Tags are ordered by key when rendered
 	c := Type().Id("foo").Struct(
 		Id("A").String().Tag(map[string]string{"json": "a"}),
 		Id("B").Int().Tag(map[string]string{"json": "b", "bar": "baz"}),
