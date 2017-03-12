@@ -4,7 +4,7 @@ import (
 	"io"
 	"strings"
 
-	. "github.com/davelondon/jennifer/jen"
+	. "github.com/dave/jennifer/jen"
 )
 
 func render(w io.Writer) error {

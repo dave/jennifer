@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	. "github.com/davelondon/jennifer/jen"
+	. "github.com/dave/jennifer/jen"
 )
 
 func TestNil(t *testing.T) {

@@ -5,7 +5,7 @@ import (
 
 	"bytes"
 
-	. "github.com/davelondon/jennifer/jen"
+	. "github.com/dave/jennifer/jen"
 )
 
 func ExampleValues_dict_single() {
