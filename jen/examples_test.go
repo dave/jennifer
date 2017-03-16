@@ -15,7 +15,7 @@ func ExampleLit_bool_true() {
 	// true
 }
 
-func ExampleLit_bool_flase() {
+func ExampleLit_bool_false() {
 	c := Lit(false)
 	fmt.Printf("%#v", c)
 	// Output:
