@@ -52,3 +52,97 @@ func (s *Statement) LitFunc(f func() interface{}) *Statement {
 	*s = append(*s, t)
 	return s
 }
+
+// LitRune renders a rune literal.
+func LitRune(v rune) *Statement {
+	return newStatement().LitRune(v)
+}
+
+// LitRune renders a rune literal.
+func (g *Group) LitRune(v rune) *Statement {
+	s := LitRune(v)
+	g.items = append(g.items, s)
+	return s
+}
+
+// LitRune renders a rune literal.
+func (s *Statement) LitRune(v rune) *Statement {
+	t := token{
+		typ:     literalRuneToken,
+		content: v,
+	}
+	*s = append(*s, t)
+	return s
+}
+
+// LitRuneFunc renders a rune literal. LitRuneFunc generates the value to
+// render by executing the provided function.
+func LitRuneFunc(f func() rune) *Statement {
+	return newStatement().LitRuneFunc(f)
+}
+
+// LitRuneFunc renders a rune literal. LitRuneFunc generates the value to
+// render by executing the provided function.
+func (g *Group) LitRuneFunc(f func() rune) *Statement {
+	s := LitRuneFunc(f)
+	g.items = append(g.items, s)
+	return s
+}
+
+// LitRuneFunc renders a rune literal. LitRuneFunc generates the value to
+// render by executing the provided function.
+func (s *Statement) LitRuneFunc(f func() rune) *Statement {
+	t := token{
+		typ:     literalRuneToken,
+		content: f(),
+	}
+	*s = append(*s, t)
+	return s
+}
+
+// LitByte renders a byte literal.
+func LitByte(v byte) *Statement {
+	return newStatement().LitByte(v)
+}
+
+// LitByte renders a byte literal.
+func (g *Group) LitByte(v byte) *Statement {
+	s := LitByte(v)
+	g.items = append(g.items, s)
+	return s
+}
+
+// LitByte renders a byte literal.
+func (s *Statement) LitByte(v byte) *Statement {
+	t := token{
+		typ:     literalByteToken,
+		content: v,
+	}
+	*s = append(*s, t)
+	return s
+}
+
+// LitByteFunc renders a byte literal. LitByteFunc generates the value to
+// render by executing the provided function.
+func LitByteFunc(f func() byte) *Statement {
+	return newStatement().LitByteFunc(f)
+}
+
+// LitByteFunc renders a byte literal. LitByteFunc generates the value to
+// render by executing the provided function.
+func (g *Group) LitByteFunc(f func() byte) *Statement {
+	s := LitByteFunc(f)
+	g.items = append(g.items, s)
+	return s
+}
+
+// LitByteFunc renders a byte literal. LitByteFunc generates the value to
+// render by executing the provided function.
+func (s *Statement) LitByteFunc(f func() byte) *Statement {
+	t := token{
+		typ:     literalByteToken,
+		content: f(),
+	}
+	*s = append(*s, t)
+	return s
+}

@@ -3,20 +3,23 @@ package jen
 import (
 	"fmt"
 	"io"
+	"strconv"
 )
 
 type tokenType string
 
 const (
-	packageToken    tokenType = "package"
-	identifierToken tokenType = "identifier"
-	qualifiedToken  tokenType = "qualified"
-	keywordToken    tokenType = "keyword"
-	operatorToken   tokenType = "operator"
-	delimiterToken  tokenType = "delimiter"
-	literalToken    tokenType = "literal"
-	nullToken       tokenType = "null"
-	layoutToken     tokenType = "layout"
+	packageToken     tokenType = "package"
+	identifierToken  tokenType = "identifier"
+	qualifiedToken   tokenType = "qualified"
+	keywordToken     tokenType = "keyword"
+	operatorToken    tokenType = "operator"
+	delimiterToken   tokenType = "delimiter"
+	literalToken     tokenType = "literal"
+	literalRuneToken tokenType = "literal_rune"
+	literalByteToken tokenType = "literal_byte"
+	nullToken        tokenType = "null"
+	layoutToken      tokenType = "layout"
 )
 
 type token struct {
@@ -35,8 +38,39 @@ func (t token) isNull(f *File) bool {
 func (t token) render(f *File, w io.Writer, s *Statement) error {
 	switch t.typ {
 	case literalToken:
-		// TODO: Does this work in all cases?
-		if _, err := w.Write([]byte(fmt.Sprintf("%#v", t.content))); err != nil {
+		var out string
+		switch v := t.content.(type) {
+		case bool, string, int, complex128:
+			// default constant types can be left bare
+			out = fmt.Sprintf("%#v", t.content)
+		case float64:
+			// float is a special case becase fmt package doesn't format correctly
+			if v == float64(int64(v)) {
+				// value is a whole number, so fmt package will omit the
+				// trailing ".0", so we add it.
+				// TODO: More testing needed for this. Corner cases?
+				out = fmt.Sprintf("%#v.0", t.content)
+			} else {
+				out = fmt.Sprintf("%#v", t.content)
+			}
+		case float32, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, uintptr:
+			// other built-in types need specific type info
+			out = fmt.Sprintf("%T(%#v)", t.content, t.content)
+		case complex64:
+			// fmt package already renders parenthesis for complex64
+			out = fmt.Sprintf("%T%#v", t.content, t.content)
+		default:
+			out = fmt.Sprintf("%#v", t.content)
+		}
+		if _, err := w.Write([]byte(out)); err != nil {
+			return err
+		}
+	case literalRuneToken:
+		if _, err := w.Write([]byte(strconv.QuoteRune(t.content.(rune)))); err != nil {
+			return err
+		}
+	case literalByteToken:
+		if _, err := w.Write([]byte(fmt.Sprintf("byte(%#v)", t.content))); err != nil {
 			return err
 		}
 	case keywordToken, operatorToken, layoutToken, delimiterToken:

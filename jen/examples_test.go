@@ -8,6 +8,189 @@ import (
 	. "github.com/dave/jennifer/jen"
 )
 
+func ExampleLit_bool_true() {
+	c := Lit(true)
+	fmt.Printf("%#v", c)
+	// Output:
+	// true
+}
+
+func ExampleLit_bool_flase() {
+	c := Lit(false)
+	fmt.Printf("%#v", c)
+	// Output:
+	// false
+}
+
+func ExampleLit_byte() {
+	// Lit can't tell the difference between byte and uint8. Use LitByte to
+	// render byte literals.
+	c := Lit(byte(0x1))
+	fmt.Printf("%#v", c)
+	// Output:
+	// uint8(0x1)
+}
+
+func ExampleLit_complex64() {
+	c := Lit(complex64(0 + 0i))
+	fmt.Printf("%#v", c)
+	// Output:
+	// complex64(0 + 0i)
+}
+
+func ExampleLit_complex128() {
+	c := Lit(0 + 0i)
+	fmt.Printf("%#v", c)
+	// Output:
+	// (0 + 0i)
+}
+
+func ExampleLit_float32() {
+	c := Lit(float32(1))
+	fmt.Printf("%#v", c)
+	// Output:
+	// float32(1)
+}
+
+func ExampleLit_float64_one_point_zero() {
+	c := Lit(1.0)
+	fmt.Printf("%#v", c)
+	// Output:
+	// 1.0
+}
+
+func ExampleLit_float64_zero() {
+	c := Lit(0.0)
+	fmt.Printf("%#v", c)
+	// Output:
+	// 0.0
+}
+
+func ExampleLit_int() {
+	c := Lit(1)
+	fmt.Printf("%#v", c)
+	// Output:
+	// 1
+}
+
+func ExampleLit_int8() {
+	c := Lit(int8(1))
+	fmt.Printf("%#v", c)
+	// Output:
+	// int8(1)
+}
+
+func ExampleLit_int16() {
+	c := Lit(int16(1))
+	fmt.Printf("%#v", c)
+	// Output:
+	// int16(1)
+}
+
+func ExampleLit_int32() {
+	c := Lit(int32(1))
+	fmt.Printf("%#v", c)
+	// Output:
+	// int32(1)
+}
+
+func ExampleLit_int64() {
+	c := Lit(int64(1))
+	fmt.Printf("%#v", c)
+	// Output:
+	// int64(1)
+}
+
+func ExampleLit_uint() {
+	c := Lit(uint(0x1))
+	fmt.Printf("%#v", c)
+	// Output:
+	// uint(0x1)
+}
+
+func ExampleLit_uint8() {
+	c := Lit(uint8(0x1))
+	fmt.Printf("%#v", c)
+	// Output:
+	// uint8(0x1)
+}
+
+func ExampleLit_uint16() {
+	c := Lit(uint16(0x1))
+	fmt.Printf("%#v", c)
+	// Output:
+	// uint16(0x1)
+}
+
+func ExampleLit_uint32() {
+	c := Lit(uint32(0x1))
+	fmt.Printf("%#v", c)
+	// Output:
+	// uint32(0x1)
+}
+
+func ExampleLit_uint64() {
+	c := Lit(uint64(0x1))
+	fmt.Printf("%#v", c)
+	// Output:
+	// uint64(0x1)
+}
+
+func ExampleLit_uintptr() {
+	c := Lit(uintptr(0x1))
+	fmt.Printf("%#v", c)
+	// Output:
+	// uintptr(0x1)
+}
+
+func ExampleLit_rune() {
+	// Lit can't tell the difference between rune and int32. Use LitRune to
+	// render rune literals.
+	c := Lit('x')
+	fmt.Printf("%#v", c)
+	// Output:
+	// int32(120)
+}
+
+func ExampleLitRune() {
+	c := LitRune('x')
+	fmt.Printf("%#v", c)
+	// Output:
+	// 'x'
+}
+
+func ExampleLitRuneFunc() {
+	c := LitRuneFunc(func() rune {
+		return '\t'
+	})
+	fmt.Printf("%#v", c)
+	// Output:
+	// '\t'
+}
+
+func ExampleLitByte() {
+	c := LitByte(byte(1))
+	fmt.Printf("%#v", c)
+	// Output:
+	// byte(0x1)
+}
+
+func ExampleLitByteFunc() {
+	c := LitByteFunc(func() byte {
+		return byte(2)
+	})
+	fmt.Printf("%#v", c)
+	// Output:
+	// byte(0x2)
+}
+
+func ExampleLit_string() {
+	c := Lit("foo")
+	fmt.Printf("%#v", c)
+	// Output:
+	// "foo"
+}
+
 func ExampleValues_dict_single() {
 	c := Map(String()).String().Values(Dict{
 		Lit("a"): Lit("b"),
