@@ -66,6 +66,20 @@ func ExampleLit_float64_zero() {
 	// 0.0
 }
 
+func ExampleLit_float64_negative() {
+	c := Lit(-0.1)
+	fmt.Printf("%#v", c)
+	// Output:
+	// -0.1
+}
+
+func ExampleLit_float64_negative_whole() {
+	c := Lit(-1.0)
+	fmt.Printf("%#v", c)
+	// Output:
+	// -1.0
+}
+
 func ExampleLit_int() {
 	c := Lit(1)
 	fmt.Printf("%#v", c)
