@@ -570,7 +570,8 @@ will render the untyped constant.
 | `Lit("foo")`  | `"foo"`    |
 | `Lit(0 + 1i)` | `(0 + 1i)` |
 
-For all other built-in types (float32, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, uintptr, complex64), Lit will also render the type.
+For all other built-in types (float32, int8, int16, int32, int64, uint, uint8, 
+uint16, uint32, uint64, uintptr, complex64), Lit will also render the type.
 
 | Code                     | Output              |
 | ------------------------ | ------------------- |
