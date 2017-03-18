@@ -1,7 +1,6 @@
 language: go
 go:
-    - 1.8
-go_import_path: github.com/dave/jennifer/
+    - 1.x
 notificaitons:
   email:
     recipients: dave@brophy.uk
@@ -10,6 +9,6 @@ install:
   - go get -u github.com/dave/courtney/...
   - go get -t -v ./...
 script:
-  - courtney github.com/dave/jennifer/...
+  - courtney ./...
 after_success:
   - bash <(curl -s https://codecov.io/bash)
