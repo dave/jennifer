@@ -84,12 +84,13 @@ func render(w io.Writer) error {
 			Return(Id("s")),
 		)
 
-		funcComment := Commentf("%sFunc %s", b.name, b.comment)
-		funcFuncParams := []Code{Id("f").Func().Params(Op("*").Id("Group"))}
-		funcCallParams := []Code{Id("f")}
-
 		if b.variadic && !b.preventFunc {
+
 			funcName := b.name + "Func"
+			funcComment := Commentf("%sFunc %s", b.name, b.comment)
+			funcFuncParams := []Code{Id("f").Func().Params(Op("*").Id("Group"))}
+			funcCallParams := []Code{Id("f")}
+
 			addFunctionAndGroupMethod(
 				file,
 				funcName,
