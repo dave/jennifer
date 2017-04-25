@@ -35,7 +35,7 @@ Jennifer has a comprehensive suite of examples - see [godoc](https://godoc.org/g
 it uses data in [data.go](https://github.com/dave/jennifer/blob/master/genjen/data.go), which is processed by [render.go](https://github.com/dave/jennifer/blob/master/genjen/render.go) to create [generated.go](https://github.com/dave/jennifer/blob/master/jen/generated.go). More examples of jennifer being used in the real-world:
 
 * [go-contentful-generator](https://github.com/nicolai86/go-contentful-generator)
-* [kego](https://github.com/kego/ke/blob/master/process/generate/structs.go)
+* [frizz](https://github.com/frizz/frizz/blob/master/process/generate/structs.go)
 
 ### Rendering
 For testing, a File or Statement can be rendered with the fmt package 
