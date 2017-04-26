@@ -301,6 +301,8 @@ render rune and byte literals.
 All constructs that accept a variadic list of items are paired with GroupFunc 
 functions that accept a func(*Group). Use for embedding logic.
 
+{{ "ExampleValuesFunc" | example }}
+
 {{ "ExampleBlockFunc" | example }}
 
 ### Add

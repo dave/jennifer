@@ -657,17 +657,31 @@ All constructs that accept a variadic list of items are paired with GroupFunc
 functions that accept a func(*Group). Use for embedding logic.
 
 ```go
+c := Id("numbers").Op(":=").Index().Int().ValuesFunc(func(g *Group) {
+	for i := 0; i <= 5; i++ {
+		g.Lit(i)
+	}
+})
+fmt.Printf("%#v", c)
+// Output:
+// numbers := []int{0, 1, 2, 3, 4, 5}
+```
+
+```go
 increment := true
+name := "a"
 c := Func().Id("a").Params().BlockFunc(func(g *Group) {
+	g.Id(name).Op("=").Lit(1)
 	if increment {
-		g.Id("a").Op("++")
+		g.Id(name).Op("++")
 	} else {
-		g.Id("a").Op("--")
+		g.Id(name).Op("--")
 	}
 })
 fmt.Printf("%#v", c)
 // Output:
 // func a() {
+// 	a = 1
 // 	a++
 // }
 ```
