@@ -1253,11 +1253,13 @@ func (s *Statement) Bool() *Statement {
 
 // Byte renders the byte identifier.
 func Byte() *Statement {
+	// notest
 	return newStatement().Byte()
 }
 
 // Byte renders the byte identifier.
 func (g *Group) Byte() *Statement {
+	// notest
 	s := Byte()
 	g.items = append(g.items, s)
 	return s
@@ -1265,6 +1267,7 @@ func (g *Group) Byte() *Statement {
 
 // Byte renders the byte identifier.
 func (s *Statement) Byte() *Statement {
+	// notest
 	t := token{
 		content: "byte",
 		typ:     identifierToken,
@@ -1275,11 +1278,13 @@ func (s *Statement) Byte() *Statement {
 
 // Complex64 renders the complex64 identifier.
 func Complex64() *Statement {
+	// notest
 	return newStatement().Complex64()
 }
 
 // Complex64 renders the complex64 identifier.
 func (g *Group) Complex64() *Statement {
+	// notest
 	s := Complex64()
 	g.items = append(g.items, s)
 	return s
@@ -1287,6 +1292,7 @@ func (g *Group) Complex64() *Statement {
 
 // Complex64 renders the complex64 identifier.
 func (s *Statement) Complex64() *Statement {
+	// notest
 	t := token{
 		content: "complex64",
 		typ:     identifierToken,
@@ -1297,11 +1303,13 @@ func (s *Statement) Complex64() *Statement {
 
 // Complex128 renders the complex128 identifier.
 func Complex128() *Statement {
+	// notest
 	return newStatement().Complex128()
 }
 
 // Complex128 renders the complex128 identifier.
 func (g *Group) Complex128() *Statement {
+	// notest
 	s := Complex128()
 	g.items = append(g.items, s)
 	return s
@@ -1309,6 +1317,7 @@ func (g *Group) Complex128() *Statement {
 
 // Complex128 renders the complex128 identifier.
 func (s *Statement) Complex128() *Statement {
+	// notest
 	t := token{
 		content: "complex128",
 		typ:     identifierToken,
@@ -1319,11 +1328,13 @@ func (s *Statement) Complex128() *Statement {
 
 // Error renders the error identifier.
 func Error() *Statement {
+	// notest
 	return newStatement().Error()
 }
 
 // Error renders the error identifier.
 func (g *Group) Error() *Statement {
+	// notest
 	s := Error()
 	g.items = append(g.items, s)
 	return s
@@ -1331,6 +1342,7 @@ func (g *Group) Error() *Statement {
 
 // Error renders the error identifier.
 func (s *Statement) Error() *Statement {
+	// notest
 	t := token{
 		content: "error",
 		typ:     identifierToken,
@@ -1341,11 +1353,13 @@ func (s *Statement) Error() *Statement {
 
 // Float32 renders the float32 identifier.
 func Float32() *Statement {
+	// notest
 	return newStatement().Float32()
 }
 
 // Float32 renders the float32 identifier.
 func (g *Group) Float32() *Statement {
+	// notest
 	s := Float32()
 	g.items = append(g.items, s)
 	return s
@@ -1353,6 +1367,7 @@ func (g *Group) Float32() *Statement {
 
 // Float32 renders the float32 identifier.
 func (s *Statement) Float32() *Statement {
+	// notest
 	t := token{
 		content: "float32",
 		typ:     identifierToken,
@@ -1363,11 +1378,13 @@ func (s *Statement) Float32() *Statement {
 
 // Float64 renders the float64 identifier.
 func Float64() *Statement {
+	// notest
 	return newStatement().Float64()
 }
 
 // Float64 renders the float64 identifier.
 func (g *Group) Float64() *Statement {
+	// notest
 	s := Float64()
 	g.items = append(g.items, s)
 	return s
@@ -1375,6 +1392,7 @@ func (g *Group) Float64() *Statement {
 
 // Float64 renders the float64 identifier.
 func (s *Statement) Float64() *Statement {
+	// notest
 	t := token{
 		content: "float64",
 		typ:     identifierToken,
@@ -1385,11 +1403,13 @@ func (s *Statement) Float64() *Statement {
 
 // Int renders the int identifier.
 func Int() *Statement {
+	// notest
 	return newStatement().Int()
 }
 
 // Int renders the int identifier.
 func (g *Group) Int() *Statement {
+	// notest
 	s := Int()
 	g.items = append(g.items, s)
 	return s
@@ -1397,6 +1417,7 @@ func (g *Group) Int() *Statement {
 
 // Int renders the int identifier.
 func (s *Statement) Int() *Statement {
+	// notest
 	t := token{
 		content: "int",
 		typ:     identifierToken,
@@ -1407,11 +1428,13 @@ func (s *Statement) Int() *Statement {
 
 // Int8 renders the int8 identifier.
 func Int8() *Statement {
+	// notest
 	return newStatement().Int8()
 }
 
 // Int8 renders the int8 identifier.
 func (g *Group) Int8() *Statement {
+	// notest
 	s := Int8()
 	g.items = append(g.items, s)
 	return s
@@ -1419,6 +1442,7 @@ func (g *Group) Int8() *Statement {
 
 // Int8 renders the int8 identifier.
 func (s *Statement) Int8() *Statement {
+	// notest
 	t := token{
 		content: "int8",
 		typ:     identifierToken,
@@ -1429,11 +1453,13 @@ func (s *Statement) Int8() *Statement {
 
 // Int16 renders the int16 identifier.
 func Int16() *Statement {
+	// notest
 	return newStatement().Int16()
 }
 
 // Int16 renders the int16 identifier.
 func (g *Group) Int16() *Statement {
+	// notest
 	s := Int16()
 	g.items = append(g.items, s)
 	return s
@@ -1441,6 +1467,7 @@ func (g *Group) Int16() *Statement {
 
 // Int16 renders the int16 identifier.
 func (s *Statement) Int16() *Statement {
+	// notest
 	t := token{
 		content: "int16",
 		typ:     identifierToken,
@@ -1451,11 +1478,13 @@ func (s *Statement) Int16() *Statement {
 
 // Int32 renders the int32 identifier.
 func Int32() *Statement {
+	// notest
 	return newStatement().Int32()
 }
 
 // Int32 renders the int32 identifier.
 func (g *Group) Int32() *Statement {
+	// notest
 	s := Int32()
 	g.items = append(g.items, s)
 	return s
@@ -1463,6 +1492,7 @@ func (g *Group) Int32() *Statement {
 
 // Int32 renders the int32 identifier.
 func (s *Statement) Int32() *Statement {
+	// notest
 	t := token{
 		content: "int32",
 		typ:     identifierToken,
@@ -1473,11 +1503,13 @@ func (s *Statement) Int32() *Statement {
 
 // Int64 renders the int64 identifier.
 func Int64() *Statement {
+	// notest
 	return newStatement().Int64()
 }
 
 // Int64 renders the int64 identifier.
 func (g *Group) Int64() *Statement {
+	// notest
 	s := Int64()
 	g.items = append(g.items, s)
 	return s
@@ -1485,6 +1517,7 @@ func (g *Group) Int64() *Statement {
 
 // Int64 renders the int64 identifier.
 func (s *Statement) Int64() *Statement {
+	// notest
 	t := token{
 		content: "int64",
 		typ:     identifierToken,
@@ -1495,11 +1528,13 @@ func (s *Statement) Int64() *Statement {
 
 // Rune renders the rune identifier.
 func Rune() *Statement {
+	// notest
 	return newStatement().Rune()
 }
 
 // Rune renders the rune identifier.
 func (g *Group) Rune() *Statement {
+	// notest
 	s := Rune()
 	g.items = append(g.items, s)
 	return s
@@ -1507,6 +1542,7 @@ func (g *Group) Rune() *Statement {
 
 // Rune renders the rune identifier.
 func (s *Statement) Rune() *Statement {
+	// notest
 	t := token{
 		content: "rune",
 		typ:     identifierToken,
@@ -1517,11 +1553,13 @@ func (s *Statement) Rune() *Statement {
 
 // String renders the string identifier.
 func String() *Statement {
+	// notest
 	return newStatement().String()
 }
 
 // String renders the string identifier.
 func (g *Group) String() *Statement {
+	// notest
 	s := String()
 	g.items = append(g.items, s)
 	return s
@@ -1529,6 +1567,7 @@ func (g *Group) String() *Statement {
 
 // String renders the string identifier.
 func (s *Statement) String() *Statement {
+	// notest
 	t := token{
 		content: "string",
 		typ:     identifierToken,
@@ -1539,11 +1578,13 @@ func (s *Statement) String() *Statement {
 
 // Uint renders the uint identifier.
 func Uint() *Statement {
+	// notest
 	return newStatement().Uint()
 }
 
 // Uint renders the uint identifier.
 func (g *Group) Uint() *Statement {
+	// notest
 	s := Uint()
 	g.items = append(g.items, s)
 	return s
@@ -1551,6 +1592,7 @@ func (g *Group) Uint() *Statement {
 
 // Uint renders the uint identifier.
 func (s *Statement) Uint() *Statement {
+	// notest
 	t := token{
 		content: "uint",
 		typ:     identifierToken,
@@ -1561,11 +1603,13 @@ func (s *Statement) Uint() *Statement {
 
 // Uint8 renders the uint8 identifier.
 func Uint8() *Statement {
+	// notest
 	return newStatement().Uint8()
 }
 
 // Uint8 renders the uint8 identifier.
 func (g *Group) Uint8() *Statement {
+	// notest
 	s := Uint8()
 	g.items = append(g.items, s)
 	return s
@@ -1573,6 +1617,7 @@ func (g *Group) Uint8() *Statement {
 
 // Uint8 renders the uint8 identifier.
 func (s *Statement) Uint8() *Statement {
+	// notest
 	t := token{
 		content: "uint8",
 		typ:     identifierToken,
@@ -1583,11 +1628,13 @@ func (s *Statement) Uint8() *Statement {
 
 // Uint16 renders the uint16 identifier.
 func Uint16() *Statement {
+	// notest
 	return newStatement().Uint16()
 }
 
 // Uint16 renders the uint16 identifier.
 func (g *Group) Uint16() *Statement {
+	// notest
 	s := Uint16()
 	g.items = append(g.items, s)
 	return s
@@ -1595,6 +1642,7 @@ func (g *Group) Uint16() *Statement {
 
 // Uint16 renders the uint16 identifier.
 func (s *Statement) Uint16() *Statement {
+	// notest
 	t := token{
 		content: "uint16",
 		typ:     identifierToken,
@@ -1605,11 +1653,13 @@ func (s *Statement) Uint16() *Statement {
 
 // Uint32 renders the uint32 identifier.
 func Uint32() *Statement {
+	// notest
 	return newStatement().Uint32()
 }
 
 // Uint32 renders the uint32 identifier.
 func (g *Group) Uint32() *Statement {
+	// notest
 	s := Uint32()
 	g.items = append(g.items, s)
 	return s
@@ -1617,6 +1667,7 @@ func (g *Group) Uint32() *Statement {
 
 // Uint32 renders the uint32 identifier.
 func (s *Statement) Uint32() *Statement {
+	// notest
 	t := token{
 		content: "uint32",
 		typ:     identifierToken,
@@ -1627,11 +1678,13 @@ func (s *Statement) Uint32() *Statement {
 
 // Uint64 renders the uint64 identifier.
 func Uint64() *Statement {
+	// notest
 	return newStatement().Uint64()
 }
 
 // Uint64 renders the uint64 identifier.
 func (g *Group) Uint64() *Statement {
+	// notest
 	s := Uint64()
 	g.items = append(g.items, s)
 	return s
@@ -1639,6 +1692,7 @@ func (g *Group) Uint64() *Statement {
 
 // Uint64 renders the uint64 identifier.
 func (s *Statement) Uint64() *Statement {
+	// notest
 	t := token{
 		content: "uint64",
 		typ:     identifierToken,
@@ -1649,11 +1703,13 @@ func (s *Statement) Uint64() *Statement {
 
 // Uintptr renders the uintptr identifier.
 func Uintptr() *Statement {
+	// notest
 	return newStatement().Uintptr()
 }
 
 // Uintptr renders the uintptr identifier.
 func (g *Group) Uintptr() *Statement {
+	// notest
 	s := Uintptr()
 	g.items = append(g.items, s)
 	return s
@@ -1661,6 +1717,7 @@ func (g *Group) Uintptr() *Statement {
 
 // Uintptr renders the uintptr identifier.
 func (s *Statement) Uintptr() *Statement {
+	// notest
 	t := token{
 		content: "uintptr",
 		typ:     identifierToken,
@@ -1671,11 +1728,13 @@ func (s *Statement) Uintptr() *Statement {
 
 // True renders the true identifier.
 func True() *Statement {
+	// notest
 	return newStatement().True()
 }
 
 // True renders the true identifier.
 func (g *Group) True() *Statement {
+	// notest
 	s := True()
 	g.items = append(g.items, s)
 	return s
@@ -1683,6 +1742,7 @@ func (g *Group) True() *Statement {
 
 // True renders the true identifier.
 func (s *Statement) True() *Statement {
+	// notest
 	t := token{
 		content: "true",
 		typ:     identifierToken,
@@ -1693,11 +1753,13 @@ func (s *Statement) True() *Statement {
 
 // False renders the false identifier.
 func False() *Statement {
+	// notest
 	return newStatement().False()
 }
 
 // False renders the false identifier.
 func (g *Group) False() *Statement {
+	// notest
 	s := False()
 	g.items = append(g.items, s)
 	return s
@@ -1705,6 +1767,7 @@ func (g *Group) False() *Statement {
 
 // False renders the false identifier.
 func (s *Statement) False() *Statement {
+	// notest
 	t := token{
 		content: "false",
 		typ:     identifierToken,
@@ -1715,11 +1778,13 @@ func (s *Statement) False() *Statement {
 
 // Iota renders the iota identifier.
 func Iota() *Statement {
+	// notest
 	return newStatement().Iota()
 }
 
 // Iota renders the iota identifier.
 func (g *Group) Iota() *Statement {
+	// notest
 	s := Iota()
 	g.items = append(g.items, s)
 	return s
@@ -1727,6 +1792,7 @@ func (g *Group) Iota() *Statement {
 
 // Iota renders the iota identifier.
 func (s *Statement) Iota() *Statement {
+	// notest
 	t := token{
 		content: "iota",
 		typ:     identifierToken,
@@ -1737,11 +1803,13 @@ func (s *Statement) Iota() *Statement {
 
 // Nil renders the nil identifier.
 func Nil() *Statement {
+	// notest
 	return newStatement().Nil()
 }
 
 // Nil renders the nil identifier.
 func (g *Group) Nil() *Statement {
+	// notest
 	s := Nil()
 	g.items = append(g.items, s)
 	return s
@@ -1749,6 +1817,7 @@ func (g *Group) Nil() *Statement {
 
 // Nil renders the nil identifier.
 func (s *Statement) Nil() *Statement {
+	// notest
 	t := token{
 		content: "nil",
 		typ:     identifierToken,
@@ -1759,11 +1828,13 @@ func (s *Statement) Nil() *Statement {
 
 // Err renders the err identifier.
 func Err() *Statement {
+	// notest
 	return newStatement().Err()
 }
 
 // Err renders the err identifier.
 func (g *Group) Err() *Statement {
+	// notest
 	s := Err()
 	g.items = append(g.items, s)
 	return s
@@ -1771,6 +1842,7 @@ func (g *Group) Err() *Statement {
 
 // Err renders the err identifier.
 func (s *Statement) Err() *Statement {
+	// notest
 	t := token{
 		content: "err",
 		typ:     identifierToken,
@@ -1781,11 +1853,13 @@ func (s *Statement) Err() *Statement {
 
 // Break renders the break keyword.
 func Break() *Statement {
+	// notest
 	return newStatement().Break()
 }
 
 // Break renders the break keyword.
 func (g *Group) Break() *Statement {
+	// notest
 	s := Break()
 	g.items = append(g.items, s)
 	return s
@@ -1793,6 +1867,7 @@ func (g *Group) Break() *Statement {
 
 // Break renders the break keyword.
 func (s *Statement) Break() *Statement {
+	// notest
 	t := token{
 		content: "break",
 		typ:     keywordToken,
@@ -1803,11 +1878,13 @@ func (s *Statement) Break() *Statement {
 
 // Default renders the default keyword.
 func Default() *Statement {
+	// notest
 	return newStatement().Default()
 }
 
 // Default renders the default keyword.
 func (g *Group) Default() *Statement {
+	// notest
 	s := Default()
 	g.items = append(g.items, s)
 	return s
@@ -1815,6 +1892,7 @@ func (g *Group) Default() *Statement {
 
 // Default renders the default keyword.
 func (s *Statement) Default() *Statement {
+	// notest
 	t := token{
 		content: "default",
 		typ:     keywordToken,
@@ -1825,11 +1903,13 @@ func (s *Statement) Default() *Statement {
 
 // Func renders the func keyword.
 func Func() *Statement {
+	// notest
 	return newStatement().Func()
 }
 
 // Func renders the func keyword.
 func (g *Group) Func() *Statement {
+	// notest
 	s := Func()
 	g.items = append(g.items, s)
 	return s
@@ -1837,6 +1917,7 @@ func (g *Group) Func() *Statement {
 
 // Func renders the func keyword.
 func (s *Statement) Func() *Statement {
+	// notest
 	t := token{
 		content: "func",
 		typ:     keywordToken,
@@ -1847,11 +1928,13 @@ func (s *Statement) Func() *Statement {
 
 // Select renders the select keyword.
 func Select() *Statement {
+	// notest
 	return newStatement().Select()
 }
 
 // Select renders the select keyword.
 func (g *Group) Select() *Statement {
+	// notest
 	s := Select()
 	g.items = append(g.items, s)
 	return s
@@ -1859,6 +1942,7 @@ func (g *Group) Select() *Statement {
 
 // Select renders the select keyword.
 func (s *Statement) Select() *Statement {
+	// notest
 	t := token{
 		content: "select",
 		typ:     keywordToken,
@@ -1869,11 +1953,13 @@ func (s *Statement) Select() *Statement {
 
 // Chan renders the chan keyword.
 func Chan() *Statement {
+	// notest
 	return newStatement().Chan()
 }
 
 // Chan renders the chan keyword.
 func (g *Group) Chan() *Statement {
+	// notest
 	s := Chan()
 	g.items = append(g.items, s)
 	return s
@@ -1881,6 +1967,7 @@ func (g *Group) Chan() *Statement {
 
 // Chan renders the chan keyword.
 func (s *Statement) Chan() *Statement {
+	// notest
 	t := token{
 		content: "chan",
 		typ:     keywordToken,
@@ -1891,11 +1978,13 @@ func (s *Statement) Chan() *Statement {
 
 // Else renders the else keyword.
 func Else() *Statement {
+	// notest
 	return newStatement().Else()
 }
 
 // Else renders the else keyword.
 func (g *Group) Else() *Statement {
+	// notest
 	s := Else()
 	g.items = append(g.items, s)
 	return s
@@ -1903,6 +1992,7 @@ func (g *Group) Else() *Statement {
 
 // Else renders the else keyword.
 func (s *Statement) Else() *Statement {
+	// notest
 	t := token{
 		content: "else",
 		typ:     keywordToken,
@@ -1913,11 +2003,13 @@ func (s *Statement) Else() *Statement {
 
 // Const renders the const keyword.
 func Const() *Statement {
+	// notest
 	return newStatement().Const()
 }
 
 // Const renders the const keyword.
 func (g *Group) Const() *Statement {
+	// notest
 	s := Const()
 	g.items = append(g.items, s)
 	return s
@@ -1925,6 +2017,7 @@ func (g *Group) Const() *Statement {
 
 // Const renders the const keyword.
 func (s *Statement) Const() *Statement {
+	// notest
 	t := token{
 		content: "const",
 		typ:     keywordToken,
@@ -1935,11 +2028,13 @@ func (s *Statement) Const() *Statement {
 
 // Fallthrough renders the fallthrough keyword.
 func Fallthrough() *Statement {
+	// notest
 	return newStatement().Fallthrough()
 }
 
 // Fallthrough renders the fallthrough keyword.
 func (g *Group) Fallthrough() *Statement {
+	// notest
 	s := Fallthrough()
 	g.items = append(g.items, s)
 	return s
@@ -1947,6 +2042,7 @@ func (g *Group) Fallthrough() *Statement {
 
 // Fallthrough renders the fallthrough keyword.
 func (s *Statement) Fallthrough() *Statement {
+	// notest
 	t := token{
 		content: "fallthrough",
 		typ:     keywordToken,
@@ -1957,11 +2053,13 @@ func (s *Statement) Fallthrough() *Statement {
 
 // Type renders the type keyword.
 func Type() *Statement {
+	// notest
 	return newStatement().Type()
 }
 
 // Type renders the type keyword.
 func (g *Group) Type() *Statement {
+	// notest
 	s := Type()
 	g.items = append(g.items, s)
 	return s
@@ -1969,6 +2067,7 @@ func (g *Group) Type() *Statement {
 
 // Type renders the type keyword.
 func (s *Statement) Type() *Statement {
+	// notest
 	t := token{
 		content: "type",
 		typ:     keywordToken,
@@ -1979,11 +2078,13 @@ func (s *Statement) Type() *Statement {
 
 // Continue renders the continue keyword.
 func Continue() *Statement {
+	// notest
 	return newStatement().Continue()
 }
 
 // Continue renders the continue keyword.
 func (g *Group) Continue() *Statement {
+	// notest
 	s := Continue()
 	g.items = append(g.items, s)
 	return s
@@ -1991,6 +2092,7 @@ func (g *Group) Continue() *Statement {
 
 // Continue renders the continue keyword.
 func (s *Statement) Continue() *Statement {
+	// notest
 	t := token{
 		content: "continue",
 		typ:     keywordToken,
@@ -2001,11 +2103,13 @@ func (s *Statement) Continue() *Statement {
 
 // Var renders the var keyword.
 func Var() *Statement {
+	// notest
 	return newStatement().Var()
 }
 
 // Var renders the var keyword.
 func (g *Group) Var() *Statement {
+	// notest
 	s := Var()
 	g.items = append(g.items, s)
 	return s
@@ -2013,6 +2117,7 @@ func (g *Group) Var() *Statement {
 
 // Var renders the var keyword.
 func (s *Statement) Var() *Statement {
+	// notest
 	t := token{
 		content: "var",
 		typ:     keywordToken,
@@ -2023,11 +2128,13 @@ func (s *Statement) Var() *Statement {
 
 // Goto renders the goto keyword.
 func Goto() *Statement {
+	// notest
 	return newStatement().Goto()
 }
 
 // Goto renders the goto keyword.
 func (g *Group) Goto() *Statement {
+	// notest
 	s := Goto()
 	g.items = append(g.items, s)
 	return s
@@ -2035,6 +2142,7 @@ func (g *Group) Goto() *Statement {
 
 // Goto renders the goto keyword.
 func (s *Statement) Goto() *Statement {
+	// notest
 	t := token{
 		content: "goto",
 		typ:     keywordToken,
@@ -2045,11 +2153,13 @@ func (s *Statement) Goto() *Statement {
 
 // Defer renders the defer keyword.
 func Defer() *Statement {
+	// notest
 	return newStatement().Defer()
 }
 
 // Defer renders the defer keyword.
 func (g *Group) Defer() *Statement {
+	// notest
 	s := Defer()
 	g.items = append(g.items, s)
 	return s
@@ -2057,6 +2167,7 @@ func (g *Group) Defer() *Statement {
 
 // Defer renders the defer keyword.
 func (s *Statement) Defer() *Statement {
+	// notest
 	t := token{
 		content: "defer",
 		typ:     keywordToken,
@@ -2067,11 +2178,13 @@ func (s *Statement) Defer() *Statement {
 
 // Go renders the go keyword.
 func Go() *Statement {
+	// notest
 	return newStatement().Go()
 }
 
 // Go renders the go keyword.
 func (g *Group) Go() *Statement {
+	// notest
 	s := Go()
 	g.items = append(g.items, s)
 	return s
@@ -2079,6 +2192,7 @@ func (g *Group) Go() *Statement {
 
 // Go renders the go keyword.
 func (s *Statement) Go() *Statement {
+	// notest
 	t := token{
 		content: "go",
 		typ:     keywordToken,
@@ -2089,11 +2203,13 @@ func (s *Statement) Go() *Statement {
 
 // Range renders the range keyword.
 func Range() *Statement {
+	// notest
 	return newStatement().Range()
 }
 
 // Range renders the range keyword.
 func (g *Group) Range() *Statement {
+	// notest
 	s := Range()
 	g.items = append(g.items, s)
 	return s
@@ -2101,6 +2217,7 @@ func (g *Group) Range() *Statement {
 
 // Range renders the range keyword.
 func (s *Statement) Range() *Statement {
+	// notest
 	t := token{
 		content: "range",
 		typ:     keywordToken,

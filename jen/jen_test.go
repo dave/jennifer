@@ -408,6 +408,10 @@ var cases = []tc{
 }
 
 func TestJen(t *testing.T) {
+	caseTester(t, cases)
+}
+
+func caseTester(t *testing.T, cases []tc) {
 	for i, c := range cases {
 		onlyTest := ""
 		if onlyTest != "" && c.desc != onlyTest {

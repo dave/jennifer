@@ -15,9 +15,6 @@ func render(w io.Writer) error {
 
 	for _, b := range groups {
 		b := b // b used in closures
-		if b.name == "" {
-			continue
-		}
 		comment := Commentf("%s %s", b.name, b.comment)
 
 		if b.variadic && len(b.parameters) > 1 {
@@ -41,6 +38,7 @@ func render(w io.Writer) error {
 			comment,
 			funcParams,
 			callParams,
+			false,
 		)
 
 		/*
@@ -97,6 +95,7 @@ func render(w io.Writer) error {
 				funcComment,
 				funcFuncParams,
 				funcCallParams,
+				false,
 			)
 
 			/*
@@ -156,7 +155,7 @@ func render(w io.Writer) error {
 		})
 	}
 
-	for _, t := range tokens {
+	for i, t := range tokens {
 		t := t // used in closures
 		comment := Commentf(
 			"%s renders the %s %s.",
@@ -170,6 +169,7 @@ func render(w io.Writer) error {
 			comment,
 			nil,
 			nil,
+			i != 0, // only enforce test coverage on one item
 		)
 
 		/*
@@ -187,6 +187,12 @@ func render(w io.Writer) error {
 		file.Func().Params(
 			Id("s").Op("*").Id("Statement"),
 		).Id(t.name).Params().Op("*").Id("Statement").Block(
+			Do(func(s *Statement) {
+				if i != 0 {
+					// only enforce test coverage on one item
+					s.Comment("notest")
+				}
+			}),
 			Id("t").Op(":=").Id("token").Values(Dict{
 				Id("typ"):     Id(t.tokenType),
 				Id("content"): Lit(t.token),
@@ -207,6 +213,7 @@ func addFunctionAndGroupMethod(
 	comment *Statement,
 	funcParams []Code,
 	callParams []Code,
+	notest bool,
 ) {
 	/*
 		// <comment>
@@ -216,6 +223,12 @@ func addFunctionAndGroupMethod(
 	*/
 	file.Add(comment)
 	file.Func().Id(name).Params(funcParams...).Op("*").Id("Statement").Block(
+		Do(func(s *Statement) {
+			if notest {
+				// only enforce test coverage on one item
+				s.Comment("notest")
+			}
+		}),
 		Return(Id("newStatement").Call().Dot(name).Call(callParams...)),
 	)
 	/*
@@ -230,6 +243,12 @@ func addFunctionAndGroupMethod(
 	file.Func().Params(
 		Id("g").Op("*").Id("Group"),
 	).Id(name).Params(funcParams...).Op("*").Id("Statement").Block(
+		Do(func(s *Statement) {
+			if notest {
+				// only enforce test coverage on one item
+				s.Comment("notest")
+			}
+		}),
 		Id("s").Op(":=").Id(name).Params(callParams...),
 		Id("g").Dot("items").Op("=").Append(Id("g").Dot("items"), Id("s")),
 		Return(Id("s")),

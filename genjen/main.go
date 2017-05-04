@@ -6,6 +6,7 @@ import (
 )
 
 func main() {
+	// notest
 	buf := &bytes.Buffer{}
 	if err := render(buf); err != nil {
 		panic(err)
