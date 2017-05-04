@@ -75,6 +75,9 @@ func (f *File) isLocal(path string) bool {
 
 func (f *File) register(path string) string {
 	if f.isLocal(path) {
+		// notest
+		// should never get here becasue in Qual the packageToken will be null,
+		// so render will never be called.
 		return ""
 	}
 	if f.imports[path] != "" && f.imports[path] != "_" {

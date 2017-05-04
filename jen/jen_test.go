@@ -9,19 +9,162 @@ import (
 	. "github.com/dave/jennifer/jen"
 )
 
-func TestNil(t *testing.T) {
-	var s *Statement
-	c := Func().Id("a").Params(
-		s,
-	)
-	got := fmt.Sprintf("%#v", c)
-	expect := "func a()"
-	if got != expect {
-		t.Fatalf("Got: %s, expect: %s", got, expect)
-	}
-}
-
 var cases = []tc{
+	{
+		desc: `line statement`,
+		code: Block(Lit(1).Line(), Lit(2)),
+		expect: `{
+		1
+		
+		2
+		}`,
+	},
+	{
+		desc: `line func`,
+		code: Block(Lit(1), Line(), Lit(2)),
+		expect: `{
+		1
+		
+		2
+		}`,
+	},
+	{
+		desc: `line group`,
+		code: BlockFunc(func(g *Group) {
+			g.Id("a")
+			g.Line()
+			g.Id("b")
+		}),
+		expect: `{
+		a
+		
+		b
+		}`,
+	},
+	{
+		desc: `op group`,
+		code: BlockFunc(func(g *Group) {
+			g.Op("*").Id("a")
+		}),
+		expect: `{*a}`,
+	},
+	{
+		desc: `empty group`,
+		code: BlockFunc(func(g *Group) {
+			g.Empty()
+		}),
+		expect: `{
+		
+		}`,
+	},
+	{
+		desc: `null group`,
+		code: BlockFunc(func(g *Group) {
+			g.Null()
+		}),
+		expect: `{}`,
+	},
+	{
+		desc:   `tag no backquote`,
+		code:   Tag(map[string]string{"a": "`b`"}),
+		expect: "\"a:\\\"`b`\\\"\"",
+	},
+	{
+		desc:   `tag null`,
+		code:   Tag(map[string]string{}),
+		expect: ``,
+	},
+	{
+		desc: `litrunefunc group`,
+		code: BlockFunc(func(g *Group) {
+			g.LitByteFunc(func() byte { return byte(0xab) })
+		}),
+		expect: `{byte(0xab)}`,
+	},
+	{
+		desc: `litbyte group`,
+		code: BlockFunc(func(g *Group) {
+			g.LitByte(byte(0xab))
+		}),
+		expect: `{byte(0xab)}`,
+	},
+	{
+		desc: `litrunefunc group`,
+		code: BlockFunc(func(g *Group) {
+			g.LitRuneFunc(func() rune { return 'a' })
+		}),
+		expect: `{'a'}`,
+	},
+	{
+		desc: `litrune group`,
+		code: BlockFunc(func(g *Group) {
+			g.LitRune('a')
+		}),
+		expect: `{'a'}`,
+	},
+	{
+		desc: `litfunc group`,
+		code: BlockFunc(func(g *Group) {
+			g.LitFunc(func() interface{} {
+				return 1 + 1
+			})
+		}),
+		expect: `{2}`,
+	},
+	{
+		desc: `litfunc func`,
+		code: LitFunc(func() interface{} {
+			return 1 + 1
+		}),
+		expect: `2`,
+	},
+	{
+		desc:   `group all null`,
+		code:   List(Null(), Null()),
+		expect: ``,
+	},
+	{
+		desc:   `do group`,
+		code:   BlockFunc(func(g *Group) { g.Do(func(s *Statement) { s.Lit(1) }) }),
+		expect: `{1}`,
+	},
+	{
+		desc:   `do func`,
+		code:   Do(func(s *Statement) { s.Lit(1) }),
+		expect: `1`,
+	},
+	{
+		desc:   `dict empty`,
+		code:   Values(Dict{}),
+		expect: `{}`,
+	},
+	{
+		desc:   `dict null`,
+		code:   Values(Dict{Null(): Null()}),
+		expect: `{}`,
+	},
+	{
+		desc: `commentf group`,
+		code: BlockFunc(func(g *Group) { g.Commentf("%d", 1) }),
+		expect: `{
+		// 1
+		}`,
+	},
+	{
+		desc:   `commentf func`,
+		code:   Commentf("%d", 1),
+		expect: `// 1`,
+	},
+	{
+		desc:   `add func`,
+		code:   Add(Lit(1)),
+		expect: `1`,
+	},
+	{
+		desc:   `add group`,
+		code:   BlockFunc(func(g *Group) { g.Add(Lit(1)) }),
+		expect: `{1}`,
+	},
 	{
 		desc:   `empty block`,
 		code:   Block(),
@@ -302,4 +445,48 @@ type tc struct {
 	expect string
 	// expected imports
 	expectImports map[string]string
+}
+
+func TestNilStatement(t *testing.T) {
+	var s *Statement
+	c := Func().Id("a").Params(
+		s,
+	)
+	got := fmt.Sprintf("%#v", c)
+	expect := "func a()"
+	if got != expect {
+		t.Fatalf("Got: %s, expect: %s", got, expect)
+	}
+}
+
+func TestNilGroup(t *testing.T) {
+	var g *Group
+	c := Func().Id("a").Params(
+		g,
+	)
+	got := fmt.Sprintf("%#v", c)
+	expect := "func a()"
+	if got != expect {
+		t.Fatalf("Got: %s, expect: %s", got, expect)
+	}
+}
+
+func TestGroup_GoString(t *testing.T) {
+	BlockFunc(func(g *Group) {
+		g.Lit(1)
+		got := fmt.Sprintf("%#v", g)
+		expect := "{\n\t1\n}"
+		if got != expect {
+			t.Fatalf("Got: %s, expect: %s", got, expect)
+		}
+	})
+}
+
+func TestLitRenderUnknownType(t *testing.T) {
+	c := Lit(struct{ a int }{a: 1})
+	got := fmt.Sprintf("%#v", c)
+	expect := "struct{ a int }{a: 1}"
+	if got != expect {
+		t.Fatalf("Got: %s, expect: %s", got, expect)
+	}
 }

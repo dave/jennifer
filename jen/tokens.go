@@ -94,7 +94,8 @@ func (t token) render(f *File, w io.Writer, s *Statement) error {
 			return err
 		}
 	case nullToken:
-		// do nothing
+		// notest
+		// do nothing (should never render a null token)
 	}
 	return nil
 }
@@ -172,11 +173,15 @@ func (s *Statement) Op(op string) *Statement {
 
 // Dot renders a period followed by an identifier. Use for fields and selectors.
 func Dot(name string) *Statement {
+	// notest
+	// don't think this can be used in valid code?
 	return newStatement().Dot(name)
 }
 
 // Dot renders a period followed by an identifier. Use for fields and selectors.
 func (g *Group) Dot(name string) *Statement {
+	// notest
+	// don't think this can be used in valid code?
 	s := Dot(name)
 	g.items = append(g.items, s)
 	return s
