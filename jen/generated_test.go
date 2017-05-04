@@ -8,6 +8,353 @@ import (
 
 var gencases = []tc{
 	{
+		desc: `bool group`,
+		code: BlockFunc(func(g *Group) {
+			g.Bool()
+		}),
+		expect: `{
+		bool
+		}`,
+	},
+	{
+		desc:   `recover func`,
+		code:   Recover(),
+		expect: `recover()`,
+	},
+	{
+		desc:   `recover statement`,
+		code:   Null().Recover(),
+		expect: `recover()`,
+	},
+	{
+		desc: `recover group`,
+		code: BlockFunc(func(g *Group) {
+			g.Recover()
+		}),
+		expect: `{
+		recover()
+		}`,
+	},
+	{
+		desc:   `real func`,
+		code:   Real(Id("a")),
+		expect: `real(a)`,
+	},
+	{
+		desc:   `real statement`,
+		code:   Null().Real(Id("a")),
+		expect: `real(a)`,
+	},
+	{
+		desc: `real group`,
+		code: BlockFunc(func(g *Group) {
+			g.Real(Id("a"))
+		}),
+		expect: `{
+		real(a)
+		}`,
+	},
+	{
+		desc:   `printlnfunc func`,
+		code:   PrintlnFunc(func(g *Group) { g.Id("a") }),
+		expect: `println(a)`,
+	},
+	{
+		desc:   `printlnfunc statement`,
+		code:   Null().PrintlnFunc(func(g *Group) { g.Id("a") }),
+		expect: `println(a)`,
+	},
+	{
+		desc: `printlnfunc group`,
+		code: BlockFunc(func(bg *Group) {
+			bg.PrintlnFunc(func(pg *Group) { pg.Id("a") })
+		}),
+		expect: `{
+		println(a)
+		}`,
+	},
+	{
+		desc:   `println func`,
+		code:   Println(Id("a")),
+		expect: `println(a)`,
+	},
+	{
+		desc:   `println statement`,
+		code:   Null().Println(Id("a")),
+		expect: `println(a)`,
+	},
+	{
+		desc: `println group`,
+		code: BlockFunc(func(g *Group) {
+			g.Println(Id("a"))
+		}),
+		expect: `{
+		println(a)
+		}`,
+	},
+	{
+		desc:   `printfunc func`,
+		code:   PrintFunc(func(g *Group) { g.Id("a") }),
+		expect: `print(a)`,
+	},
+	{
+		desc:   `printfunc statement`,
+		code:   Null().PrintFunc(func(g *Group) { g.Id("a") }),
+		expect: `print(a)`,
+	},
+	{
+		desc: `printfunc group`,
+		code: BlockFunc(func(bg *Group) {
+			bg.PrintFunc(func(pg *Group) { pg.Id("a") })
+		}),
+		expect: `{
+		print(a)
+		}`,
+	},
+	{
+		desc:   `print func`,
+		code:   Print(Id("a")),
+		expect: `print(a)`,
+	},
+	{
+		desc:   `print statement`,
+		code:   Null().Print(Id("a")),
+		expect: `print(a)`,
+	},
+	{
+		desc: `print group`,
+		code: BlockFunc(func(g *Group) {
+			g.Print(Id("a"))
+		}),
+		expect: `{
+		print(a)
+		}`,
+	},
+	{
+		desc:   `panic func`,
+		code:   Panic(Id("a")),
+		expect: `panic(a)`,
+	},
+	{
+		desc:   `panic statement`,
+		code:   Null().Panic(Id("a")),
+		expect: `panic(a)`,
+	},
+	{
+		desc: `panic group`,
+		code: BlockFunc(func(g *Group) {
+			g.Panic(Id("a"))
+		}),
+		expect: `{
+		panic(a)
+		}`,
+	},
+	{
+		desc:   `new func`,
+		code:   New(Id("a")),
+		expect: `new(a)`,
+	},
+	{
+		desc:   `new statement`,
+		code:   Id("a").Op(":=").New(Id("a")),
+		expect: `a := new(a)`,
+	},
+	{
+		desc: `new group`,
+		code: BlockFunc(func(g *Group) {
+			g.New(Id("a"))
+		}),
+		expect: `{
+		new(a)
+		}`,
+	},
+	{
+		desc:   `make func`,
+		code:   Make(Id("a")),
+		expect: `make(a)`,
+	},
+	{
+		desc:   `make statement`,
+		code:   Id("a").Op(":=").Make(Id("a")),
+		expect: `a := make(a)`,
+	},
+	{
+		desc: `make group`,
+		code: BlockFunc(func(g *Group) {
+			g.Make(Id("a"))
+		}),
+		expect: `{
+		make(a)
+		}`,
+	},
+	{
+		desc:   `len func`,
+		code:   Len(Id("a")),
+		expect: `len(a)`,
+	},
+	{
+		desc:   `len statement`,
+		code:   Id("a").Op(":=").Len(Id("a")),
+		expect: `a := len(a)`,
+	},
+	{
+		desc: `len group`,
+		code: BlockFunc(func(g *Group) {
+			g.Len(Id("a"))
+		}),
+		expect: `{
+		len(a)
+		}`,
+	},
+	{
+		desc:   `imag func`,
+		code:   Imag(Id("a")),
+		expect: `imag(a)`,
+	},
+	{
+		desc:   `imag statement`,
+		code:   Id("a").Op(":=").Imag(Id("a")),
+		expect: `a := imag(a)`,
+	},
+	{
+		desc: `imag group`,
+		code: BlockFunc(func(g *Group) {
+			g.Imag(Id("a"))
+		}),
+		expect: `{
+		imag(a)
+		}`,
+	},
+	{
+		desc:   `delete func`,
+		code:   Delete(Id("a"), Id("b")),
+		expect: `delete(a, b)`,
+	},
+	{
+		desc:   `delete statement`,
+		code:   Null().Delete(Id("a"), Id("b")),
+		expect: `delete(a, b)`,
+	},
+	{
+		desc: `delete group`,
+		code: BlockFunc(func(g *Group) {
+			g.Delete(Id("a"), Id("b"))
+		}),
+		expect: `{
+		delete(a, b)
+		}`,
+	},
+	{
+		desc:   `copy func`,
+		code:   Copy(Id("a"), Id("b")),
+		expect: `copy(a, b)`,
+	},
+	{
+		desc:   `copy statement`,
+		code:   Id("a").Op(":=").Copy(Id("a"), Id("b")),
+		expect: `a := copy(a, b)`,
+	},
+	{
+		desc: `copy group`,
+		code: BlockFunc(func(g *Group) {
+			g.Copy(Id("a"), Id("b"))
+		}),
+		expect: `{
+		copy(a, b)
+		}`,
+	},
+	{
+		desc:   `complex func`,
+		code:   Complex(Id("a"), Id("b")),
+		expect: `complex(a, b)`,
+	},
+	{
+		desc:   `complex statement`,
+		code:   Id("a").Op(":=").Complex(Id("a"), Id("b")),
+		expect: `a := complex(a, b)`,
+	},
+	{
+		desc: `complex group`,
+		code: BlockFunc(func(g *Group) {
+			g.Complex(Id("a"), Id("b"))
+		}),
+		expect: `{
+		complex(a, b)
+		}`,
+	},
+	{
+		desc: `close group`,
+		code: BlockFunc(func(g *Group) { g.Close(Id("a")) }),
+		expect: `{
+		close(a)
+		}`,
+	},
+	{
+		desc:   `cap func`,
+		code:   Cap(Id("a")),
+		expect: `cap(a)`,
+	},
+	{
+		desc:   `cap statement`,
+		code:   Id("a").Op(":=").Cap(Id("b")),
+		expect: `a := cap(b)`,
+	},
+	{
+		desc: `cap group`,
+		code: BlockFunc(func(g *Group) {
+			g.Cap(Id("a"))
+		}),
+		expect: `{
+		cap(a)
+		}`,
+	},
+	{
+		desc: `append group`,
+		code: BlockFunc(func(g *Group) {
+			g.Append(Id("a"))
+		}),
+		expect: `{
+		append(a)
+		}`,
+	},
+	{
+		desc:   `appendfunc statement`,
+		code:   Id("a").Op("=").AppendFunc(func(ag *Group) { ag.Id("a") }),
+		expect: `a = append(a)`,
+	},
+	{
+		desc:   `appendfunc func`,
+		code:   AppendFunc(func(ag *Group) { ag.Id("a") }),
+		expect: `append(a)`,
+	},
+	{
+		desc: `appendfunc group`,
+		code: BlockFunc(func(bg *Group) {
+			bg.AppendFunc(func(ag *Group) { ag.Id("a") })
+		}),
+		expect: `{
+		append(a)
+		}`,
+	},
+	{
+		desc: `casefunc group`,
+		code: Switch().BlockFunc(func(g *Group) {
+			g.CaseFunc(func(g *Group) { g.Id("a") }).Block()
+		}),
+		expect: `switch {
+		case a:
+		}`,
+	},
+	{
+		desc: `case group`,
+		code: Switch().BlockFunc(func(g *Group) {
+			g.Case(Id("a")).Block()
+		}),
+		expect: `switch {
+		case a:
+		}`,
+	},
+	{
 		desc:   `structfunc statement`,
 		code:   Id("a").Op(":=").StructFunc(func(g *Group) {}).Values(),
 		expect: `a := struct{}{}`,
