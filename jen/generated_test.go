@@ -8,6 +8,192 @@ import (
 
 var gencases = []tc{
 	{
+		desc:   `structfunc statement`,
+		code:   Id("a").Op(":=").StructFunc(func(g *Group) {}).Values(),
+		expect: `a := struct{}{}`,
+	},
+	{
+		desc: `structfunc group`,
+		// Don't do this! ListFunc used to kludge Group.Struct usage
+		// without syntax error.
+		code:   Id("a").Op(":=").ListFunc(func(g *Group) { g.StructFunc(func(g *Group) {}) }).Values(),
+		expect: `a := struct{}{}`,
+	},
+	{
+		desc:   `structfunc func`,
+		code:   Id("a").Op(":=").Add(StructFunc(func(g *Group) {})).Values(),
+		expect: `a := struct{}{}`,
+	},
+	{
+		desc: `struct group`,
+		// Don't do this! ListFunc used to kludge Group.Struct usage
+		// without syntax error.
+		code:   Id("a").Op(":=").ListFunc(func(g *Group) { g.Struct() }).Values(),
+		expect: `a := struct{}{}`,
+	},
+	{
+		desc:   `struct func`,
+		code:   Id("a").Op(":=").Add(Struct()).Values(),
+		expect: `a := struct{}{}`,
+	},
+	{
+		desc: `interfacefunc func`,
+		code: Id("a").Assert(InterfaceFunc(func(g *Group) {
+			g.Id("a").Call().Int()
+			g.Id("b").Call().Int()
+		})),
+		expect: `a.(interface{
+		a() int
+		b() int
+		})`,
+	},
+	{
+		desc: `interfacefunc statement`,
+		code: Id("a").Assert(Null().InterfaceFunc(func(g *Group) {
+			g.Id("a").Call().Int()
+			g.Id("b").Call().Int()
+		})),
+		expect: `a.(interface{
+		a() int
+		b() int
+		})`,
+	},
+	{
+		desc: `interfacefunc group`,
+		// Don't do this! ListFunc used to kludge Group.InterfaceFunc usage
+		// without syntax error.
+		code: Id("a").Assert(ListFunc(func(lg *Group) {
+			lg.InterfaceFunc(func(ig *Group) {
+				ig.Id("a").Call().Int()
+				ig.Id("b").Call().Int()
+			})
+		})),
+		expect: `a.(interface{
+		a() int
+		b() int
+		})`,
+	},
+	{
+		desc:   `interface func`,
+		code:   Interface().Parens(Id("a")),
+		expect: `interface{}(a)`,
+	},
+	{
+		desc:   `interface statement`,
+		code:   Null().Interface().Parens(Id("a")),
+		expect: `interface{}(a)`,
+	},
+	{
+		desc: `switchfunc func`,
+		code: SwitchFunc(func(rg *Group) {
+			rg.Id("a")
+		}).Block(),
+		expect: `switch a {}`,
+	},
+	{
+		desc: `switchfunc statement`,
+		code: Null().SwitchFunc(func(rg *Group) {
+			rg.Id("a")
+		}).Block(),
+		expect: `switch a {
+		}`,
+	},
+	{
+		desc: `switchfunc group`,
+		code: BlockFunc(func(bg *Group) {
+			bg.SwitchFunc(func(rg *Group) {
+				rg.Id("a")
+			}).Block()
+		}),
+		expect: `{
+			switch a {
+			}
+		}`,
+	},
+	{
+		desc: `switch group`,
+		code: BlockFunc(func(bg *Group) {
+			bg.Switch().Block()
+		}),
+		expect: `{
+			switch {
+			}
+		}`,
+	},
+	{
+		desc: `forfunc func`,
+		code: ForFunc(func(rg *Group) {
+			rg.Id("a")
+		}).Block(),
+		expect: `for a {}`,
+	},
+	{
+		desc: `forfunc statement`,
+		code: Null().ForFunc(func(rg *Group) {
+			rg.Id("a")
+		}).Block(),
+		expect: `for a {
+		}`,
+	},
+	{
+		desc: `forfunc group`,
+		code: BlockFunc(func(bg *Group) {
+			bg.ForFunc(func(rg *Group) {
+				rg.Id("a")
+			}).Block()
+		}),
+		expect: `{
+			for a {
+			}
+		}`,
+	},
+	{
+		desc: `for group`,
+		code: BlockFunc(func(g *Group) {
+			g.For(Id("a")).Block()
+		}),
+		expect: `{
+		for a {}
+		}`,
+	},
+	{
+		desc: `returnfunc func`,
+		code: ReturnFunc(func(rg *Group) {
+			rg.Lit(1)
+			rg.Lit(2)
+		}),
+		expect: `return 1, 2`,
+	},
+	{
+		desc: `returnfunc statement`,
+		code: Empty().ReturnFunc(func(rg *Group) {
+			rg.Lit(1)
+			rg.Lit(2)
+		}),
+		expect: `return 1, 2`,
+	},
+	{
+		desc: `returnfunc group`,
+		code: BlockFunc(func(bg *Group) {
+			bg.ReturnFunc(func(rg *Group) {
+				rg.Lit(1)
+				rg.Lit(2)
+			})
+		}),
+		expect: `{
+		return 1, 2
+		}`,
+	},
+	{
+		desc: `return group`,
+		code: BlockFunc(func(g *Group) {
+			g.Return()
+		}),
+		expect: `{
+		return
+		}`,
+	},
+	{
 		desc: `iffunc group`,
 		code: BlockFunc(func(bg *Group) {
 			bg.IfFunc(func(ig *Group) {
