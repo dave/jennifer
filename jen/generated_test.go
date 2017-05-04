@@ -8,6 +8,142 @@ import (
 
 var gencases = []tc{
 	{
+		desc: `iffunc group`,
+		code: BlockFunc(func(bg *Group) {
+			bg.IfFunc(func(ig *Group) {
+				ig.Id("a")
+			}).Block()
+		}),
+		expect: `{
+		if a {} 
+		}`,
+	},
+	{
+		desc: `iffunc func`,
+		code: IfFunc(func(ig *Group) {
+			ig.Id("a")
+		}).Block(),
+		expect: `if a {}`,
+	},
+	{
+		desc: `iffunc statement`,
+		code: Null().IfFunc(func(ig *Group) {
+			ig.Id("a")
+		}).Block(),
+		expect: `if a {}`,
+	},
+	{
+		desc: `if group`,
+		code: BlockFunc(func(g *Group) { g.If(Id("a")).Block() }),
+		expect: `{
+		if a {}
+		}`,
+	},
+	{
+		desc: `map group`,
+		code: BlockFunc(func(g *Group) { g.Map(Int()).Int().Values(Dict{Lit(1): Lit(1)}) }),
+		expect: `{
+		map[int]int{1:1}
+		}`,
+	},
+	{
+		desc: `assert group`,
+		// Don't do this! ListFunc used to kludge Group.Assert usage without
+		// syntax error.
+		code:   Id("a").ListFunc(func(g *Group) { g.Assert(Id("b")) }),
+		expect: `a.(b)`,
+	},
+	{
+		desc:   `assert func`,
+		code:   Id("a").Add(Assert(Id("b"))),
+		expect: `a.(b)`,
+	},
+	{
+		desc: `paramsfunc group`,
+		// Don't do this! ListFunc used to kludge Group.ParamsFunc usage without
+		// syntax error.
+		code:   Id("a").ListFunc(func(lg *Group) { lg.ParamsFunc(func(cg *Group) { cg.Lit(1) }) }),
+		expect: `a(1)`,
+	},
+	{
+		desc:   `paramsfunc func`,
+		code:   Id("a").Add(ParamsFunc(func(g *Group) { g.Lit(1) })),
+		expect: `a(1)`,
+	},
+	{
+		desc:   `paramsfunc statement`,
+		code:   Id("a").ParamsFunc(func(g *Group) { g.Lit(1) }),
+		expect: `a(1)`,
+	},
+	{
+		desc: `params group`,
+		// Don't do this! ListFunc used to kludge Group.Params usage without
+		// syntax error.
+		code:   Id("a").ListFunc(func(g *Group) { g.Params(Lit(1)) }),
+		expect: `a(1)`,
+	},
+	{
+		desc:   `params func`,
+		code:   Id("a").Add(Params(Lit(1))),
+		expect: `a(1)`,
+	},
+	{
+		desc: `callfunc group`,
+		// Don't do this! ListFunc used to kludge Group.CallFunc usage without
+		// syntax error.
+		code:   Id("a").ListFunc(func(lg *Group) { lg.CallFunc(func(cg *Group) { cg.Lit(1) }) }),
+		expect: `a(1)`,
+	},
+	{
+		desc:   `callfunc func`,
+		code:   Id("a").Add(CallFunc(func(g *Group) { g.Lit(1) })),
+		expect: `a(1)`,
+	},
+	{
+		desc: `call group`,
+		// Don't do this! ListFunc used to kludge Group.Call usage without
+		// syntax error.
+		code:   Id("a").ListFunc(func(g *Group) { g.Call(Lit(1)) }),
+		expect: `a(1)`,
+	},
+	{
+		desc:   `call func`,
+		code:   Id("a").Add(Call(Lit(1))),
+		expect: `a(1)`,
+	},
+	{
+		desc: `defsfunc statement`,
+		code: Const().DefsFunc(func(g *Group) { g.Id("a").Op("=").Lit(1) }),
+		expect: `const (
+		a = 1
+		)`,
+	},
+	{
+		desc: `defsfunc func`,
+		code: Const().Add(DefsFunc(func(g *Group) { g.Id("a").Op("=").Lit(1) })),
+		expect: `const (
+		a = 1
+		)`,
+	},
+	{
+		desc: `defsfunc group`,
+		// Don't do this! ListFunc used to kludge Group.DefsFunc usage without
+		// syntax error.
+		code: Const().ListFunc(func(lg *Group) { lg.DefsFunc(func(dg *Group) { dg.Id("a").Op("=").Lit(1) }) }),
+		expect: `const (
+		a = 1
+		)`,
+	},
+	{
+		desc: `defs group`,
+		// Don't do this! ListFunc used to kludge Group.Defs usage without
+		// syntax error.
+		code: Const().ListFunc(func(g *Group) { g.Defs(Id("a").Op("=").Lit(1)) }),
+		expect: `const (
+		a = 1
+		)`,
+	},
+	{
 		desc: `defs func`,
 		code: Const().Add(Defs(Id("a").Op("=").Lit(1))),
 		expect: `const (
