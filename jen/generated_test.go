@@ -426,6 +426,15 @@ var gencases = []tc{
 		expect: `interface{}(a)`,
 	},
 	{
+		desc: `interface group`,
+		code: BlockFunc(func(g *Group) {
+			g.Interface().Parens(Id("a"))
+		}),
+		expect: `{
+		interface{}(a)
+		}`,
+	},
+	{
 		desc:   `interface statement`,
 		code:   Null().Interface().Parens(Id("a")),
 		expect: `interface{}(a)`,
