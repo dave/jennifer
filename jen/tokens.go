@@ -93,8 +93,7 @@ func (t token) render(f *File, w io.Writer, s *Statement) error {
 		if _, err := w.Write([]byte(t.content.(string))); err != nil {
 			return err
 		}
-	case nullToken:
-		// notest
+	case nullToken: // notest
 		// do nothing (should never render a null token)
 	}
 	return nil
