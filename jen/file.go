@@ -3,6 +3,7 @@ package jen
 import (
 	"bytes"
 	"fmt"
+	stdtoken "go/token"
 	"regexp"
 	"strings"
 )
@@ -73,6 +74,20 @@ func (f *File) isLocal(path string) bool {
 	return f.path == path
 }
 
+func (f *File) isValidAlias(alias string) bool {
+	// the import alias is invalid if it's a keyword
+	if stdtoken.Lookup(alias) != stdtoken.IDENT {
+		return false
+	}
+	// the import alias is invalid if it's already been registered
+	for _, v := range f.imports {
+		if alias == v {
+			return false
+		}
+	}
+	return true
+}
+
 func (f *File) register(path string) string {
 	if f.isLocal(path) {
 		// notest
@@ -85,16 +100,8 @@ func (f *File) register(path string) string {
 	}
 	alias := guessAlias(path)
 	unique := alias
-	find := func(a string) bool {
-		for _, v := range f.imports {
-			if a == v {
-				return true
-			}
-		}
-		return false
-	}
 	i := 0
-	for find(unique) {
+	for !f.isValidAlias(unique) {
 		i++
 		unique = fmt.Sprintf("%s%d", alias, i)
 	}
