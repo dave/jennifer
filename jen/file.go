@@ -3,7 +3,6 @@ package jen
 import (
 	"bytes"
 	"fmt"
-	stdtoken "go/token"
 	"regexp"
 	"strings"
 )
@@ -74,9 +73,27 @@ func (f *File) isLocal(path string) bool {
 	return f.path == path
 }
 
+var reserved = []string{
+	/* keywords */
+	"break", "default", "func", "interface", "select", "case", "defer", "go", "map", "struct", "chan", "else", "goto", "package", "switch", "const", "fallthrough", "if", "range", "type", "continue", "for", "import", "return", "var",
+	/* predeclared */
+	"bool", "byte", "complex64", "complex128", "error", "float32", "float64", "int", "int8", "int16", "int32", "int64", "rune", "string", "uint", "uint8", "uint16", "uint32", "uint64", "uintptr", "true", "false", "iota", "nil", "append", "cap", "close", "complex", "copy", "delete", "imag", "len", "make", "new", "panic", "print", "println", "real", "recover",
+	/* common variables */
+	"err",
+}
+
+func isReservedWord(alias string) bool {
+	for _, name := range reserved {
+		if alias == name {
+			return true
+		}
+	}
+	return false
+}
+
 func (f *File) isValidAlias(alias string) bool {
-	// the import alias is invalid if it's a keyword
-	if stdtoken.Lookup(alias) != stdtoken.IDENT {
+	// the import alias is invalid if it's a reserved word
+	if isReservedWord(alias) {
 		return false
 	}
 	// the import alias is invalid if it's already been registered
@@ -123,25 +140,18 @@ func (f *File) GoString() string {
 
 func guessAlias(path string) string {
 	alias := path
+
 	if strings.HasSuffix(alias, "/") {
 		// training slashes are usually tolerated, so we can get rid of one if
 		// it exists
 		alias = alias[:len(alias)-1]
 	}
+
 	if strings.Contains(alias, "/") {
 		// if the path contains a "/", use the last part
 		alias = alias[strings.LastIndex(alias, "/")+1:]
 	}
-	if strings.Contains(alias, "-") {
-		// the name usually follows a hyphen - e.g. github.com/foo/go-bar if
-		// the package name contains a "-", use the last part
-		alias = alias[strings.LastIndex(alias, "-")+1:]
-	}
-	if strings.Contains(alias, ".") {
-		// dot is commonly usually used as a version - e.g. github.com/foo/bar.v1
-		// if the package name contains a ".", use the first part
-		alias = alias[:strings.Index(alias, ".")]
-	}
+
 	// alias should be lower case
 	alias = strings.ToLower(alias)
 
