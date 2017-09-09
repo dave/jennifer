@@ -105,6 +105,8 @@ Special cases for [If, For](#if-for), [Interface, Struct](#interface-struct), [S
 
 {{ "ExampleOp_variadic" | example }}
 
+{{ "ExampleOp_complex_conditions" | example }}
+
 # Braces
 [Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) **Braces** [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Helpers](#helpers) [Misc](#misc) [File](#file)
 

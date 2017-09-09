@@ -8,6 +8,14 @@ import (
 	. "github.com/dave/jennifer/jen"
 )
 
+func ExampleOp_complex_conditions() {
+	c := If(Params(Id("a").Op("||").Id("b")).Op("&&").Id("c")).Block()
+	fmt.Printf("%#v", c)
+	// Output:
+	// if (a || b) && c {
+	// }
+}
+
 func ExampleLit_bool_true() {
 	c := Lit(true)
 	fmt.Printf("%#v", c)

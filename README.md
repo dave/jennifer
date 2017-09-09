@@ -189,6 +189,14 @@ fmt.Printf("%#v", c)
 // a(b...)
 ```
 
+```go
+c := If(Params(Id("a").Op("||").Id("b")).Op("&&").Id("c")).Block()
+fmt.Printf("%#v", c)
+// Output:
+// if (a || b) && c {
+// }
+```
+
 # Braces
 [Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) **Braces** [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Helpers](#helpers) [Misc](#misc) [File](#file)
 
