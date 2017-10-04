@@ -69,16 +69,30 @@ func (s *Statement) render(f *File, w io.Writer, _ *Statement) error {
 	return nil
 }
 
-// GoString renders the Statement for testing. Any error will cause a panic.
-func (s *Statement) GoString() string {
+// Provide API for rendering not whole file.
+func (s *Statement) Render(writer io.Writer) error {
 	f := NewFile("")
 	buf := &bytes.Buffer{}
 	if err := s.render(f, buf, nil); err != nil {
-		panic(err)
+		return err
 	}
 	b, err := format.Source(buf.Bytes())
 	if err != nil {
-		panic(fmt.Errorf("Error while formatting source: %s\nSource: %s", err, buf.String()))
+		return fmt.Errorf("Error while formatting source: %s\nSource: %s", err, buf.String())
 	}
-	return string(b)
+	_, err = writer.Write(b)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// GoString renders the Statement for testing. Any error will cause a panic.
+func (s *Statement) GoString() string {
+	buf := bytes.Buffer{}
+	err := s.Render(&buf)
+	if err != nil {
+		panic(err)
+	}
+	return buf.String()
 }
