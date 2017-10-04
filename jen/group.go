@@ -106,16 +106,30 @@ func (g *Group) renderItems(f *File, w io.Writer) (isNull bool, err error) {
 	return first, nil
 }
 
-// GoString renders the Group for testing. Any error will cause a panic.
-func (g *Group) GoString() string {
+// Provide API for rendering not whole file.
+func (g *Group) Render(writer io.Writer) error {
 	f := NewFile("")
 	buf := &bytes.Buffer{}
 	if err := g.render(f, buf, nil); err != nil {
-		panic(err)
+		return err
 	}
 	b, err := format.Source(buf.Bytes())
 	if err != nil {
-		panic(fmt.Errorf("Error while formatting source: %s\nSource: %s", err, buf.String()))
+		return fmt.Errorf("Error while formatting source: %s\nSource: %s", err, buf.String())
 	}
-	return string(b)
+	_, err = writer.Write(b)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// GoString renders the Group for testing. Any error will cause a panic.
+func (g *Group) GoString() string {
+	buf := bytes.Buffer{}
+	err := g.Render(&buf)
+	if err != nil {
+		panic(err)
+	}
+	return buf.String()
 }
