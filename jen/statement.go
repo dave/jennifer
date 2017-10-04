@@ -69,7 +69,7 @@ func (s *Statement) render(f *File, w io.Writer, _ *Statement) error {
 	return nil
 }
 
-// Provide API for rendering not whole file.
+// Render renders the Statement to the provided writer.
 func (s *Statement) Render(writer io.Writer) error {
 	f := NewFile("")
 	buf := &bytes.Buffer{}
@@ -80,8 +80,7 @@ func (s *Statement) Render(writer io.Writer) error {
 	if err != nil {
 		return fmt.Errorf("Error while formatting source: %s\nSource: %s", err, buf.String())
 	}
-	_, err = writer.Write(b)
-	if err != nil {
+	if _, err := writer.Write(b); err != nil {
 		return err
 	}
 	return nil
@@ -90,8 +89,7 @@ func (s *Statement) Render(writer io.Writer) error {
 // GoString renders the Statement for testing. Any error will cause a panic.
 func (s *Statement) GoString() string {
 	buf := bytes.Buffer{}
-	err := s.Render(&buf)
-	if err != nil {
+	if err := s.Render(&buf); err != nil {
 		panic(err)
 	}
 	return buf.String()

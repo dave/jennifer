@@ -60,8 +60,7 @@ func (f *File) Render(w io.Writer) error {
 	if err != nil {
 		return fmt.Errorf("Error %s while formatting source:\n%s", err, source.String())
 	}
-	_, err = w.Write(formatted)
-	if err != nil {
+	if _, err := w.Write(formatted); err != nil {
 		return err
 	}
 	return nil

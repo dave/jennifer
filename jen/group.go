@@ -106,7 +106,7 @@ func (g *Group) renderItems(f *File, w io.Writer) (isNull bool, err error) {
 	return first, nil
 }
 
-// Provide API for rendering not whole file.
+// Render renders the Group to the provided writer.
 func (g *Group) Render(writer io.Writer) error {
 	f := NewFile("")
 	buf := &bytes.Buffer{}
@@ -117,8 +117,7 @@ func (g *Group) Render(writer io.Writer) error {
 	if err != nil {
 		return fmt.Errorf("Error while formatting source: %s\nSource: %s", err, buf.String())
 	}
-	_, err = writer.Write(b)
-	if err != nil {
+	if _, err := writer.Write(b); err != nil {
 		return err
 	}
 	return nil
@@ -127,8 +126,7 @@ func (g *Group) Render(writer io.Writer) error {
 // GoString renders the Group for testing. Any error will cause a panic.
 func (g *Group) GoString() string {
 	buf := bytes.Buffer{}
-	err := g.Render(&buf)
-	if err != nil {
+	if err := g.Render(&buf); err != nil {
 		panic(err)
 	}
 	return buf.String()
