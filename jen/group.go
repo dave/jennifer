@@ -115,7 +115,7 @@ func (g *Group) Render(writer io.Writer) error {
 	}
 	b, err := format.Source(buf.Bytes())
 	if err != nil {
-		return fmt.Errorf("Error while formatting source: %s\nSource: %s", err, buf.String())
+		return fmt.Errorf("Error %s while formatting source:\n%s", err, buf.String())
 	}
 	if _, err := writer.Write(b); err != nil {
 		return err
