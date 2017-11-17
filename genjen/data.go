@@ -105,6 +105,15 @@ var groups = []struct {
 		parameters: []string{"typ"},
 	},
 	{
+		name:       "Slice",
+		comment:    "renders square brackets followed by the keyword. Use for slice definitions.",
+		variadic:   false,
+		opening:    "[]",
+		closing:    "",
+		separator:  "",
+		parameters: []string{"typ"},
+	},
+	{
 		name:       "If",
 		comment:    "renders the keyword followed by a semicolon separated list.",
 		variadic:   true,

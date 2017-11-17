@@ -1081,6 +1081,13 @@ func ExampleMap() {
 	// a := map[string]string{}
 }
 
+func ExampleSlice() {
+	c := Type().Id("a").Slice(Byte())
+	fmt.Printf("%#v", c)
+	// Output:
+	// type a []byte
+}
+
 func ExampleDict() {
 	c := Id("a").Op(":=").Map(String()).String().Values(Dict{
 		Lit("a"): Lit("b"),

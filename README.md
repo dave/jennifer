@@ -485,6 +485,16 @@ fmt.Printf("%#v", c)
 // a := b[1:]
 ```
 
+### Slice
+Slice renders square brackets followed by the keyword. Use for slice definitions.
+
+```go
+c := Type().Id("a").Slice(Byte())
+fmt.Printf("%#v", c)
+// Output:
+// type a []byte
+```
+
 ### Values
 Values renders a comma separated list enclosed by curly braces. Use for slice or composite literals.
 
