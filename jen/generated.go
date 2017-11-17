@@ -429,6 +429,31 @@ func (s *Statement) Map(typ Code) *Statement {
 	return s
 }
 
+// Slice renders square brackets followed by the keyword. Use for slice definitions.
+func Slice(typ Code) *Statement {
+	return newStatement().Slice(typ)
+}
+
+// Slice renders square brackets followed by the keyword. Use for slice definitions.
+func (g *Group) Slice(typ Code) *Statement {
+	s := Slice(typ)
+	g.items = append(g.items, s)
+	return s
+}
+
+// Slice renders square brackets followed by the keyword. Use for slice definitions.
+func (s *Statement) Slice(typ Code) *Statement {
+	g := &Group{
+		close:     "",
+		items:     []Code{typ},
+		name:      "slice",
+		open:      "[]",
+		separator: "",
+	}
+	*s = append(*s, g)
+	return s
+}
+
 // If renders the keyword followed by a semicolon separated list.
 func If(conditions ...Code) *Statement {
 	return newStatement().If(conditions...)

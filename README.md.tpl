@@ -217,6 +217,11 @@ Switch, Select, Case and Block are used to build switch or select statements:
 
 {{ "ExampleIndex_empty" | example }}
 
+### Slice
+{{ "Slice" | doc }}
+
+{{ "ExampleSlice" | example }}
+
 ### Values
 {{ "Values" | doc }}
 
