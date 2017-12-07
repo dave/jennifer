@@ -891,12 +891,12 @@ fmt.Printf("%#v", f)
 ```
 
 ### Comments
+PackageComment adds a comment to the top of the file, above the package
+keyword.
+
 HeaderComment adds a comment to the top of the file, above any package
 comments. A blank line is rendered below the header comments, ensuring
 header comments are not included in the package doc.
-
-PackageComment adds a comment to the top of the file, above the package
-keyword.
 
 ```go
 f := NewFile("c")
