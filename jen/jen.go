@@ -37,6 +37,21 @@ func (f *File) Render(w io.Writer) error {
 		return err
 	}
 	source := &bytes.Buffer{}
+	if f.headers != nil {
+		for _, c := range f.headers {
+			if err := Comment(c).render(f, source, nil); err != nil {
+				return err
+			}
+			if _, err := fmt.Fprint(source, "\n"); err != nil {
+				return err
+			}
+		}
+		// Append an extra newline so that header comments don't get lumped in
+		// with package comments.
+		if _, err := fmt.Fprint(source, "\n"); err != nil {
+			return err
+		}
+	}
 	if f.comments != nil {
 		for _, c := range f.comments {
 			if err := Comment(c).render(f, source, nil); err != nil {

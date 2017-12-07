@@ -383,10 +383,12 @@ avoid this, use Clone. {{ "Statement.Clone" | doc }}
 
 {{ "ExampleFile_Anon" | example }}
 
-### PackageComment
+### Comments
+{{ "File.HeaderComment" | doc }}
+
 {{ "File.PackageComment" | doc }}
 
-{{ "ExampleFile_PackageComment" | example }}
+{{ "ExampleFile_HeaderAndPackageComments" | example }}
 
 ### PackagePrefix
 {{ "File.PackagePrefix" | doc }}

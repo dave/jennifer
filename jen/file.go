@@ -51,9 +51,17 @@ type File struct {
 	path     string
 	imports  map[string]string
 	comments []string
+	headers  []string
 	// If you're worried about package aliases conflicting with local variable
 	// names, you can set a prefix here. Package foo becomes {prefix}_foo.
 	PackagePrefix string
+}
+
+// HeaderComment adds a comment to the top of the file, above any package
+// comments. A blank line is rendered below the header comments, ensuring
+// header comments are not included in the package doc.
+func (f *File) HeaderComment(comment string) {
+	f.headers = append(f.headers, comment)
 }
 
 // PackageComment adds a comment to the top of the file, above the package
