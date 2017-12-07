@@ -384,9 +384,9 @@ avoid this, use Clone. {{ "Statement.Clone" | doc }}
 {{ "ExampleFile_Anon" | example }}
 
 ### Comments
-{{ "File.HeaderComment" | doc }}
-
 {{ "File.PackageComment" | doc }}
+
+{{ "File.HeaderComment" | doc }}
 
 {{ "ExampleFile_HeaderAndPackageComments" | example }}
 
