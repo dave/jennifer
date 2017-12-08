@@ -485,12 +485,3 @@ func TestGroup_GoString(t *testing.T) {
 		}
 	})
 }
-
-func TestLitRenderUnknownType(t *testing.T) {
-	c := Lit(struct{ a int }{a: 1})
-	got := fmt.Sprintf("%#v", c)
-	expect := "struct{ a int }{a: 1}"
-	if got != expect {
-		t.Fatalf("Got: %s, expect: %s", got, expect)
-	}
-}

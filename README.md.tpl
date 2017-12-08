@@ -244,7 +244,7 @@ Note: the items are ordered by key when rendered to ensure repeatable code.
 
 {{ "ExampleLit_float" | example }}
 
-{{ "LitFunc[1:]" | doc }}
+{{ "LitFunc[1:2]" | doc }}
 
 {{ "ExampleLitFunc" | example }}
 
