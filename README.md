@@ -545,9 +545,9 @@ Note: the items are ordered by key when rendered to ensure repeatable code.
 [Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) **Literals** [Comments](#comments) [Helpers](#helpers) [Misc](#misc) [File](#file)
 
 ### Lit
-Lit renders a simple literal. Lit supports bool, string, int, complex128, float64, float32,
-int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, uintptr and complex64. Any other
-type will cause a panic.
+Lit renders a literal. Lit supports only built-in types (bool, string, int, complex128, float64,
+float32, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, uintptr and complex64).
+Passing any other type will panic.
 
 ```go
 c := Id("a").Op(":=").Lit("a")
@@ -563,8 +563,8 @@ fmt.Printf("%#v", c)
 // a := 1.5
 ```
 
-LitFunc generates the value to render by executing the
-provided function.
+LitFunc generates the value to render by executing the provided
+function.
 
 ```go
 c := Id("a").Op(":=").LitFunc(func() interface{} { return 1 + 1 })
