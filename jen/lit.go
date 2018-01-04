@@ -1,21 +1,24 @@
 package jen
 
-// Lit renders a literal, using the format provided by the fmt package %#v
-// verb.
+// Lit renders a literal. Lit supports only built-in types (bool, string, int, complex128, float64, 
+// float32, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, uintptr and complex64). 
+// Passing any other type will panic.
 func Lit(v interface{}) *Statement {
 	return newStatement().Lit(v)
 }
 
-// Lit renders a literal, using the format provided by the fmt package %#v
-// verb.
+// Lit renders a literal. Lit supports only built-in types (bool, string, int, complex128, float64, 
+// float32, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, uintptr and complex64). 
+// Passing any other type will panic.
 func (g *Group) Lit(v interface{}) *Statement {
 	s := Lit(v)
 	g.items = append(g.items, s)
 	return s
 }
 
-// Lit renders a literal, using the format provided by the fmt package %#v
-// verb.
+// Lit renders a literal. Lit supports only built-in types (bool, string, int, complex128, float64, 
+// float32, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, uintptr and complex64). 
+// Passing any other type will panic.
 func (s *Statement) Lit(v interface{}) *Statement {
 	t := token{
 		typ:     literalToken,
@@ -25,25 +28,28 @@ func (s *Statement) Lit(v interface{}) *Statement {
 	return s
 }
 
-// LitFunc renders a literal, using the format provided by the fmt package %#v
-// verb. LitFunc generates the value to render by executing the provided
-// function.
+// LitFunc renders a literal. LitFunc generates the value to render by executing the provided 
+// function. LitFunc supports only built-in types (bool, string, int, complex128, float64, float32, 
+// int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, uintptr and complex64). 
+// Returning any other type will panic.
 func LitFunc(f func() interface{}) *Statement {
 	return newStatement().LitFunc(f)
 }
 
-// LitFunc renders a literal, using the format provided by the fmt package %#v
-// verb. LitFunc generates the value to render by executing the provided
-// function.
+// LitFunc renders a literal. LitFunc generates the value to render by executing the provided 
+// function. LitFunc supports only built-in types (bool, string, int, complex128, float64, float32, 
+// int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, uintptr and complex64). 
+// Returning any other type will panic.
 func (g *Group) LitFunc(f func() interface{}) *Statement {
 	s := LitFunc(f)
 	g.items = append(g.items, s)
 	return s
 }
 
-// LitFunc renders a literal, using the format provided by the fmt package %#v
-// verb. LitFunc generates the value to render by executing the provided
-// function.
+// LitFunc renders a literal. LitFunc generates the value to render by executing the provided 
+// function. LitFunc supports only built-in types (bool, string, int, complex128, float64, float32, 
+// int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, uintptr and complex64). 
+// Returning any other type will panic.
 func (s *Statement) LitFunc(f func() interface{}) *Statement {
 	t := token{
 		typ:     literalToken,

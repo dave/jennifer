@@ -44,7 +44,7 @@ func (t token) render(f *File, w io.Writer, s *Statement) error {
 			// default constant types can be left bare
 			out = fmt.Sprintf("%#v", t.content)
 		case float64:
-			// float is a special case becase fmt package doesn't format correctly
+			// float is a special case because fmt package doesn't format correctly
 			if v == float64(int64(v)) {
 				// value is a whole number, so fmt package will omit the
 				// trailing ".0", so we add it.
@@ -60,7 +60,7 @@ func (t token) render(f *File, w io.Writer, s *Statement) error {
 			// fmt package already renders parenthesis for complex64
 			out = fmt.Sprintf("%T%#v", t.content, t.content)
 		default:
-			out = fmt.Sprintf("%#v", t.content)
+			panic(fmt.Sprintf("unsupported type for literal: %T", t.content))
 		}
 		if _, err := w.Write([]byte(out)); err != nil {
 			return err

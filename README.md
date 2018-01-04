@@ -545,8 +545,9 @@ Note: the items are ordered by key when rendered to ensure repeatable code.
 [Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) **Literals** [Comments](#comments) [Helpers](#helpers) [Misc](#misc) [File](#file)
 
 ### Lit
-Lit renders a literal, using the format provided by the fmt package %#v
-verb.
+Lit renders a literal. Lit supports only built-in types (bool, string, int, complex128, float64,
+float32, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, uintptr and complex64).
+Passing any other type will panic.
 
 ```go
 c := Id("a").Op(":=").Lit("a")
