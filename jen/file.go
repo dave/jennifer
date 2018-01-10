@@ -47,11 +47,12 @@ func NewFilePathName(packagePath, packageName string) *File {
 // automaticaly by File.
 type File struct {
 	*Group
-	name     string
-	path     string
-	imports  map[string]string
-	comments []string
-	headers  []string
+	name        string
+	path        string
+	imports     map[string]string
+	comments    []string
+	headers     []string
+	cgoPreamble []string
 	// If you're worried about package aliases conflicting with local variable
 	// names, you can set a prefix here. Package foo becomes {prefix}_foo.
 	PackagePrefix string
@@ -68,6 +69,12 @@ func (f *File) HeaderComment(comment string) {
 // keyword.
 func (f *File) PackageComment(comment string) {
 	f.comments = append(f.comments, comment)
+}
+
+// CgoPreamble adds a cgo preamble comment that is rendered directly before the "C" pseudo-package
+// import.
+func (f *File) CgoPreamble(comment string) {
+	f.cgoPreamble = append(f.cgoPreamble, comment)
 }
 
 // Anon adds an anonymous import:
@@ -122,6 +129,11 @@ func (f *File) register(path string) string {
 	}
 	if f.imports[path] != "" && f.imports[path] != "_" {
 		return f.imports[path]
+	}
+	if path == "C" {
+		// special case for "C" pseudo-package
+		f.imports[path] = "C"
+		return "C"
 	}
 	alias := guessAlias(path)
 	unique := alias
