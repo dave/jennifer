@@ -823,6 +823,49 @@ fmt.Printf("%#v", c)
 // }
 ```
 
+### Cgo
+The cgo "C" pseudo-package is a special case, and always renders without a package alias. The 
+import can be added with `Qual`, `Anon` or by supplying a preamble. The preamble is added with 
+`File.CgoPreamble` which has the same semantics as [Comment](#comments). If a preamble is provided, 
+the import is separated, and preceded by the preamble. 
+
+```go
+f := NewFile("a")
+f.CgoPreamble(`#include <stdio.h>
+#include <stdlib.h>
+
+void myprint(char* s) {
+printf("%s\n", s);
+}
+`)
+f.Func().Id("init").Params().Block(
+	Id("cs").Op(":=").Qual("C", "CString").Call(Lit("Hello from stdio\n")),
+	Qual("C", "myprint").Call(Id("cs")),
+	Qual("C", "free").Call(Qual("unsafe", "Pointer").Parens(Id("cs"))),
+)
+fmt.Printf("%#v", f)
+// Output:
+// package a
+//
+// import unsafe "unsafe"
+//
+// /*
+// #include <stdio.h>
+// #include <stdlib.h>
+//
+// void myprint(char* s) {
+// 	printf("%s\n", s);
+// }
+// */
+// import "C"
+//
+// func init() {
+// 	cs := C.CString("Hello from stdio\n")
+// 	C.myprint(cs)
+// 	C.free(unsafe.Pointer(cs))
+// }
+```  
+
 # File
 [Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Helpers](#helpers) [Misc](#misc) **File**
 
@@ -913,6 +956,9 @@ fmt.Printf("%#v", f)
 //
 // func init() {}
 ```
+
+CgoPreamble adds a cgo preamble comment that is rendered directly before the "C" pseudo-package
+import.
 
 ### PackagePrefix
 If you're worried about package aliases conflicting with local variable
