@@ -354,6 +354,14 @@ avoid this, use Clone. {{ "Statement.Clone" | doc }}
 
 {{ "ExampleStatement_Clone_fixed" | example }}
 
+### Cgo
+The cgo "C" pseudo-package is a special case, and always renders without a package alias. The 
+import can be added with `Qual`, `Anon` or by supplying a preamble. The preamble is added with 
+`File.CgoPreamble` which has the same semantics as [Comment](#comments). If a preamble is provided, 
+the import is separated, and preceded by the preamble. 
+
+{{ "ExampleFile_CgoPreamble" | example }}  
+
 # File
 [Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Helpers](#helpers) [Misc](#misc) **File**
 
@@ -389,6 +397,8 @@ avoid this, use Clone. {{ "Statement.Clone" | doc }}
 {{ "File.HeaderComment" | doc }}
 
 {{ "ExampleFile_HeaderAndPackageComments" | example }}
+
+{{ "File.CgoPreamble" | doc }}
 
 ### PackagePrefix
 {{ "File.PackagePrefix" | doc }}
