@@ -8,6 +8,138 @@ import (
 	. "github.com/dave/jennifer/jen"
 )
 
+func ExampleFile_CgoPreamble() {
+	f := NewFile("a")
+	f.CgoPreamble(`#include <stdio.h>
+#include <stdlib.h>
+
+void myprint(char* s) {
+	printf("%s\n", s);
+}
+`)
+	f.Func().Id("init").Params().Block(
+		Id("cs").Op(":=").Qual("C", "CString").Call(Lit("Hello from stdio\n")),
+		Qual("C", "myprint").Call(Id("cs")),
+		Qual("C", "free").Call(Qual("unsafe", "Pointer").Parens(Id("cs"))),
+	)
+	fmt.Printf("%#v", f)
+	// Output:
+	// package a
+	//
+	// import unsafe "unsafe"
+	//
+	// /*
+	// #include <stdio.h>
+	// #include <stdlib.h>
+	//
+	// void myprint(char* s) {
+	// 	printf("%s\n", s);
+	// }
+	// */
+	// import "C"
+	//
+	// func init() {
+	// 	cs := C.CString("Hello from stdio\n")
+	// 	C.myprint(cs)
+	// 	C.free(unsafe.Pointer(cs))
+	// }
+}
+
+func ExampleFile_CgoPreamble_anon() {
+	f := NewFile("a")
+	f.CgoPreamble(`#include <stdio.h>`)
+	f.Func().Id("init").Params().Block(
+		Qual("foo.bar/a", "A"),
+		Qual("foo.bar/b", "B"),
+	)
+	fmt.Printf("%#v", f)
+	// Output:
+	// package a
+	//
+	// import (
+	// 	a "foo.bar/a"
+	// 	b "foo.bar/b"
+	// )
+	//
+	// // #include <stdio.h>
+	// import "C"
+	//
+	// func init() {
+	// 	a.A
+	// 	b.B
+	// }
+}
+
+func ExampleFile_CgoPreamble_no_preamble() {
+	f := NewFile("a")
+	f.Func().Id("init").Params().Block(
+		Qual("C", "Foo").Call(),
+		Qual("fmt", "Print").Call(),
+	)
+	fmt.Printf("%#v", f)
+	// Output:
+	// package a
+	//
+	// import (
+	// 	"C"
+	// 	fmt "fmt"
+	// )
+	//
+	// func init() {
+	// 	C.Foo()
+	// 	fmt.Print()
+	// }
+}
+
+func ExampleFile_CgoPreamble_no_preamble_single() {
+	f := NewFile("a")
+	f.Func().Id("init").Params().Block(
+		Qual("C", "Foo").Call(),
+	)
+	fmt.Printf("%#v", f)
+	// Output:
+	// package a
+	//
+	// import "C"
+	//
+	// func init() {
+	// 	C.Foo()
+	// }
+}
+
+func ExampleFile_CgoPreamble_no_preamble_single_anon() {
+	f := NewFile("a")
+	f.Anon("C")
+	f.Func().Id("init").Params().Block()
+	fmt.Printf("%#v", f)
+	// Output:
+	// package a
+	//
+	// import "C"
+	//
+	// func init() {}
+}
+
+func ExampleFile_CgoPreamble_no_preamble_anon() {
+	f := NewFile("a")
+	f.Anon("C")
+	f.Func().Id("init").Params().Block(
+		Qual("fmt", "Print").Call(),
+	)
+	fmt.Printf("%#v", f)
+	// Output:
+	// package a
+	//
+	// import (
+	// 	"C"
+	// 	fmt "fmt"
+	// )
+	//
+	// func init() {
+	// 	fmt.Print()
+	// }
+}
+
 func ExampleOp_complex_conditions() {
 	c := If(Params(Id("a").Op("||").Id("b")).Op("&&").Id("c")).Block()
 	fmt.Printf("%#v", c)
