@@ -190,7 +190,7 @@ fmt.Printf("%#v", c)
 ```
 
 ```go
-c := If(Params(Id("a").Op("||").Id("b")).Op("&&").Id("c")).Block()
+c := If(Parens(Id("a").Op("||").Id("b")).Op("&&").Id("c")).Block()
 fmt.Printf("%#v", c)
 // Output:
 // if (a || b) && c {
