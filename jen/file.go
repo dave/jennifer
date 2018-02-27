@@ -161,6 +161,9 @@ func (f *File) GoString() string {
 func guessAlias(path string) string {
 	alias := path
 
+	if parts := strings.Split(path, " "); len(parts) == 2{
+		return parts[0]
+	}
 	if strings.HasSuffix(alias, "/") {
 		// training slashes are usually tolerated, so we can get rid of one if
 		// it exists

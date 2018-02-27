@@ -26,7 +26,7 @@ void myprint(char* s) {
 	// Output:
 	// package a
 	//
-	// import unsafe "unsafe"
+	// import "unsafe"
 	//
 	// /*
 	// #include <stdio.h>
@@ -57,8 +57,8 @@ func ExampleFile_CgoPreamble_anon() {
 	// package a
 	//
 	// import (
-	// 	a "foo.bar/a"
-	// 	b "foo.bar/b"
+	// 	"foo.bar/a"
+	// 	"foo.bar/b"
 	// )
 	//
 	// // #include <stdio.h>
@@ -82,7 +82,7 @@ func ExampleFile_CgoPreamble_no_preamble() {
 	//
 	// import (
 	// 	"C"
-	// 	fmt "fmt"
+	// 	"fmt"
 	// )
 	//
 	// func init() {
@@ -132,7 +132,7 @@ func ExampleFile_CgoPreamble_no_preamble_anon() {
 	//
 	// import (
 	// 	"C"
-	// 	fmt "fmt"
+	// 	"fmt"
 	// )
 	//
 	// func init() {
@@ -847,7 +847,7 @@ func ExampleNewFilePath() {
 	// package c
 	//
 	// import (
-	// 	f "d.e/f"
+	// 	"d.e/f"
 	// 	f1 "g.h/f"
 	// )
 	//
@@ -990,7 +990,7 @@ func ExampleQual_file() {
 	// package c
 	//
 	// import (
-	// 	f "d.e/f"
+	// 	"d.e/f"
 	// 	f1 "g.h/f"
 	// )
 	//
@@ -1298,7 +1298,7 @@ func ExampleId_remote() {
 	// Output:
 	// package main
 	//
-	// import fmt "fmt"
+	// import "fmt"
 	//
 	// func main() {
 	// 	fmt.Println("Hello, world")
@@ -1329,7 +1329,7 @@ func ExampleNewFile() {
 	// Output:
 	// package main
 	//
-	// import fmt "fmt"
+	// import "fmt"
 	//
 	// func main() {
 	// 	fmt.Println("Hello, world")

@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"sort"
 	"strconv"
+	"strings"
 )
 
 // Code represents an item of code that can be rendered.
@@ -93,6 +94,9 @@ func (f *File) renderImports(source io.Writer) error {
 		// imports, but only if it is accompanied by a preamble comment
 		if path == "C" && separateCgo {
 			continue
+		}
+		if path[strings.LastIndex(path, "/")+1:] == alias {
+			alias = ""
 		}
 		filtered[path] = alias
 	}
