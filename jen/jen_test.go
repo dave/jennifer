@@ -195,7 +195,7 @@ var cases = []tc{
 	},
 	{
 		desc:   `import path alias`,
-		code:   Qual("alias x.y/z", "a"),
+		code:   Qual(NewPackageAlias("x.y/z", "alias"), "a"),
 		expect: `alias.a`,
 		expectImports: map[string]string{
 			"x.y/z": "alias",

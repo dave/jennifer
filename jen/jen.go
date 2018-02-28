@@ -95,7 +95,7 @@ func (f *File) renderImports(source io.Writer) error {
 		if path == "C" && separateCgo {
 			continue
 		}
-		if path[strings.LastIndex(path, "/")+1:] == alias {
+		if  strings.ToLower(path[strings.LastIndex(path, "/")+1:]) == alias {
 			alias = ""
 		}
 		filtered[path] = alias

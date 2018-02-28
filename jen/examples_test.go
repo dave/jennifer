@@ -858,6 +858,29 @@ func ExampleNewFilePath() {
 	// }
 }
 
+func ExamplePackageAlias() {
+	f := NewFilePath("a.b/c")
+	f.Func().Id("init").Params().Block(
+		Qual("a.b/c", "Foo").Call().Comment("Local package - alias is omitted."),
+		Qual(NewPackageAlias("d.e/f", "alias"), "Bar").Call().Comment("Import is automatically added."),
+		Qual(NewPackageAlias("g.h/f", "alias1"), "Baz").Call().Comment("Colliding package name is automatically renamed."),
+	)
+	fmt.Printf("%#v", f)
+	// Output:
+	// package c
+	//
+	// import (
+	// 	alias "d.e/f"
+	// 	alias1 "g.h/f"
+	// )
+	//
+	// func init() {
+	// 	Foo()        // Local package - alias is omitted.
+	// 	alias.Bar()  // Import is automatically added.
+	// 	alias1.Baz() // Colliding package name is automatically renamed.
+	// }
+}
+
 func ExampleStruct_empty() {
 	c := Id("c").Op(":=").Make(Chan().Struct())
 	fmt.Printf("%#v", c)
