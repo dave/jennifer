@@ -26,7 +26,7 @@ void myprint(char* s) {
 	// Output:
 	// package a
 	//
-	// import unsafe "unsafe"
+	// import "unsafe"
 	//
 	// /*
 	// #include <stdio.h>
@@ -57,8 +57,8 @@ func ExampleFile_CgoPreamble_anon() {
 	// package a
 	//
 	// import (
-	// 	a "foo.bar/a"
-	// 	b "foo.bar/b"
+	// 	"foo.bar/a"
+	// 	"foo.bar/b"
 	// )
 	//
 	// // #include <stdio.h>
@@ -82,7 +82,7 @@ func ExampleFile_CgoPreamble_no_preamble() {
 	//
 	// import (
 	// 	"C"
-	// 	fmt "fmt"
+	// 	"fmt"
 	// )
 	//
 	// func init() {
@@ -132,7 +132,7 @@ func ExampleFile_CgoPreamble_no_preamble_anon() {
 	//
 	// import (
 	// 	"C"
-	// 	fmt "fmt"
+	// 	"fmt"
 	// )
 	//
 	// func init() {
@@ -847,7 +847,7 @@ func ExampleNewFilePath() {
 	// package c
 	//
 	// import (
-	// 	f "d.e/f"
+	// 	"d.e/f"
 	// 	f1 "g.h/f"
 	// )
 	//
@@ -855,6 +855,29 @@ func ExampleNewFilePath() {
 	// 	Foo()    // Local package - alias is omitted.
 	// 	f.Bar()  // Import is automatically added.
 	// 	f1.Baz() // Colliding package name is automatically renamed.
+	// }
+}
+
+func ExamplePackageAlias() {
+	f := NewFilePath("a.b/c")
+	f.Func().Id("init").Params().Block(
+		Qual("a.b/c", "Foo").Call().Comment("Local package - alias is omitted."),
+		Qual(NewPackageAlias("d.e/f", "alias"), "Bar").Call().Comment("Import is automatically added."),
+		Qual(NewPackageAlias("g.h/f", "alias1"), "Baz").Call().Comment("Colliding package name is automatically renamed."),
+	)
+	fmt.Printf("%#v", f)
+	// Output:
+	// package c
+	//
+	// import (
+	// 	alias "d.e/f"
+	// 	alias1 "g.h/f"
+	// )
+	//
+	// func init() {
+	// 	Foo()        // Local package - alias is omitted.
+	// 	alias.Bar()  // Import is automatically added.
+	// 	alias1.Baz() // Colliding package name is automatically renamed.
 	// }
 }
 
@@ -990,7 +1013,7 @@ func ExampleQual_file() {
 	// package c
 	//
 	// import (
-	// 	f "d.e/f"
+	// 	"d.e/f"
 	// 	f1 "g.h/f"
 	// )
 	//
@@ -1298,7 +1321,7 @@ func ExampleId_remote() {
 	// Output:
 	// package main
 	//
-	// import fmt "fmt"
+	// import "fmt"
 	//
 	// func main() {
 	// 	fmt.Println("Hello, world")
@@ -1329,7 +1352,7 @@ func ExampleNewFile() {
 	// Output:
 	// package main
 	//
-	// import fmt "fmt"
+	// import "fmt"
 	//
 	// func main() {
 	// 	fmt.Println("Hello, world")

@@ -194,6 +194,14 @@ var cases = []tc{
 		},
 	},
 	{
+		desc:   `import path alias`,
+		code:   Qual(NewPackageAlias("x.y/z", "alias"), "a"),
+		expect: `alias.a`,
+		expectImports: map[string]string{
+			"x.y/z": "alias",
+		},
+	},
+	{
 		desc:   `var decl`,
 		code:   Var().Id("a").Op("=").Lit("b"),
 		expect: `var a = "b"`,

@@ -120,32 +120,42 @@ func (f *File) isValidAlias(alias string) bool {
 	return true
 }
 
-func (f *File) register(path string) string {
-	if f.isLocal(path) {
+func (f *File) register(path interface{}) string {
+	var importPath, alias string
+	pkgAlias, isPkgAlias := path.(PackageAlias);
+	if isPkgAlias{
+		importPath = pkgAlias.Path
+		alias = pkgAlias.Alias
+	} else {
+		importPath = path.(string)
+	}
+	if f.isLocal(importPath) {
 		// notest
 		// should never get here becasue in Qual the packageToken will be null,
 		// so render will never be called.
 		return ""
 	}
-	if f.imports[path] != "" && f.imports[path] != "_" {
-		return f.imports[path]
+	if f.imports[importPath] != "" && f.imports[importPath] != "_" {
+		return f.imports[importPath]
 	}
 	if path == "C" {
 		// special case for "C" pseudo-package
-		f.imports[path] = "C"
+		f.imports[importPath] = "C"
 		return "C"
 	}
-	alias := guessAlias(path)
+	if alias == "" {
+		alias = guessAlias(importPath)
+	}
 	unique := alias
 	i := 0
 	for !f.isValidAlias(unique) {
 		i++
 		unique = fmt.Sprintf("%s%d", alias, i)
 	}
-	if f.PackagePrefix != "" {
+	if f.PackagePrefix != "" && !isPkgAlias{
 		unique = f.PackagePrefix + "_" + unique
 	}
-	f.imports[path] = unique
+	f.imports[importPath] = unique
 	return unique
 }
 

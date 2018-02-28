@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"strconv"
+	"strings"
 )
 
 type tokenType string
@@ -22,6 +23,23 @@ const (
 	layoutToken      tokenType = "layout"
 )
 
+type PackageAlias struct {
+	Path string
+	Alias string
+}
+
+func NewPackageAlias(path, alias string) PackageAlias {
+	path = strings.TrimSpace(path)
+	alias = strings.TrimSpace(alias)
+	if alias == "" {
+		panic("alias should not be empty")
+	}
+	if path == "" {
+		panic("path should not be empty")
+	}
+	return PackageAlias{path, alias}
+}
+
 type token struct {
 	typ     tokenType
 	content interface{}
@@ -30,7 +48,12 @@ type token struct {
 func (t token) isNull(f *File) bool {
 	if t.typ == packageToken {
 		// package token is null if the path is the local package path
-		return f.isLocal(t.content.(string))
+		alias, isAlias := t.content.(PackageAlias)
+		if isAlias {
+			return f.isLocal(alias.Path)
+		} else {
+			return f.isLocal(t.content.(string))
+		}
 	}
 	return t.typ == nullToken
 }
@@ -84,8 +107,7 @@ func (t token) render(f *File, w io.Writer, s *Statement) error {
 			}
 		}
 	case packageToken:
-		path := t.content.(string)
-		alias := f.register(path)
+		alias := f.register(t.content)
 		if _, err := w.Write([]byte(alias)); err != nil {
 			return err
 		}
@@ -225,7 +247,7 @@ func (s *Statement) Id(name string) *Statement {
 // Qual renders a qualified identifier. Imports are automatically added when
 // used with a File. If the path matches the local path, the package name is
 // omitted. If package names conflict they are automatically renamed.
-func Qual(path, name string) *Statement {
+func Qual(path interface{}, name string) *Statement {
 	return newStatement().Qual(path, name)
 }
 
@@ -241,7 +263,7 @@ func (g *Group) Qual(path, name string) *Statement {
 // Qual renders a qualified identifier. Imports are automatically added when
 // used with a File. If the path matches the local path, the package name is
 // omitted. If package names conflict they are automatically renamed.
-func (s *Statement) Qual(path, name string) *Statement {
+func (s *Statement) Qual(path interface{}, name string) *Statement {
 	g := &Group{
 		close: "",
 		items: []Code{
