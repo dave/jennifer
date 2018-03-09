@@ -24,7 +24,7 @@ Output:
 ```go
 package main
 
-import fmt "fmt"
+import "fmt"
 
 func main() {
 	fmt.Println("Hello, world")
@@ -847,7 +847,7 @@ fmt.Printf("%#v", f)
 // Output:
 // package a
 //
-// import unsafe "unsafe"
+// import "unsafe"
 //
 // /*
 // #include <stdio.h>
@@ -919,7 +919,7 @@ if err != nil {
 ```
 
 ### Anon
-Anon adds an anonymous import:
+Anon adds an anonymous import.
 
 ```go
 f := NewFile("c")
@@ -932,6 +932,62 @@ fmt.Printf("%#v", f)
 // import _ "a"
 //
 // func init() {}
+```
+
+### ImportName
+ImportName provides the package name for a path. If specified, the alias will be omitted from the
+import block. This is optional. If not specified, a sensible package name is used based on the path
+and this is added as an alias in the import block.
+
+```go
+f := NewFile("main")
+
+// package a should use name "a"
+f.ImportName("github.com/foo/a", "a")
+
+// package b is not used in the code so will not be included
+f.ImportName("github.com/foo/b", "b")
+
+f.Func().Id("main").Params().Block(
+	Qual("github.com/foo/a", "A").Call(),
+)
+fmt.Printf("%#v", f)
+
+// Output:
+// package main
+//
+// import "github.com/foo/a"
+//
+// func main() {
+// 	a.A()
+// }
+```
+
+### ImportAlias
+ImportAlias provides the alias for a package path that should be used in the import block.
+
+```go
+f := NewFile("main")
+
+// package a should be aliased to "b"
+f.ImportAlias("github.com/foo/a", "b")
+
+// package c is not used in the code so will not be included
+f.ImportAlias("github.com/foo/c", "c")
+
+f.Func().Id("main").Params().Block(
+	Qual("github.com/foo/a", "A").Call(),
+)
+fmt.Printf("%#v", f)
+
+// Output:
+// package main
+//
+// import b "github.com/foo/a"
+//
+// func main() {
+// 	b.A()
+// }
 ```
 
 ### Comments
@@ -961,22 +1017,22 @@ CgoPreamble adds a cgo preamble comment that is rendered directly before the "C"
 import.
 
 ### PackagePrefix
-If you're worried about package aliases conflicting with local variable
-names, you can set a prefix here. Package foo becomes {prefix}_foo.
+If you're worried about generated package aliases conflicting with local variable names, you
+can set a prefix here. Package foo becomes {prefix}_foo.
 
 ```go
-f := NewFile("c")
+f := NewFile("a")
 f.PackagePrefix = "pkg"
 f.Func().Id("main").Params().Block(
-	Qual("fmt", "Println").Call(),
+	Qual("b.c/d", "E").Call(),
 )
 fmt.Printf("%#v", f)
 // Output:
-// package c
+// package a
 //
-// import pkg_fmt "fmt"
+// import pkg_d "b.c/d"
 //
 // func main() {
-// 	pkg_fmt.Println()
+// 	pkg_d.E()
 // }
 ```

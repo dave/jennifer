@@ -8,6 +8,54 @@ import (
 	. "github.com/dave/jennifer/jen"
 )
 
+func ExampleFile_ImportName() {
+	f := NewFile("main")
+
+	// package a should use name "a"
+	f.ImportName("github.com/foo/a", "a")
+
+	// package b is not used in the code so will not be included
+	f.ImportName("github.com/foo/b", "b")
+
+	f.Func().Id("main").Params().Block(
+		Qual("github.com/foo/a", "A").Call(),
+	)
+	fmt.Printf("%#v", f)
+
+	// Output:
+	// package main
+	//
+	// import "github.com/foo/a"
+	//
+	// func main() {
+	// 	a.A()
+	// }
+}
+
+func ExampleFile_ImportAlias() {
+	f := NewFile("main")
+
+	// package a should be aliased to "b"
+	f.ImportAlias("github.com/foo/a", "b")
+
+	// package c is not used in the code so will not be included
+	f.ImportAlias("github.com/foo/c", "c")
+
+	f.Func().Id("main").Params().Block(
+		Qual("github.com/foo/a", "A").Call(),
+	)
+	fmt.Printf("%#v", f)
+
+	// Output:
+	// package main
+	//
+	// import b "github.com/foo/a"
+	//
+	// func main() {
+	// 	b.A()
+	// }
+}
+
 func ExampleFile_CgoPreamble() {
 	f := NewFile("a")
 	f.CgoPreamble(`#include <stdio.h>
@@ -26,7 +74,7 @@ void myprint(char* s) {
 	// Output:
 	// package a
 	//
-	// import unsafe "unsafe"
+	// import "unsafe"
 	//
 	// /*
 	// #include <stdio.h>
@@ -82,7 +130,7 @@ func ExampleFile_CgoPreamble_no_preamble() {
 	//
 	// import (
 	// 	"C"
-	// 	fmt "fmt"
+	// 	"fmt"
 	// )
 	//
 	// func init() {
@@ -132,7 +180,7 @@ func ExampleFile_CgoPreamble_no_preamble_anon() {
 	//
 	// import (
 	// 	"C"
-	// 	fmt "fmt"
+	// 	"fmt"
 	// )
 	//
 	// func init() {
@@ -1298,7 +1346,7 @@ func ExampleId_remote() {
 	// Output:
 	// package main
 	//
-	// import fmt "fmt"
+	// import "fmt"
 	//
 	// func main() {
 	// 	fmt.Println("Hello, world")
@@ -1329,7 +1377,7 @@ func ExampleNewFile() {
 	// Output:
 	// package main
 	//
-	// import fmt "fmt"
+	// import "fmt"
 	//
 	// func main() {
 	// 	fmt.Println("Hello, world")
@@ -1379,18 +1427,18 @@ func ExampleFile_Anon() {
 }
 
 func ExampleFile_PackagePrefix() {
-	f := NewFile("c")
+	f := NewFile("a")
 	f.PackagePrefix = "pkg"
 	f.Func().Id("main").Params().Block(
-		Qual("fmt", "Println").Call(),
+		Qual("b.c/d", "E").Call(),
 	)
 	fmt.Printf("%#v", f)
 	// Output:
-	// package c
+	// package a
 	//
-	// import pkg_fmt "fmt"
+	// import pkg_d "b.c/d"
 	//
 	// func main() {
-	// 	pkg_fmt.Println()
+	// 	pkg_d.E()
 	// }
 }

@@ -391,6 +391,16 @@ the import is separated, and preceded by the preamble.
 
 {{ "ExampleFile_Anon" | example }}
 
+### ImportName
+{{ "File.ImportName" | doc }}
+
+{{ "ExampleFile_ImportName" | example }}
+
+### ImportAlias
+{{ "File.ImportAlias" | doc }}
+
+{{ "ExampleFile_ImportAlias" | example }}
+
 ### Comments
 {{ "File.PackageComment" | doc }}
 
