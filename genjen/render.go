@@ -1,13 +1,8 @@
 package main
 
 import (
-	"go/build"
 	"io"
-	"os/exec"
 	"strings"
-
-	"fmt"
-	"path/filepath"
 
 	. "github.com/dave/jennifer/jen"
 )
@@ -207,26 +202,6 @@ func render(w io.Writer) error {
 		)
 	}
 
-	packages, err := getStandardLibraryPackages()
-	if err != nil {
-		return err
-	}
-	/*
-		// PackageNameHints is a map containing hints for the names of all standard library packages
-		var PackageNameHints = map[string]string{
-			...
-		}
-	*/
-	file.Comment("PackageNameHints is a map containing hints for the names of all standard library packages")
-	file.Var().Id("PackageNameHints").Op("=").Map(String()).String().Values(DictFunc(func(d Dict) {
-		for path, name := range packages {
-			if name == "main" {
-				continue
-			}
-			d[Lit(path)] = Lit(name)
-		}
-	}))
-
 	return file.Render(w)
 }
 
@@ -278,27 +253,4 @@ func addFunctionAndGroupMethod(
 		Id("g").Dot("items").Op("=").Append(Id("g").Dot("items"), Id("s")),
 		Return(Id("s")),
 	)
-}
-
-func getStandardLibraryPackages() (map[string]string, error) {
-	cmd := exec.Command("go", "list", "-f", "{{ .ImportPath }} {{ .Name }}", "./...")
-	cmd.Env = []string{
-		fmt.Sprintf("GOPATH=%s", build.Default.GOPATH),
-		fmt.Sprintf("GOROOT=%s", build.Default.GOROOT),
-	}
-	cmd.Dir = filepath.Join(build.Default.GOROOT, "src")
-	b, err := cmd.CombinedOutput()
-	if err != nil {
-		return nil, err
-	}
-	all := strings.Split(strings.TrimSpace(string(b)), "\n")
-
-	packages := map[string]string{}
-	for _, j := range all {
-		parts := strings.Split(j, " ")
-		path := parts[0]
-		name := parts[1]
-		packages[path] = name
-	}
-	return packages, nil
 }

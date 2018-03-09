@@ -173,9 +173,9 @@ func (f *File) register(path string) string {
 	}
 
 	// look up the path in the list of standard library packages, if found add and return the name
-	if PackageNameHints[path] != "" {
-		f.imports[path] = importdef{name: PackageNameHints[path], alias: false}
-		return PackageNameHints[path]
+	if Hints[path] != "" {
+		f.imports[path] = importdef{name: Hints[path], alias: false}
+		return Hints[path]
 	}
 
 	alias := guessAlias(path)
