@@ -220,6 +220,9 @@ func render(w io.Writer) error {
 	file.Comment("PackageNameHints is a map containing hints for the names of all standard library packages")
 	file.Var().Id("PackageNameHints").Op("=").Map(String()).String().Values(DictFunc(func(d Dict) {
 		for path, name := range packages {
+			if name == "main" {
+				continue
+			}
 			d[Lit(path)] = Lit(name)
 		}
 	}))
