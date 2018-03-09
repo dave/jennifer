@@ -8,8 +8,11 @@ import (
 func TestGuessAlias(t *testing.T) {
 
 	data := map[string]string{
-		"A":             "a",
+		"A":             "A",
 		"a":             "a",
+		"a0":            "a0",
+		"a_b":           "a_b",
+		"ß":             "ß",
 		"a$":            "a",
 		"a/b":           "b",
 		"a/b/c":         "c",

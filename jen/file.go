@@ -172,11 +172,9 @@ func guessAlias(path string) string {
 		alias = alias[strings.LastIndex(alias, "/")+1:]
 	}
 
-	// alias should be lower case
-	alias = strings.ToLower(alias)
-
-	// alias should now only contain alphanumerics
-	importsRegex := regexp.MustCompile(`[^a-z0-9]`)
+	// valid package identifiers are \p{L}[p{L}\p{Nd}_]?, so
+	// alias should only contain those characters classes
+	importsRegex := regexp.MustCompile(`[^\p{L}\p{Nd}_]`)
 	alias = importsRegex.ReplaceAllString(alias, "")
 
 	return alias
