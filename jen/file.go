@@ -104,6 +104,14 @@ func (f *File) ImportName(path, name string) {
 	f.hints[path] = importdef{name: name, alias: false}
 }
 
+// ImportNames allows multiple names to be imported as a map. Use the [gennames](gennames) command to
+// automatically generate a go file containing a map of a selection of package names.
+func (f *File) ImportNames(names map[string]string) {
+	for path, name := range names {
+		f.hints[path] = importdef{name: name, alias: false}
+	}
+}
+
 // ImportAlias provides the alias for a package path that should be used in the import block.
 func (f *File) ImportAlias(path, alias string) {
 	f.hints[path] = importdef{name: alias, alias: true}
@@ -172,9 +180,9 @@ func (f *File) register(path string) string {
 		// look up the path in the list of provided package names and aliases by ImportName / ImportAlias
 		name = hint.name
 		alias = hint.alias
-	} else if Hints[path] != "" {
-		// look up the path in the list of standard library packages, if found add and return the name
-		name = Hints[path]
+	} else if standardLibraryHints[path] != "" {
+		// look up the path in the list of standard library packages
+		name = standardLibraryHints[path]
 		alias = false
 	} else {
 		// if a hint is not found for the package, guess the alias from the package path

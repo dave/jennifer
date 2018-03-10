@@ -44,7 +44,7 @@ in your PR.
 ### Examples
 Jennifer has a comprehensive suite of examples - see [godoc](https://godoc.org/github.com/dave/jennifer/jen#pkg-examples) for an index. Here's some examples of jennifer being used in the real-world:
 
-* [genjen](https://github.com/dave/jennifer/blob/master/genjen/render.go) (which generates much of jennifer, using data in [data.go](https://github.com/dave/jennifer/blob/master/genjen/data.go))
+* [genjen](genjen/render.go) (which generates much of jennifer, using data in [data.go](genjen/data.go))
 * [frizz](https://github.com/frizz/frizz/blob/master/process/generate/structs.go)
 * [zerogen](https://github.com/mrsinham/zerogen/blob/master/generator.go)
 * [go-contentful-generator](https://github.com/nicolai86/go-contentful-generator)
@@ -969,6 +969,10 @@ fmt.Printf("%#v", f)
 // 	a.A()
 // }
 ```
+
+### ImportNames
+ImportNames allows multiple names to be imported as a map. Use the [gennames](gennames) command to
+automatically generate a go file containing a map of a selection of package names. 
 
 ### ImportAlias
 ImportAlias provides the alias for a package path that should be used in the import block.

@@ -86,6 +86,31 @@ func ExampleFile_ImportName() {
 	// }
 }
 
+func ExampleFile_ImportNames() {
+
+	// package a should use name "a", package b is not used in the code so will not be included
+	names := map[string]string{
+		"github.com/foo/a": "a",
+		"github.com/foo/b": "b",
+	}
+
+	f := NewFile("main")
+	f.ImportNames(names)
+	f.Func().Id("main").Params().Block(
+		Qual("github.com/foo/a", "A").Call(),
+	)
+	fmt.Printf("%#v", f)
+
+	// Output:
+	// package main
+	//
+	// import "github.com/foo/a"
+	//
+	// func main() {
+	// 	a.A()
+	// }
+}
+
 func ExampleFile_ImportAlias() {
 	f := NewFile("main")
 

@@ -14,12 +14,4 @@ func main() {
 	if err := ioutil.WriteFile("./jen/generated.go", buf.Bytes(), 0644); err != nil {
 		panic(err)
 	}
-
-	buf = &bytes.Buffer{}
-	if err := hints(buf); err != nil {
-		panic(err)
-	}
-	if err := ioutil.WriteFile("./jen/hints.go", buf.Bytes(), 0644); err != nil {
-		panic(err)
-	}
 }
