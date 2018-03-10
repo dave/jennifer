@@ -224,14 +224,24 @@ func (s *Statement) Id(name string) *Statement {
 
 // Qual renders a qualified identifier. Imports are automatically added when
 // used with a File. If the path matches the local path, the package name is
-// omitted. If package names conflict they are automatically renamed.
+// omitted. If package names conflict they are automatically renamed. Note that
+// it is not possible to reliably determine the package name given an arbitrary
+// package path, so a sensible name is guessed from the path and added as an
+// alias. The names of all standard library packages are known so these do not
+// need to be aliased. If more control is needed of the aliases, see
+// [File.ImportName](#importname) or [File.ImportAlias](#importalias).
 func Qual(path, name string) *Statement {
 	return newStatement().Qual(path, name)
 }
 
 // Qual renders a qualified identifier. Imports are automatically added when
 // used with a File. If the path matches the local path, the package name is
-// omitted. If package names conflict they are automatically renamed.
+// omitted. If package names conflict they are automatically renamed. Note that
+// it is not possible to reliably determine the package name given an arbitrary
+// package path, so a sensible name is guessed from the path and added as an
+// alias. The names of all standard library packages are known so these do not
+// need to be aliased. If more control is needed of the aliases, see
+// [File.ImportName](#importname) or [File.ImportAlias](#importalias).
 func (g *Group) Qual(path, name string) *Statement {
 	s := Qual(path, name)
 	g.items = append(g.items, s)
@@ -240,7 +250,12 @@ func (g *Group) Qual(path, name string) *Statement {
 
 // Qual renders a qualified identifier. Imports are automatically added when
 // used with a File. If the path matches the local path, the package name is
-// omitted. If package names conflict they are automatically renamed.
+// omitted. If package names conflict they are automatically renamed. Note that
+// it is not possible to reliably determine the package name given an arbitrary
+// package path, so a sensible name is guessed from the path and added as an
+// alias. The names of all standard library packages are known so these do not
+// need to be aliased. If more control is needed of the aliases, see
+// [File.ImportName](#importname) or [File.ImportAlias](#importalias).
 func (s *Statement) Qual(path, name string) *Statement {
 	g := &Group{
 		close: "",

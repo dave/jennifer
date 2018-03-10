@@ -165,30 +165,44 @@ func (f *File) register(path string) string {
 		return "C"
 	}
 
-	// look up the path in the list of provided package names and aliases by ImportName / ImportAlias
-	hint := f.hints[path]
-	if hint.name != "" {
-		f.imports[path] = importdef{name: hint.name, alias: hint.alias}
-		return hint.name
+	var name string
+	var alias bool
+
+	if hint := f.hints[path]; hint.name != "" {
+		// look up the path in the list of provided package names and aliases by ImportName / ImportAlias
+		name = hint.name
+		alias = hint.alias
+	} else if Hints[path] != "" {
+		// look up the path in the list of standard library packages, if found add and return the name
+		name = Hints[path]
+		alias = false
+	} else {
+		// if a hint is not found for the package, guess the alias from the package path
+		name = guessAlias(path)
+		alias = true
 	}
 
-	// look up the path in the list of standard library packages, if found add and return the name
-	if Hints[path] != "" {
-		f.imports[path] = importdef{name: Hints[path], alias: false}
-		return Hints[path]
-	}
-
-	alias := guessAlias(path)
-	unique := alias
+	// If the name is invalid or has been registered already, make it unique by appending a number
+	unique := name
 	i := 0
 	for !f.isValidAlias(unique) {
 		i++
-		unique = fmt.Sprintf("%s%d", alias, i)
+		unique = fmt.Sprintf("%s%d", name, i)
 	}
-	if f.PackagePrefix != "" {
+
+	// If we've changed the name to make it unique, it should definitely be an alias
+	if unique != name {
+		alias = true
+	}
+
+	// Only add a prefix if the name is an alias
+	if f.PackagePrefix != "" && alias {
 		unique = f.PackagePrefix + "_" + unique
 	}
-	f.imports[path] = importdef{name: unique, alias: true}
+
+	// Register the eventual name
+	f.imports[path] = importdef{name: unique, alias: alias}
+
 	return unique
 }
 

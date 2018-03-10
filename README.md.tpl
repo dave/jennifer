@@ -65,9 +65,11 @@ preferred.
 
 {{ "ExampleQual" | example }}
 
-{{ "Qual[1:]" | doc }}
+{{ "Qual[1:4]" | doc }}
 
 {{ "ExampleQual_file" | example }}
+
+{{ "Qual[4:]" | doc }}
 
 ### List
 {{ "List" | doc }}

@@ -128,6 +128,13 @@ fmt.Printf("%#v", f)
 // }
 ```
 
+Note that
+it is not possible to reliably determine the package name given an arbitrary
+package path, so a sensible name is guessed from the path and added as an
+alias. The names of all standard library packages are known so these do not
+need to be aliased. If more control is needed of the aliases, see
+[File.ImportName](#importname) or [File.ImportAlias](#importalias).
+
 ### List
 List renders a comma separated list. Use for multiple return functions.
 

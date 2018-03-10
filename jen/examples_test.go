@@ -8,6 +8,60 @@ import (
 	. "github.com/dave/jennifer/jen"
 )
 
+func ExampleFile_ImportName_conflict() {
+	f := NewFile("main")
+
+	// We provide a hint that package foo/a should use name "a", but because package bar/a already
+	// registers the required name, foo/a is aliased.
+	f.ImportName("github.com/foo/a", "a")
+
+	f.Func().Id("main").Params().Block(
+		Qual("github.com/bar/a", "Bar").Call(),
+		Qual("github.com/foo/a", "Foo").Call(),
+	)
+	fmt.Printf("%#v", f)
+
+	// Output:
+	// package main
+	//
+	// import (
+	// 	a "github.com/bar/a"
+	// 	a1 "github.com/foo/a"
+	// )
+	//
+	// func main() {
+	// 	a.Bar()
+	// 	a1.Foo()
+	// }
+}
+
+func ExampleFile_ImportAlias_conflict() {
+	f := NewFile("main")
+
+	// We provide a hint that package foo/a should use alias "b", but because package bar/b already
+	// registers the required name, foo/a is aliased using the requested alias as a base.
+	f.ImportName("github.com/foo/a", "b")
+
+	f.Func().Id("main").Params().Block(
+		Qual("github.com/bar/b", "Bar").Call(),
+		Qual("github.com/foo/a", "Foo").Call(),
+	)
+	fmt.Printf("%#v", f)
+
+	// Output:
+	// package main
+	//
+	// import (
+	// 	b "github.com/bar/b"
+	// 	b1 "github.com/foo/a"
+	// )
+	//
+	// func main() {
+	// 	b.Bar()
+	// 	b1.Foo()
+	// }
+}
+
 func ExampleFile_ImportName() {
 	f := NewFile("main")
 
