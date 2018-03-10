@@ -82,29 +82,31 @@ func (f *File) Render(w io.Writer) error {
 func (f *File) renderImports(source io.Writer) error {
 
 	// Render the "C" import if it's been used in a `Qual`, `Anon` or if there's a preamble comment
-	hasCgo := f.imports["C"] != "" || len(f.cgoPreamble) > 0
+	hasCgo := f.imports["C"].name != "" || len(f.cgoPreamble) > 0
 
 	// Only separate the import from the main imports block if there's a preamble
 	separateCgo := hasCgo && len(f.cgoPreamble) > 0
 
-	filtered := map[string]string{}
-	for path, alias := range f.imports {
+	filtered := map[string]importdef{}
+	for path, def := range f.imports {
 		// filter out the "C" pseudo-package so it's not rendered in a block with the other
 		// imports, but only if it is accompanied by a preamble comment
 		if path == "C" && separateCgo {
 			continue
 		}
-		filtered[path] = alias
+		filtered[path] = def
 	}
 
 	if len(filtered) == 1 {
-		for path, alias := range filtered {
-			if path == "C" {
-				if _, err := fmt.Fprint(source, "import \"C\"\n\n"); err != nil {
+		for path, def := range filtered {
+			if def.alias && path != "C" {
+				// "C" package should be rendered without alias even when used as an anonymous import
+				// (e.g. should never have an underscore).
+				if _, err := fmt.Fprintf(source, "import %s %s\n\n", def.name, strconv.Quote(path)); err != nil {
 					return err
 				}
 			} else {
-				if _, err := fmt.Fprintf(source, "import %s %s\n\n", alias, strconv.Quote(path)); err != nil {
+				if _, err := fmt.Fprintf(source, "import %s\n\n", strconv.Quote(path)); err != nil {
 					return err
 				}
 			}
@@ -121,13 +123,16 @@ func (f *File) renderImports(source io.Writer) error {
 		}
 		sort.Strings(paths)
 		for _, path := range paths {
-			alias := filtered[path]
-			if path == "C" {
-				if _, err := fmt.Fprint(source, "\"C\"\n"); err != nil {
+			def := filtered[path]
+			if def.alias && path != "C" {
+				// "C" package should be rendered without alias even when used as an anonymous import
+				// (e.g. should never have an underscore).
+				if _, err := fmt.Fprintf(source, "%s %s\n", def.name, strconv.Quote(path)); err != nil {
 					return err
 				}
+
 			} else {
-				if _, err := fmt.Fprintf(source, "%s %s\n", alias, strconv.Quote(path)); err != nil {
+				if _, err := fmt.Fprintf(source, "%s\n", strconv.Quote(path)); err != nil {
 					return err
 				}
 			}

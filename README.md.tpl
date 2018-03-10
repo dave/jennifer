@@ -32,7 +32,7 @@ in your PR.
 ### Examples
 Jennifer has a comprehensive suite of examples - see [godoc](https://godoc.org/github.com/dave/jennifer/jen#pkg-examples) for an index. Here's some examples of jennifer being used in the real-world:
 
-* [genjen](https://github.com/dave/jennifer/blob/master/genjen/render.go) (which generates much of jennifer, using data in [data.go](https://github.com/dave/jennifer/blob/master/genjen/data.go))
+* [genjen](genjen/render.go) (which generates much of jennifer, using data in [data.go](genjen/data.go))
 * [frizz](https://github.com/frizz/frizz/blob/master/process/generate/structs.go)
 * [zerogen](https://github.com/mrsinham/zerogen/blob/master/generator.go)
 * [go-contentful-generator](https://github.com/nicolai86/go-contentful-generator)
@@ -65,9 +65,11 @@ preferred.
 
 {{ "ExampleQual" | example }}
 
-{{ "Qual[1:]" | doc }}
+{{ "Qual[1:4]" | doc }}
 
 {{ "ExampleQual_file" | example }}
+
+{{ "Qual[4:]" | doc }}
 
 ### List
 {{ "List" | doc }}
@@ -390,6 +392,19 @@ the import is separated, and preceded by the preamble.
 {{ "File.Anon" | doc }}
 
 {{ "ExampleFile_Anon" | example }}
+
+### ImportName
+{{ "File.ImportName" | doc }}
+
+{{ "ExampleFile_ImportName" | example }}
+
+### ImportNames
+{{ "File.ImportNames" | doc }} 
+
+### ImportAlias
+{{ "File.ImportAlias" | doc }}
+
+{{ "ExampleFile_ImportAlias" | example }}
 
 ### Comments
 {{ "File.PackageComment" | doc }}

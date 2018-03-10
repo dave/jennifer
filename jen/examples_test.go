@@ -8,6 +8,133 @@ import (
 	. "github.com/dave/jennifer/jen"
 )
 
+func ExampleFile_ImportName_conflict() {
+	f := NewFile("main")
+
+	// We provide a hint that package foo/a should use name "a", but because package bar/a already
+	// registers the required name, foo/a is aliased.
+	f.ImportName("github.com/foo/a", "a")
+
+	f.Func().Id("main").Params().Block(
+		Qual("github.com/bar/a", "Bar").Call(),
+		Qual("github.com/foo/a", "Foo").Call(),
+	)
+	fmt.Printf("%#v", f)
+
+	// Output:
+	// package main
+	//
+	// import (
+	// 	a "github.com/bar/a"
+	// 	a1 "github.com/foo/a"
+	// )
+	//
+	// func main() {
+	// 	a.Bar()
+	// 	a1.Foo()
+	// }
+}
+
+func ExampleFile_ImportAlias_conflict() {
+	f := NewFile("main")
+
+	// We provide a hint that package foo/a should use alias "b", but because package bar/b already
+	// registers the required name, foo/a is aliased using the requested alias as a base.
+	f.ImportName("github.com/foo/a", "b")
+
+	f.Func().Id("main").Params().Block(
+		Qual("github.com/bar/b", "Bar").Call(),
+		Qual("github.com/foo/a", "Foo").Call(),
+	)
+	fmt.Printf("%#v", f)
+
+	// Output:
+	// package main
+	//
+	// import (
+	// 	b "github.com/bar/b"
+	// 	b1 "github.com/foo/a"
+	// )
+	//
+	// func main() {
+	// 	b.Bar()
+	// 	b1.Foo()
+	// }
+}
+
+func ExampleFile_ImportName() {
+	f := NewFile("main")
+
+	// package a should use name "a"
+	f.ImportName("github.com/foo/a", "a")
+
+	// package b is not used in the code so will not be included
+	f.ImportName("github.com/foo/b", "b")
+
+	f.Func().Id("main").Params().Block(
+		Qual("github.com/foo/a", "A").Call(),
+	)
+	fmt.Printf("%#v", f)
+
+	// Output:
+	// package main
+	//
+	// import "github.com/foo/a"
+	//
+	// func main() {
+	// 	a.A()
+	// }
+}
+
+func ExampleFile_ImportNames() {
+
+	// package a should use name "a", package b is not used in the code so will not be included
+	names := map[string]string{
+		"github.com/foo/a": "a",
+		"github.com/foo/b": "b",
+	}
+
+	f := NewFile("main")
+	f.ImportNames(names)
+	f.Func().Id("main").Params().Block(
+		Qual("github.com/foo/a", "A").Call(),
+	)
+	fmt.Printf("%#v", f)
+
+	// Output:
+	// package main
+	//
+	// import "github.com/foo/a"
+	//
+	// func main() {
+	// 	a.A()
+	// }
+}
+
+func ExampleFile_ImportAlias() {
+	f := NewFile("main")
+
+	// package a should be aliased to "b"
+	f.ImportAlias("github.com/foo/a", "b")
+
+	// package c is not used in the code so will not be included
+	f.ImportAlias("github.com/foo/c", "c")
+
+	f.Func().Id("main").Params().Block(
+		Qual("github.com/foo/a", "A").Call(),
+	)
+	fmt.Printf("%#v", f)
+
+	// Output:
+	// package main
+	//
+	// import b "github.com/foo/a"
+	//
+	// func main() {
+	// 	b.A()
+	// }
+}
+
 func ExampleFile_CgoPreamble() {
 	f := NewFile("a")
 	f.CgoPreamble(`#include <stdio.h>
@@ -26,7 +153,7 @@ void myprint(char* s) {
 	// Output:
 	// package a
 	//
-	// import unsafe "unsafe"
+	// import "unsafe"
 	//
 	// /*
 	// #include <stdio.h>
@@ -82,7 +209,7 @@ func ExampleFile_CgoPreamble_no_preamble() {
 	//
 	// import (
 	// 	"C"
-	// 	fmt "fmt"
+	// 	"fmt"
 	// )
 	//
 	// func init() {
@@ -132,7 +259,7 @@ func ExampleFile_CgoPreamble_no_preamble_anon() {
 	//
 	// import (
 	// 	"C"
-	// 	fmt "fmt"
+	// 	"fmt"
 	// )
 	//
 	// func init() {
@@ -1298,7 +1425,7 @@ func ExampleId_remote() {
 	// Output:
 	// package main
 	//
-	// import fmt "fmt"
+	// import "fmt"
 	//
 	// func main() {
 	// 	fmt.Println("Hello, world")
@@ -1329,7 +1456,7 @@ func ExampleNewFile() {
 	// Output:
 	// package main
 	//
-	// import fmt "fmt"
+	// import "fmt"
 	//
 	// func main() {
 	// 	fmt.Println("Hello, world")
@@ -1379,18 +1506,18 @@ func ExampleFile_Anon() {
 }
 
 func ExampleFile_PackagePrefix() {
-	f := NewFile("c")
+	f := NewFile("a")
 	f.PackagePrefix = "pkg"
 	f.Func().Id("main").Params().Block(
-		Qual("fmt", "Println").Call(),
+		Qual("b.c/d", "E").Call(),
 	)
 	fmt.Printf("%#v", f)
 	// Output:
-	// package c
+	// package a
 	//
-	// import pkg_fmt "fmt"
+	// import pkg_d "b.c/d"
 	//
 	// func main() {
-	// 	pkg_fmt.Println()
+	// 	pkg_d.E()
 	// }
 }

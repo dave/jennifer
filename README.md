@@ -24,7 +24,7 @@ Output:
 ```go
 package main
 
-import fmt "fmt"
+import "fmt"
 
 func main() {
 	fmt.Println("Hello, world")
@@ -44,7 +44,7 @@ in your PR.
 ### Examples
 Jennifer has a comprehensive suite of examples - see [godoc](https://godoc.org/github.com/dave/jennifer/jen#pkg-examples) for an index. Here's some examples of jennifer being used in the real-world:
 
-* [genjen](https://github.com/dave/jennifer/blob/master/genjen/render.go) (which generates much of jennifer, using data in [data.go](https://github.com/dave/jennifer/blob/master/genjen/data.go))
+* [genjen](genjen/render.go) (which generates much of jennifer, using data in [data.go](genjen/data.go))
 * [frizz](https://github.com/frizz/frizz/blob/master/process/generate/structs.go)
 * [zerogen](https://github.com/mrsinham/zerogen/blob/master/generator.go)
 * [go-contentful-generator](https://github.com/nicolai86/go-contentful-generator)
@@ -127,6 +127,13 @@ fmt.Printf("%#v", f)
 // 	f1.Baz() // Colliding package name is renamed.
 // }
 ```
+
+Note that
+it is not possible to reliably determine the package name given an arbitrary
+package path, so a sensible name is guessed from the path and added as an
+alias. The names of all standard library packages are known so these do not
+need to be aliased. If more control is needed of the aliases, see
+[File.ImportName](#importname) or [File.ImportAlias](#importalias).
 
 ### List
 List renders a comma separated list. Use for multiple return functions.
@@ -847,7 +854,7 @@ fmt.Printf("%#v", f)
 // Output:
 // package a
 //
-// import unsafe "unsafe"
+// import "unsafe"
 //
 // /*
 // #include <stdio.h>
@@ -919,7 +926,7 @@ if err != nil {
 ```
 
 ### Anon
-Anon adds an anonymous import:
+Anon adds an anonymous import.
 
 ```go
 f := NewFile("c")
@@ -932,6 +939,66 @@ fmt.Printf("%#v", f)
 // import _ "a"
 //
 // func init() {}
+```
+
+### ImportName
+ImportName provides the package name for a path. If specified, the alias will be omitted from the
+import block. This is optional. If not specified, a sensible package name is used based on the path
+and this is added as an alias in the import block.
+
+```go
+f := NewFile("main")
+
+// package a should use name "a"
+f.ImportName("github.com/foo/a", "a")
+
+// package b is not used in the code so will not be included
+f.ImportName("github.com/foo/b", "b")
+
+f.Func().Id("main").Params().Block(
+	Qual("github.com/foo/a", "A").Call(),
+)
+fmt.Printf("%#v", f)
+
+// Output:
+// package main
+//
+// import "github.com/foo/a"
+//
+// func main() {
+// 	a.A()
+// }
+```
+
+### ImportNames
+ImportNames allows multiple names to be imported as a map. Use the [gennames](gennames) command to
+automatically generate a go file containing a map of a selection of package names. 
+
+### ImportAlias
+ImportAlias provides the alias for a package path that should be used in the import block.
+
+```go
+f := NewFile("main")
+
+// package a should be aliased to "b"
+f.ImportAlias("github.com/foo/a", "b")
+
+// package c is not used in the code so will not be included
+f.ImportAlias("github.com/foo/c", "c")
+
+f.Func().Id("main").Params().Block(
+	Qual("github.com/foo/a", "A").Call(),
+)
+fmt.Printf("%#v", f)
+
+// Output:
+// package main
+//
+// import b "github.com/foo/a"
+//
+// func main() {
+// 	b.A()
+// }
 ```
 
 ### Comments
@@ -961,22 +1028,22 @@ CgoPreamble adds a cgo preamble comment that is rendered directly before the "C"
 import.
 
 ### PackagePrefix
-If you're worried about package aliases conflicting with local variable
-names, you can set a prefix here. Package foo becomes {prefix}_foo.
+If you're worried about generated package aliases conflicting with local variable names, you
+can set a prefix here. Package foo becomes {prefix}_foo.
 
 ```go
-f := NewFile("c")
+f := NewFile("a")
 f.PackagePrefix = "pkg"
 f.Func().Id("main").Params().Block(
-	Qual("fmt", "Println").Call(),
+	Qual("b.c/d", "E").Call(),
 )
 fmt.Printf("%#v", f)
 // Output:
-// package c
+// package a
 //
-// import pkg_fmt "fmt"
+// import pkg_d "b.c/d"
 //
 // func main() {
-// 	pkg_fmt.Println()
+// 	pkg_d.E()
 // }
 ```
