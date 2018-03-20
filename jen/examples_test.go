@@ -8,6 +8,44 @@ import (
 	. "github.com/dave/jennifer/jen"
 )
 
+func ExampleCustom() {
+	multiLineCall := Options{
+		Close:     ")",
+		Multi:     true,
+		Open:      "(",
+		Separator: ",",
+	}
+	c := Id("foo").Custom(multiLineCall, Lit("a"), Lit("b"), Lit("c"))
+	fmt.Printf("%#v", c)
+	// Output:
+	// foo(
+	// 	"a",
+	// 	"b",
+	// 	"c",
+	// )
+}
+
+func ExampleCustomFunc() {
+	multiLineCall := Options{
+		Close:     ")",
+		Multi:     true,
+		Open:      "(",
+		Separator: ",",
+	}
+	c := Id("foo").CustomFunc(multiLineCall, func(g *Group) {
+		g.Lit("a")
+		g.Lit("b")
+		g.Lit("c")
+	})
+	fmt.Printf("%#v", c)
+	// Output:
+	// foo(
+	// 	"a",
+	// 	"b",
+	// 	"c",
+	// )
+}
+
 func ExampleFile_ImportName_conflict() {
 	f := NewFile("main")
 

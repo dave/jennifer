@@ -50,6 +50,7 @@ func render(w io.Writer) error {
 					open:      "<opening>",
 					close:     "<closing>",
 					separator: "<separator>",
+					multi:     <multi>,
 				}
 				*s = append(*s, g)
 				return s
@@ -77,6 +78,7 @@ func render(w io.Writer) error {
 				Id("open"):      Lit(b.opening),
 				Id("close"):     Lit(b.closing),
 				Id("separator"): Lit(b.separator),
+				Id("multi"):     Lit(b.multi),
 			}),
 			Op("*").Id("s").Op("=").Append(Op("*").Id("s"), Id("g")),
 			Return(Id("s")),
@@ -106,6 +108,7 @@ func render(w io.Writer) error {
 						open:      "<opening>",
 						close:     "<closing>",
 						separator: "<separator>",
+						multi:     <multi>,
 					}
 					f(g)
 					*s = append(*s, g)
@@ -123,6 +126,7 @@ func render(w io.Writer) error {
 					Id("open"):      Lit(b.opening),
 					Id("close"):     Lit(b.closing),
 					Id("separator"): Lit(b.separator),
+					Id("multi"):     Lit(b.multi),
 				}),
 				Id("f").Call(Id("g")),
 				Op("*").Id("s").Op("=").Append(Op("*").Id("s"), Id("g")),

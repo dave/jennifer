@@ -11,7 +11,7 @@ import (
 func NewFile(packageName string) *File {
 	return &File{
 		Group: &Group{
-			separator: "\n",
+			multi: true,
 		},
 		name:    packageName,
 		imports: map[string]importdef{},
@@ -24,7 +24,7 @@ func NewFile(packageName string) *File {
 func NewFilePath(packagePath string) *File {
 	return &File{
 		Group: &Group{
-			separator: "\n",
+			multi: true,
 		},
 		name:    guessAlias(packagePath),
 		path:    packagePath,
@@ -37,7 +37,7 @@ func NewFilePath(packagePath string) *File {
 func NewFilePathName(packagePath, packageName string) *File {
 	return &File{
 		Group: &Group{
-			separator: "\n",
+			multi: true,
 		},
 		name:    packageName,
 		path:    packagePath,

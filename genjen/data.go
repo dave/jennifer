@@ -11,6 +11,7 @@ var groups = []struct {
 	opening     string   // opening token
 	closing     string   // closing token
 	separator   string   // separator token
+	multi       bool     // items are always on multiple lines
 	parameters  []string // parameter names
 	preventFunc bool     // prevent the fooFunc function/method
 }{
@@ -56,7 +57,7 @@ var groups = []struct {
 		variadic:   true,
 		opening:    "{",
 		closing:    "}",
-		separator:  "\n",
+		multi:      true,
 		parameters: []string{"statements"},
 	},
 	{
@@ -65,7 +66,7 @@ var groups = []struct {
 		variadic:   true,
 		opening:    "(",
 		closing:    ")",
-		separator:  "\n",
+		multi:      true,
 		parameters: []string{"definitions"},
 	},
 	{
@@ -146,7 +147,7 @@ var groups = []struct {
 		variadic:   true,
 		opening:    "interface{",
 		closing:    "}",
-		separator:  "\n",
+		multi:      true,
 		parameters: []string{"methods"},
 	},
 	{
@@ -155,7 +156,7 @@ var groups = []struct {
 		variadic:   true,
 		opening:    "struct{",
 		closing:    "}",
-		separator:  "\n",
+		multi:      true,
 		parameters: []string{"fields"},
 	},
 	{

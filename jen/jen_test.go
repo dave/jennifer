@@ -9,7 +9,55 @@ import (
 	. "github.com/dave/jennifer/jen"
 )
 
+var o1 = Options{
+	Close:     ")",
+	Multi:     true,
+	Open:      "(",
+	Separator: ",",
+}
+
+var o2 = Options{
+	Close:     "",
+	Multi:     false,
+	Open:      "",
+	Separator: ",",
+}
+
 var cases = []tc{
+	{
+		desc: `custom func group`,
+		code: ListFunc(func(g *Group) {
+			g.CustomFunc(o2, func(g *Group) {
+				g.Id("a")
+				g.Id("b")
+				g.Id("c")
+			})
+		}).Op("=").Id("foo").Call(),
+		expect: `a, b, c = foo()`,
+	},
+	{
+		desc:   `custom group`,
+		code:   ListFunc(func(g *Group) { g.Custom(o2, Id("a"), Id("b"), Id("c")) }).Op("=").Id("foo").Call(),
+		expect: `a, b, c = foo()`,
+	},
+	{
+		desc: `custom function`,
+		code: Id("foo").Add(Custom(o1, Lit("a"), Lit("b"), Lit("c"))),
+		expect: `foo(
+			"a",
+			"b",
+			"c",
+		)`,
+	},
+	{
+		desc: `custom function`,
+		code: Id("foo").Add(Custom(o1, Lit("a"), Lit("b"), Lit("c"))),
+		expect: `foo(
+			"a",
+			"b",
+			"c",
+		)`,
+	},
 	{
 		desc: `line statement`,
 		code: Block(Lit(1).Line(), Lit(2)),

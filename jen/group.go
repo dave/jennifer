@@ -15,6 +15,7 @@ type Group struct {
 	open      string
 	close     string
 	separator string
+	multi     bool
 }
 
 func (g *Group) isNull(f *File) bool {
@@ -54,13 +55,16 @@ func (g *Group) render(f *File, w io.Writer, s *Statement) error {
 	if err != nil {
 		return err
 	}
-	if !isNull && g.separator == "\n" && g.close != "" {
-		// For blocks separated with new lines and with a closing token, we
-		// always insert a new line after the last item (but only if there is
-		// an item). This is to ensure that if the statement finishes with a
-		// comment, the closing token is not commented out.
-		// TODO: This seems really brittle.
-		if _, err := w.Write([]byte("\n")); err != nil {
+	if !isNull && g.multi && g.close != "" {
+		// For multi-line blocks with a closing token, we insert a new line after the last item (but
+		// not if all items were null). This is to ensure that if the statement finishes with a comment,
+		// the closing token is not commented out.
+		s := "\n"
+		if g.separator == "," {
+			// We also insert add trailing comma if the separator was ",".
+			s = ",\n"
+		}
+		if _, err := w.Write([]byte(s)); err != nil {
 			return err
 		}
 	}
@@ -86,15 +90,15 @@ func (g *Group) renderItems(f *File, w io.Writer) (isNull bool, err error) {
 				panic("Error in Values: if Dict is used, must be one item only")
 			}
 		}
-		if first && g.separator == "\n" {
-			// For blocks separated with new lines, we always insert a new line
-			// before the first item (but only if there is an item).
-			if _, err := w.Write([]byte("\n")); err != nil {
+		if !first && g.separator != "" {
+			// The separator token is added before each non-null item, but not before the first item.
+			if _, err := w.Write([]byte(g.separator)); err != nil {
 				return false, err
 			}
 		}
-		if !first && g.separator != "" {
-			if _, err := w.Write([]byte(g.separator)); err != nil {
+		if g.multi {
+			// For multi-line blocks, we insert a new line before each non-null item.
+			if _, err := w.Write([]byte("\n")); err != nil {
 				return false, err
 			}
 		}
