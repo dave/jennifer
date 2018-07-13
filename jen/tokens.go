@@ -44,11 +44,14 @@ func (t token) render(f *File, w io.Writer, s *Statement) error {
 			// default constant types can be left bare
 			out = fmt.Sprintf("%#v", t.content)
 		case float64:
-			// float is a special case because fmt package doesn't format correctly
-			if v == float64(int64(v)) {
+			// float is a special case because fmt package doesn't format correctly. We check that the
+			// bug still exists to gracefully handle the possibility that a future Go release will fix
+			// this bug. See:
+			// https://github.com/dave/jennifer/issues/39
+			// https://github.com/golang/go/issues/26363
+			if v == float64(int64(v)) && fmtBugStillExists {
 				// value is a whole number, so fmt package will omit the
 				// trailing ".0", so we add it.
-				// TODO: More testing needed for this. Corner cases?
 				out = fmt.Sprintf("%#v.0", t.content)
 			} else {
 				out = fmt.Sprintf("%#v", t.content)
@@ -298,3 +301,5 @@ func (s *Statement) Line() *Statement {
 	*s = append(*s, t)
 	return s
 }
+
+var fmtBugStillExists = fmt.Sprintf("%#v", 1.0) == "1"

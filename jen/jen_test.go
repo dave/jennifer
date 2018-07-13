@@ -25,6 +25,11 @@ var o2 = Options{
 
 var cases = []tc{
 	{
+		desc:   `lit float whole numbers`,
+		code:   Index().Float64().Values(Lit(-3.0), Lit(-2.0), Lit(-1.0), Lit(0.0), Lit(1.0), Lit(2.0), Lit(3.0)),
+		expect: "[]float64{-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0}",
+	},
+	{
 		desc: `custom func group`,
 		code: ListFunc(func(g *Group) {
 			g.CustomFunc(o2, func(g *Group) {
