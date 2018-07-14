@@ -25,9 +25,19 @@ var o2 = Options{
 
 var cases = []tc{
 	{
+		desc:   `scientific notation`,
+		code:   Lit(1e3),
+		expect: `1000.0`,
+	},
+	{
+		desc:   `big float`,
+		code:   Lit(1000000.0),
+		expect: `1e+06`,
+	},
+	{
 		desc:   `lit float whole numbers`,
-		code:   Index().Float64().Values(Lit(-3.0), Lit(-2.0), Lit(-1.0), Lit(0.0), Lit(1.0), Lit(2.0), Lit(3.0)),
-		expect: "[]float64{-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0}",
+		code:   Index().Float64().Values(Lit(-10.0), Lit(-2.0), Lit(-1.0), Lit(0.0), Lit(1.0), Lit(2.0), Lit(10.0)),
+		expect: "[]float64{-10.0, -2.0, -1.0, 0.0, 1.0, 2.0, 10.0}",
 	},
 	{
 		desc: `custom func group`,
