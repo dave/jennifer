@@ -209,7 +209,7 @@ func render(w io.Writer) error {
 	return file.Render(w)
 }
 
-// For each method on *Statement, this this generates a package level
+// For each method on *Statement, this generates a package level
 // function and a method on *Group, both with the same name.
 func addFunctionAndGroupMethod(
 	file *File,
