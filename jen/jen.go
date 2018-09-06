@@ -60,7 +60,18 @@ func (f *File) Render(w io.Writer) error {
 			return err
 		}
 	}
-	if _, err := fmt.Fprintf(source, "package %s\n\n", f.name); err != nil {
+	if _, err := fmt.Fprintf(source, "package %s", f.name); err != nil {
+		return err
+	}
+	if f.importComment != "" {
+		if _, err := fmt.Fprint(source, " "); err != nil {
+			return err
+		}
+		if err := Comment(f.importComment).render(f, source, nil); err != nil {
+			return err
+		}
+	}
+	if _, err := fmt.Fprint(source, "\n\n"); err != nil {
 		return err
 	}
 	if err := f.renderImports(source); err != nil {

@@ -50,13 +50,14 @@ func NewFilePathName(packagePath, packageName string) *File {
 // automaticaly by File.
 type File struct {
 	*Group
-	name        string
-	path        string
-	imports     map[string]importdef
-	hints       map[string]importdef
-	comments    []string
-	headers     []string
-	cgoPreamble []string
+	name          string
+	path          string
+	imports       map[string]importdef
+	hints         map[string]importdef
+	importComment string
+	comments      []string
+	headers       []string
+	cgoPreamble   []string
 	// If you're worried about generated package aliases conflicting with local variable names, you
 	// can set a prefix here. Package foo becomes {prefix}_foo.
 	PackagePrefix string
@@ -76,6 +77,13 @@ type importdef struct {
 // header comments are not included in the package doc.
 func (f *File) HeaderComment(comment string) {
 	f.headers = append(f.headers, comment)
+}
+
+// ImportComment adds a comment to the top of the file, on the same line as
+// the package name. This is usually used for the canonical import path
+// annotation.
+func (f *File) ImportComment(comment string) {
+	f.importComment = comment
 }
 
 // PackageComment adds a comment to the top of the file, above the package
