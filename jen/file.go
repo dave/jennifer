@@ -60,6 +60,8 @@ type File struct {
 	// If you're worried about generated package aliases conflicting with local variable names, you
 	// can set a prefix here. Package foo becomes {prefix}_foo.
 	PackagePrefix string
+	// CanonicalPath adds a canonical import path annotation to the package clause.
+	CanonicalPath string
 }
 
 // importdef is used to differentiate packages where we know the package name from packages where the
