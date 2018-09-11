@@ -43,7 +43,6 @@ func (g *Group) render(f *File, w io.Writer, s *Statement) error {
 		if isGrp && grp.name == "case" || isTkn && tkn.content == "default" {
 			g.open = ""
 			g.close = ""
-			g.separator = "\n"
 		}
 	}
 	if g.open != "" {
