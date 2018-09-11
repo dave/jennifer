@@ -8,6 +8,22 @@ import (
 	. "github.com/dave/jennifer/jen"
 )
 
+func ExampleCaseBug() {
+	c := Switch(Id("a")).Block(
+		Case(Lit(1)).Block(
+			Var().Id("i").Int(),
+			Var().Id("j").Int(),
+		),
+	)
+	fmt.Printf("%#v", c)
+	// Output:
+	// switch a {
+	// case 1:
+	// 	var i int
+	// 	var j int
+	// }
+}
+
 func ExampleCustom() {
 	multiLineCall := Options{
 		Close:     ")",
