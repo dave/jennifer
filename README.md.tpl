@@ -410,6 +410,8 @@ the import is separated, and preceded by the preamble.
 
 {{ "File.HeaderComment" | doc }}
 
+{{ "File.CanonicalPath" | doc }}
+
 {{ "ExampleFile_HeaderAndPackageComments" | example }}
 
 {{ "File.CgoPreamble" | doc }}
