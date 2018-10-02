@@ -14,9 +14,13 @@ import (
 )
 
 var (
+	// Switcher for resolving package aliases
+	// When true, aliases will be taken from existing packages from GOPATH if it possible.
 	ImportAliasFromSources = false
 
-	gopathCache  = ""
+	// GOPATH may be obtained from multiple sources, so we want to save current.
+	gopathCache = ""
+	// Do not parse files every time.
 	importsCache = make(map[string]string)
 )
 
