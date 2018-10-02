@@ -2,9 +2,7 @@ package jen
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
-	"go/ast"
 	"go/parser"
 	asttoken "go/token"
 	"regexp"
@@ -56,43 +54,7 @@ func NewFileFromSource(src []byte) (*File, error) {
 	if err != nil {
 		return nil, fmt.Errorf("parse source error: %v", err)
 	}
-	return NewFileFromAst(file)
-}
-
-func NewFileFromAst(file *ast.File) (*File, error) {
-	if file.Name == nil {
-		return nil, errors.New("empty file name")
-	}
-	packageName := file.Name.Name
-	imports := make(map[string]importdef)
-	hints := make(map[string]importdef)
-	for i := range file.Imports {
-		if file.Imports[i].Path == nil {
-			continue // invalid package
-		}
-		path := file.Imports[i].Path.Value
-		if file.Imports[i].Name != nil {
-			// Special case for "." import:
-			// ignore these imports because in most cases code will be ready for this.
-			if file.Imports[i].Name.Name == "." {
-				continue
-			}
-			imports[path] = importdef{name: strings.Trim(file.Imports[i].Name.Name, `"`), alias: true}
-		} else {
-			hints[path] = importdef{name: "", alias: false}
-		}
-	}
-	f := &File{
-		Group: &Group{
-			multi: true,
-		},
-		name:    packageName,
-		imports: imports,
-		hints:   hints,
-	}
-	file.Name = nil
-	f.addRaw()
-	return f, nil
+	return NewFileFromAst(file, set)
 }
 
 // File represents a single source file. Package imports are managed
