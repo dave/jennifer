@@ -186,6 +186,12 @@ func (f *File) register(path string) string {
 		return "C"
 	}
 
+	if ImportAliasFromSources {
+		if alias, ok := importsCache[path]; ok && alias != "" {
+			f.hints[path] = importdef{name: alias, alias: false}
+		}
+	}
+
 	var name string
 	var alias bool
 

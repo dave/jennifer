@@ -279,6 +279,9 @@ func (s *Statement) Qual(path, name string) *Statement {
 		open:      "",
 		separator: ".",
 	}
+	if ImportAliasFromSources {
+		_, _ = preloadAliasFromSource(path, name) // write imports to cache, take them later
+	}
 	*s = append(*s, g)
 	return s
 }
