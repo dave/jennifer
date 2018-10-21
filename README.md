@@ -876,7 +876,7 @@ fmt.Printf("%#v", f)
 [Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Helpers](#helpers) [Misc](#misc) **File**
 
 File represents a single source file. Package imports are managed
-automaticaly by File.
+automatically by File.
 
 ### NewFile
 NewFile Creates a new file, with the specified package name.
