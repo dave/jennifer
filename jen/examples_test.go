@@ -189,6 +189,38 @@ func ExampleFile_ImportAlias() {
 	// }
 }
 
+func ExampleFile_ImportAliasDot() {
+	f := NewFile("main")
+
+	// package a should be a dot-import
+	f.ImportAlias("github.com/foo/a", ".")
+
+	// package b should be a dot-import
+	f.ImportAlias("github.com/foo/b", ".")
+
+	// package c is not used in the code so will not be included
+	f.ImportAlias("github.com/foo/c", ".")
+
+	f.Func().Id("main").Params().Block(
+		Qual("github.com/foo/a", "A").Call(),
+		Qual("github.com/foo/b", "B").Call(),
+	)
+	fmt.Printf("%#v", f)
+
+	// Output:
+	// package main
+	//
+	// import (
+	// 	. "github.com/foo/a"
+	// 	. "github.com/foo/b"
+	// )
+	//
+	// func main() {
+	// 	A()
+	// 	B()
+	// }
+}
+
 func ExampleFile_CgoPreamble() {
 	f := NewFile("a")
 	f.CgoPreamble(`#include <stdio.h>

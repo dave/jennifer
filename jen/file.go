@@ -114,7 +114,8 @@ func (f *File) ImportNames(names map[string]string) {
 	}
 }
 
-// ImportAlias provides the alias for a package path that should be used in the import block.
+// ImportAlias provides the alias for a package path that should be used in the import block. A
+// period can be used to force a dot-import.
 func (f *File) ImportAlias(path, alias string) {
 	f.hints[path] = importdef{name: alias, alias: true}
 }
@@ -142,6 +143,10 @@ func isReservedWord(alias string) bool {
 }
 
 func (f *File) isValidAlias(alias string) bool {
+	// multiple dot-imports are ok
+	if alias == "." {
+		return true
+	}
 	// the import alias is invalid if it's a reserved word
 	if isReservedWord(alias) {
 		return false
@@ -153,6 +158,13 @@ func (f *File) isValidAlias(alias string) bool {
 		}
 	}
 	return true
+}
+
+func (f *File) isDotImport(path string) bool {
+	if id, ok := f.hints[path]; ok {
+		return id.name == "." && id.alias
+	}
+	return false
 }
 
 func (f *File) register(path string) string {
