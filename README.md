@@ -974,7 +974,8 @@ ImportNames allows multiple names to be imported as a map. Use the [gennames](ge
 automatically generate a go file containing a map of a selection of package names. 
 
 ### ImportAlias
-ImportAlias provides the alias for a package path that should be used in the import block.
+ImportAlias provides the alias for a package path that should be used in the import block. A
+period can be used to force a dot-import.
 
 ```go
 f := NewFile("main")

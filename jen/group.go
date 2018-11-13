@@ -78,6 +78,12 @@ func (g *Group) render(f *File, w io.Writer, s *Statement) error {
 func (g *Group) renderItems(f *File, w io.Writer) (isNull bool, err error) {
 	first := true
 	for _, code := range g.items {
+		if pt, ok := code.(token); ok && pt.typ == packageToken {
+			// Special case for package tokens in Qual groups - for dot-imports, the package token
+			// will be null, so will not render and will not be registered in the imports block.
+			// This ensures all packageTokens that are rendered are registered.
+			f.register(pt.content.(string))
+		}
 		if code == nil || code.isNull(f) {
 			// Null() token produces no output but also
 			// no separator. Empty() token products no

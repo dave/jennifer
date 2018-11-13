@@ -30,8 +30,8 @@ type token struct {
 
 func (t token) isNull(f *File) bool {
 	if t.typ == packageToken {
-		// package token is null if the path is the local package path
-		return f.isLocal(t.content.(string))
+		// package token is null if the path is a dot-import or the local package path
+		return f.isDotImport(t.content.(string)) || f.isLocal(t.content.(string))
 	}
 	return t.typ == nullToken
 }
