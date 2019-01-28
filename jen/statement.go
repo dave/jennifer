@@ -71,9 +71,22 @@ func (s *Statement) render(f *File, w io.Writer, _ *Statement) error {
 
 // Render renders the Statement to the provided writer.
 func (s *Statement) Render(writer io.Writer) error {
-	f := NewFile("")
+	return s.RenderWithFile(writer, NewFile(""))
+}
+
+// GoString renders the Statement for testing. Any error will cause a panic.
+func (s *Statement) GoString() string {
+	buf := bytes.Buffer{}
+	if err := s.Render(&buf); err != nil {
+		panic(err)
+	}
+	return buf.String()
+}
+
+// RenderWithFile renders the Statement to the provided writer, using imports from the provided file.
+func (s *Statement) RenderWithFile(writer io.Writer, file *File) error {
 	buf := &bytes.Buffer{}
-	if err := s.render(f, buf, nil); err != nil {
+	if err := s.render(file, buf, nil); err != nil {
 		return err
 	}
 	b, err := format.Source(buf.Bytes())
@@ -86,11 +99,3 @@ func (s *Statement) Render(writer io.Writer) error {
 	return nil
 }
 
-// GoString renders the Statement for testing. Any error will cause a panic.
-func (s *Statement) GoString() string {
-	buf := bytes.Buffer{}
-	if err := s.Render(&buf); err != nil {
-		panic(err)
-	}
-	return buf.String()
-}
