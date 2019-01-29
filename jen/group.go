@@ -117,9 +117,22 @@ func (g *Group) renderItems(f *File, w io.Writer) (isNull bool, err error) {
 
 // Render renders the Group to the provided writer.
 func (g *Group) Render(writer io.Writer) error {
-	f := NewFile("")
+	return g.RenderWithFile(writer, NewFile(""))
+}
+
+// GoString renders the Group for testing. Any error will cause a panic.
+func (g *Group) GoString() string {
+	buf := bytes.Buffer{}
+	if err := g.Render(&buf); err != nil {
+		panic(err)
+	}
+	return buf.String()
+}
+
+// RenderWithFile renders the Group to the provided writer, using imports from the provided file.
+func (g *Group) RenderWithFile(writer io.Writer, file *File) error {
 	buf := &bytes.Buffer{}
-	if err := g.render(f, buf, nil); err != nil {
+	if err := g.render(file, buf, nil); err != nil {
 		return err
 	}
 	b, err := format.Source(buf.Bytes())
@@ -132,11 +145,3 @@ func (g *Group) Render(writer io.Writer) error {
 	return nil
 }
 
-// GoString renders the Group for testing. Any error will cause a panic.
-func (g *Group) GoString() string {
-	buf := bytes.Buffer{}
-	if err := g.Render(&buf); err != nil {
-		panic(err)
-	}
-	return buf.String()
-}
