@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+	"unicode"
+	"unicode/utf8"
 )
 
 // NewFile Creates a new file, with the specified package name.
@@ -239,6 +241,11 @@ func guessAlias(path string) string {
 	// alias should now only contain alphanumerics
 	importsRegex := regexp.MustCompile(`[^a-z0-9]`)
 	alias = importsRegex.ReplaceAllString(alias, "")
+
+	// can't have a first digit, per Go identifier rules, so just skip them
+	for firstRune, runeLen := utf8.DecodeRuneInString(alias); unicode.IsDigit(firstRune); firstRune, runeLen = utf8.DecodeRuneInString(alias) {
+		alias = alias[runeLen:]
+	}
 
 	return alias
 }
