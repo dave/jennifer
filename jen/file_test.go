@@ -22,6 +22,7 @@ func TestGuessAlias(t *testing.T) {
 		"a/foo-go":      "foogo",
 		"123a":          "a",
 		"a/321a.b":      "ab",
+		"a/123":         "pkg",
 	}
 	for path, expected := range data {
 		if guessAlias(path) != expected {

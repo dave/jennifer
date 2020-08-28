@@ -247,5 +247,10 @@ func guessAlias(path string) string {
 		alias = alias[runeLen:]
 	}
 
+	// If path part was all digits, we may be left with an empty string. In this case use "pkg" as the alias.
+	if alias == "" {
+		alias = "pkg"
+	}
+
 	return alias
 }
