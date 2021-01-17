@@ -40,12 +40,23 @@ func (t token) render(f *File, w io.Writer, s *Statement) error {
 	switch t.typ {
 	case literalToken:
 		var out string
-		switch t.content.(type) {
-		case bool, string, int, complex128:
+		switch val := t.content.(type) {
+		case bool, int, complex128:
 			// default constant types can be left bare
-			out = fmt.Sprintf("%#v", t.content)
+			out = fmt.Sprintf("%#v", val)
+		case string:
+			// if string contains newlines and is longer than 80 characters, use
+			// multiline strings, but only if it does not have only newline at end
+			// of string
+			hasNewlinesAndIsLongStr := strings.Contains(val, "\n") && len(val) > 50
+			hasNewlineAtEndOfStr := strings.Count(val, "\n") == 1 && strings.HasSuffix(val, "\n")
+			if hasNewlinesAndIsLongStr && !hasNewlineAtEndOfStr {
+				out = "`" + val + "`"
+			} else {
+				out = fmt.Sprintf("%#v", val)
+			}
 		case float64:
-			out = fmt.Sprintf("%#v", t.content)
+			out = fmt.Sprintf("%#v", val)
 			if !strings.Contains(out, ".") && !strings.Contains(out, "e") {
 				// If the formatted value is not in scientific notation, and does not have a dot, then
 				// we add ".0". Otherwise it will be interpreted as an int.
@@ -56,12 +67,12 @@ func (t token) render(f *File, w io.Writer, s *Statement) error {
 			}
 		case float32, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, uintptr:
 			// other built-in types need specific type info
-			out = fmt.Sprintf("%T(%#v)", t.content, t.content)
+			out = fmt.Sprintf("%T(%#v)", val, val)
 		case complex64:
 			// fmt package already renders parenthesis for complex64
-			out = fmt.Sprintf("%T%#v", t.content, t.content)
+			out = fmt.Sprintf("%T%#v", val, val)
 		default:
-			panic(fmt.Sprintf("unsupported type for literal: %T", t.content))
+			panic(fmt.Sprintf("unsupported type for literal: %T", val))
 		}
 		if _, err := w.Write([]byte(out)); err != nil {
 			return err

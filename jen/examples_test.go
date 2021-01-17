@@ -558,6 +558,15 @@ func ExampleLit_string() {
 	// "foo"
 }
 
+func ExampleLit_newlineString() {
+	c := Lit(`Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`)
+	fmt.Printf("%#v", c)
+	// Output:
+	// `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+	// sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`
+}
+
 func ExampleValues_dict_single() {
 	c := Map(String()).String().Values(Dict{
 		Lit("a"): Lit("b"),
