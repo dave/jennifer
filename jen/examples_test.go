@@ -1,9 +1,8 @@
 package jen_test
 
 import (
-	"fmt"
-
 	"bytes"
+	"fmt"
 
 	. "github.com/dave/jennifer/jen"
 )
@@ -1292,6 +1291,19 @@ func ExampleTag() {
 	// type foo struct {
 	// 	A string `json:"a"`
 	// 	B int    `bar:"baz" json:"b"`
+	// }
+}
+
+func ExampleTag_withQuotesAndNewline() {
+	c := Type().Id("foo").Struct(
+		Id("A").String().Tag(map[string]string{"json": "a"}),
+		Id("B").Int().Tag(map[string]string{"json": "b", "bar": "the value of\nthe\"bar\" tag"}),
+	)
+	fmt.Printf("%#v", c)
+	// Output:
+	// type foo struct {
+	// 	A string `json:"a"`
+	// 	B int    `bar:"the value of\nthe \"bar\" tag" json:"b"`
 	// }
 }
 
