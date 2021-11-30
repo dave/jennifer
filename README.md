@@ -582,6 +582,19 @@ fmt.Printf("%#v", c)
 // a := 2
 ```
 
+LitRawString renders a raw string literal.
+
+```go
+c := Id("a").Op(":=").LitRawString("\n  some\n  formatted\n  multiline\n  string")
+fmt.Printf("%#v", c)
+// Output:
+// a := `
+//   some
+//   formatted
+//   multiline
+//   string`
+```
+
 For the default constant types (bool, int, float64, string, complex128), Lit 
 will render the untyped constant.
 

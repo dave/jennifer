@@ -152,3 +152,50 @@ func (s *Statement) LitByteFunc(f func() byte) *Statement {
 	*s = append(*s, t)
 	return s
 }
+
+// LitRawString renders a raw string literal.
+func LitRawString(v interface{}) *Statement {
+	return newStatement().Lit(v)
+}
+
+// LitRawString renders a raw string literal.
+func (g *Group) LitRawString(v interface{}) *Statement {
+	s := Lit(v)
+	g.items = append(g.items, s)
+	return s
+}
+
+// LitRawString renders a raw string literal.
+func (s *Statement) LitRawString(v interface{}) *Statement {
+	t := token{
+		typ:     literalRawStringToken,
+		content: v,
+	}
+	*s = append(*s, t)
+	return s
+}
+
+// LitRawStringFunc renders a raw string literal. LitRawStringFunc generates the
+// value to render by executing the provided function.
+func LitRawStringFunc(f func() interface{}) *Statement {
+	return newStatement().LitRawStringFunc(f)
+}
+
+// LitRawStringFunc renders a raw string literal. LitRawStringFunc generates the
+// value to render by executing the provided function.
+func (g *Group) LitRawStringFunc(f func() interface{}) *Statement {
+	s := LitRawStringFunc(f)
+	g.items = append(g.items, s)
+	return s
+}
+
+// LitRawStringFunc renders a raw string literal. LitRawStringFunc generates the
+// value to render by executing the provided function.
+func (s *Statement) LitRawStringFunc(f func() interface{}) *Statement {
+	t := token{
+		typ:     literalRawStringToken,
+		content: f(),
+	}
+	*s = append(*s, t)
+	return s
+}

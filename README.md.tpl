@@ -252,6 +252,10 @@ Note: the items are ordered by key when rendered to ensure repeatable code.
 
 {{ "ExampleLitFunc" | example }}
 
+{{ "LitRawString" | doc }}
+
+{{ "ExampleLitRawString" | example }}
+
 For the default constant types (bool, int, float64, string, complex128), Lit 
 will render the untyped constant.
 

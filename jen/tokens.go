@@ -10,17 +10,18 @@ import (
 type tokenType string
 
 const (
-	packageToken     tokenType = "package"
-	identifierToken  tokenType = "identifier"
-	qualifiedToken   tokenType = "qualified"
-	keywordToken     tokenType = "keyword"
-	operatorToken    tokenType = "operator"
-	delimiterToken   tokenType = "delimiter"
-	literalToken     tokenType = "literal"
-	literalRuneToken tokenType = "literal_rune"
-	literalByteToken tokenType = "literal_byte"
-	nullToken        tokenType = "null"
-	layoutToken      tokenType = "layout"
+	packageToken          tokenType = "package"
+	identifierToken       tokenType = "identifier"
+	qualifiedToken        tokenType = "qualified"
+	keywordToken          tokenType = "keyword"
+	operatorToken         tokenType = "operator"
+	delimiterToken        tokenType = "delimiter"
+	literalToken          tokenType = "literal"
+	literalRuneToken      tokenType = "literal_rune"
+	literalByteToken      tokenType = "literal_byte"
+	literalRawStringToken tokenType = "literal_rawString"
+	nullToken             tokenType = "null"
+	layoutToken           tokenType = "layout"
 )
 
 type token struct {
@@ -72,6 +73,10 @@ func (t token) render(f *File, w io.Writer, s *Statement) error {
 		}
 	case literalByteToken:
 		if _, err := w.Write([]byte(fmt.Sprintf("byte(%#v)", t.content))); err != nil {
+			return err
+		}
+	case literalRawStringToken:
+		if _, err := w.Write([]byte(fmt.Sprintf("`%v`", t.content.(string)))); err != nil {
 			return err
 		}
 	case keywordToken, operatorToken, layoutToken, delimiterToken:
