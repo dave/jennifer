@@ -60,6 +60,8 @@ func (t token) render(f *File, w io.Writer, s *Statement) error {
 		case complex64:
 			// fmt package already renders parenthesis for complex64
 			out = fmt.Sprintf("%T%#v", t.content, t.content)
+		case nil:
+			// do nothing, consistent with nil types
 		default:
 			panic(fmt.Sprintf("unsupported type for literal: %T", t.content))
 		}

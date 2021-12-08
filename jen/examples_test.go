@@ -1297,7 +1297,7 @@ func ExampleTag() {
 func ExampleTag_withQuotesAndNewline() {
 	c := Type().Id("foo").Struct(
 		Id("A").String().Tag(map[string]string{"json": "a"}),
-		Id("B").Int().Tag(map[string]string{"json": "b", "bar": "the value of\nthe\"bar\" tag"}),
+		Id("B").Int().Tag(map[string]string{"json": "b", "bar": "the value of\nthe \"bar\" tag"}),
 	)
 	fmt.Printf("%#v", c)
 	// Output:
