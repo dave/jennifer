@@ -1,7 +1,8 @@
 [![Build Status](https://travis-ci.org/dave/jennifer.svg?branch=master)](https://travis-ci.org/dave/jennifer) [![Go Report Card](https://goreportcard.com/badge/github.com/dave/jennifer)](https://goreportcard.com/report/github.com/dave/jennifer)
 [![codecov](https://img.shields.io/badge/codecov-100%25-brightgreen.svg)](https://codecov.io/gh/dave/jennifer)
 ![stability-stable](https://img.shields.io/badge/stability-stable-brightgreen.svg)
-[![Sourcegraph](https://sourcegraph.com/github.com/dave/jennifer/-/badge.svg)](https://sourcegraph.com/github.com/dave/jennifer?badge)
+
+<!-- Use rebecca (https://github.com/dave/rebecca) to generate the readme -->>
 
 # Jennifer
 Jennifer is a code generator for Go.
@@ -50,7 +51,7 @@ panic. For production use, [File.Render](#render) or [File.Save](#save) are
 preferred.
 
 # Identifiers
-**Identifiers** [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Helpers](#helpers) [Misc](#misc) [File](#file)
+**Identifiers** [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Generics](#generics) [Helpers](#helpers) [Misc](#misc) [File](#file)
 
 ### Id
 {{ "Id" | doc }}
@@ -79,7 +80,7 @@ preferred.
 {{ "ExampleList" | example }}
 
 # Keywords
-[Identifiers](#identifiers) **Keywords** [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Helpers](#helpers) [Misc](#misc) [File](#file)
+[Identifiers](#identifiers) **Keywords** [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Generics](#generics) [Helpers](#helpers) [Misc](#misc) [File](#file)
 
 Simple keywords, predeclared identifiers and built-in functions are self 
 explanatory:
@@ -99,7 +100,7 @@ Built-in functions take a list of parameters and render them appropriately:
 Special cases for [If, For](#if-for), [Interface, Struct](#interface-struct), [Switch, Case](#switch-select), [Return](#return) and [Map](#map) are explained below.
 
 # Operators
-[Identifiers](#identifiers) [Keywords](#keywords) **Operators** [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Helpers](#helpers) [Misc](#misc) [File](#file)
+[Identifiers](#identifiers) [Keywords](#keywords) **Operators** [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Generics](#generics) [Helpers](#helpers) [Misc](#misc) [File](#file)
 
 {{ "Op" | doc }}
 
@@ -112,7 +113,7 @@ Special cases for [If, For](#if-for), [Interface, Struct](#interface-struct), [S
 {{ "ExampleOp_complex_conditions" | example }}
 
 # Braces
-[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) **Braces** [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Helpers](#helpers) [Misc](#misc) [File](#file)
+[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) **Braces** [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Generics](#generics) [Helpers](#helpers) [Misc](#misc) [File](#file)
 
 Several methods render curly braces, summarized below: 
 
@@ -145,7 +146,7 @@ by curly braces.
 {{ "ExampleStruct" | example }}
 
 # Parentheses
-[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) **Parentheses** [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Helpers](#helpers) [Misc](#misc) [File](#file)
+[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) **Parentheses** [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Generics](#generics) [Helpers](#helpers) [Misc](#misc) [File](#file)
 
 Several methods output parenthesis, summarized below:
 
@@ -185,7 +186,7 @@ Several methods output parenthesis, summarized below:
 {{ "ExampleAssert" | example }}
 
 # Control flow
-[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) **Control flow** [Collections](#collections) [Literals](#literals) [Comments](#comments) [Helpers](#helpers) [Misc](#misc) [File](#file)
+[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) **Control flow** [Collections](#collections) [Literals](#literals) [Comments](#comments) [Generics](#generics) [Helpers](#helpers) [Misc](#misc) [File](#file)
 
 ### If, For
 If and For render the keyword followed by a semicolon separated list.
@@ -205,7 +206,7 @@ Switch, Select, Case and Block are used to build switch or select statements:
 {{ "ExampleReturn" | example }}
 
 # Collections
-[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) **Collections** [Literals](#literals) [Comments](#comments) [Helpers](#helpers) [Misc](#misc) [File](#file)
+[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) **Collections** [Literals](#literals) [Comments](#comments) [Generics](#generics) [Helpers](#helpers) [Misc](#misc) [File](#file)
 
 ### Map
 {{ "Map" | doc }}
@@ -239,7 +240,7 @@ Switch, Select, Case and Block are used to build switch or select statements:
 Note: the items are ordered by key when rendered to ensure repeatable code.
 
 # Literals
-[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) **Literals** [Comments](#comments) [Helpers](#helpers) [Misc](#misc) [File](#file)
+[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) **Literals** [Comments](#comments) [Generics](#generics) [Helpers](#helpers) [Misc](#misc) [File](#file)
 
 ### Lit
 {{ "Lit" | doc }}
@@ -282,7 +283,7 @@ render rune and byte literals.
 | `LitByte(byte(0x1))`     | `byte(0x1)` |
 
 # Comments
-[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) **Comments** [Helpers](#helpers) [Misc](#misc) [File](#file)
+[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) **Comments** [Generics](#generics) [Helpers](#helpers) [Misc](#misc) [File](#file)
 
 ### Comment
 {{ "Comment[:2]" | doc }}
@@ -300,8 +301,31 @@ render rune and byte literals.
 
 {{ "ExampleCommentf" | example }}
 
+# Generics
+[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) **Generics** [Helpers](#helpers) [Misc](#misc) [File](#file)
+
+It is hoped that with the introduction of generics with Go 1.8, the need to generate code
+will be reduced. However, for the sake of completeness, we now support generics including
+the `any` and `comparable` predeclared identifiers, and the `Types` and `Union` lists. To
+emit the approximation (`~`) token, use `Op("~")`.
+
+### Types
+
+{{ "Types" | doc }}
+
+### Union
+
+{{ "Union" | doc }}
+
+### Examples
+
+{{ "ExampleGenericsTypesDefinition" | example }}
+{{ "ExampleGenericsTypesUsage" | example }}
+{{ "ExampleGenericsUnion" | example }}
+{{ "ExampleGenericsApproximate" | example }}
+
 # Helpers
-[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) **Helpers** [Misc](#misc) [File](#file)
+[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Generics](#generics) **Helpers** [Misc](#misc) [File](#file)
 
 ### Func methods
 All constructs that accept a variadic list of items are paired with GroupFunc 
@@ -324,7 +348,7 @@ functions that accept a func(*Group). Use for embedding logic.
 {{ "ExampleDo" | example }}
 
 # Misc
-[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Helpers](#helpers) **Misc** [File](#file)
+[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Generics](#generics) [Helpers](#helpers) **Misc** [File](#file)
 
 ### Tag
 {{ "Tag" | doc }}
@@ -367,7 +391,7 @@ the import is separated, and preceded by the preamble.
 {{ "ExampleFile_CgoPreamble" | example }}  
 
 # File
-[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Helpers](#helpers) [Misc](#misc) **File**
+[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Generics](#generics) [Helpers](#helpers) [Misc](#misc) **File**
 
 {{ "File" | doc }}
 

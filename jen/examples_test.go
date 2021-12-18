@@ -8,6 +8,42 @@ import (
 	. "github.com/dave/jennifer/jen"
 )
 
+func ExampleGenericsTypesDefinition() {
+	c := Func().Id("Keys").Types(Id("K").Comparable(), Id("V").Any()).Params(Id("m").Map(Id("K")).Id("V")).Index().Id("K").Block()
+	fmt.Printf("%#v", c)
+	// Output:
+	// func Keys[K comparable, V any](m map[K]V) []K {}
+}
+
+func ExampleGenericsTypesUsage() {
+	c := Return(Id("Keys").Types(Int(), String()).Call(Id("m")))
+	fmt.Printf("%#v", c)
+	// Output:
+	// return Keys[int, string](m)
+}
+
+func ExampleGenericsUnion() {
+	c := Type().Id("PredeclaredSignedInteger").Interface(
+		Union(Int(), Int8(), Int16(), Int32(), Int64()),
+	)
+	fmt.Printf("%#v", c)
+	// Output:
+	// type PredeclaredSignedInteger interface {
+	//	int | int8 | int16 | int32 | int64
+	// }
+}
+
+func ExampleGenericsApproximate() {
+	c := Type().Id("AnyString").Interface(
+		Op("~").String(),
+	)
+	fmt.Printf("%#v", c)
+	// Output:
+	// type AnyString interface {
+	//	~string
+	// }
+}
+
 func ExampleCaseBug() {
 	c := Switch(Id("a")).Block(
 		Case(Lit(1)).Block(

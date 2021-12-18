@@ -1276,6 +1276,110 @@ func (s *Statement) Recover() *Statement {
 	return s
 }
 
+// Types renders a comma separated list enclosed by square brackets. Use for type parameters and constraints.
+func Types(types ...Code) *Statement {
+	return newStatement().Types(types...)
+}
+
+// Types renders a comma separated list enclosed by square brackets. Use for type parameters and constraints.
+func (g *Group) Types(types ...Code) *Statement {
+	s := Types(types...)
+	g.items = append(g.items, s)
+	return s
+}
+
+// Types renders a comma separated list enclosed by square brackets. Use for type parameters and constraints.
+func (s *Statement) Types(types ...Code) *Statement {
+	g := &Group{
+		close:     "]",
+		items:     types,
+		multi:     false,
+		name:      "types",
+		open:      "[",
+		separator: ",",
+	}
+	*s = append(*s, g)
+	return s
+}
+
+// TypesFunc renders a comma separated list enclosed by square brackets. Use for type parameters and constraints.
+func TypesFunc(f func(*Group)) *Statement {
+	return newStatement().TypesFunc(f)
+}
+
+// TypesFunc renders a comma separated list enclosed by square brackets. Use for type parameters and constraints.
+func (g *Group) TypesFunc(f func(*Group)) *Statement {
+	s := TypesFunc(f)
+	g.items = append(g.items, s)
+	return s
+}
+
+// TypesFunc renders a comma separated list enclosed by square brackets. Use for type parameters and constraints.
+func (s *Statement) TypesFunc(f func(*Group)) *Statement {
+	g := &Group{
+		close:     "]",
+		multi:     false,
+		name:      "types",
+		open:      "[",
+		separator: ",",
+	}
+	f(g)
+	*s = append(*s, g)
+	return s
+}
+
+// Union renders a pipe separated list. Use for union type constraints.
+func Union(types ...Code) *Statement {
+	return newStatement().Union(types...)
+}
+
+// Union renders a pipe separated list. Use for union type constraints.
+func (g *Group) Union(types ...Code) *Statement {
+	s := Union(types...)
+	g.items = append(g.items, s)
+	return s
+}
+
+// Union renders a pipe separated list. Use for union type constraints.
+func (s *Statement) Union(types ...Code) *Statement {
+	g := &Group{
+		close:     "",
+		items:     types,
+		multi:     false,
+		name:      "union",
+		open:      "",
+		separator: "|",
+	}
+	*s = append(*s, g)
+	return s
+}
+
+// UnionFunc renders a pipe separated list. Use for union type constraints.
+func UnionFunc(f func(*Group)) *Statement {
+	return newStatement().UnionFunc(f)
+}
+
+// UnionFunc renders a pipe separated list. Use for union type constraints.
+func (g *Group) UnionFunc(f func(*Group)) *Statement {
+	s := UnionFunc(f)
+	g.items = append(g.items, s)
+	return s
+}
+
+// UnionFunc renders a pipe separated list. Use for union type constraints.
+func (s *Statement) UnionFunc(f func(*Group)) *Statement {
+	g := &Group{
+		close:     "",
+		multi:     false,
+		name:      "union",
+		open:      "",
+		separator: "|",
+	}
+	f(g)
+	*s = append(*s, g)
+	return s
+}
+
 // Bool renders the bool identifier.
 func Bool() *Statement {
 	return newStatement().Bool()
@@ -1892,6 +1996,56 @@ func (s *Statement) Err() *Statement {
 	// notest
 	t := token{
 		content: "err",
+		typ:     identifierToken,
+	}
+	*s = append(*s, t)
+	return s
+}
+
+// Any renders the any identifier.
+func Any() *Statement {
+	// notest
+	return newStatement().Any()
+}
+
+// Any renders the any identifier.
+func (g *Group) Any() *Statement {
+	// notest
+	s := Any()
+	g.items = append(g.items, s)
+	return s
+}
+
+// Any renders the any identifier.
+func (s *Statement) Any() *Statement {
+	// notest
+	t := token{
+		content: "any",
+		typ:     identifierToken,
+	}
+	*s = append(*s, t)
+	return s
+}
+
+// Comparable renders the comparable identifier.
+func Comparable() *Statement {
+	// notest
+	return newStatement().Comparable()
+}
+
+// Comparable renders the comparable identifier.
+func (g *Group) Comparable() *Statement {
+	// notest
+	s := Comparable()
+	g.items = append(g.items, s)
+	return s
+}
+
+// Comparable renders the comparable identifier.
+func (s *Statement) Comparable() *Statement {
+	// notest
+	t := token{
+		content: "comparable",
 		typ:     identifierToken,
 	}
 	*s = append(*s, t)

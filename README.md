@@ -1,7 +1,8 @@
 [![Build Status](https://travis-ci.org/dave/jennifer.svg?branch=master)](https://travis-ci.org/dave/jennifer) [![Go Report Card](https://goreportcard.com/badge/github.com/dave/jennifer)](https://goreportcard.com/report/github.com/dave/jennifer)
 [![codecov](https://img.shields.io/badge/codecov-100%25-brightgreen.svg)](https://codecov.io/gh/dave/jennifer)
 ![stability-stable](https://img.shields.io/badge/stability-stable-brightgreen.svg)
-[![Sourcegraph](https://sourcegraph.com/github.com/dave/jennifer/-/badge.svg)](https://sourcegraph.com/github.com/dave/jennifer?badge)
+
+<!-- Use rebecca (https://github.com/dave/rebecca) to generate the readme -->>
 
 # Jennifer
 Jennifer is a code generator for Go.
@@ -67,7 +68,7 @@ panic. For production use, [File.Render](#render) or [File.Save](#save) are
 preferred.
 
 # Identifiers
-**Identifiers** [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Helpers](#helpers) [Misc](#misc) [File](#file)
+**Identifiers** [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Generics](#generics) [Helpers](#helpers) [Misc](#misc) [File](#file)
 
 ### Id
 Id renders an identifier.
@@ -148,7 +149,7 @@ fmt.Printf("%#v", c)
 ```
 
 # Keywords
-[Identifiers](#identifiers) **Keywords** [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Helpers](#helpers) [Misc](#misc) [File](#file)
+[Identifiers](#identifiers) **Keywords** [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Generics](#generics) [Helpers](#helpers) [Misc](#misc) [File](#file)
 
 Simple keywords, predeclared identifiers and built-in functions are self 
 explanatory:
@@ -173,7 +174,7 @@ fmt.Printf("%#v", c)
 Special cases for [If, For](#if-for), [Interface, Struct](#interface-struct), [Switch, Case](#switch-select), [Return](#return) and [Map](#map) are explained below.
 
 # Operators
-[Identifiers](#identifiers) [Keywords](#keywords) **Operators** [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Helpers](#helpers) [Misc](#misc) [File](#file)
+[Identifiers](#identifiers) [Keywords](#keywords) **Operators** [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Generics](#generics) [Helpers](#helpers) [Misc](#misc) [File](#file)
 
 Op renders the provided operator / token.
 
@@ -207,7 +208,7 @@ fmt.Printf("%#v", c)
 ```
 
 # Braces
-[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) **Braces** [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Helpers](#helpers) [Misc](#misc) [File](#file)
+[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) **Braces** [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Generics](#generics) [Helpers](#helpers) [Misc](#misc) [File](#file)
 
 Several methods render curly braces, summarized below: 
 
@@ -292,7 +293,7 @@ fmt.Printf("%#v", c)
 ```
 
 # Parentheses
-[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) **Parentheses** [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Helpers](#helpers) [Misc](#misc) [File](#file)
+[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) **Parentheses** [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Generics](#generics) [Helpers](#helpers) [Misc](#misc) [File](#file)
 
 Several methods output parenthesis, summarized below:
 
@@ -381,7 +382,7 @@ fmt.Printf("%#v", c)
 ```
 
 # Control flow
-[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) **Control flow** [Collections](#collections) [Literals](#literals) [Comments](#comments) [Helpers](#helpers) [Misc](#misc) [File](#file)
+[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) **Control flow** [Collections](#collections) [Literals](#literals) [Comments](#comments) [Generics](#generics) [Helpers](#helpers) [Misc](#misc) [File](#file)
 
 ### If, For
 If and For render the keyword followed by a semicolon separated list.
@@ -458,7 +459,7 @@ fmt.Printf("%#v", c)
 ```
 
 # Collections
-[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) **Collections** [Literals](#literals) [Comments](#comments) [Helpers](#helpers) [Misc](#misc) [File](#file)
+[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) **Collections** [Literals](#literals) [Comments](#comments) [Generics](#generics) [Helpers](#helpers) [Misc](#misc) [File](#file)
 
 ### Map
 Map renders the keyword followed by a single item enclosed by square brackets. Use for map definitions.
@@ -551,7 +552,7 @@ fmt.Printf("%#v", c)
 Note: the items are ordered by key when rendered to ensure repeatable code.
 
 # Literals
-[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) **Literals** [Comments](#comments) [Helpers](#helpers) [Misc](#misc) [File](#file)
+[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) **Literals** [Comments](#comments) [Generics](#generics) [Helpers](#helpers) [Misc](#misc) [File](#file)
 
 ### Lit
 Lit renders a literal. Lit supports only built-in types (bool, string, int, complex128, float64,
@@ -612,7 +613,7 @@ render rune and byte literals.
 | `LitByte(byte(0x1))`     | `byte(0x1)` |
 
 # Comments
-[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) **Comments** [Helpers](#helpers) [Misc](#misc) [File](#file)
+[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) **Comments** [Generics](#generics) [Helpers](#helpers) [Misc](#misc) [File](#file)
 
 ### Comment
 Comment adds a comment. If the provided string contains a newline, the
@@ -667,8 +668,59 @@ fmt.Printf("%#v", c)
 // foo := "bar" // foo is the string "bar"
 ```
 
+# Generics
+[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) **Generics** [Helpers](#helpers) [Misc](#misc) [File](#file)
+
+It is hoped that with the introduction of generics with Go 1.8, the need to generate code
+will be reduced. However, for the sake of completeness, we now support generics including
+the `any` and `comparable` predeclared identifiers, and the `Types` and `Union` lists. To
+emit the approximation (`~`) token, use `Op("~")`.
+
+### Types
+
+Types renders a comma separated list enclosed by square brackets. Use for type parameters and constraints.
+
+### Union
+
+Union renders a pipe separated list. Use for union type constraints.
+
+### Examples
+
+```go
+c := Func().Id("Keys").Types(Id("K").Comparable(), Id("V").Any()).Params(Id("m").Map(Id("K")).Id("V")).Index().Id("K").Block()
+fmt.Printf("%#v", c)
+// Output:
+// func Keys[K comparable, V any](m map[K]V) []K {}
+```
+```go
+c := Return(Id("Keys").Types(Int(), String()).Call(Id("m")))
+fmt.Printf("%#v", c)
+// Output:
+// return Keys[int, string](m)
+```
+```go
+c := Type().Id("PredeclaredSignedInteger").Interface(
+	Union(Int(), Int8(), Int16(), Int32(), Int64()),
+)
+fmt.Printf("%#v", c)
+// Output:
+// type PredeclaredSignedInteger interface {
+//	int | int8 | int16 | int32 | int64
+// }
+```
+```go
+c := Type().Id("AnyString").Interface(
+	Op("~").String(),
+)
+fmt.Printf("%#v", c)
+// Output:
+// type AnyString interface {
+//	~string
+// }
+```
+
 # Helpers
-[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) **Helpers** [Misc](#misc) [File](#file)
+[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Generics](#generics) **Helpers** [Misc](#misc) [File](#file)
 
 ### Func methods
 All constructs that accept a variadic list of items are paired with GroupFunc 
@@ -745,7 +797,7 @@ fmt.Printf("%#v\n%#v", f("a", true), f("b", false))
 ```
 
 # Misc
-[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Helpers](#helpers) **Misc** [File](#file)
+[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Generics](#generics) [Helpers](#helpers) **Misc** [File](#file)
 
 ### Tag
 Tag renders a struct tag
@@ -876,7 +928,7 @@ fmt.Printf("%#v", f)
 ```  
 
 # File
-[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Helpers](#helpers) [Misc](#misc) **File**
+[Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Generics](#generics) [Helpers](#helpers) [Misc](#misc) **File**
 
 File represents a single source file. Package imports are managed
 automaticaly by File.
