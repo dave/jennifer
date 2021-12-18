@@ -685,7 +685,12 @@ Union renders a pipe separated list. Use for union type constraints.
 ### Examples
 
 ```go
-c := Func().Id("Keys").Types(Id("K").Comparable(), Id("V").Any()).Params(Id("m").Map(Id("K")).Id("V")).Index().Id("K").Block()
+c := Func().Id("Keys").Types(
+	Id("K").Comparable(),
+	Id("V").Any(),
+).Params(
+	Id("m").Map(Id("K")).Id("V"),
+).Index().Id("K").Block()
 fmt.Printf("%#v", c)
 // Output:
 // func Keys[K comparable, V any](m map[K]V) []K {}
