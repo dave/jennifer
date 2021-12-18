@@ -2,8 +2,6 @@
 [![codecov](https://img.shields.io/badge/codecov-100%25-brightgreen.svg)](https://codecov.io/gh/dave/jennifer)
 ![stability-stable](https://img.shields.io/badge/stability-stable-brightgreen.svg)
 
-<!-- Use rebecca (https://github.com/dave/rebecca) to generate the readme -->>
-
 # Jennifer
 Jennifer is a code generator for Go.
 
