@@ -669,7 +669,7 @@ fmt.Printf("%#v", c)
 # Generics
 [Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) **Generics** [Helpers](#helpers) [Misc](#misc) [File](#file)
 
-It is hoped that with the introduction of generics with Go 1.8, the need to generate code
+It is hoped that with the introduction of generics with Go 1.18, the need to generate code
 will be reduced. However, for the sake of completeness, we now support generics including
 the `any` and `comparable` predeclared identifiers, and the `Types` and `Union` lists. To
 emit the approximation (`~`) token, use `Op("~")`.
