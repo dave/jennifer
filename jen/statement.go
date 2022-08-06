@@ -83,6 +83,16 @@ func (s *Statement) GoString() string {
 	return buf.String()
 }
 
+// GoStringUnsafe renders the Statement for testing. The rendered code is not
+// formatted and not guaranteed to be valid Go code.
+func (s *Statement) GoStringUnsafe() (string, error) {
+	buf := &bytes.Buffer{}
+	if err := s.render(NewFile(""), buf, nil); err != nil {
+		return "", err
+	}
+	return buf.String(), nil
+}
+
 // RenderWithFile renders the Statement to the provided writer, using imports from the provided file.
 func (s *Statement) RenderWithFile(writer io.Writer, file *File) error {
 	buf := &bytes.Buffer{}

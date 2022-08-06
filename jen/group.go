@@ -129,6 +129,16 @@ func (g *Group) GoString() string {
 	return buf.String()
 }
 
+// GoStringUnsafe renders the Group for testing. The rendered code is not
+// formatted and not guaranteed to be valid Go code.
+func (g *Group) GoStringUnsafe() (string, error) {
+	buf := &bytes.Buffer{}
+	if err := g.render(NewFile(""), buf, nil); err != nil {
+		return "", err
+	}
+	return buf.String(), nil
+}
+
 // RenderWithFile renders the Group to the provided writer, using imports from the provided file.
 func (g *Group) RenderWithFile(writer io.Writer, file *File) error {
 	buf := &bytes.Buffer{}

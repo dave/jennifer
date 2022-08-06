@@ -33,3 +33,28 @@ func TestGroup_Render(t *testing.T) {
 		t.Fatalf("Got: %v, expect: %v", got.String(), expect)
 	}
 }
+
+func TestGroup_GoStringUnsafe(t *testing.T) {
+	tt := []struct {
+		statement *Statement
+		expect    string
+	}{
+		{Func(), `func`},
+		{Map(String()).Int(), `map[string] int`},
+		{Interface(), `interface{}`},
+	}
+
+	for _, tc := range tt {
+		g := &Group{}
+		g.Add(tc.statement)
+
+		got, err := g.GoStringUnsafe()
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if got != tc.expect {
+			t.Fatalf("Got: %v, expect: %v", got, tc.expect)
+		}
+	}
+}

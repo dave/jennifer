@@ -30,3 +30,25 @@ func TestStatement_Render(t *testing.T) {
 		t.Fatalf("Got: %v, expect: %v", got.String(), expect)
 	}
 }
+
+func TestStatement_GoStringUnsafe(t *testing.T) {
+	tt := []struct {
+		statement *Statement
+		expect    string
+	}{
+		{Func(), `func`},
+		{Map(String()).Int(), `map[string] int`},
+		{Interface(), `interface{}`},
+	}
+
+	for _, tc := range tt {
+		got, err := tc.statement.GoStringUnsafe()
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if got != tc.expect {
+			t.Fatalf("Got: %v, expect: %v", got, tc.expect)
+		}
+	}
+}
