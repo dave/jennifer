@@ -25,6 +25,10 @@ func (g *Group) isNull(f *File) bool {
 	if g.open != "" || g.close != "" {
 		return false
 	}
+	return g.isNullItems(f)
+}
+
+func (g *Group) isNullItems(f *File) bool {
 	for _, c := range g.items {
 		if !c.isNull(f) {
 			return false
@@ -34,6 +38,10 @@ func (g *Group) isNull(f *File) bool {
 }
 
 func (g *Group) render(f *File, w io.Writer, s *Statement) error {
+	if g.name == "types" && g.isNullItems(f) {
+		// Special case for types - if all items are null, don't render the open/close tokens.
+		return nil
+	}
 	if g.name == "block" && s != nil {
 		// Special CaseBlock format for then the previous item in the statement
 		// is a Case group or the default keyword.
@@ -144,4 +152,3 @@ func (g *Group) RenderWithFile(writer io.Writer, file *File) error {
 	}
 	return nil
 }
-

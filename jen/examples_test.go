@@ -7,6 +7,36 @@ import (
 	. "github.com/dave/jennifer/jen"
 )
 
+func ExampleGenericsTypesFuncEmpty() {
+	c := Func().Id("F").TypesFunc(func(group *Group) {}).Params().Block()
+	fmt.Printf("%#v", c)
+	// Output:
+	// func F() {}
+}
+
+func ExampleGenericsTypesFuncNull() {
+	c := Func().Id("F").TypesFunc(func(group *Group) {
+		group.Null()
+	}).Params().Block()
+	fmt.Printf("%#v", c)
+	// Output:
+	// func F() {}
+}
+
+func ExampleGenericsTypesEmpty() {
+	c := Func().Id("F").Types().Params().Block()
+	fmt.Printf("%#v", c)
+	// Output:
+	// func F() {}
+}
+
+func ExampleGenericsTypesNull() {
+	c := Func().Id("F").Types(Null()).Params().Block()
+	fmt.Printf("%#v", c)
+	// Output:
+	// func F() {}
+}
+
 func ExampleGenericsTypesDefinition() {
 	c := Func().Id("Keys").Types(
 		Id("K").Comparable(),
@@ -1344,7 +1374,7 @@ func ExampleTag_withQuotesAndNewline() {
 	// Output:
 	// type foo struct {
 	// 	A string `json:"a"`
-	// 	B int    `bar:"the value of\nthe \"bar\" tag" json:"b"`
+	// 	B int    `bar:"the value of\nthe\"bar\" tag" json:"b"`
 	// }
 }
 
