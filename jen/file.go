@@ -49,7 +49,7 @@ func NewFilePathName(packagePath, packageName string) *File {
 }
 
 // File represents a single source file. Package imports are managed
-// automaticaly by File.
+// automatically by File.
 type File struct {
 	*Group
 	name        string
