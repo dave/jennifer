@@ -59,7 +59,8 @@ type File struct {
 	comments    []string
 	headers     []string
 	cgoPreamble []string
-	// NoFormat can be set to true to disable formatting of the generated source.
+	// NoFormat can be set to true to disable formatting of the generated source. This may be useful
+	// when performance is critical, and readable code is not required.
 	NoFormat bool
 	// If you're worried about generated package aliases conflicting with local variable names, you
 	// can set a prefix here. Package foo becomes {prefix}_foo.

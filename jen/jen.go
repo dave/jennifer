@@ -77,15 +77,17 @@ func (f *File) Render(w io.Writer) error {
 	if _, err := source.Write(body.Bytes()); err != nil {
 		return err
 	}
-	finalSource := source.Bytes()
-	if !f.NoFormat {
-		formatted, err := format.Source(source.Bytes())
+	var output []byte
+	if f.NoFormat {
+		output = source.Bytes()
+	} else {
+		var err error
+		output, err = format.Source(source.Bytes())
 		if err != nil {
 			return fmt.Errorf("Error %s while formatting source:\n%s", err, source.String())
 		}
-		finalSource = formatted
 	}
-	if _, err := w.Write(finalSource); err != nil {
+	if _, err := w.Write(output); err != nil {
 		return err
 	}
 	return nil

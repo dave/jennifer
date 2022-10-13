@@ -38,9 +38,9 @@ func main() {
 go get -u github.com/dave/jennifer/jen
 ```
 
-### Need help? 
-If you get stuck, have a question, would like a code review, or just want a 
-chat: I'm happy to help! Feel free to open an issue, email me or mention @dave 
+### Need help?
+If you get stuck, have a question, would like a code review, or just want a
+chat: I'm happy to help! Feel free to open an issue, email me or mention @dave
 in your PR.
 
 ### Examples
@@ -51,7 +51,7 @@ Jennifer has a comprehensive suite of examples - see [godoc](https://godoc.org/g
 * [go-contentful-generator](https://github.com/nicolai86/go-contentful-generator)
 
 ### Rendering
-For testing, a File or Statement can be rendered with the fmt package 
+For testing, a File or Statement can be rendered with the fmt package
 using the %#v verb.
 
 ```go
@@ -61,8 +61,8 @@ fmt.Printf("%#v", c)
 // a("b")
 ```
 
-This is not recommended for use in production because any error will cause a 
-panic. For production use, [File.Render](#render) or [File.Save](#save) are 
+This is not recommended for use in production because any error will cause a
+panic. For production use, [File.Render](#render) or [File.Save](#save) are
 preferred.
 
 # Identifiers
@@ -83,7 +83,7 @@ fmt.Printf("%#v", c)
 ```
 
 ### Dot
-Dot renders a period followed by an identifier. Use for fields and selectors. 
+Dot renders a period followed by an identifier. Use for fields and selectors.
 
 ```go
 c := Qual("a.b/c", "Foo").Call().Dot("Bar").Index(Lit(0)).Dot("Baz")
@@ -149,7 +149,7 @@ fmt.Printf("%#v", c)
 # Keywords
 [Identifiers](#identifiers) **Keywords** [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Generics](#generics) [Helpers](#helpers) [Misc](#misc) [File](#file)
 
-Simple keywords, predeclared identifiers and built-in functions are self 
+Simple keywords, predeclared identifiers and built-in functions are self
 explanatory:
 
 | Construct        | Name |
@@ -208,7 +208,7 @@ fmt.Printf("%#v", c)
 # Braces
 [Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) **Braces** [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Generics](#generics) [Helpers](#helpers) [Misc](#misc) [File](#file)
 
-Several methods render curly braces, summarized below: 
+Several methods render curly braces, summarized below:
 
 | Name                           | Prefix       | Separator | Example                              |
 | ------------------------------ | ------------ | --------- | -------------------------------------|
@@ -249,7 +249,7 @@ fmt.Printf("%#v", c)
 A special case applies when used directly after Case or Default, where the braces are omitted. This allows use in switch and select statements. [See example](#switch-select).
 
 ### Interface, Struct
-Interface and Struct render the keyword followed by a statement list enclosed 
+Interface and Struct render the keyword followed by a statement list enclosed
 by curly braces.
 
 ```go
@@ -581,7 +581,7 @@ fmt.Printf("%#v", c)
 // a := 2
 ```
 
-For the default constant types (bool, int, float64, string, complex128), Lit 
+For the default constant types (bool, int, float64, string, complex128), Lit
 will render the untyped constant.
 
 | Code          | Output     |
@@ -592,7 +592,7 @@ will render the untyped constant.
 | `Lit("foo")`  | `"foo"`    |
 | `Lit(0 + 1i)` | `(0 + 1i)` |
 
-For all other built-in types (float32, int8, int16, int32, int64, uint, uint8, 
+For all other built-in types (float32, int8, int16, int32, int64, uint, uint8,
 uint16, uint32, uint64, uintptr, complex64), Lit will also render the type.
 
 | Code                     | Output              |
@@ -602,7 +602,7 @@ uint16, uint32, uint64, uintptr, complex64), Lit will also render the type.
 | `Lit(uint8(0x1))`        | `uint8(0x1)`        |
 | `Lit(complex64(0 + 1i))` | `complex64(0 + 1i)` |
 
-The built-in alias types byte and rune need a special case. LitRune and LitByte 
+The built-in alias types byte and rune need a special case. LitRune and LitByte
 render rune and byte literals.
 
 | Code                     | Output      |
@@ -726,7 +726,7 @@ fmt.Printf("%#v", c)
 [Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Generics](#generics) **Helpers** [Misc](#misc) [File](#file)
 
 ### Func methods
-All constructs that accept a variadic list of items are paired with GroupFunc 
+All constructs that accept a variadic list of items are paired with GroupFunc
 functions that accept a func(*Group). Use for embedding logic.
 
 ```go
@@ -853,7 +853,7 @@ fmt.Printf("%#v", c)
 Line inserts a blank line.
 
 ### Clone
-Be careful when passing *Statement. Consider the following... 
+Be careful when passing *Statement. Consider the following...
 
 ```go
 a := Id("a")
@@ -869,9 +869,9 @@ fmt.Printf("%#v", c)
 // }
 ```
 
-Id("a") returns a *Statement, which the Call() method appends to twice. To 
+Id("a") returns a *Statement, which the Call() method appends to twice. To
 avoid this, use Clone. Clone makes a copy of the Statement, so further tokens can be appended
-without affecting the original.  
+without affecting the original.
 
 ```go
 a := Id("a")
@@ -888,10 +888,10 @@ fmt.Printf("%#v", c)
 ```
 
 ### Cgo
-The cgo "C" pseudo-package is a special case, and always renders without a package alias. The 
-import can be added with `Qual`, `Anon` or by supplying a preamble. The preamble is added with 
-`File.CgoPreamble` which has the same semantics as [Comment](#comments). If a preamble is provided, 
-the import is separated, and preceded by the preamble. 
+The cgo "C" pseudo-package is a special case, and always renders without a package alias. The
+import can be added with `Qual`, `Anon` or by supplying a preamble. The preamble is added with
+`File.CgoPreamble` which has the same semantics as [Comment](#comments). If a preamble is provided,
+the import is separated, and preceded by the preamble.
 
 ```go
 f := NewFile("a")
@@ -928,7 +928,7 @@ fmt.Printf("%#v", f)
 // 	C.myprint(cs)
 // 	C.free(unsafe.Pointer(cs))
 // }
-```  
+```
 
 # File
 [Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Generics](#generics) [Helpers](#helpers) [Misc](#misc) **File**
@@ -1029,7 +1029,7 @@ fmt.Printf("%#v", f)
 
 ### ImportNames
 ImportNames allows multiple names to be imported as a map. Use the [gennames](gennames) command to
-automatically generate a go file containing a map of a selection of package names. 
+automatically generate a go file containing a map of a selection of package names.
 
 ### ImportAlias
 ImportAlias provides the alias for a package path that should be used in the import block. A
@@ -1108,3 +1108,7 @@ fmt.Printf("%#v", f)
 // 	pkg_d.E()
 // }
 ```
+
+### NoFormat
+NoFormat can be set to true to disable formatting of the generated source. This may be useful
+when performance is critical, and readable code is not required.

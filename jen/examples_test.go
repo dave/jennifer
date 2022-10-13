@@ -1691,3 +1691,16 @@ func ExampleFile_PackagePrefix() {
 	// 	pkg_d.E()
 	// }
 }
+
+func ExampleFile_NoFormat() {
+	f := NewFile("main")
+	f.NoFormat = true
+
+	f.Func().Id("main").Params().Block(
+		Qual("fmt", "Println").Call(Lit("foo")),
+	)
+	fmt.Printf("%q", fmt.Sprintf("%#v", f)) // Special case because Go Examples don't handle multiple newlines well.
+
+	// Output:
+	// "package main\n\nimport \"fmt\"\n\n\nfunc main () {\nfmt.Println (\"foo\")\n}"
+}

@@ -26,9 +26,9 @@ Output:
 go get -u github.com/dave/jennifer/jen
 ```
 
-### Need help? 
-If you get stuck, have a question, would like a code review, or just want a 
-chat: I'm happy to help! Feel free to open an issue, email me or mention @dave 
+### Need help?
+If you get stuck, have a question, would like a code review, or just want a
+chat: I'm happy to help! Feel free to open an issue, email me or mention @dave
 in your PR.
 
 ### Examples
@@ -39,13 +39,13 @@ Jennifer has a comprehensive suite of examples - see [godoc](https://godoc.org/g
 * [go-contentful-generator](https://github.com/nicolai86/go-contentful-generator)
 
 ### Rendering
-For testing, a File or Statement can be rendered with the fmt package 
+For testing, a File or Statement can be rendered with the fmt package
 using the %#v verb.
 
 {{ "ExampleCall_fmt" | example }}
 
-This is not recommended for use in production because any error will cause a 
-panic. For production use, [File.Render](#render) or [File.Save](#save) are 
+This is not recommended for use in production because any error will cause a
+panic. For production use, [File.Render](#render) or [File.Save](#save) are
 preferred.
 
 # Identifiers
@@ -57,7 +57,7 @@ preferred.
 {{ "ExampleId" | example }}
 
 ### Dot
-{{ "Dot" | doc }} 
+{{ "Dot" | doc }}
 
 {{ "ExampleDot" | example }}
 
@@ -80,7 +80,7 @@ preferred.
 # Keywords
 [Identifiers](#identifiers) **Keywords** [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Generics](#generics) [Helpers](#helpers) [Misc](#misc) [File](#file)
 
-Simple keywords, predeclared identifiers and built-in functions are self 
+Simple keywords, predeclared identifiers and built-in functions are self
 explanatory:
 
 | Construct        | Name |
@@ -113,7 +113,7 @@ Special cases for [If, For](#if-for), [Interface, Struct](#interface-struct), [S
 # Braces
 [Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) **Braces** [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Generics](#generics) [Helpers](#helpers) [Misc](#misc) [File](#file)
 
-Several methods render curly braces, summarized below: 
+Several methods render curly braces, summarized below:
 
 | Name                           | Prefix       | Separator | Example                              |
 | ------------------------------ | ------------ | --------- | -------------------------------------|
@@ -132,7 +132,7 @@ Several methods render curly braces, summarized below:
 {{ "Block[2:]" | doc }} [See example](#switch-select).
 
 ### Interface, Struct
-Interface and Struct render the keyword followed by a statement list enclosed 
+Interface and Struct render the keyword followed by a statement list enclosed
 by curly braces.
 
 {{ "ExampleInterface_empty" | example }}
@@ -251,7 +251,7 @@ Note: the items are ordered by key when rendered to ensure repeatable code.
 
 {{ "ExampleLitFunc" | example }}
 
-For the default constant types (bool, int, float64, string, complex128), Lit 
+For the default constant types (bool, int, float64, string, complex128), Lit
 will render the untyped constant.
 
 | Code          | Output     |
@@ -262,7 +262,7 @@ will render the untyped constant.
 | `Lit("foo")`  | `"foo"`    |
 | `Lit(0 + 1i)` | `(0 + 1i)` |
 
-For all other built-in types (float32, int8, int16, int32, int64, uint, uint8, 
+For all other built-in types (float32, int8, int16, int32, int64, uint, uint8,
 uint16, uint32, uint64, uintptr, complex64), Lit will also render the type.
 
 | Code                     | Output              |
@@ -272,7 +272,7 @@ uint16, uint32, uint64, uintptr, complex64), Lit will also render the type.
 | `Lit(uint8(0x1))`        | `uint8(0x1)`        |
 | `Lit(complex64(0 + 1i))` | `complex64(0 + 1i)` |
 
-The built-in alias types byte and rune need a special case. LitRune and LitByte 
+The built-in alias types byte and rune need a special case. LitRune and LitByte
 render rune and byte literals.
 
 | Code                     | Output      |
@@ -326,7 +326,7 @@ emit the approximation (`~`) token, use `Op("~")`.
 [Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Generics](#generics) **Helpers** [Misc](#misc) [File](#file)
 
 ### Func methods
-All constructs that accept a variadic list of items are paired with GroupFunc 
+All constructs that accept a variadic list of items are paired with GroupFunc
 functions that accept a func(*Group). Use for embedding logic.
 
 {{ "ExampleValuesFunc" | example }}
@@ -371,22 +371,22 @@ In lists, nil will produce the same effect.
 {{ "Line" | doc }}
 
 ### Clone
-Be careful when passing *Statement. Consider the following... 
+Be careful when passing *Statement. Consider the following...
 
 {{ "ExampleStatement_Clone_broken" | example }}
 
-Id("a") returns a *Statement, which the Call() method appends to twice. To 
-avoid this, use Clone. {{ "Statement.Clone" | doc }}  
+Id("a") returns a *Statement, which the Call() method appends to twice. To
+avoid this, use Clone. {{ "Statement.Clone" | doc }}
 
 {{ "ExampleStatement_Clone_fixed" | example }}
 
 ### Cgo
-The cgo "C" pseudo-package is a special case, and always renders without a package alias. The 
-import can be added with `Qual`, `Anon` or by supplying a preamble. The preamble is added with 
-`File.CgoPreamble` which has the same semantics as [Comment](#comments). If a preamble is provided, 
-the import is separated, and preceded by the preamble. 
+The cgo "C" pseudo-package is a special case, and always renders without a package alias. The
+import can be added with `Qual`, `Anon` or by supplying a preamble. The preamble is added with
+`File.CgoPreamble` which has the same semantics as [Comment](#comments). If a preamble is provided,
+the import is separated, and preceded by the preamble.
 
-{{ "ExampleFile_CgoPreamble" | example }}  
+{{ "ExampleFile_CgoPreamble" | example }}
 
 # File
 [Identifiers](#identifiers) [Keywords](#keywords) [Operators](#operators) [Braces](#braces) [Parentheses](#parentheses) [Control flow](#control-flow) [Collections](#collections) [Literals](#literals) [Comments](#comments) [Generics](#generics) [Helpers](#helpers) [Misc](#misc) **File**
@@ -423,7 +423,7 @@ the import is separated, and preceded by the preamble.
 {{ "ExampleFile_ImportName" | example }}
 
 ### ImportNames
-{{ "File.ImportNames" | doc }} 
+{{ "File.ImportNames" | doc }}
 
 ### ImportAlias
 {{ "File.ImportAlias" | doc }}
@@ -445,3 +445,6 @@ the import is separated, and preceded by the preamble.
 {{ "File.PackagePrefix" | doc }}
 
 {{ "ExampleFile_PackagePrefix" | example }}
+
+### NoFormat
+{{ "File.NoFormat" | doc }}
