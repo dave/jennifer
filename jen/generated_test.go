@@ -8,6 +8,20 @@ import (
 
 var gencases = []tc{
 	{
+		desc: `typesfunc group`,
+		// Don't do this! ListFunc used to kludge Group.TypesFunc usage without
+		// syntax error.
+		code:   Id("a").ListFunc(func(lg *Group) { lg.TypesFunc(func(cg *Group) { cg.Lit(1) }) }),
+		expect: `a[1]`,
+	},
+	{
+		desc: `types group`,
+		// Don't do this! ListFunc used to kludge Group.Types usage without
+		// syntax error.
+		code:   Id("a").ListFunc(func(lg *Group) { lg.Types(Lit(1)) }),
+		expect: `a[1]`,
+	},
+	{
 		desc: `bool group`,
 		code: BlockFunc(func(g *Group) {
 			g.Bool()

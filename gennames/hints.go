@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"go/build"
 	"io"
+	"os"
 	"os/exec"
 	"strings"
 
@@ -53,9 +54,11 @@ func getPackages(goListPath, filter string, standard, novendor bool) (map[string
 	}
 
 	cmd := exec.Command("go", "list", "-e", "-f", "{{ .Standard }} {{ .ImportPath }} {{ .Name }}", goListPath)
+	home, _ := os.UserHomeDir()
 	cmd.Env = []string{
 		fmt.Sprintf("GOPATH=%s", build.Default.GOPATH),
 		fmt.Sprintf("GOROOT=%s", build.Default.GOROOT),
+		fmt.Sprintf("HOME=%s", home),
 	}
 	if standard {
 		cmd.Dir = filepath.Join(build.Default.GOROOT, "src")

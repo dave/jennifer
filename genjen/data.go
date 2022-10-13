@@ -2,7 +2,7 @@ package main
 
 var keywords = []string{"break", "default", "func", "select", "chan", "else", "const", "fallthrough", "type", "continue", "var", "goto", "defer", "go", "range"}
 
-var identifiers = []string{"bool", "byte", "complex64", "complex128", "error", "float32", "float64", "int", "int8", "int16", "int32", "int64", "rune", "string", "uint", "uint8", "uint16", "uint32", "uint64", "uintptr", "true", "false", "iota", "nil", "err"}
+var identifiers = []string{"bool", "byte", "complex64", "complex128", "error", "float32", "float64", "int", "int8", "int16", "int32", "int64", "rune", "string", "uint", "uint8", "uint16", "uint32", "uint64", "uintptr", "true", "false", "iota", "nil", "err", "any", "comparable"}
 
 var groups = []struct {
 	name        string   // name of the function / method
@@ -303,5 +303,23 @@ var groups = []struct {
 		closing:    ")",
 		separator:  ",",
 		parameters: []string{},
+	},
+	{
+		name:       "Types",
+		comment:    "renders a comma separated list enclosed by square brackets. Use for type parameters and constraints.",
+		variadic:   true,
+		opening:    "[",
+		closing:    "]",
+		separator:  ",",
+		parameters: []string{"types"},
+	},
+	{
+		name:       "Union",
+		comment:    "renders a pipe separated list. Use for union type constraints.",
+		variadic:   true,
+		opening:    "",
+		closing:    "",
+		separator:  "|",
+		parameters: []string{"types"},
 	},
 }

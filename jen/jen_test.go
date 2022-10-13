@@ -25,6 +25,59 @@ var o2 = Options{
 
 var cases = []tc{
 	{
+		desc: `union_group`,
+		code: Type().Id("A").InterfaceFunc(func(g *Group) {
+			g.Union(Id("A"), Id("B"))
+		}),
+		expect: `type A interface{
+			A|B
+		}`,
+	},
+	{
+		desc: `union_group_func`,
+		code: Type().Id("A").InterfaceFunc(func(g1 *Group) {
+			g1.UnionFunc(func(g2 *Group) {
+				g2.Id("A")
+				g2.Id("B")
+			})
+		}),
+		expect: `type A interface{
+			A|B
+		}`,
+	},
+	{
+		desc: `union`,
+		code: Type().Id("A").Interface(Union(Id("A"), Id("B"))),
+		expect: `type A interface{
+			A|B
+		}`,
+	},
+	{
+		desc: `unionFunc`,
+		code: Type().Id("A").Interface(UnionFunc(func(g *Group) {
+			g.Id("A")
+			g.Id("B")
+		})),
+		expect: `type A interface{
+			A|B
+		}`,
+	},
+	{
+		desc:   `types1`,
+		code:   Func().Id("A").Types(Id("K").Comparable(), Id("V").Any()).Params(),
+		expect: `func A[K comparable, V any]()`,
+	},
+	{
+		desc:   `types2`,
+		code:   Func().Id("A").Types(Id("T1"), Id("T2").Any()).Params(),
+		expect: `func A[T1, T2 any]()`,
+	},
+	{
+		desc:   `types func`,
+		code:   Func().Id("A").Add(Types(Id("T1"), Id("T2").Any())).Params(),
+		expect: `func A[T1, T2 any]()`,
+	},
+	{
 		desc:   `scientific notation`,
 		code:   Lit(1e3),
 		expect: `1000.0`,

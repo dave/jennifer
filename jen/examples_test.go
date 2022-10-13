@@ -1,12 +1,82 @@
 package jen_test
 
 import (
-	"fmt"
-
 	"bytes"
+	"fmt"
 
 	. "github.com/dave/jennifer/jen"
 )
+
+func ExampleGenericsTypesFuncEmpty() {
+	c := Func().Id("F").TypesFunc(func(group *Group) {}).Params().Block()
+	fmt.Printf("%#v", c)
+	// Output:
+	// func F() {}
+}
+
+func ExampleGenericsTypesFuncNull() {
+	c := Func().Id("F").TypesFunc(func(group *Group) {
+		group.Null()
+	}).Params().Block()
+	fmt.Printf("%#v", c)
+	// Output:
+	// func F() {}
+}
+
+func ExampleGenericsTypesEmpty() {
+	c := Func().Id("F").Types().Params().Block()
+	fmt.Printf("%#v", c)
+	// Output:
+	// func F() {}
+}
+
+func ExampleGenericsTypesNull() {
+	c := Func().Id("F").Types(Null()).Params().Block()
+	fmt.Printf("%#v", c)
+	// Output:
+	// func F() {}
+}
+
+func ExampleGenericsTypesDefinition() {
+	c := Func().Id("Keys").Types(
+		Id("K").Comparable(),
+		Id("V").Any(),
+	).Params(
+		Id("m").Map(Id("K")).Id("V"),
+	).Index().Id("K").Block()
+	fmt.Printf("%#v", c)
+	// Output:
+	// func Keys[K comparable, V any](m map[K]V) []K {}
+}
+
+func ExampleGenericsTypesUsage() {
+	c := Return(Id("Keys").Types(Int(), String()).Call(Id("m")))
+	fmt.Printf("%#v", c)
+	// Output:
+	// return Keys[int, string](m)
+}
+
+func ExampleGenericsUnion() {
+	c := Type().Id("PredeclaredSignedInteger").Interface(
+		Union(Int(), Int8(), Int16(), Int32(), Int64()),
+	)
+	fmt.Printf("%#v", c)
+	// Output:
+	// type PredeclaredSignedInteger interface {
+	//	int | int8 | int16 | int32 | int64
+	// }
+}
+
+func ExampleGenericsApproximate() {
+	c := Type().Id("AnyString").Interface(
+		Op("~").String(),
+	)
+	fmt.Printf("%#v", c)
+	// Output:
+	// type AnyString interface {
+	//	~string
+	// }
+}
 
 func ExampleCaseBug() {
 	c := Switch(Id("a")).Block(
@@ -1295,6 +1365,19 @@ func ExampleTag() {
 	// }
 }
 
+func ExampleTag_withQuotesAndNewline() {
+	c := Type().Id("foo").Struct(
+		Id("A").String().Tag(map[string]string{"json": "a"}),
+		Id("B").Int().Tag(map[string]string{"json": "b", "bar": "the value of\nthe\"bar\" tag"}),
+	)
+	fmt.Printf("%#v", c)
+	// Output:
+	// type foo struct {
+	// 	A string `json:"a"`
+	// 	B int    `bar:"the value of\nthe\"bar\" tag" json:"b"`
+	// }
+}
+
 func ExampleNull_and_nil() {
 	c := Func().Id("foo").Params(
 		nil,
@@ -1607,4 +1690,17 @@ func ExampleFile_PackagePrefix() {
 	// func main() {
 	// 	pkg_d.E()
 	// }
+}
+
+func ExampleFile_NoFormat() {
+	f := NewFile("main")
+	f.NoFormat = true
+
+	f.Func().Id("main").Params().Block(
+		Qual("fmt", "Println").Call(Lit("foo")),
+	)
+	fmt.Printf("%q", fmt.Sprintf("%#v", f)) // Special case because Go Examples don't handle multiple newlines well.
+
+	// Output:
+	// "package main\n\nimport \"fmt\"\n\n\nfunc main () {\nfmt.Println (\"foo\")\n}"
 }
