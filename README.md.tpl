@@ -1,3 +1,4 @@
+[![docs](https://pkg.go.dev/badge/github.com/dave/jennifer/jen.svg)](https://pkg.go.dev/github.com/dave/jennifer/jen)
 ![stability-stable](https://img.shields.io/badge/stability-stable-brightgreen.svg)
 
 # Jennifer
