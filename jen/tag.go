@@ -59,7 +59,7 @@ func (t tag) render(f *File, w io.Writer, s *Statement) error {
 		if len(str) > 0 {
 			str += " "
 		}
-		str += fmt.Sprintf(`%s:%q`, k, v)
+		str += fmt.Sprintf(`%s:"%s"`, k, v)
 	}
 
 	if strconv.CanBackquote(str) {
