@@ -3,8 +3,8 @@ package main
 import (
 	"bytes"
 	"flag"
-	"io/ioutil"
 	"log"
+	"os"
 )
 
 func main() {
@@ -23,7 +23,7 @@ func main() {
 	if err := hints(buf, *pkg, *name, *goListPath, *filter, *standard, *novendor); err != nil {
 		log.Fatal(err.Error())
 	}
-	if err := ioutil.WriteFile(*out, buf.Bytes(), 0644); err != nil {
+	if err := os.WriteFile(*out, buf.Bytes(), 0644); err != nil {
 		log.Fatal(err.Error())
 	}
 }
