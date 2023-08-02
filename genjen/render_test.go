@@ -1,7 +1,7 @@
 package main
 
 import (
-	"io/ioutil"
+	"os"
 	"regexp"
 	"testing"
 
@@ -17,7 +17,7 @@ func TestRender(t *testing.T) {
 	generatedString := buf.String()
 
 	existingFilePath := "../jen/generated.go"
-	existingBytes, err := ioutil.ReadFile(existingFilePath)
+	existingBytes, err := os.ReadFile(existingFilePath)
 	if err != nil {
 		t.Fatal(err.Error())
 	}
