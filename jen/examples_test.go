@@ -973,6 +973,41 @@ func ExampleClose() {
 	// }
 }
 
+func ExampleClear() {
+	c := Block(
+		Id("a").Op(":=").Map(String()).String().Values(),
+		Clear(Id("a")),
+	)
+	fmt.Printf("%#v", c)
+	// Output:
+	// {
+	// 	a := map[string]string{}
+	// 	clear(a)
+	// }
+}
+
+func ExampleMin() {
+	c := Block(
+		Id("n").Op(":=").Min(Lit(1), Lit(2)),
+	)
+	fmt.Printf("%#v", c)
+	// Output:
+	// {
+	// 	n := min(1, 2)
+	// }
+}
+
+func ExampleMax() {
+	c := Block(
+		Id("x").Op(":=").Max(Lit(1), Lit(2)),
+	)
+	fmt.Printf("%#v", c)
+	// Output:
+	// {
+	// 	x := max(1, 2)
+	// }
+}
+
 func ExampleComment() {
 	f := NewFile("a")
 	f.Comment("Foo returns the string \"foo\"")
