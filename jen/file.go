@@ -36,6 +36,8 @@ func NewFilePath(packagePath string) *File {
 }
 
 // NewFilePathName creates a new file with the specified package path and name.
+// When generating an external test package, use ImportName to specify the name
+// of the package under test. Its identifiers will then remain qualified.
 func NewFilePathName(packagePath, packageName string) *File {
 	return &File{
 		Group: &Group{
@@ -126,7 +128,13 @@ func (f *File) ImportAlias(path, alias string) {
 }
 
 func (f *File) isLocal(path string) bool {
-	return f.path == path
+	if f.path != path {
+		return false
+	}
+	if hint, ok := f.hints[path]; ok && !hint.alias && hint.name != "" {
+		return f.name != hint.name+"_test"
+	}
+	return true
 }
 
 func (f *File) isValidAlias(alias string) bool {

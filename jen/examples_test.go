@@ -1681,6 +1681,19 @@ func ExampleNewFilePathName() {
 	// }
 }
 
+func ExampleNewFilePathName_externalTest() {
+	f := NewFilePathName("math/big", "big_test")
+	f.ImportName("math/big", "big")
+	f.Var().Id("value").Qual("math/big", "Int")
+	fmt.Printf("%#v", f)
+	// Output:
+	// package big_test
+	//
+	// import "math/big"
+	//
+	// var value big.Int
+}
+
 func ExampleFile_HeaderAndPackageComments() {
 	f := NewFile("c")
 	f.CanonicalPath = "d.e/f"
