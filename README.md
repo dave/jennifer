@@ -102,7 +102,7 @@ fmt.Printf("%#v", c)
 ```
 
 Imports are automatically added when
-used with a File. If the path matches the local path, the package name is
+used with a File. For references to the local package, the package name is
 omitted. If package names conflict they are automatically renamed.
 
 ```go
@@ -944,6 +944,8 @@ package name is inferred from the path.
 
 ### NewFilePathName
 NewFilePathName creates a new file with the specified package path and name.
+When generating an external test package, use ImportName to specify the name
+of the package under test. Its identifiers will then remain qualified.
 
 ```go
 f := NewFilePathName("a.b/c", "main")
@@ -957,6 +959,19 @@ fmt.Printf("%#v", f)
 // func main() {
 // 	Foo()
 // }
+```
+
+```go
+f := NewFilePathName("math/big", "big_test")
+f.ImportName("math/big", "big")
+f.Var().Id("value").Qual("math/big", "Int")
+fmt.Printf("%#v", f)
+// Output:
+// package big_test
+//
+// import "math/big"
+//
+// var value big.Int
 ```
 
 ### Save

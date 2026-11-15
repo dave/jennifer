@@ -224,7 +224,7 @@ func (s *Statement) Id(name string) *Statement {
 }
 
 // Qual renders a qualified identifier. Imports are automatically added when
-// used with a File. If the path matches the local path, the package name is
+// used with a File. For references to the local package, the package name is
 // omitted. If package names conflict they are automatically renamed. Note that
 // it is not possible to reliably determine the package name given an arbitrary
 // package path, so a sensible name is guessed from the path and added as an
@@ -236,7 +236,7 @@ func Qual(path, name string) *Statement {
 }
 
 // Qual renders a qualified identifier. Imports are automatically added when
-// used with a File. If the path matches the local path, the package name is
+// used with a File. For references to the local package, the package name is
 // omitted. If package names conflict they are automatically renamed. Note that
 // it is not possible to reliably determine the package name given an arbitrary
 // package path, so a sensible name is guessed from the path and added as an
@@ -250,7 +250,7 @@ func (g *Group) Qual(path, name string) *Statement {
 }
 
 // Qual renders a qualified identifier. Imports are automatically added when
-// used with a File. If the path matches the local path, the package name is
+// used with a File. For references to the local package, the package name is
 // omitted. If package names conflict they are automatically renamed. Note that
 // it is not possible to reliably determine the package name given an arbitrary
 // package path, so a sensible name is guessed from the path and added as an

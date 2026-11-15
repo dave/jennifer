@@ -1,9 +1,68 @@
 package jen
 
 import (
+	"bytes"
 	"fmt"
 	"testing"
 )
+
+func TestFileExternalTestPackage(t *testing.T) {
+	for _, tt := range []struct {
+		name string
+		path string
+	}{
+		{"pkg", "example.com/pkg"},
+		{"client", "example.com/client/v2"},
+		{"pkg_test", "example.com/pkg_test"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			f := NewFilePathName(tt.path, tt.name+"_test")
+			f.ImportName(tt.path, tt.name)
+			f.Var().Id("value").Qual(tt.path, "Type")
+
+			var buf bytes.Buffer
+			if err := f.Render(&buf); err != nil {
+				t.Fatal(err)
+			}
+			want := fmt.Sprintf("package %s_test\n\nimport %q\n\nvar value %s.Type\n", tt.name, tt.path, tt.name)
+			if got := buf.String(); got != want {
+				t.Errorf("got:\n%s\nwant:\n%s", got, want)
+			}
+		})
+	}
+}
+
+func TestFileLocalPackageWithImportHint(t *testing.T) {
+	for _, tt := range []struct {
+		name  string
+		hint  string
+		alias bool
+	}{
+		{"pkg", "pkg", false},
+		{"main", "main", false},
+		{"pkg_test", "pkg_test", false},
+		{"pkg_test", "pkg", true},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			f := NewFilePathName("example.com/pkg", tt.name)
+			if tt.alias {
+				f.ImportAlias("example.com/pkg", tt.hint)
+			} else {
+				f.ImportName("example.com/pkg", tt.hint)
+			}
+			f.Var().Id("value").Qual("example.com/pkg", "Type")
+
+			var buf bytes.Buffer
+			if err := f.Render(&buf); err != nil {
+				t.Fatal(err)
+			}
+			want := fmt.Sprintf("package %s\n\nvar value Type\n", tt.name)
+			if got := buf.String(); got != want {
+				t.Errorf("got:\n%s\nwant:\n%s", got, want)
+			}
+		})
+	}
+}
 
 func TestGuessAlias(t *testing.T) {
 
