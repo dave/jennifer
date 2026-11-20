@@ -19,51 +19,32 @@ func DictFunc(f func(Dict)) Dict {
 }
 
 func (d Dict) render(f *File, w io.Writer, s *Statement) error {
-	first := true
-	// must order keys to ensure repeatable source
-	type kv struct {
-		k Code
-		v Code
-	}
-	lookup := map[string]kv{}
-	keys := []string{}
+	lookup := make(map[string]kv, len(d))
+	keys := make([]string, 0, len(d))
+
+	buf := &bytes.Buffer{}
 	for k, v := range d {
 		if k.isNull(f) || v.isNull(f) {
 			continue
 		}
-		buf := &bytes.Buffer{}
 		if err := k.render(f, buf, nil); err != nil {
 			return err
 		}
 		keys = append(keys, buf.String())
 		lookup[buf.String()] = kv{k: k, v: v}
+		buf.Reset()
 	}
+
+	// must order keys to ensure repeatable source
 	sort.Strings(keys)
+
+	ordered := make([]kv, 0, len(keys))
 	for _, key := range keys {
-		k := lookup[key].k
-		v := lookup[key].v
-		if first && len(keys) > 1 {
-			if _, err := w.Write([]byte("\n")); err != nil {
-				return err
-			}
-			first = false
-		}
-		if err := k.render(f, w, nil); err != nil {
-			return err
-		}
-		if _, err := w.Write([]byte(":")); err != nil {
-			return err
-		}
-		if err := v.render(f, w, nil); err != nil {
-			return err
-		}
-		if len(keys) > 1 {
-			if _, err := w.Write([]byte(",\n")); err != nil {
-				return err
-			}
-		}
+		ordered = append(ordered, kv{k: lookup[key].k, v: lookup[key].v})
 	}
-	return nil
+
+	dict := &OrderedDict{items: ordered}
+	return dict.render(f, w, s)
 }
 
 func (d Dict) isNull(f *File) bool {

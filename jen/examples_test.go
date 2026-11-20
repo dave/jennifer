@@ -1577,6 +1577,26 @@ func ExampleDictFunc() {
 	// }
 }
 
+func ExampleOrderedDictFunc() {
+	c := Id("a").Op(":=").Map(String()).String().Values(OrderedDictFunc(func(o *OrderedDict) {
+		o.Add(Lit("c"), Lit("d"))
+		o.Add(Lit("a"), Lit("b"))
+	}))
+	fmt.Printf("%#v", c)
+	// Output:
+	// a := map[string]string{
+	// 	"c": "d",
+	// 	"a": "b",
+	// }
+}
+
+func ExampleOrderedDictFunc_nil() {
+	c := Id("a").Op(":=").Map(String()).String().Values(OrderedDictFunc(func(o *OrderedDict) {}))
+	fmt.Printf("%#v", c)
+	// Output:
+	// a := map[string]string{}
+}
+
 func ExampleDefs() {
 	c := Const().Defs(
 		Id("a").Op("=").Lit("a"),
